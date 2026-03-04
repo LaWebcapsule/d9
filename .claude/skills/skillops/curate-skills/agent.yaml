@@ -1,0 +1,28 @@
+name: curate-skills
+status: validated
+
+primary_use: Evaluate, score (ASQM strict), tag, and normalize all Skills; write agent.yaml and README per skill; produce ASQM_AUDIT.md or chat summary. Strict scoring required; agent_native 5 only with explicit output contract in SKILL.md.
+
+inputs:
+  - skills_directory (root path containing skill subdirectories)
+
+outputs:
+  - per skill: agent.yaml (scores, status, overlaps_with, market_position), normalized README.md
+  - repo-level: ASQM_AUDIT.md or structured chat summary
+  - overlap and market_position report
+
+scores:
+  agent_native: 5
+  cognitive: 4
+  composability: 5
+  stance: 5
+
+asqm_quality: 19
+
+overlaps_with:
+  - nesnilnehc/ai-cortex:refine-skill-design
+  - nesnilnehc/ai-cortex:generate-standard-readme
+
+market_position: differentiated
+
+tags: [meta-skill, eng-standards, documentation]
