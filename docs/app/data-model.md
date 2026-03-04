@@ -6,14 +6,14 @@ readTime: 15 min read
 
 # Data Model
 
-> The Directus data studio enables no-code configuration and management for any SQL database, with no arbitrary
+> The d9 data studio enables no-code configuration and management for any SQL database, with no arbitrary
 > restrictions on how you build your data model. You get control over table, column and relationship configuration, as
 > well as how users view and interact with data inside the data studio.
 
 <!--
 :::tip Before You Begin
 
-Learn Directus
+Learn d9
 Please see the [Quickstart Guide]().
 Configuration > Overview
 
@@ -22,7 +22,7 @@ Configuration > Overview
 
 :::tip Learn More
 
-Remember, you will have full access to manage your database using SQL. Directus will mirror any changes. You can also
+Remember, you will have full access to manage your database using SQL. d9 will mirror any changes. You can also
 configure your data model programmatically via the API. To learn more, see our API documentation on
 [Collections](/reference/system/collections), [Fields](/reference/system/fields), and
 [Relations](/reference/system/relations).
@@ -31,19 +31,19 @@ configure your data model programmatically via the API. To learn more, see our A
 
 ## Relational Data Models
 
-In order to understand how Directus handles data models, you will need an understanding of what relational data models
+In order to understand how d9 handles data models, you will need an understanding of what relational data models
 are. This section provides a brief summary of the core concepts. It may be useful as a review, or for business users
 working on your team that want a simple explanation of how data models work. If you have a firm knowledge of relational
 data model concepts, such as databases, data tables, columns, data types, primary and foreign keys, rows, relationships,
-and schemas then feel free to jump to [Data Models in Directus](#data-models-in-directus).
+and schemas then feel free to jump to [Data Models in d9](#data-models-in-directus).
 
 ### Databases
 
-Directus is an SQL database wrapper. A database is a set of data stored in a computer, in a structured way, making it
+d9 is an SQL database wrapper. A database is a set of data stored in a computer, in a structured way, making it
 organized, accessible, and scalable. The specific way you structure your data within a database is called your data
 model.
 
-![A Database Schema]({{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/database-schema-20220805A.webp)
+![A Database Schema](/images/database-schema-20220805A.webp)
 
 ### Database vs Excel
 
@@ -52,7 +52,7 @@ data in Excel spreadsheets. You know how you can build a table on one sheet in E
 sheet, then link the rows of each table together? That is pretty much how a relational data model works. But there are
 some key points where Excel and relational databases differ.
 
-![Data in an Excel Spreadsheet]({{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/spreadsheet-20220805A.webp)
+![Data in an Excel Spreadsheet](/images/spreadsheet-20220805A.webp)
 
 Many times, we store data as a table in Excel, but that's not always the case, as the program serves tons of other
 purposes. Excel lets you make your data stylized _(bold, italicized, colored, custom fonts, etc.)_, set dynamic
@@ -60,7 +60,7 @@ functions in cells, add graphics like charts and graphs, and input any kind of d
 enforced structure. Your Excel spreadsheet is a blank canvas, designed to store up to tens of thousands of rows of
 information.
 
-![A data table]({{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/datatable-20220805A.webp)
+![A data table](/images/datatable-20220805A.webp)
 
 There is no stylization within databases. They strictly store raw data values in a structured way. Any time you want to
 style data, build a function, put data into a graph, _etc.,_ you must create that functionality in your app or website.
@@ -69,7 +69,7 @@ trillions_, of rows of information.
 
 ### Data Tables
 
-![A Data Table: rows and columns]({{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/rows-and-columns.webp)
+![A Data Table: rows and columns](/images/rows-and-columns.webp)
 
 <!-- image should note rows and columns. -->
 
@@ -79,7 +79,7 @@ tables are further broken down into columns and rows.
 
 ### Columns
 
-![A Column]({{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/columns-20220805A.webp)
+![A Column](/images/columns-20220805A.webp)
 
 Columns are categories that store one kind of information. Each column has a unique, descriptive name and stores one
 unit of information in each of its [cell values](#cell-values). Columns keep the data organized, consistent, and easily
@@ -89,7 +89,7 @@ accessible. The columns you choose to add to a data table will completely depend
 
 ### Cell Values
 
-![Cell Values]({{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/datatable-cell-value-20220805A.webp)
+![Cell Values](/images/datatable-cell-value-20220805A.webp)
 
 Each value in a column is stored in its own cell. In general, you want to create columns that save _atomic_ values. That
 means create the column to store the smallest indivisible units There is no restriction for the kinds of information to
@@ -115,14 +115,14 @@ unexpected and even dangerous behaviors in your program.
 
 ### Rows
 
-![Rows]({{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/row-20220805A.webp)
+![Rows](/images/row-20220805A.webp)
 
 Each row stores data associated to a unique record, event, object, entity, observation, etc. Data tables can contain
 millions, _even billions and trillions_ of rows of data.
 
 ### Primary Keys
 
-![Primary Key]({{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/primary-keys-20220805A.webp)
+![Primary Key](/images/primary-keys-20220805A.webp)
 
 In order to uniquely identify and track each row, every data table must have a primary key column. A primary key is a
 unique ID that identifies a specific row. Any pattern or system could be used to generate primary keys, so long as it
@@ -132,7 +132,7 @@ differentiate it from other rows.
 
 ### Foreign Keys
 
-![Foreign Keys]({{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/foreign-keys-20220805A.webp)
+![Foreign Keys](/images/foreign-keys-20220805A.webp)
 
 Since primary keys uniquely identify each and every row in a data table, they are the perfect tool to create
 relationships. If you want to relationally link rows between two data tables, you create a column to store _foreign
@@ -163,12 +163,12 @@ There are several ways you can relationally link tables:
   M2M relationships, M2As require a junction data table as well as an additional column on the junction table to store
   the related tables' names.
 
-To learn more about how these relationships work conceptually, as well as how they are handled within Directus, see our
+To learn more about how these relationships work conceptually, as well as how they are handled within d9, see our
 guide on [relationships](/configuration/data-model/relationships).
 
 ### Database Schemas
 
-![Data Table to schema]({{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/datatable-to-schema-20220805A.webp)
+![Data Table to schema](/images/datatable-to-schema-20220805A.webp)
 
 In our examples so far, we have seen and described actual [data tables](#data-tables). As you design your relational
 data model, you will need to create a schema to keep track of its complexity.
@@ -205,7 +205,7 @@ irrelevant to the current learning point, we omit their details so you can focus
 Please note too, that with more complex schemas, containing dozens _(or maybe hundreds!)_ of relationally linked data
 tables, you usually include datatype information as well as a visualization of how each and every table interlinks.
 
-![A Complex Schema]({{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/complex-schema.webp)
+![A Complex Schema](/images/complex-schema.webp)
 
 ### Avoid Data Duplication
 
@@ -245,7 +245,7 @@ data is displayed on each user profile page, for chat messaging and other types 
 situation in many projects_. In this case, the author name and other details would also need to exist in the `users`
 table.
 
-![Duplicate Data]({{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/duplicate-data-20220829A.webp)
+![Duplicate Data](/images/duplicate-data-20220829A.webp)
 
 This creates duplicate data. There are two big problems with this:
 
@@ -315,7 +315,7 @@ between `blog` and `users`.
 
 ### Working With Relational Data Models
 
-![Database, Backend, Frontend]({{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/database-backend-frontend-20220805A.webp)
+![Database, Backend, Frontend](/images/database-backend-frontend-20220805A.webp)
 
 Once you've designed your data model conceptually, you typically build and interact with it using SQL, or Structured
 Querying Language. This language is used to create, read & query, update, and delete anything and everything in the
@@ -346,14 +346,11 @@ Therefore, developers need to build front-ends with polished UIs and custom disp
 human-friendly. However, even for developers with strong SQL database skills, building out APIs and GUIs to build and
 manage a data model is time consuming.
 
-## Data Models in Directus
+## Data Models in d9
 
-<video title="Settings > Data Model" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/data-model-overview-20220805A.mp4" type="video/mp4" />
-</video>
 
-All relational data model concepts listed above apply in Directus. You get complete, un-opinionated, relational data
-model design and configuration. The difference is that Directus handles all SQL, builds the API, and provides a Data
+All relational data model concepts listed above apply in d9. You get complete, un-opinionated, relational data
+model design and configuration. The difference is that d9 handles all SQL, builds the API, and provides a Data
 Studio which lets business users work with data in a human-friendly way.
 
 The Data Studio also offers features and functionalities to display and interact with your data intuitively. Once your
@@ -370,16 +367,13 @@ You have the power to do the following things, without a line of code or SQL:
 - Configure how data is interacted with by users in the Data Studio.
 - Translate any and all text in the Data Studio into any language.
 
-Directus replaces traditional relational database jargon with more user-friendly terms and concepts. Please keep in mind
-that while traditional relational database jargon strictly encompasses database concepts, some of the new Directus terms
+d9 replaces traditional relational database jargon with more user-friendly terms and concepts. Please keep in mind
+that while traditional relational database jargon strictly encompasses database concepts, some of the new d9 terms
 encompass these relational database concepts _plus display and interaction logic_. The following sections will introduce
-Directus terms and map them to classic relational database concepts.
+d9 terms and map them to classic relational database concepts.
 
 ## Collections
 
-<video title="Collections" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/collections-20220805A.mp4" type="video/mp4" />
-</video>
 
 A collection _is a set of [items](#items)_. This can be a 1-1 match-up with a data table in SQL, a group of other
 collections, or a readonly view.
@@ -390,23 +384,17 @@ Data Model**. From there, click a collection to open its configurations page. To
 
 ## Fields
 
-<video title="Fields" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/fields-20220805A.mp4" type="video/mp4" />
-</video>
 
 Fields are database columns, but with a twist.
 
 Remember, SQL database columns store pure, raw data. From there, developers build out custom logic and UIs to determine
-how this data is displayed and interacted with. In Directus, fields encompass column configurations, as well as custom
-configuration over how to the data is displayed and interacted with in the Data Studio. Directus also has
+how this data is displayed and interacted with. In d9, fields encompass column configurations, as well as custom
+configuration over how to the data is displayed and interacted with in the Data Studio. d9 also has
 [alias fields](/getting-started/glossary#alias), which are virtual and do not match directly to a column. To learn more,
 see our guide on [fields](/configuration/data-model/fields/).
 
 ## Items
 
-<video title="Collections" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/items-20220805A.mp4" type="video/mp4" />
-</video>
 
 Items are data table rows, but with a twist.
 
@@ -420,17 +408,14 @@ You access items from other app modules, such as [Content](/app/content), [User 
 
 ## Data Type Superset
 
-Directus abstracts type differences between SQL vendors with a
+d9 abstracts type differences between SQL vendors with a
 [Data Type Superset](/getting-started/glossary#data-type-superset).
 
 ## Keys and IDs
 
-<video title="Keys and IDs" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/keys-and-ids-20220805A.mp4" type="video/mp4" />
-</video>
 
-Primary keys are called IDs in Directus fairly frequently. When you
-[create a collection](/configuration/data-model/collections#create-a-collection), you must add an `id` field. Directus
+Primary keys are called IDs in d9 fairly frequently. When you
+[create a collection](/configuration/data-model/collections#create-a-collection), you must add an `id` field. d9
 supports the following types of IDs:
 
 - **Auto-Incremented Integer** — IDs increment `1`, `2`, `3` up to `2^31-1` or `2,147,483,647`.
@@ -443,9 +428,6 @@ supports the following types of IDs:
 
 ## Relationships
 
-<video title="Relations" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/relationships-20220805A.mp4" type="video/mp4" />
-</video>
 
-Directus supports all standard [types of relationships](#types-of-relationships), as well as a few more of its own
+d9 supports all standard [types of relationships](#types-of-relationships), as well as a few more of its own
 compound types. To learn more, see our guide on [relationships](/configuration/data-model/relationships).

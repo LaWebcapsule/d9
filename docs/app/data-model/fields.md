@@ -6,9 +6,6 @@
 
 ## Overview
 
-<video title="Fields Overview" autoplay muted loop controls playsinline>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/fields-20220805A.mp4" type="video/mp4" />
-</video>
 
 To access a collection's fields, navigate to **Settings > Data Model > [Collection]**. From here, you can click a field
 to access its **Configuration Drawer** and make advanced configurations. You also have the following controls for each
@@ -34,9 +31,6 @@ Context Menu** and **Field Configuration Drawer**, described below.
 
 ## Create a Field (Standard)
 
-<video title="Create a Field (Standard)" autoplay muted loop controls playsinline>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/fields/fields-20220805/create-a-field-20220805A.mp4" type="video/mp4" />
-</video>
 
 To make field configuration as intuitive and easy as possible, a template wizard is provided so that you can create
 fields pre-configured for common use-cases. When you create a field this way, you will still have full power to
@@ -53,9 +47,6 @@ fields pre-configured for common use-cases. When you create a field this way, yo
 
 ## Create a Field (Advanced)
 
-<video title="Create a Field (Advanced)" autoplay muted loop controls playsinline>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/fields/fields-20220805/create-a-field-advanced-20220805A.mp4" type="video/mp4" />
-</video>
 
 This field creation method opens the **Field Configuration Drawer** so you can customize every field detail from the
 start. To create a field in advanced mode, follow these steps.
@@ -70,15 +61,12 @@ start. To create a field in advanced mode, follow these steps.
 ::: tip Database Columns
 
 Remember, a field is a database column. Therefore, you can create a column directly in the database and it will
-automatically appear within Directus. You can then enhance the experience further by configuring it as desired.
+automatically appear within d9. You can then enhance the experience further by configuring it as desired.
 
 :::
 
 ## Configure a Field
 
-<video title="Configure a Field" autoplay muted loop controls playsinline>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/fields/fields-20220805/configure-a-field-20220805A.mp4" type="video/mp4" />
-</video>
 
 Fields are configured in the **Field Configuration Drawer**, which is composed of eight sections. These provide
 extensive customization options, from the database column's details, to how it is displayed and interacted with, and
@@ -107,9 +95,6 @@ create new fields within system collections.
 
 ## Duplicate a Field
 
-<video title="Duplicate a Field" autoplay muted loop controls playsinline>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/fields/fields-20220805/duplicate-a-field-20220805A.mp4" type="video/mp4" />
-</video>
 
 To duplicate a field, follow these steps.
 
@@ -133,9 +118,6 @@ field will not be copied.
 
 ## Toggle Field Visibility (for Admins)
 
-<video title="Toggle Field Visibility (for Admins)" autoplay muted loop controls playsinline>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/fields/fields-20220805/toggle-field-visibility-20220805A.mp4" type="video/mp4" />
-</video>
 
 For users with any _non-admin_ role, a field's visibility can be adjusted via
 [access permissions](/configuration/users-roles-permissions.md). However, you may want to hide certain fields for admins
@@ -143,9 +125,6 @@ as well. This is handy if the field is distracting or has no need to be seen on 
 
 ## Adjust Field Width
 
-<video title="Group and Sort Field" autoplay muted loop controls playsinline>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/fields/fields-20220805/adjust-field-width-20220805A.mp4" type="video/mp4" />
-</video>
 
 Adjusting the field width in **Fields and Layout** will change field width on the
 [Item Detail Page](/app/content#item-page). To adjust field width, follow these steps.
@@ -158,9 +137,6 @@ Adjusting the field width in **Fields and Layout** will change field width on th
 
 ## Manually Sort Fields
 
-<video title="Group and Sort Field" autoplay muted loop controls playsinline>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/fields/fields-20220805/manually-sort-fields-20220805A.mp4" type="video/mp4" />
-</video>
 
 Adjusting the field order in **Fields and Layout** will change its order on the
 [Item Page](/app/content/collections#item-page). To manually sort fields, click <span mi icon>drag_indicator</span> to
@@ -168,9 +144,6 @@ drag and drop the field as desired.
 
 ## Delete a Field
 
-<video autoplay muted loop controls title="" playsinline>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/fields/fields-20220805/delete-a-field-20220805A.mp4" type="video/mp4" />
-</video>
 
 To permanently delete a field and all its stored values, follow these steps.
 

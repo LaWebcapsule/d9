@@ -17,7 +17,7 @@ author: Eron Powell
 
 <!-- **Skill Level:** {{$frontmatter.skill_level}}\ -->
 
-**Directus Version:** {{$frontmatter.directus_version}}
+**d9 Version:** {{$frontmatter.directus_version}}
 
 <!-- **Tags:** {{$frontmatter.tags.join(", ")}} -->
 

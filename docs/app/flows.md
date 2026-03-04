@@ -1,13 +1,13 @@
 ---
 description:
-  Flows enable custom, event-driven data processing and task automation within Directus. Each flow is composed of one
+  Flows enable custom, event-driven data processing and task automation within d9. Each flow is composed of one
   trigger, followed by a series of operations.
 readTime: 5 min read
 ---
 
 # Flows
 
-> Flows enable custom, event-driven data processing and task automation within Directus. Each flow is composed of one
+> Flows enable custom, event-driven data processing and task automation within d9. Each flow is composed of one
 > trigger, followed by a series of operations.
 
 :::tip Before You Begin
@@ -55,12 +55,11 @@ Async/Sync ->
 
 ## What's a Flow?
 
-![What's a Flow?]({{CDN_URL}}/docs/v9/configuration/flows/flows/flows-20220603A/whats-a-flow-20220603A.webp)
+![What's a Flow?](/images/whats-a-flow-20220603A.webp)
 
 <!--
 <video title="What's a Flow" autoplay playsinline muted loop controls>
 <source src="" type="video/mp4" />
-</video>
 -->
 
 Each flow is made up of three elements: A trigger, operations, and a data chain.
@@ -77,9 +76,9 @@ manage data: _send off emails, push in-app notifications, send webhooks, and bey
 
 To put it in conceptual terms, operations do three things:
 
-- **Get data** from Directus or another outside service.
+- **Get data** from d9 or another outside service.
 - **Process data** a.k.a. transform it, validate it, or whatever.
-- **Send data** to Directus or another outside service.
+- **Send data** to d9 or another outside service.
 
 :::tip Developers
 
@@ -115,9 +114,6 @@ create a flow, which we discuss in the next section.
 
 ## Configure A Flow
 
-<video autoplay playsinline muted loop controls title="Create a Flow">
-	<source src="{{CDN_URL}}/docs/v9/configuration/flows/flows/flows-20220603A/create-a-flow-20220603A.mp4" type="video/mp4" />
-</video>
 
 ### Create a Flow
 
@@ -148,7 +144,7 @@ You'll now see your trigger in an empty grid area. Its time to start adding oper
 
 5. On the trigger panel, click <span mi>add</span> and the **Create Operation** side drawer will open.
 6. Choose a **Name**, an [operation](/configuration/flows/operations) type, and configure as desired.\
-   Directus will convert the name into a unique operation key, used on the [data chain](#the-data-chain).\
+   d9 will convert the name into a unique operation key, used on the [data chain](#the-data-chain).\
    If you don't choose a name, the system will auto-generate a name and key for you.
 7. Next, click <span mi btn>done</span> in the page header to confirm and return to the flow grid area.
 8. From here, you can make the following optional configurations:
@@ -195,11 +191,6 @@ Now that we know how to create and configure a flow, it's time to get a firmer u
 
 ## The Data Chain
 
-<!--
-<video title="The data chain" autoplay playsinline muted loop controls>
-<source src="{{CDN_URL}}/docs/v9/" type="video/mp4" />
-</video>
--->
 
 Remember, each flow creates its own JSON object to store any data generated.
 
@@ -261,11 +252,6 @@ Remember, `$trigger`, `$accountability`, and `$last` begin with `$`, but not `op
 
 ## Data Chain Variables
 
-<!--
-<video title="Use data chain Keys as Variables" autoplay playsinline muted loop controls>
-<source src="{{CDN_URL}}/docs/v9/" type="video/mp4" />
-</video>
--->
 
 While [configuring your operations](#configure-an-operation), you can use keys from the data chain as variables to
 access data. Simply wrap the variable with quotes and _double mustaches_. For example:
@@ -318,17 +304,9 @@ Certain operations use dropdowns, toggles, checkboxes, and other input options. 
 input raw values directly with [Toggle to Raw Editor](#configure-an-operation). You can use double-moustache syntax to
 access data dynamically in these input options as well.
 
-<!--
-<video autoplay playsinline muted loop controls title="">
-	<source src="{{CDN_URL}}/docs/v9/configuration/flows/flows/" type="video/mp4" />
-</video>
--->
 
 ## Logs
 
-<video autoplay playsinline muted loop controls title="">
-	<source src="{{CDN_URL}}/docs/v9/configuration/flows/flows/flows-20220603A/logs-20220603A.mp4" type="video/mp4" />
-</video>
 
 Accessible from the sidebar, logs store information for each flow execution. Each log will display information from
 triggers as well as each operation in the flow. To access a flow's logs, follow these steps.

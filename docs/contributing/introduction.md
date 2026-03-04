@@ -1,27 +1,27 @@
 ---
-description: An introduction to the process, rules and guidelines that for all code contributions to Directus.
+description: An introduction to the process, rules and guidelines that for all code contributions to d9.
 readTime: 6 min read
 ---
 
 # Contributing
 
-Heya! Welcome to Directus, and thank you for taking the time to contribute back to our project! ❤️ We want everybody to
-be able to contribute to Directus, no matter your background or expertise. In order to facilitate that, we've put
+Heya! Welcome to d9, and thank you for taking the time to contribute back to our project! ❤️ We want everybody to
+be able to contribute to d9, no matter your background or expertise. In order to facilitate that, we've put
 together a couple tips and tricks below. Our team truly appreciates every single contributor, community member, GitHub
 star, pull-request, bug report, and feature request.
 
 > We're here to help!
 >
-> If you have _any_ questions along your contributor journey, please feel free to come chat with us on
-> [our Discord server]({{DISCORD_CHAT_URL}}).
+> If you have _any_ questions along your contributor journey, please feel free to reach out on
+> [GitHub Discussions]({{GITHUB_COMMUNITY_URL}}) or via [email](mailto:{{SUPPORT_EMAIL}}).
 
 ## Code of Conduct
 
-**The Directus [Code of Conduct]({{GITHUB_URL}}/blob/main/code_of_conduct.md) is one of the
+**The d9 [Code of Conduct]({{GITHUB_URL}}/blob/main/code_of_conduct.md) is one of the
 ways we put our values into practice. We expect all of our staff, contractors and contributors to know and follow this
 code.**
 
-**Our contributors and maintainers work extremely hard to build Directus as premium open-source software. Please be
+**Our contributors and maintainers work extremely hard to build d9 as open-source software. Please be
 respectful of those efforts throughout our ecosystem. Trolling, harassing, insulting, or other unacceptable behavior by
 participants will not be tolerated.**
 
@@ -58,8 +58,8 @@ Discussion on our GitHub Discussions board: {{GITHUB_URL}}/discussions
 
 ### Helping Others
 
-The Directus community is growing quickly, which also means there's more and more people that have questions. Helping
-out your fellow developers by answering questions on [Discord]({{DISCORD_CHAT_URL}}) or
+The d9 community is growing quickly, which also means there's more and more people that have questions. Helping
+out your fellow developers by answering questions on
 [GitHub Discussions]({{GITHUB_URL}}/discussions/categories/q-a) is a great way to help the
 project.
 
@@ -73,9 +73,9 @@ have been triaged, accepted, and are ready to be implemented.
 
 #### Implementing Features
 
-With the continuous growth of Directus, more and more people are relying on Directus for (critical) data workloads in
+With the continuous growth of d9, more and more people are relying on d9 for (critical) data workloads in
 various use cases. This means we need to be careful with any changes that might affect the stability, security,
-performance, or scalability of Directus. For this reason, it's important that any new feature is properly thought
+performance, or scalability of d9. For this reason, it's important that any new feature is properly thought
 through and discussed before being implemented.
 
 Before you start writing code to implement your new feature idea, please read through and understand our triaging
@@ -97,7 +97,7 @@ actionable item, be it a feature or otherwise.
 
 ### Reporting Security Vulnerabilities
 
-If you believe you have discovered a security issue within a Directus product or service, please reach out to us
+If you believe you have discovered a security issue within a d9 product or service, please reach out to us
 directly over email: [{{SECURITY_EMAIL}}](mailto:{{SECURITY_EMAIL}}). We will then open a
 [GitHub Security Advisory]({{GITHUB_URL}}/security/advisories) for tracking the fix.
 
@@ -105,5 +105,5 @@ We value the members of the independent security research community who find sec
 team so that proper fixes can be issued to users. Our policy is to credit all researchers in the fix's release notes. In
 order to receive credit, security researchers must follow responsible disclosure practices, including:
 
-- They do not publish the vulnerability prior to the Directus team releasing a fix for it
+- They do not publish the vulnerability prior to the d9 team releasing a fix for it
 - They do not divulge exact details of the issue, e.g., through exploits or proof-of-concepts

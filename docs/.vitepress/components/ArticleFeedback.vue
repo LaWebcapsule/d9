@@ -30,7 +30,7 @@ const prompts = [
 	'Make it count',
 	'Leave some feedback',
 	'Help us improve',
-	`We're all ears 🐰`,
+	`We're all ears ☄️`,
 	'Tell us what is missing',
 	'Your thoughts matter to us',
 	'Feedback is a gift',

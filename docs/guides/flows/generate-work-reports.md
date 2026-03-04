@@ -1,5 +1,5 @@
 ---
-description: This recipe outlines a method to generate reports using Directus Flows.
+description: This recipe outlines a method to generate reports using d9 Flows.
 tags: []
 skill_level:
 directus_version: 9.18.1
@@ -19,7 +19,7 @@ Pairs well with [workflows](/cookbook/permissions/workflows.md)
 
 <!-- **Skill Level:** {{$frontmatter.skill_level}}\ -->
 
-**Directus Version:** {{$frontmatter.directus_version}}
+**d9 Version:** {{$frontmatter.directus_version}}
 
 <!-- **Tags:** {{$frontmatter.tags.join(", ")}} -->
 

@@ -11,7 +11,7 @@ the `src/` folder of your extension package.
 ### App Entrypoint
 
 The App entrypoint exports a configuration object with options to configure the appearance of your operation. When
-loading your operation, this object is imported by the Directus App host.
+loading your operation, this object is imported by the d9 App host.
 
 Example of an entrypoint:
 
@@ -46,7 +46,7 @@ export default {
 - `id` — The unique key for this operation. It is good practice to scope proprietary operations with an author prefix.
 - `name` — The human-readable name for this operation.
 - `icon` — An icon name from the [material icon set](/getting-started/glossary#material-icons), or the extended list of
-  Directus custom icons.
+  d9 custom icons.
 - `description` — A short description (<80 characters) of this operation shown in the App.
 - `overview` — An overview that will be shown on the operation's tile. Can be either a function that receives the
   options of the operation and returns an array of objects containing `label` and `text` or a dedicated Vue component.
@@ -55,7 +55,7 @@ export default {
 ### API Entrypoint
 
 The API entrypoint exports a configuration object with options to configure the behavior of your operation. When loading
-your operation, this object is imported by the Directus API host.
+your operation, this object is imported by the d9 API host.
 
 Example of an entrypoint:
 
@@ -75,7 +75,7 @@ export default {
 
 ::: warning Extension Id
 
-The extension id needs to be identical for both entrypoints in order for Directus to recognize them as part of the same
+The extension id needs to be identical for both entrypoints in order for d9 to recognize them as part of the same
 extension.
 
 :::

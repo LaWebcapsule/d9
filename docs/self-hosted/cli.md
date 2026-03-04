@@ -1,15 +1,15 @@
 ---
 description:
-  Directus has two command line interfaces (CLI) that you can use for various actions, one for server-side actions and
-  another to interact with a Directus instance as you would with an SDK
+  d9 has two command line interfaces (CLI) that you can use for various actions, one for server-side actions and
+  another to interact with a d9 instance as you would with an SDK
 readTime: 7 min read
 ---
 
 # Command Line Interface
 
-> Directus has two command line interfaces (CLI) that you can use for various actions. One is used for server-side
+> d9 has two command line interfaces (CLI) that you can use for various actions. One is used for server-side
 > actions that relate to your on-prem instance, like migrating the database or resetting a user, while the other allows
-> you to interact with a Directus instance as you would with an SDK.
+> you to interact with a d9 instance as you would with an SDK.
 
 ## Requirements
 
@@ -60,7 +60,7 @@ custom migration or an external service, for example).
 npx directus database install
 ```
 
-Installs the initial Directus system tables on an empty database. Used internally by `bootstrap`.
+Installs the initial d9 system tables on an empty database. Used internally by `bootstrap`.
 
 It should be used only in specific cases, e.g. when you want to run something between `install` and `migrate`. You
 probably should call `directus database migrate:latest` afterwards manually.
@@ -75,17 +75,17 @@ npx directus database migrate:up
 npx directus database migrate:down
 ```
 
-Migrate the database up/down to match the versions of Directus. Once you update Directus itself, make sure to run
+Migrate the database up/down to match the versions of d9. Once you update d9 itself, make sure to run
 `npx directus database migrate:latest` (or `npx directus bootstrap`) to update your database.
 
 ### Migrate Schema to a different Environment
 
 This allows you to do things like migrate a schema from development to production. To move your configured data model
-between Directus instances, you can use the schema "snapshot" and "apply" commands.
+between d9 instances, you can use the schema "snapshot" and "apply" commands.
 
 #### Snapshot the Data Model
 
-Directus can automatically generate a snapshot of your current data model in YAML or JSON format. This includes all
+d9 can automatically generate a snapshot of your current data model in YAML or JSON format. This includes all
 collections, fields, and relations, and their configuration. This snapshot can be checked in version control and shared
 with your team. To generate the snapshot, run
 
@@ -119,7 +119,7 @@ your server to keep a schema backup.
 #### Applying a Snapshot
 
 To make a different instance up to date with the latest changes in your data model, you can apply the snapshot. By
-applying the snapshot, Directus will auto-detect the changes required to make the current instance up to date with the
+applying the snapshot, d9 will auto-detect the changes required to make the current instance up to date with the
 proposed data model in the snapshot file, and will run the required migrations to the database to make it match the
 snapshot.
 
@@ -200,7 +200,7 @@ instead.
 
 ### Instances
 
-Most client-side CLI commands needs a running Directus instance in order to work. To connect the CLI to an instance, you
+Most client-side CLI commands needs a running d9 instance in order to work. To connect the CLI to an instance, you
 can use `directusctl instance connect` command. These instance's configs are going to be saved on `~/.directus` folder.
 
 To manage the connected instances, you can use `directusctl instance <command>` commands.
@@ -210,7 +210,7 @@ To manage the connected instances, you can use `directusctl instance <command>` 
 By default, commands will try using an instance named `default` when executing commands.
 
 If you want to change which instance you want to use, either pass `--instance <name>` to the command, or configure
-`instance` variable on your project's Directus config file.
+`instance` variable on your project's d9 config file.
 
 For example:
 
@@ -226,7 +226,7 @@ The CLI is designed with ease of use and automation in mind, this means that you
 by setting how you want the data to be written to the terminal. We currently support three formats, `table` (the default
 one), `json` and `yaml`.
 
-This makes it easier to parse and use data from Directus with other tools like `jq`, `yq`, `grep` or any other tools
+This makes it easier to parse and use data from d9 with other tools like `jq`, `yq`, `grep` or any other tools
 that accepts data from `stdin`
 
 It's also worth mentioning that everything is data. Try for example running `directusctl --help --format=json`.
@@ -254,5 +254,5 @@ Useful when you need to parse data using tools like `jq` for example.
 
 <!-- ### Extending
 
-To find how you can extend the CLI and write custom commands, check how we make Directus highly extensible on our
+To find how you can extend the CLI and write custom commands, check how we make d9 highly extensible on our
 [extensions overview page](/concepts/extensions). -->

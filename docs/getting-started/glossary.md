@@ -1,5 +1,5 @@
 ---
-description: A glossary of key Directus terminology.
+description: A glossary of key d9 terminology.
 readTime: 15 min read
 ---
 
@@ -67,9 +67,9 @@ group data based on department, objective, business process or anything you choo
 
 ## Database Abstraction
 
-Directus supports mirroring all the most widely used SQL databases, including PostgreSQL, MySQL, Microsoft SQL Server,
+d9 supports mirroring all the most widely used SQL databases, including PostgreSQL, MySQL, Microsoft SQL Server,
 SQLite, OracleDB, MariaDB, CockroachDB, and other variants. Each vendor has subtle (and sometimes not so subtle)
-differences in how they function, so Directus includes an abstraction layer that helps it avoid writing different code
+differences in how they function, so d9 includes an abstraction layer that helps it avoid writing different code
 for each type.
 
 This means there is also the possibility of supporting other datastores in the future, such as NoSQL options like
@@ -82,7 +82,7 @@ Displays are the smaller, read-only counterpart to [Interfaces](#interfaces), de
 displayed inline throughout the App.
 
 For example, you may have a "Status" field that uses a _Dropdown_ Interface on the Item Detail page, and a smaller
-_Badge_ Display when the field is referenced throughout the rest of the App. Directus includes many Displays
+_Badge_ Display when the field is referenced throughout the rest of the App. d9 includes many Displays
 out-of-the-box, below are the some key examples:
 
 - **Raw** — The exact value, straight from the API
@@ -141,7 +141,7 @@ is an excellent Digital Asset Management system.
 
 ### Material Icons
 
-Full list of icons [can be found here](https://fonts.google.com/icons). Directus supports both filled & outlined
+Full list of icons [can be found here](https://fonts.google.com/icons). d9 supports both filled & outlined
 variants of Material icons.
 
 ### Social Icons
@@ -193,7 +193,7 @@ connect data. For instance, if you have a `recipes` collection and an `ingredien
 ## Layouts
 
 Layouts determine how you view or interact with a Collection. In most cases, they offer a way to browse items based on a
-specific type of data, but can also be used to visualize or interact with data. Directus includes several Layout options
+specific type of data, but can also be used to visualize or interact with data. d9 includes several Layout options
 out-of-the-box, each with different features and configuration options.
 
 - **Table** — Works with any type of data, showing items as rows and their fields as columns.
@@ -238,7 +238,7 @@ Multitenancy is an architecture that allows multiple tenants (e.g., customers) t
 two main ways to achieve multitenancy:
 
 - **Project Scoping** — Creating a super-admin layer that provisions new tenant projects has been made easier by the
-  Cloud-native model of Directus 9+. This method involves developing custom code that can dynamically spin up/down
+  Cloud-native model of d9. This method involves developing custom code that can dynamically spin up/down
   projects, but is also the most flexible, supporting scoped extensions and differentiated project settings.
 - **Role Scoping** — In this method, you create one Role per tenant, and configure their permissions to properly scope
   them within a single project. This direction allows for tenants to share a single schema using _item_ scoped
@@ -279,7 +279,7 @@ often called `id`.
 ## Projects
 
 A Project is a complete instance of the platform. Each project represents a **Database**, but also encapsulates a config
-file, asset storage, and any custom extensions. Projects are the highest level of organization in Directus.
+file, asset storage, and any custom extensions. Projects are the highest level of organization in d9.
 
 - [Creating a Project](/self-hosted/quickstart)
 - [Configuring a Project](/self-hosted/config-options)
@@ -299,7 +299,7 @@ purpose. [Learn more about Relationships](/configuration/data-model/relationship
 ## Revisions
 
 Revisions are created whenever an Item is updated. These alternate versions are tracked so that previous states can be
-recovered. Every change made to items in Directus is stored as a complete versioned snapshot and a set of specific
+recovered. Every change made to items in d9 is stored as a complete versioned snapshot and a set of specific
 changes made (the delta). The revisions system is tightly coupled to the activity logs system, with each revision linked
 to the activity event where it was created.
 
@@ -308,7 +308,7 @@ to the activity event where it was created.
 Roles define a specific set of access permissions, and are the primary organizational structure for Users within the
 platform. You can create an unlimited number of roles, so organize your users in whatever way feels most appropriate.
 
-During the installation process, Directus automatically creates an "Administrators" Role, which is used to provide the
+During the installation process, d9 automatically creates an "Administrators" Role, which is used to provide the
 initial admin user with full platform access. However this is just a _normal_ role, and so it can still be updated,
 renamed, or even deleted. Keep in mind that your project must maintain at least one role with Admin Access at all times.
 
@@ -324,14 +324,14 @@ There is also a "Public" role that determines access for unauthenticated access.
 
 ## Singleton
 
-- **Directus** - A collection that only contains one single item
+- **d9** - A collection that only contains one single item
 - [**Design pattern**](https://www.patterns.dev/posts/singleton-pattern/) - Classes which can be instantiated once and
   can be accessed globally. This single instance can be shared throughout our application, which makes singletons great
   for managing global state in an application.
 
 ## Storage Adapters
 
-Storage adapters allow project files to be stored in different locations or services. By default, Directus includes the
+Storage adapters allow project files to be stored in different locations or services. By default, d9 includes the
 following drivers:
 
 - **Local Filesystem** — The default, any file system location or network-attached storage
@@ -367,9 +367,9 @@ cause data loss, so types are locked within the platform after a field is create
 
 ### Data Type Superset
 
-Directus uses its built-in database abstraction to properly support all the different SQL vendors. However, these
+d9 uses its built-in database abstraction to properly support all the different SQL vendors. However, these
 vendors do not share support for the same data types, instead, each SQL vendor maintains their own list. To standardize
-all of these differences, Directus has a single _superset_ of types that map to the vendor-specific ones.
+all of these differences, d9 has a single _superset_ of types that map to the vendor-specific ones.
 
 - **String** — A shorter set of characters with a configurable max length
 - **Text** — A longer set of characters with no real-world max length

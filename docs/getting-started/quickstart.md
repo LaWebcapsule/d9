@@ -1,74 +1,48 @@
 ---
 description:
-  Get up and running with Directus Cloud in minutes. Learn the basics of building your data model and managing
+  Get up and running with d9 in minutes. Learn the basics of building your data model and managing
   permissions.
 readTime: 7 min read
 ---
 
 # Quickstart Guide
 
-> This quickstart guide is designed to get you up and running with a Directus Cloud Project in a snap. Along the way,
-> you will better understand what Directus is, setup your free Directus Cloud Account, get a _hands-on introduction_ to
-> the App and API, and find more resources to deep-dive into.
+> This quickstart guide is designed to get you up and running with a d9 Project in a snap. Along the way,
+> you will better understand what d9 is, get a _hands-on introduction_ to the App and API, and find more
+> resources to deep-dive into.
 
-## 1. Create Cloud Account and Login
+## 1. Install & Start d9
 
-First, you'll need to [create an Account and log in](/cloud/accounts#create-account-and-login) on
-[Directus Cloud]({{CLOUD_URL}}/login)
+The fastest way to get started is with Docker:
 
-Your Directus Cloud Account allows you to create and manage any number of Projects. We've made life easier by giving you
-the option to create and log in to your free Cloud Account automatically with GitHub. If you don't have a GitHub account
-or prefer not to use this login method, email-and-password login is available as well.
+```bash
+docker run -d \
+  -p 8055:8055 \
+  -e KEY=some-random-key \
+  -e SECRET=another-random-key \
+  -e ADMIN_EMAIL=admin@example.com \
+  -e ADMIN_PASSWORD=your-password \
+  -e DB_CLIENT=sqlite3 \
+  -e DB_FILENAME=/directus/database/data.db \
+  ghcr.io/lawebcapsule/directus9:latest
+```
 
-The very first time you log in to your cloud account, you will be prompted to create a Team. Teams are totally free to
-create. Each Directus Cloud Project exists within the scope of one Team. They allow you to organize Team Members,
-Projects and Project Billing as desired.
+Or with npm:
 
-Once your Team is created, it's time to create your Directus Cloud Project!
+```bash
+npm init @wbce-d9/directus-project@latest
+```
 
-:::tip Learn More About Cloud
+Once running, open `http://localhost:8055` in your browser and log in with the admin credentials you set above.
 
-- [Overview](/cloud/overview)
-- [Cloud Accounts](/cloud/accounts)
-- [Cloud Teams](/cloud/teams)
+:::tip Learn More About Self-Hosting
 
-:::
-
-## 2. Create and Access Project
-
-To create a Project, follow the steps below:
-
-1. Open the Team Menu in the Dashboard Header and select or [create](/cloud/teams#create-a-team) the desired Team.
-2. Navigate to **"Projects"** and click **"Create Project"**.
-3. Set the Project Name and tier.
-4. Scroll to the bottom of the screen and choose the **"Empty Project"** Starting Template.\
-   Note: The **"Demo Project"** adds in dummy data for in-depth feature demonstrations.
-5. Click **"Create Project"**.
-
-_It should take around 90 seconds for the Cloud Project to build out. During this time, a link will be sent to the email
-associated with your Cloud Account. The email will contain your Project URL as well as an email and password to login.
-If you used GitHub to create your account, this will be your GitHub email. Once the build is complete, it's time log
-in!_
-
-7. You can [access a Project](/cloud/projects#access-a-project) from within the Cloud Dashboard or type the URL into
-   your browser.
-8. Log in with your username and password from the email.
-
-:::tip Check All Inbox Folders
-
-Due to the algorithms used by some email providers, it is possible the email containing your Project login information
-will end up in another folder like "Social" or "Promotions".
+- [Docker Guide](/self-hosted/docker-guide)
+- [Config Options](/self-hosted/config-options)
 
 :::
 
-:::tip Learn More About Cloud Projects
-
-- [Overview](/cloud/overview)
-- [Cloud Projects](/cloud/projects)
-
-:::
-
-## 3. Create a Collection
+## 2. Create a Collection
 
 Once logged in, you're greeted with the option to create your first [Collection](/getting-started/glossary#collections).
 
@@ -89,14 +63,14 @@ Once logged in, you're greeted with the option to create your first [Collection]
 
 :::
 
-## 4. Create a Field
+## 3. Create a Field
 
 With your first Collection created, it's time to start adding some [Fields](/getting-started/glossary#fields).
 
 1. Navigate to **Settings Module > Data Model > `Collection-Name`**.
 2. Click the **"Create Field"** button and select the **"Input"** Field type.
 3. Fill in a Field name under **Key**. We'll be calling our Field `title`.\
-   Directus offers powerful Field customization options, but let's stick to the defaults for now.
+   d9 offers powerful Field customization options, but let's stick to the defaults for now.
 4. Select **"Save"**.
 
 ::: tip Learn More About Fields
@@ -105,7 +79,7 @@ With your first Collection created, it's time to start adding some [Fields](/get
 
 :::
 
-## 5. Create an Item
+## 4. Create an Item
 
 Now that we have a Collection with a Field configured, it's time to add an [Item](/getting-started/glossary#).
 
@@ -121,15 +95,15 @@ Now that we have a Collection with a Field configured, it's time to add an [Item
 
 :::
 
-## 6. Set Roles & Permissions
+## 5. Set Roles & Permissions
 
-Directus comes with two built-in roles: Public and Admin. The Public Role determines what data is returned to
+d9 comes with two built-in roles: Public and Admin. The Public Role determines what data is returned to
 non-authenticated users. Public comes with all permissions turned off and can be reconfigured with fully granular
 control to expose exactly what you want unauthenticated Users to see. The Admin role has full permissions and this
 cannot be changed. Aside from these built-in Roles, any number of new Roles can be created, all with fully customized,
 granular permissions.
 
-By Default, content entered into Directus will be considered private. So permissions always start off set to the default
+By Default, content entered into d9 will be considered private. So permissions always start off set to the default
 of <span mi icon dngr>block</span> **No Access**, with full ability to reconfigure as desired. So, in order to have the
 API return our Items, let's add some read permissions. For simplicity's sake, we'll do this on the Public Role, instead
 of creating a new Role.
@@ -145,13 +119,13 @@ of creating a new Role.
 
 :::
 
-## 7. Connect to the API
+## 6. Connect to the API
 
 Now that your Project has some content in it which is exposed to the Public, it's time to start using this content
 externally! Data can be accessed in a number of ways, including the REST and GraphQL API endpoints. In this case, we'll
 use the `/items/` [REST API endpoint](/reference/items) to retrieve the Item we just created.
 
-1. Open `http://your-project-url.directus.app/items/articles`.\
+1. Open `http://localhost:8055/items/articles`.\
    You can use the browser or an API tool like [Postman](http://postman.com) or [Paw](https://paw.cloud)
 
 _And there it is! The Article Item you just created is being served in beautiful JSON, ready to be used anywhere and

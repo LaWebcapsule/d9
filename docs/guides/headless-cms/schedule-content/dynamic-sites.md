@@ -16,7 +16,7 @@ author: Bryant Gillespie
 
 <!-- **Skill Level:** {{$frontmatter.skill_level}}\ -->
 
-**Directus Version:** {{$frontmatter.directus_version}}
+**d9 Version:** {{$frontmatter.directus_version}}
 
 <!-- **Tags:** {{$frontmatter.tags.join(", ")}} -->
 
@@ -26,7 +26,7 @@ author: Bryant Gillespie
 
 This recipe explains how to schedule content to be published on a future date for dynamic sites.
 
-Scheduling content has fewer steps for a dynamic site. Since you are calling your Directus API at the time that a
+Scheduling content has fewer steps for a dynamic site. Since you are calling your d9 API at the time that a
 visitor requests a page from your site, all you need to do is add a filter to your query.
 
 :::info Note
@@ -57,7 +57,7 @@ field `status` that controls the published state.
 
 3. [Add a new field](/configuration/data-model/fields.html#create-a-field-standard) to your content Collection.
 
-   ![The interface for creating a new field is shown. The field type Datetime is selected. The Key is named date_published. The field for Use 24-Hour format is checked.]({{CDN_URL}}/docs/v9/headless-cms/how-to-packet-20220222A/scheduling-content-publish-date.webp)
+   ![The interface for creating a new field is shown. The field type Datetime is selected. The Key is named date_published. The field for Use 24-Hour format is checked.](/images/scheduling-content-publish-date.webp)
 
    a. Choose **Datetime** for the Type.
 
@@ -69,7 +69,7 @@ field `status` that controls the published state.
 
 4. [Create or update an Item](/app/content/items) inside your Collection
 
-   ![A content item within the Articles collection is shown. The title is "What is Headless CMS?". English translations are also shown with a Summary field. The Summary reads "A quick overview of what Headless CMS is and how it's beneficial to your team."]({{CDN_URL}}/docs/v9/headless-cms/how-to-packet-20220222A/scheduling-content-create-content-published.webp)
+   ![A content item within the Articles collection is shown. The title is "What is Headless CMS?". English translations are also shown with a Summary field. The Summary reads "A quick overview of what Headless CMS is and how it's beneficial to your team."](/images/scheduling-content-create-content-published.webp)
 
    a. Set the `status` field to `published`
 
@@ -77,7 +77,7 @@ field `status` that controls the published state.
 
    c. Add the content for other fields and save the Item
 
-### Check the Published Date When Calling the Directus API
+### Check the Published Date When Calling the d9 API
 
 - When calling the API, add a [filter rule](/reference/filter-rules) that checks the `date_published` field.
 - Use the `_lte` operator to filter for dates that are less than or equal the current date/time.
@@ -93,7 +93,7 @@ articles that have a publish date AND have the `published` state are displayed o
 
 :::
 
-Using the [Directus JavaScript SDK](/reference/sdk) (preferred)
+Using the [d9 JavaScript SDK](/reference/sdk) (preferred)
 
 ```js
 const articles = await directus.items('articles').readByQuery({

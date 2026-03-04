@@ -1,12 +1,12 @@
 ---
 description:
-  A collection of example Directus configurations for integrating with various OAuth 2.0, OpenID and SAML platforms.
+  A collection of example d9 configurations for integrating with various OAuth 2.0, OpenID and SAML platforms.
 readTime: 2 min read
 ---
 
 # SSO Examples
 
-Below is a collection of example Directus configurations for integrating with various OAuth 2.0 and OpenID platforms.
+Below is a collection of example d9 configurations for integrating with various OAuth 2.0 and OpenID platforms.
 
 Due to the large number of available SSO platforms, this list will only cover the most common configurations.
 Contributions to expand and maintain the list are encouraged.
@@ -104,7 +104,7 @@ AUTH_GITHUB_PROFILE_URL="https://api.github.com/user"
 
 ::: warning Notice
 
-If the authenticating user has not marked their email as "public" in GitHub, it will not be accessible by Directus.
+If the authenticating user has not marked their email as "public" in GitHub, it will not be accessible by d9.
 
 :::
 
@@ -165,15 +165,15 @@ AUTH_AWSSSO_EMAIL_KEY=email
 - Users have found that replacing
   `<md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://your-soo-portal-url"/>`
   in the IAM Identity Center SAML metadata file with your AWS Portal URL is a fix for getting the 'Login With SSO'
-  button on Directus to work, rather the default redirect from AWS.
+  button on d9 to work, rather the default redirect from AWS.
 
-- Directus expects `<?xml version="1.0" encoding="UTF-8"?>` to be removed from the start of the XML.
+- d9 expects `<?xml version="1.0" encoding="UTF-8"?>` to be removed from the start of the XML.
 
 :::
 
 **Mapping:**
 
-Maps the email address into Directus as external_identifier:
+Maps the email address into d9 as external_identifier:
 
 ```
 | User attribute in the application | Maps to this string value or user attribute in IAM Identity Center | type |

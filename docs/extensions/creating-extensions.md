@@ -1,11 +1,11 @@
 ---
-description: A guide on how to scaffold your Directus Extension.
+description: A guide on how to scaffold your d9 Extension.
 readTime: 5 min read
 ---
 
 # Creating Extensions
 
-## Scaffolding your Directus Extension
+## Scaffolding your d9 Extension
 
 The easiest way to start developing extensions is to use the `create-directus-extension` utility:
 
@@ -40,14 +40,14 @@ The generated `package.json` file contains an additional `directus:extension` fi
 - `type` — The type of the extension
 - `path` — The path to the built extension
 - `source` — The path to the source entrypoint
-- `host` — A semver string that indicates with which versions of the Directus host, the extension is compatible with
+- `host` — A semver string that indicates with which versions of the d9 host, the extension is compatible with
 
 The CLI will use those fields by default to determine the input and output file paths and how the extension should be
 built.
 
 ## Building your Extension
 
-Before your extension can be used by Directus, it has to be built. If you used the `create-directus-extension` utility
+Before your extension can be used by d9, it has to be built. If you used the `create-directus-extension` utility
 to scaffold your extension, building your extension is as easy as running:
 
 ```bash
@@ -131,7 +131,7 @@ on changes automatically.
 
 ## Publishing your Extension
 
-To make an extension available to all Directus users, you can publish the npm package created by
+To make an extension available to all d9 users, you can publish the npm package created by
 `@wbce-d9/extensions-sdk` to the npm registry. Make sure the name of the package follows the naming convention for
 package extensions: `directus-extension-<extension-name>` or `@<scope>/directus-extension-<extension-name>`.
 `<extension-name>` has to be replaced with the name of your extension.
@@ -143,8 +143,8 @@ There are two ways to install an extension.
 ### Package Extension
 
 Package extensions are essentially npm packages. They can be installed from the npm registry, from a tarball, from a git
-repository or any other means supported by npm. On startup, Directus will automatically load any package extension
-installed into your Directus project folder.
+repository or any other means supported by npm. On startup, d9 will automatically load any package extension
+installed into your d9 project folder.
 
 To install an extension from the npm registry, simply use the npm CLI:
 
@@ -153,7 +153,7 @@ cd <directus-project-folder>
 npm install <full-package-extension-name>
 ```
 
-`<project-folder>` has to be replaced by the Directus project folder. `<full-package-extension-name>` should be replaced
+`<project-folder>` has to be replaced by the d9 project folder. `<full-package-extension-name>` should be replaced
 with the full name of the package extension (e.g. `directus-extension-custom`).
 
 ### Local Extension

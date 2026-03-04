@@ -1,5 +1,5 @@
 ---
-description: REST and GraphQL API documentation on the Permissions collection in Directus.
+description: REST and GraphQL API documentation on the Permissions collection in d9.
 readTime: 5 min read
 pageClass: page-reference
 ---
@@ -60,7 +60,7 @@ What fields the user is allowed to alter.
 
 ## List Permissions
 
-List all permissions that exist in Directus.
+List all permissions that exist in d9.
 
 ::: tip Permissions
 

@@ -1,6 +1,6 @@
 ---
 description:
-  Directus supports internationalization across the entire App. Many languages are currently supported, with more being
+  d9 supports internationalization across the entire App. Many languages are currently supported, with more being
   added all the time. Anyone can add or refine any languages through the integration with Crowdin
 readTime: 2 min read
 ---
@@ -50,4 +50,4 @@ using the "Comment" section.
 ## Requesting a New Language
 
 To add a new language to the Crowdin service, you can make a request via Crowdin's **Discussions** section, or reach out
-to a Core Team member via [Discord]({{DISCORD_CHAT_URL}}).
+to the Core Team via [email](mailto:{{SUPPORT_EMAIL}}).

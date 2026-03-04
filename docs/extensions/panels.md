@@ -1,5 +1,5 @@
 ---
-description: A guide on how to build custom Panels in Directus.
+description: A guide on how to build custom Panels in d9.
 readTime: 3 min read
 ---
 
@@ -13,7 +13,7 @@ readTime: 3 min read
 
 The entrypoint of your panel is the `index` file inside the `src/` folder of your extension package. It exports a
 configuration object with options to configure the behavior of your panel. When loading your panel, this object is
-imported by the Directus host.
+imported by the d9 host.
 
 Example of an entrypoint:
 
@@ -47,7 +47,7 @@ export default {
 - `id` — The unique key for this panel. It is good practice to scope proprietary panels with an author prefix.
 - `name` — The human-readable name for this panel.
 - `icon` — An icon name from the [material icon set](/getting-started/glossary#material-icons), or the extended list of
-  Directus custom icons.
+  d9 custom icons.
 - `description` — A short description (<80 characters) of this panel shown in the App.
 - `component` — A reference to your panel component.
 - `options` — The options of your panel. Can be either an options object or a dedicated Vue component.
@@ -56,7 +56,7 @@ export default {
 
 ## Panel Component
 
-The panel component is the part of your extension that will be rendered by the Directus App whenever your panel should
+The panel component is the part of your extension that will be rendered by the d9 App whenever your panel should
 be used for data visualization in a dashboard within the Insights module. This panel component has to be Vue component.
 The most straightforward way to write a Vue component is to use the Vue Single File Component syntax.
 
@@ -106,7 +106,7 @@ export default {
 
 ::: warning Vue Version
 
-The Directus App uses Vue 3. There might be 3rd party libraries that aren't yet compatible with Vue 3.
+The d9 App uses Vue 3. There might be 3rd party libraries that aren't yet compatible with Vue 3.
 
 :::
 

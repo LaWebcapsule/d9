@@ -9,9 +9,6 @@ readTime: 2 min read
 > The Settings Module is where your entire Project is configured, making it the first place to go after installation. To
 > maintain project safety and integrity, this module is only available to Administrators.
 
-<video autoplay playsinline muted loop controls>
-<source src="{{CDN_URL}}/docs/v9/app-guide/settings/settings-20220308A/settings-20220308A.mp4" type="video/mp4" />
-</video>
 
 ::: warning Administrators Only
 

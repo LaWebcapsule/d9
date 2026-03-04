@@ -1,5 +1,5 @@
 ---
-description: REST and GraphQL API documentation on the "Collections" collection in Directus.
+description: REST and GraphQL API documentation on the "Collections" collection in d9.
 readTime: 5 min read
 pageClass: page-reference
 ---
@@ -18,7 +18,7 @@ Name of the collection. This matches the table name in the database.
 
 #### Meta
 
-Directus metadata, primarily used in the Admin App.
+d9 metadata, primarily used in the Admin App.
 
 `collection` **string**\
 Name of the collection. This matches the table name in the database.

@@ -25,11 +25,8 @@ To manage the Activity Log programmatically, please see our guide on the
 
 ## Overview
 
-<video title="Activity Log Overview" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/activity-log/activity-log-20220816/activity-log-20220816A.mp4" type="video/mp4" />
-</video>
 
-The Activity Log is the only Module in Directus Core that is not found in the [Module Bar](/app/overview#_1-module-bar).
+The Activity Log is the only Module in d9 Core that is not found in the [Module Bar](/app/overview#_1-module-bar).
 Instead, it is accessed via the notifications tray of the [Sidebar](/app/overview#_4-sidebar). The Activity Log page has
 the same features and functionality as the [Collection Page](/app/content/collections).
 
@@ -49,7 +46,7 @@ please see [Revert an Item](/app/content/items#revert-an-item).
 
 ## View an Activity Log Item
 
-![Activity Log Default Fields]({{CDN_URL}}/docs/v9/configuration/activity-log/activity-log-20220816/activity-log-default-fields-20220816A.webp)
+![Activity Log Default Fields](/images/activity-log-default-fields-20220816A.webp)
 
 Click any item in the Activity Log and a side drawer will open, displaying its logged details. The following information
 is stored for each item.
@@ -65,18 +62,12 @@ is stored for each item.
 
 ## Filter by Activity
 
-<video title="Filter by Activity" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/activity-log/activity-log-20220816/filter-by-activity-20220817A.mp4" type="video/mp4" />
-</video>
 
 In addition to the filter and display functionality inherited from the [Collection Page](/app/content/collections), you
 can also filter items by activity from the Navigation Bar.
 
 ## Modify an Activity
 
-<video title="Filter by Activity" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/activity-log/activity-log-20220816/modify-an-activity-20220817A.mp4" type="video/mp4" />
-</video>
 
 To ensure proper accountability, system collections are **read only** by design. However, users with an Admin role have
 the ability to reopen, view, and modify an item's values in activities from non-system collections (where the name does

@@ -1,6 +1,6 @@
 ---
 description:
-  The core concepts behind Directus are simple, however the problems that must be solved to honor them can be remarkably
+  The core concepts behind d9 are simple, however the problems that must be solved to honor them can be remarkably
   complex. We strive to design and engineer the most elegant solutions possible, so that our codebase remains
   accessible.
 readTime: 3 min read
@@ -8,20 +8,20 @@ readTime: 3 min read
 
 # Codebase Overview
 
-> **The core concepts behind Directus are simple, however the problems that must be solved to honor them can be
+> **The core concepts behind d9 are simple, however the problems that must be solved to honor them can be
 > remarkably complex.** We strive to design and engineer the most elegant solutions possible, so that our codebase
 > remains accessible.
 
 ## Monorepo
 
-The primary Directus repository is located at [`directus/directus`]({{GITHUB_URL}}) and
+The primary d9 repository is located at [`directus/directus`]({{GITHUB_URL}}) and
 houses the Admin App (Vue.js 3 w/ Composition API), API (Node.js), API Specification (OpenAPI), and other smaller
-packages used internally. Directus follows a monorepo design similar to React or Babel — this page will outline our
+packages used internally. d9 follows a monorepo design similar to React or Babel — this page will outline our
 monorepo's design and structure.
 
 ## `/api`
 
-Contains the Directus API (REST+GraphQL), written in Node.js.
+Contains the d9 API (REST+GraphQL), written in Node.js.
 
 #### `/api/src/cli`
 
@@ -58,7 +58,7 @@ Various utility functions.
 
 ## `/app`
 
-Contains the Directus Admin App, written in Vue.js 3 w/ the Composition API.
+Contains the d9 Admin App, written in Vue.js 3 w/ the Composition API.
 
 #### `/app/public`
 

@@ -17,7 +17,7 @@ author: Eron Powell
 
 <!-- **Skill Level:** {{$frontmatter.skill_level}}\ -->
 
-**Directus Version:** {{$frontmatter.directus_version}}
+**d9 Version:** {{$frontmatter.directus_version}}
 
 <!-- **Tags:** {{$frontmatter.tags.join(", ")}} -->
 
@@ -38,7 +38,7 @@ content creation process.
 There are an infinite number of possible workflows you could configure. But for this recipe, we will configure a simple
 workflow where `writers` and `editors` work together to create, co-edit and publish `articles`.
 
-![A Workflow]({{CDN_URL}}/docs/v9/configuration/users-roles-permissions/workflows-20220909/workflows-20220909B.webp)
+![A Workflow](/images/workflows-20220909B.webp)
 
 For this recipe, our workflow will have three stages, `draft`, `under review`, and `published`, which will be defined in
 a `status` field.
@@ -53,7 +53,7 @@ a `status` field.
 This whole workflow is created with permissions. All we need to do to create these stages is change the `author` and
 `editor` permissions for each item in `articles` conditionally, based on the value of `status`.
 
-![A Workflow]({{CDN_URL}}/docs/v9/configuration/users-roles-permissions/workflows-20220909/workflows-20220909A.webp)
+![A Workflow](/images/workflows-20220909A.webp)
 
 ## How-To Guide
 
@@ -62,7 +62,7 @@ This whole workflow is created with permissions. All we need to do to create the
 To implement a workflow, you'll need:
 
 - An understanding of [permissions](/configuration/users-roles-permissions.md) and [filters](/reference/filter-rules.md)
-  in Directus.
+  in d9.
 - A collection with some kind of content. In this recipe, we'll use a collection called `articles`.
 - A field on that collection to validate conditionally. We'll use a `status` field.
 - Two _(or more)_ roles that will work to author content. We'll use `writer` and `editor` roles.
