@@ -5,7 +5,7 @@
 
 ## Input
 
-![A standard form text input](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-input.webp)
+![A standard form text input]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-input.webp)
 
 A standard form input.
 
@@ -19,7 +19,7 @@ A standard form input.
 
 ## Autocomplete Input (API)
 
-![An autocomplete form text input that shows a dropdown list of options based on a search query](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-autocomplete.webp)
+![An autocomplete form text input that shows a dropdown list of options based on a search query]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-autocomplete.webp)
 
 A search input that will populate dropdown choices by making a request to a given URL.
 
@@ -33,7 +33,7 @@ A search input that will populate dropdown choices by making a request to a give
 
 ## Code
 
-![A code editor input](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-code.webp)
+![A code editor input]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-code.webp)
 
 Code editor for pre-formatted text.
 
@@ -46,7 +46,7 @@ Code editor for pre-formatted text.
 
 ## Textarea
 
-![A standard form textarea input](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-textarea.webp)
+![A standard form textarea input]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-textarea.webp)
 
 Textarea input for longer plain text.
 
@@ -55,7 +55,7 @@ Textarea input for longer plain text.
 
 ## WYSIWYG
 
-![A What You See Is What You Get (WYSIWYG) form input that has a toolbar for formatting](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-wysiwyg.webp)
+![A What You See Is What You Get (WYSIWYG) form input that has a toolbar for formatting]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-wysiwyg.webp)
 
 The What You See Is What You Get (WYSIWYG) interface provides a text area with rich formatting options in the toolbar.
 
@@ -71,7 +71,7 @@ The What You See Is What You Get (WYSIWYG) interface provides a text area with r
 
 ## Markdown
 
-![A markdown text editor with a toolbar with formatting options. Edit and preview tabs.](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-markdown.webp)
+![A markdown text editor with a toolbar with formatting options. Edit and preview tabs.]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-markdown.webp)
 
 Markdown text editor with formatting options in the toolbar. You can switch between Edit and Preview modes.
 
@@ -86,7 +86,7 @@ Markdown text editor with formatting options in the toolbar. You can switch betw
 
 ## Tags
 
-![A standard form text input where user can select, add, and remove tags.](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-tags.webp)
+![A standard form text input where user can select, add, and remove tags.]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-tags.webp)
 
 A text input that allows users to apply any number of tags. When adding new tag, press Enter to save the tag.
 

@@ -20,7 +20,7 @@ API documentation
 ## Overview
 
 <video title="Overview" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/data-model/data-model-20220805/collections-20220805A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/collections-20220805A.mp4" type="video/mp4" />
 </video>
 
 Collections are data tables. Typically, you access items within a collection in the [Content Module](/app/content).
@@ -28,7 +28,7 @@ Collections are data tables. Typically, you access items within a collection in 
 ## System Collections
 
 <video title="System Collections" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/data-model/collections/collections-20220805/system-collections-20220805A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/collections/collections-20220805/system-collections-20220805A.mp4" type="video/mp4" />
 </video>
 
 System collections store the data and configuration details required to power your project.
@@ -67,7 +67,7 @@ each system collection is responsible for, as well as where to find relevant App
 ## Create a Collection
 
 <video title="Create a Collection" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/data-model/collections/collections-20220805/create-a-collection-20220805A.mp4
+	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/collections/collections-20220805/create-a-collection-20220805A.mp4
 " type="video/mp4" />
 </video>
 
@@ -121,7 +121,7 @@ and it will automatically appear within your Directus project. The first time yo
 ## Toggle Collection Visibility
 
 <video title="Hide a Collection" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/data-model/collections/collections-20220805/toggle-collection-visibility-20220805A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/collections/collections-20220805/toggle-collection-visibility-20220805A.mp4" type="video/mp4" />
 </video>
 
 To toggle whether a collection is hidden by default in the Content Module, follow these steps.
@@ -141,7 +141,7 @@ Collections**.
 ## Create a Folder
 
 <video title="Create a Folder" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/data-model/collections/collections-20220805/create-a-folder-20220805A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/collections/collections-20220805/create-a-folder-20220805A.mp4" type="video/mp4" />
 </video>
 
 Folders allow you to sub-nest and group how collections are displayed. This feature simply changes how the collections
@@ -157,7 +157,7 @@ folder, follow these steps.
 ## Toggle Folder Display
 
 <video title="Toggle Folder Display" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/data-model/collections/collections-20220805/toggle-folder-display-20220805A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/collections/collections-20220805/toggle-folder-display-20220805A.mp4" type="video/mp4" />
 </video>
 
 To toggle folder display, follow these steps.
@@ -171,7 +171,7 @@ To toggle folder display, follow these steps.
 ## Sort and Nest Collections
 
 <video title="Configure a Collection" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/data-model/collections/collections-20220805/sort-and-nest-collections.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/collections/collections-20220805/sort-and-nest-collections.mp4" type="video/mp4" />
 </video>
 
 To sort and nest collections in **Settings > Data Model** and **Content Module**, follow these steps.
@@ -183,7 +183,7 @@ To sort and nest collections in **Settings > Data Model** and **Content Module**
 ## Configure a Collection
 
 <video title="Configure a Collection" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/data-model/collections/collections-20220805/configure-a-collection-20220805A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/collections/collections-20220805/configure-a-collection-20220805A.mp4" type="video/mp4" />
 </video>
 
 To configure a collection, follow these steps.
@@ -202,7 +202,7 @@ To configure a collection, follow these steps.
 ### Fields & Layout
 
 <video title="Fields and Layout" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/data-model/collections/collections-20220805/fields-and-layout-20220805A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/collections/collections-20220805/fields-and-layout-20220805A.mp4" type="video/mp4" />
 </video>
 
 This section allows you to create and configure fields, as well as configure how fields are displayed on the
@@ -212,7 +212,7 @@ This section allows you to create and configure fields, as well as configure how
 ### Collection Setup
 
 <video title="Collection Setup" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/data-model/collections/collections-20220805/collection-setup-20220805A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/collections/collections-20220805/collection-setup-20220805A.mp4" type="video/mp4" />
 </video>
 
 These controls allow you to modify how the collection is displayed within the Content Module.
@@ -249,7 +249,7 @@ A collection that only contains one single item. For example, a website's **Abou
 ### Archive
 
 <video title="Archive" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/data-model/collections/collections-20220805/archive-20220805A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/collections/collections-20220805/archive-20220805A.mp4" type="video/mp4" />
 </video>
 
 Selects a field to handle archiving items. This provides a _soft-delete_ functionality for items in a collection.
@@ -287,7 +287,7 @@ filtered out. This gives you the flexibility to manage archived items however yo
 ### Sort Field
 
 <video autoplay playsinline muted loop controls title="Batch Edit Items">
-	<source src="https://cdn.directus.io/docs/v9/app-guide/content/content-collections/content-collections-20220415A/manually-sort-items-20220415A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/app-guide/content/content-collections/content-collections-20220415A/manually-sort-items-20220415A.mp4" type="video/mp4" />
 </video>
 
 The sort feature enables users to [manually sort Items](/app/content/collections#manually-sort-items) within the Data
@@ -331,7 +331,7 @@ You can also set this field to be **Hidden** so it doesn't show up within the It
 ### Accountability
 
 <video title="Accountability" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/data-model/collections/collections-20220805/acountability-20220805A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/collections/collections-20220805/acountability-20220805A.mp4" type="video/mp4" />
 </video>
 
 By default, your Directus Project tracks all [activity](/reference/system/activity) and
@@ -354,7 +354,7 @@ Accountability is a log of _who does what_ in your project. It is for your team'
 ### Duplication
 
 <video title="Duplication" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/data-model/collections/collections-20220805/duplicate-20220805A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/collections/collections-20220805/duplicate-20220805A.mp4" type="video/mp4" />
 </video>
 
 The **Save as Copy** option on the Item Details Page offers a way to effectively duplicate the current item. Since there
@@ -366,7 +366,7 @@ lets you configure which parent & relational field values will be copied when yo
 ## Delete a Collection
 
 <video title="Delete a Collection" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/data-model/collections/collections-20220805/delete-a-collection-20220805A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/collections/collections-20220805/delete-a-collection-20220805A.mp4" type="video/mp4" />
 </video>
 
 To delete a collection, follow these steps.

@@ -57,7 +57,7 @@ field `status` that controls the published state.
 
 3. [Add a new field](/configuration/data-model/fields.html#create-a-field-standard) to your content Collection.
 
-   ![The interface for creating a new field is shown. The field type Datetime is selected. The Key is named date_published. The field for Use 24-Hour format is checked.](https://cdn.directus.io/docs/v9/headless-cms/how-to-packet-20220222A/scheduling-content-publish-date.webp)
+   ![The interface for creating a new field is shown. The field type Datetime is selected. The Key is named date_published. The field for Use 24-Hour format is checked.]({{CDN_URL}}/docs/v9/headless-cms/how-to-packet-20220222A/scheduling-content-publish-date.webp)
 
    a. Choose **Datetime** for the Type.
 
@@ -69,7 +69,7 @@ field `status` that controls the published state.
 
 4. [Create or update an Item](/app/content/items) inside your Collection
 
-   ![A content item within the Articles collection is shown. The title is "What is Headless CMS?". English translations are also shown with a Summary field. The Summary reads "A quick overview of what Headless CMS is and how it's beneficial to your team."](https://cdn.directus.io/docs/v9/headless-cms/how-to-packet-20220222A/scheduling-content-create-content-published.webp)
+   ![A content item within the Articles collection is shown. The title is "What is Headless CMS?". English translations are also shown with a Summary field. The Summary reads "A quick overview of what Headless CMS is and how it's beneficial to your team."]({{CDN_URL}}/docs/v9/headless-cms/how-to-packet-20220222A/scheduling-content-create-content-published.webp)
 
    a. Set the `status` field to `published`
 

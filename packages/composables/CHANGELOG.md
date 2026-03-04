@@ -1,5 +1,13 @@
 # @wbce-d9/composables
 
+## 10.0.1
+
+### Patch Changes
+
+- 1f4d43f: Bump lodash-es from 4.17.21 to 4.17.23
+- Updated dependencies [1f4d43f]
+  - @wbce-d9/utils@10.0.1
+
 ## 10.0.0
 
 ### Major Changes

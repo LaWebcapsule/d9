@@ -12,7 +12,7 @@ readTime: 7 min read
 > assigned a [role](/getting-started/glossary#roles) which defines its
 > [access permissions](/getting-started/glossary#permissions).
 
-![Users, Roles and Permissions](https://cdn.directus.io/docs/v9/configuration/users-roles-permissions/users-roles-permissions-20220909/users-roles-permissions-20220907A.webp)
+![Users, Roles and Permissions]({{CDN_URL}}/docs/v9/configuration/users-roles-permissions/users-roles-permissions-20220909/users-roles-permissions-20220907A.webp)
 
 :::tip Before You Begin
 
@@ -112,7 +112,7 @@ It is common to have multiple, complex business rules in a project.
 ## How it Works in Directus
 
 <video title="How Users, Roles, & Permissions Work" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/users-roles-permissions/users-roles-permissions-20220909/how-users-roles-and-permissions-work-20220909A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/users-roles-permissions/users-roles-permissions-20220909/how-users-roles-and-permissions-work-20220909A.mp4" type="video/mp4" />
 </video>
 
 While you have full reign to configure these using SQL, Directus also provides a complete system to configure and manage
@@ -138,7 +138,7 @@ optional. You may configure your own system as desired.
 
 ## Directus Users
 
-![Users in the Directus Data Studio](https://cdn.directus.io/docs/v9/configuration/users-roles-permissions/users-roles-permissions-20220909/users-20220807A.webp)
+![Users in the Directus Data Studio]({{CDN_URL}}/docs/v9/configuration/users-roles-permissions/users-roles-permissions-20220909/users-20220807A.webp)
 
 Within the Data Studio, users are managed within the [User Directory](/app/user-directory.md). However, there are some
 controls available to assign users to roles in **Settings > Roles and Permissions**.
@@ -147,7 +147,7 @@ To learn more, please see our guide on [users](/configuration/users-roles-permis
 
 ## Directus Roles
 
-![Roles in the Directus Data Studio](https://cdn.directus.io/docs/v9/configuration/users-roles-permissions/users-roles-permissions-20220909/roles-20220907A.webp)
+![Roles in the Directus Data Studio]({{CDN_URL}}/docs/v9/configuration/users-roles-permissions/users-roles-permissions-20220909/roles-20220907A.webp)
 
 You can create as many roles as you need for your project. Directus also comes with built-in administrator and public
 roles, which cannot be deleted.
@@ -163,7 +163,7 @@ To learn more, see our guide on [roles](/configuration/users-roles-permissions/r
 
 ## Directus Permissions
 
-![Roles in the Directus Data Studio](https://cdn.directus.io/docs/v9/configuration/users-roles-permissions/users-roles-permissions-20220909/permissions-20220907A.webp)
+![Roles in the Directus Data Studio]({{CDN_URL}}/docs/v9/configuration/users-roles-permissions/users-roles-permissions-20220909/permissions-20220907A.webp)
 
 Directus offers an extremely granular, yet easy to configure permissions system. When you
 [create a role](#create-a-role), all permissions are turned off by default, allowing you to explicitly grant permissions
@@ -180,7 +180,7 @@ To learn more, see our guide on [permissions](/configuration/users-roles-permiss
 
 ## Workflows
 
-![Workflows in the Directus](https://cdn.directus.io/docs/v9/configuration/users-roles-permissions/workflows-20220909/workflows-20220909B.webp)
+![Workflows in the Directus]({{CDN_URL}}/docs/v9/configuration/users-roles-permissions/workflows-20220909/workflows-20220909B.webp)
 
 Workflows are a way to setup structured stages to content authoring and data management. They are created primarily with
 custom access permissions, but can be enhanced with email notifications, custom [Interfaces](/extensions/interfaces.md)

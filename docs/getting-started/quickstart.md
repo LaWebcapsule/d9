@@ -14,7 +14,7 @@ readTime: 7 min read
 ## 1. Create Cloud Account and Login
 
 First, you'll need to [create an Account and log in](/cloud/accounts#create-account-and-login) on
-[Directus Cloud](https://directus.cloud/login)
+[Directus Cloud]({{CLOUD_URL}}/login)
 
 Your Directus Cloud Account allows you to create and manage any number of Projects. We've made life easier by giving you
 the option to create and log in to your free Cloud Account automatically with GitHub. If you don't have a GitHub account

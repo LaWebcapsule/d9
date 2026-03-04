@@ -108,7 +108,7 @@ const directus = new Directus(url, init);
 #### `url` _required_
 
 - **Type** — `String`
-- **Description** — A string that points to your Directus instance. E.g., `https://example.directus.io`
+- **Description** — A string that points to your Directus instance. E.g., `{{EXAMPLE_URL}}`
 - **Default** — N/A
 
 <br />
@@ -912,7 +912,7 @@ In addition to the items common methods, the files property adds the import meth
 directus.files.import(...);
 ```
 
-See [API File Import](https://docs.directus.io/reference/files/#import-a-file)
+See [API File Import]({{DOCS_URL}}/reference/files/#import-a-file)
 
 ### Uploading a file
 

@@ -44,7 +44,7 @@ Tags for the user.
 Avatar file. Many-to-one to [files](/reference/files).
 
 `language` **string**\
-Language the Admin App is rendered in. See [our Crowdin page](https://locales.directus.io) for all available languages and
+Language the Admin App is rendered in. See [our Crowdin page]({{LOCALES_URL}}) for all available languages and
 translations.
 
 `theme` **string**\

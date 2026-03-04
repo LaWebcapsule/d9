@@ -1,5 +1,15 @@
 # docs
 
+## 10.1.0
+
+### Minor Changes
+
+- b830a2e: Add constants in docs for email and url, udpate vitepress, remove unused package and components
+
+### Patch Changes
+
+- 9a3d8e7: Add QS_ARRAY_LIMIT & QS_PARAMETER_LIMIT env variables and upate qs to 6.14.1
+
 ## 10.0.1
 
 ### Patch Changes

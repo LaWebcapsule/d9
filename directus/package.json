@@ -1,6 +1,6 @@
 {
 	"name": "@wbce-d9/directus9",
-	"version": "11.0.7",
+	"version": "11.0.8",
 	"description": "Directus is a real-time API and App dashboard for managing SQL database content",
 	"type": "module",
 	"keywords": [

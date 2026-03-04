@@ -57,7 +57,7 @@ with them.
 
 2. [Complete the Trigger Setup](/configuration/flows/triggers#triggers)
 
-   ![The Trigger Setup tab of the Creating New Flow interface is show. The Event Hook type is selected. The Type field value is "Action(Non-Blocking)". In the Scope field, "items.create" and "items.update" are selected.](https://cdn.directus.io/docs/v9/headless-cms/how-to-packet-20220222A/static-site-build-trigger.webp)
+   ![The Trigger Setup tab of the Creating New Flow interface is show. The Event Hook type is selected. The Type field value is "Action(Non-Blocking)". In the Scope field, "items.create" and "items.update" are selected.]({{CDN_URL}}/docs/v9/headless-cms/how-to-packet-20220222A/static-site-build-trigger.webp)
 
    a. Choose **Event Hook** for the trigger.
 
@@ -80,7 +80,7 @@ with them.
 
 3. [Create a new Operation](/configuration/flows/operations#operations)
 
-   ![Within a Directus Flow, the Create Operation screen is shown. The Name of the Operation is "If Published". The Operation type is "Condition". The value of the Condition Rules field is a JSON object.](https://cdn.directus.io/docs/v9/headless-cms/how-to-packet-20220222A/static-site-build-condition.webp)
+   ![Within a Directus Flow, the Create Operation screen is shown. The Name of the Operation is "If Published". The Operation type is "Condition". The value of the Condition Rules field is a JSON object.]({{CDN_URL}}/docs/v9/headless-cms/how-to-packet-20220222A/static-site-build-condition.webp)
 
    a. Name your operation, i.e. `Check Status`, `If Published`, or similar.
 
@@ -120,7 +120,7 @@ You can learn more about Vercel Deploy Hooks on their documentation.
 
 5. Back inside your Directus Flow, create a new Operation.
 
-   ![Within a Directus Flow, the Create Operation screen is shown. The Name of the Operation is "Deploy Site". The Operation type is "Webhook / Request URL". The Method selected is "POST". The URL field value is the an HTTP address for the build hook from the hosting platform.](https://cdn.directus.io/docs/v9/headless-cms/how-to-packet-20220222A/static-site-build-webhook.webp)
+   ![Within a Directus Flow, the Create Operation screen is shown. The Name of the Operation is "Deploy Site". The Operation type is "Webhook / Request URL". The Method selected is "POST". The URL field value is the an HTTP address for the build hook from the hosting platform.]({{CDN_URL}}/docs/v9/headless-cms/how-to-packet-20220222A/static-site-build-webhook.webp)
 
    a. For the type of Operation, select **Webhook / Request URL**
 

@@ -1,5 +1,28 @@
 # @wbce-d9/api
 
+## 12.2.0
+
+### Minor Changes
+
+- 9a3d8e7: Add QS_ARRAY_LIMIT & QS_PARAMETER_LIMIT env variables and upate qs to 6.14.1
+
+### Patch Changes
+
+- 1f4d43f: Bump lodash-es from 4.17.21 to 4.17.23
+- Updated dependencies [c1ae2c0]
+- Updated dependencies [b830a2e]
+- Updated dependencies [b830a2e]
+- Updated dependencies [1f4d43f]
+- Updated dependencies [df9b144]
+  - @wbce-d9/app@9.35.1
+  - @wbce-d9/storage-driver-cloudinary@10.0.1
+  - @wbce-d9/utils@10.0.1
+  - @wbce-d9/extensions-sdk@10.0.2
+  - @wbce-d9/storage-driver-azure@10.0.1
+  - @wbce-d9/storage-driver-gcs@10.0.1
+  - @wbce-d9/storage-driver-local@10.0.1
+  - @wbce-d9/storage-driver-s3@10.0.1
+
 ## 12.1.0
 
 ### Minor Changes

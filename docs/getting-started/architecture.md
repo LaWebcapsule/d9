@@ -13,7 +13,7 @@ storage, all in one place.
 
 Here's how the platform architecture breaks down.
 
-![Directus Architecture Graphic](https://cdn.directus.io/docs/v9/getting-started/architecture/architecture-20220512/directus-architecture-20220512A.webp)
+![Directus Architecture Graphic]({{CDN_URL}}/docs/v9/getting-started/architecture/architecture-20220512/directus-architecture-20220512A.webp)
 
 ## The Database
 
@@ -44,7 +44,7 @@ can set SSO and allow login through Google, Facebook, etc.
 Finally, a complete set of REST and GraphQL endpoints are generated dynamically, based on your data model as well as
 your configured roles and associated access permissions.
 
-The Directus JS-SDK is [available via NPM](https://www.npmjs.com/package/directus). You also have access to two
+The Directus JS-SDK is [available via NPM]({{NPM_URL}}). You also have access to two
 Command-Line Interfaces (CLI). One enables server-side actions relating to your on-prem instance, like migrating the
 database or resetting a user. The other allows you to interact with a Directus instance as you would with an SDK.
 
@@ -61,7 +61,7 @@ The Directus Data Studio is a no-code dashboard that brings the whole team toget
 Directus is 100% open-source, modular, and extensible, ensuring you will never hit a hard feature ceiling within the
 platform. Built entirely in crispy clean Typescript, mostly on Node.js and Vue.js, you have the power to add or modify
 _any feature_ with your own custom extensions.
-[:star: Star us on GitHub! :star:](https://github.com/LaWebcapsule/directus9)
+[:star: Star us on GitHub! :star:]({{GITHUB_URL}})
 
 ## Versioning
 

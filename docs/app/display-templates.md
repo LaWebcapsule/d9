@@ -13,7 +13,7 @@ readTime: 1 min read
 ## How it Works
 
 <video title="Set Display Template" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/app-guide/display-templates/display-templates-20220523A/set-display-templates-20220523A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/app-guide/display-templates/display-templates-20220523A/set-display-templates-20220523A.mp4" type="video/mp4" />
 </video>
 
 Display Templates can be found in various places all throughout the App, such as [Layout Options](/app/layouts) and the

@@ -9,11 +9,11 @@ readTime: 3 min read
 
 We only publish and maintain self hosting guides using Docker as this removes many environment-specific configuration
 problems. If you can't or don't want to use Docker, we also publish an
-[npm package](https://www.npmjs.com/package/directus) without guides.
+[npm package]({{NPM_URL}}) without guides.
 
 :::
 
-Directus is published to [Docker Hub](https://hub.docker.com/r/directus/directus) under `directus/directus`. To use the
+Directus is published to [Docker Hub]({{DOCKER_HUB_URL}}) under `directus/directus`. To use the
 latest Directus image from Docker Hub, run:
 
 ```bash
@@ -60,7 +60,7 @@ Containers are ephemeral, and this means that whenever you stop a container, all
 be removed [unless you persist them](https://docs.docker.com/storage) when creating your container.
 
 Directus image by default
-[will use the following locations](https://github.com/LaWebcapsule/directus9/blob/main/docker/Dockerfile#L56-L60) for
+[will use the following locations]({{GITHUB_URL}}/blob/main/docker/Dockerfile#L56-L60) for
 data persistence (note that these can be changed through environment variables)
 
 - `/directus/uploads` for uploads
@@ -133,7 +133,7 @@ services:
       ADMIN_PASSWORD: 'd1r3ctu5'
 
       # Make sure to set this in production
-      # (see https://docs.directus.io/self-hosted/config-options#general)
+      # (see {{DOCS_URL}}/self-hosted/config-options#general)
       # PUBLIC_URL: 'https://directus.example.com'
 
 networks:

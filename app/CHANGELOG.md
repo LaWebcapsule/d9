@@ -1,5 +1,14 @@
 # @wbce-d9/app
 
+## 9.35.1
+
+### Patch Changes
+
+- c1ae2c0: Bump lodash from 4.17.21 to 4.17.23
+- b830a2e: Update @fullcalendar packages
+- Updated dependencies [1f4d43f]
+  - @wbce-d9/composables@10.0.1
+
 ## 9.35.0
 
 ### Minor Changes

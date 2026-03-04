@@ -1,5 +1,14 @@
 # @wbce-d9/storage-driver-cloudinary
 
+## 10.0.1
+
+### Patch Changes
+
+- b830a2e: Update undici to a node compatible version
+- df9b144: Bump undici from 5.29.0 to 6.23.0
+- Updated dependencies [1f4d43f]
+  - @wbce-d9/utils@10.0.1
+
 ## 10.0.0
 
 ### Major Changes

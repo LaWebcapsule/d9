@@ -34,7 +34,7 @@ Admins can access and manage all presets under **Settings > Presets and Bookmark
 ## Create a Preset
 
 <video title="Create a Preset" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/presets-bookmarks/presets-bookmarks-20220819/create-a-preset-20220819B.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/presets-bookmarks/presets-bookmarks-20220819/create-a-preset-20220819B.mp4" type="video/mp4" />
 </video>
 
 There are two types or presets, Defaults and Bookmarks.
@@ -74,7 +74,7 @@ is: User, then Role, then Global.
 ## Edit a Preset
 
 <video title="Edit a Preset" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/presets-bookmarks/presets-bookmarks-20220819/edit-a-preset-20220819A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/presets-bookmarks/presets-bookmarks-20220819/edit-a-preset-20220819A.mp4" type="video/mp4" />
 </video>
 
 1. Navigate to **Settings > Presets & Bookmarks > [preset]**.
@@ -84,7 +84,7 @@ is: User, then Role, then Global.
 ## Delete a Preset
 
 <video title="Delete a Preset" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/presets-bookmarks/presets-bookmarks-20220819/delete-a-preset-20220819A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/presets-bookmarks/presets-bookmarks-20220819/delete-a-preset-20220819A.mp4" type="video/mp4" />
 </video>
 
 1. Navigate to **Settings > Presets & Bookmarks > [preset]**.

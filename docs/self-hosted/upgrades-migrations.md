@@ -76,7 +76,7 @@ version v9 instance, and is the recommended way of migrating your v8 instance.
 ::: tip
 
 The script, and instructions on how to run it, can be found on the\
-[`directus-community/migration-tool`](https://github.com/directus-community/migration-tool) repo.
+[`directus-community/migration-tool`]({{GITHUB_COMMUNITY_URL}}/migration-tool) repo.
 
 :::
 

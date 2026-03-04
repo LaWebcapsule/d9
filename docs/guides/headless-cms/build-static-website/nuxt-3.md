@@ -78,7 +78,7 @@ Navigate to the content module and enter the global collection. Collections will
 as a singleton, it will launch directly into the one-item form. Enter information in the title and description field and
 hit save.
 
-![A form named "Global" has two inputs - a title and a description, each filled with some text.](https://cdn.directus.io/docs/v9/headless-cms/how-to-packet-20220222A/nuxt-global-config.webp)
+![A form named "Global" has two inputs - a title and a description, each filled with some text.]({{CDN_URL}}/docs/v9/headless-cms/how-to-packet-20220222A/nuxt-global-config.webp)
 
 By default, new collections are not accessible to the public. Navigate to Settings -> Roles & Permissions -> Public and
 give Read access to the Global collection.
@@ -110,7 +110,7 @@ correlate with the URL for the page. For example `about` will later correlate to
 
 Create a text input field called `title` and a WYSIWYG input field called `content`. In Roles & Permissions, give the
 Public role read access to the new collection. Create 3 items in the new collection -
-[here's some sample data](https://github.com/directus/examples/blob/main/website-nuxt3/demo-data).
+[here's some sample data]({{GITHUB_DIRECTUS_URL}}/examples/blob/main/website-nuxt3/demo-data).
 
 Inside of `pages`, create a new file called `[slug].vue`. This is a dynamic route, so a single file can be used for all
 of the top-level pages.
@@ -160,7 +160,7 @@ Create the following fields in your `posts` data model:
 In Roles & Permissions, give the Public role read access to the `authors`, `posts`, and `directus_files` collections.
 
 Create 3 items in the posts collection -
-[here's some sample data](https://github.com/directus/examples/blob/main/website-nuxt3/demo-data).
+[here's some sample data]({{GITHUB_DIRECTUS_URL}}/examples/blob/main/website-nuxt3/demo-data).
 
 ### Create Blog Post Listing
 
@@ -204,7 +204,7 @@ Update the `<template>` section:
 
 Visit `http://localhost:3000` and you should now see a blog post listing, with latest items first.
 
-![A page with a title of "Blog". On it is a list of three items - each with a title, author, and date. The title is a link.](https://cdn.directus.io/docs/v9/headless-cms/how-to-packet-20220222A/nuxt-blog-listing.webp)
+![A page with a title of "Blog". On it is a list of three items - each with a title, author, and date. The title is a link.]({{CDN_URL}}/docs/v9/headless-cms/how-to-packet-20220222A/nuxt-blog-listing.webp)
 
 ### Create Blog Post Listing
 
@@ -243,7 +243,7 @@ Some key notes about this code snippet.
 
 Click on any of the blog post links, and it will take you to a blog post page complete with a header image.
 
-![A blog post page shows an image, a title, and a number of paragraphs.](https://cdn.directus.io/docs/v9/headless-cms/how-to-packet-20220222A/nuxt-blog-single.webp)
+![A blog post page shows an image, a title, and a number of paragraphs.]({{CDN_URL}}/docs/v9/headless-cms/how-to-packet-20220222A/nuxt-blog-single.webp)
 
 ## Add Navigation
 
@@ -272,4 +272,4 @@ If you want to build more complex dynamic pages made out of reusable components,
 [our recipe on doing just this](/use-cases/headless-cms/create-reusable-page-components-using-m2a).
 
 If you want to see the code for this project, you can find it
-[on GitHub](https://github.com/directus/examples/blob/main/website-nuxt3).
+[on GitHub]({{GITHUB_DIRECTUS_URL}}/examples/blob/main/website-nuxt3).

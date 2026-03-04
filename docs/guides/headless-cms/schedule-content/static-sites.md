@@ -66,7 +66,7 @@ field `status` that controls the published state.
 
 3. [Add a new field](/configuration/data-model/fields.html#create-a-field-standard) to your content Collection.
 
-   ![The interface for creating a new field is shown. The field type Datetime is selected. The Key is named date_published. The field for Use 24-Hour format is checked.](https://cdn.directus.io/docs/v9/headless-cms/how-to-packet-20220222A/scheduling-content-publish-date.webp)
+   ![The interface for creating a new field is shown. The field type Datetime is selected. The Key is named date_published. The field for Use 24-Hour format is checked.]({{CDN_URL}}/docs/v9/headless-cms/how-to-packet-20220222A/scheduling-content-publish-date.webp)
 
    a. Choose **Datetime** for the Type.
 
@@ -78,7 +78,7 @@ field `status` that controls the published state.
 
 4. [Create or update an Item](/app/content/items) inside your Collection
 
-   ![A content item within the Articles collection is shown. The title is "What is Headless CMS?". English translations are also shown with a Summary field. The Summary reads "A quick overview of what Headless CMS is and how it's beneficial to your team."](https://cdn.directus.io/docs/v9/headless-cms/how-to-packet-20220222A/scheduling-content-create-content-scheduled.webp)
+   ![A content item within the Articles collection is shown. The title is "What is Headless CMS?". English translations are also shown with a Summary field. The Summary reads "A quick overview of what Headless CMS is and how it's beneficial to your team."]({{CDN_URL}}/docs/v9/headless-cms/how-to-packet-20220222A/scheduling-content-create-content-scheduled.webp)
 
    a. Set the `status` field to `scheduled`
 
@@ -90,13 +90,13 @@ field `status` that controls the published state.
 
 5. [Create a new Flow](/configuration/flows#create-a-flow)
 
-   ![Under the Creating a New Flow interface, the Flow Setup tab is shown. The name of the new flow is Published Scheduled Articles. The status is Active. The Description field reads "This is triggered every 15 minutes to publish any scheduled articles". The icon selected is "Fiber New". For the Color field, a green color with the hex code #2ECDA7 is selected. Track Activity & Logs is selected.](https://cdn.directus.io/docs/v9/headless-cms/how-to-packet-20220222A/scheduling-content-flow-setup.webp)
+   ![Under the Creating a New Flow interface, the Flow Setup tab is shown. The name of the new flow is Published Scheduled Articles. The status is Active. The Description field reads "This is triggered every 15 minutes to publish any scheduled articles". The icon selected is "Fiber New". For the Color field, a green color with the hex code #2ECDA7 is selected. Track Activity & Logs is selected.]({{CDN_URL}}/docs/v9/headless-cms/how-to-packet-20220222A/scheduling-content-flow-setup.webp)
 
    Give it a memorable name and short description like `Publish Scheduled Articles`.
 
 6. [Complete the Trigger Setup](/configuration/flows/triggers#triggers)
 
-   ![Under the Creating New Flow interface, the Trigger Setup tab is shown. The selected trigger is Schedule(CRON). The Interval field has a value of "* 15 * * * *".](https://cdn.directus.io/docs/v9/headless-cms/how-to-packet-20220222A/scheduling-content-trigger.webp)
+   ![Under the Creating New Flow interface, the Trigger Setup tab is shown. The selected trigger is Schedule(CRON). The Interval field has a value of "* 15 * * * *".]({{CDN_URL}}/docs/v9/headless-cms/how-to-packet-20220222A/scheduling-content-trigger.webp)
 
    a. For **Type**, Select [Schedule (CRON)](/configuration/flows/triggers#schedule-cron). This will trigger this flow
    at regular intervals of time.
@@ -112,7 +112,7 @@ field `status` that controls the published state.
 
 7. [Create a new Operation](/configuration/flows/operations#operations)
 
-   ![Inside a Directus Flow, the Create Operation interface is shown. The Name of the operation is "Update Articles". The Key is "update_articles". The type of Operation is "Update Data". The Collection for the operation is "Articles". The Payload for the operation is a JSON object with key - status and value of published. There is also a JSON object for the Query field. A filter that checks that the item status is equal to "scheduled" and the date_published is less than or equal to the current timestamp.](https://cdn.directus.io/docs/v9/headless-cms/how-to-packet-20220222A/scheduling-content-update-articles.webp)
+   ![Inside a Directus Flow, the Create Operation interface is shown. The Name of the operation is "Update Articles". The Key is "update_articles". The type of Operation is "Update Data". The Collection for the operation is "Articles". The Payload for the operation is a JSON object with key - status and value of published. There is also a JSON object for the Query field. A filter that checks that the item status is equal to "scheduled" and the date_published is less than or equal to the current timestamp.]({{CDN_URL}}/docs/v9/headless-cms/how-to-packet-20220222A/scheduling-content-update-articles.webp)
 
    a. For the type of Operation, select **Update Item**
 

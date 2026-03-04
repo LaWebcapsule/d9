@@ -4,7 +4,7 @@
 
 ## Divider
 
-![A horizontal divider between two form fields](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-divider.webp)
+![A horizontal divider between two form fields]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-divider.webp)
 
 A horizontal divider to separate fields into different sections.
 
@@ -15,9 +15,9 @@ A horizontal divider to separate fields into different sections.
 
 ## Button Links
 
-![A group of two buttons. One primary button. One default button.](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-buttonlinks.webp)
+![A group of two buttons. One primary button. One default button.]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-buttonlinks.webp)
 
-![A form for creating new Button Links. Form has four fields: "Label", "Icon", "Type", "URL"](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-buttonlinks-new.webp)
+![A form for creating new Button Links. Form has four fields: "Label", "Icon", "Type", "URL"]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-buttonlinks-new.webp)
 
 Group of one or more buttons that link to a preset or dynamic url.
 
@@ -30,7 +30,7 @@ Group of one or more buttons that link to a preset or dynamic url.
 
 ## Notice
 
-![A standard warning notice in yellow with a hazard icon.](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-notice.webp)
+![A standard warning notice in yellow with a hazard icon.]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-notice.webp)
 
 An alert or notice interface to notify users of important information.
 

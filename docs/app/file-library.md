@@ -9,7 +9,7 @@ readTime: 7 min read
 > full-featured Digital Asset Management (DAM) system for storing, organizing, browsing, and transforming your various
 > files and assets.
 
-![File Library](https://cdn.directus.io/docs/v9/app-guide/file-library/file-library-20220305A/file-library-20220307A.webp)
+![File Library]({{CDN_URL}}/docs/v9/app-guide/file-library/file-library-20220305A/file-library-20220307A.webp)
 
 ::: warning More Documents on Folder and File Management
 
@@ -35,7 +35,7 @@ the API. Any type of file can be uploaded, _not just images_. When a Folder is s
 [Collections Page](/app/content/collections).
 
 <video title="How the File Library Works" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/app-guide/file-library/file-library-20220305A/how-it-works-20220305A.mp4" type="video/mp4"/>
+	<source src="{{CDN_URL}}/docs/v9/app-guide/file-library/file-library-20220305A/how-it-works-20220305A.mp4" type="video/mp4"/>
 	<p>
 		Your browser is not displaying the video for some reason. Here's a <a href="">link to the video</a> instead.
 	</p>
@@ -57,7 +57,7 @@ When a file is clicked in the File Listing Page, the File Details Page appears. 
 and embeds, with core Fields included out-of-the-box (see below), and the ability for Administrators to add additional
 custom Fields. This page has the same features and functionality as the [Item Page](/getting-started/glossary#items).
 
-![Files](https://cdn.directus.io/docs/v9/app-guide/file-library/file-library-20220305A/files-20220305A.webp)
+![Files]({{CDN_URL}}/docs/v9/app-guide/file-library/file-library-20220305A/files-20220305A.webp)
 
 ### Action Buttons
 
@@ -83,7 +83,7 @@ constraint of your File Field to `SET NULL` or `CASCADE` when the File is delete
 The Files Collection comes pre-configured with the following Fields out of the box. New Fields can be created and
 customized as needed in **Settings > Data Model**. However the pre-configured Fields cannot be changed or deleted.
 
-![File Details](https://cdn.directus.io/docs/v9/app-guide/file-library/file-library-20220305A/file-details-20220305A.webp)
+![File Details]({{CDN_URL}}/docs/v9/app-guide/file-library/file-library-20220305A/file-details-20220305A.webp)
 
 - **Preview** – A preview of the image or file.
 - **Title** – A title for the File.
@@ -98,7 +98,7 @@ customized as needed in **Settings > Data Model**. However the pre-configured Fi
 
 The file sidebar also includes the following details, which are not editable and serve as metadata.
 
-![File Sidebar](https://cdn.directus.io/docs/v9/app-guide/file-library/file-library-20220305A/file-sidebar-20220305A.webp)
+![File Sidebar]({{CDN_URL}}/docs/v9/app-guide/file-library/file-library-20220305A/file-sidebar-20220305A.webp)
 
 - **Type** – The MIME type of the file, displayed in the App as a formatted media type.
 - **Dimensions** – _Images only_. The width and height of the image in pixels.
@@ -115,7 +115,7 @@ The file sidebar also includes the following details, which are not editable and
 Rotate, crop, flip, or adjust aspect ratios of an image.
 
 <video alt="Edit an Image" loop muted controls autoplay playsinline>
-  <source src="https://cdn.directus.io/docs/v9/app-guide/file-library/file-library-20220516A/edit-an-image-20220516A.mp4" type="video/mp4">
+  <source src="{{CDN_URL}}/docs/v9/app-guide/file-library/file-library-20220516A/edit-an-image-20220516A.mp4" type="video/mp4">
 </video>
 
 1. From the **File Library**, click a file to open its detail page.
@@ -140,7 +140,7 @@ be [uploaded programmatically via the API](/reference/files).
 When a file is replaced, its existing info and all relationships are kept.
 
 <video alt="Replace a File" loop muted controls autoplay playsinline>
-  <source src="https://cdn.directus.io/docs/v9/app-guide/file-library/file-library-20220608A/replace-a-file-20220608A.mp4" type="video/mp4">
+  <source src="{{CDN_URL}}/docs/v9/app-guide/file-library/file-library-20220608A/replace-a-file-20220608A.mp4" type="video/mp4">
 </video>
 
 1. Click the Image Preview on the File Detail page. A popup will appear.
@@ -153,7 +153,7 @@ When a file is replaced, its existing info and all relationships are kept.
 
 Folders provide the organization system for Files.
 
-![Folders](https://cdn.directus.io/docs/v9/app-guide/file-library/file-library-20220305A/folders-20220305A.webp)
+![Folders]({{CDN_URL}}/docs/v9/app-guide/file-library/file-library-20220305A/folders-20220305A.webp)
 
 They can be named, renamed, and nested as sub-folders anywhere in the Folder hierarchy. Once a Folder is selected from
 the Navigation Bar, File Listing Page opens. The File Listing Page displays all Files within a Folder. It also enables
@@ -164,7 +164,7 @@ batch deleting, sorting, filtering, searching, etc. Folders can also be managed
 ## Create a Folder
 
 <video alt="Create a Folder" loop muted controls autoplay playsinline>
-  <source src="https://cdn.directus.io/docs/v9/app-guide/file-library/file-library-20220305A/create-a-folder-20220305A.mp4" type="video/mp4">
+  <source src="{{CDN_URL}}/docs/v9/app-guide/file-library/file-library-20220305A/create-a-folder-20220305A.mp4" type="video/mp4">
 </video>
 
 1. From the **File Library**, click on the <span mi btn sec>create_new_folder</span> button located in the Header.
@@ -174,7 +174,7 @@ batch deleting, sorting, filtering, searching, etc. Folders can also be managed
 ## Rename a Folder
 
 <video alt="Renaming a Folder" loop muted controls autoplay playsinline>
-  <source src="https://cdn.directus.io/docs/v9/app-guide/file-library/rename-a-folder-20220215A.mp4" type="video/mp4">
+  <source src="{{CDN_URL}}/docs/v9/app-guide/file-library/rename-a-folder-20220215A.mp4" type="video/mp4">
 </video>
 
 1. From the **File Library**, right-click on the Folder you wish to rename and select "Rename Folder".
@@ -184,7 +184,7 @@ batch deleting, sorting, filtering, searching, etc. Folders can also be managed
 ## Move a Folder
 
 <video alt="Moving a Folder" loop muted controls autoplay playsinline>
-  <source src="https://cdn.directus.io/docs/v9/app-guide/file-library/file-library-20220305A/move-a-folder20220305A.mp4" type="video/mp4">
+  <source src="{{CDN_URL}}/docs/v9/app-guide/file-library/file-library-20220305A/move-a-folder20220305A.mp4" type="video/mp4">
 </video>
 
 1. From the **File Library**, right-click on the folder you wish to move and select **"Move to Folder"**. A popup will
@@ -195,7 +195,7 @@ batch deleting, sorting, filtering, searching, etc. Folders can also be managed
 ## Delete a Folder
 
 <video alt="Deleting a Folder" loop muted controls autoplay playsinline>
-  <source src="https://cdn.directus.io/docs/v9/app-guide/file-library/delete-a-folder-20220215A.mp4" type="video/mp4">
+  <source src="{{CDN_URL}}/docs/v9/app-guide/file-library/delete-a-folder-20220215A.mp4" type="video/mp4">
 </video>
 
 1. From the **File Library**, right-click on the Folder you wish to delete and select **"Delete Folder"**.
@@ -210,4 +210,4 @@ When you delete a Folder, any nested Files and Folders will be moved one level u
 ## More Help
 
 Looking for technical support for your non-enterprise project? Chat with thousands of engineers within our growing
-[Community on Discord](https://discord.com/invite/directus)
+[Community on Discord]({{DISCORD_INVITE_URL}})

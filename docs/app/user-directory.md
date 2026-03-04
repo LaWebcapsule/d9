@@ -9,7 +9,7 @@ readTime: 7 min read
 > are the individual accounts for logging in to the App. Each User belongs to a [Role](/getting-started/glossary#roles)
 > which defines its [Permissions](/getting-started/glossary#permissions).
 
-![User Directory Page](https://cdn.directus.io/docs/v9/app-guide/user-directory/user-directory-20220222A/user-directory-20220222A.webp)
+![User Directory Page]({{CDN_URL}}/docs/v9/app-guide/user-directory/user-directory-20220222A/user-directory-20220222A.webp)
 
 <!-- @TODO getting-started > learn-directus
 
@@ -36,9 +36,9 @@ edit/delete/archive, import/export from files, etc.
 ## User Directory Page
 
 <video title="User Directory Options" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/app-guide/user-directory/user-directory-20220222A/user-directory-options-20220222A.mp4" />
+	<source src="{{CDN_URL}}/docs/v9/app-guide/user-directory/user-directory-20220222A/user-directory-options-20220222A.mp4" />
 	<p>
-		Your browser is not displaying the video for some reason. Here's a <a href="https://cdn.directus.io/docs/v9/app-guide/user-directory/user-directory-20220222A/user-directory-options-20220222A.mp4">link to the video</a> instead.
+		Your browser is not displaying the video for some reason. Here's a <a href="{{CDN_URL}}/docs/v9/app-guide/user-directory/user-directory-20220222A/user-directory-options-20220222A.mp4">link to the video</a> instead.
 	</p>
 </video>
 
@@ -62,14 +62,14 @@ _The following are only visible once Users are selected._
 
 ### Layout Options
 
-![User Directory Layout Options](https://cdn.directus.io/docs/v9/app-guide/user-directory/user-directory-20220222A/user-directory-layout-options-20220222A.webp)
+![User Directory Layout Options]({{CDN_URL}}/docs/v9/app-guide/user-directory/user-directory-20220222A/user-directory-layout-options-20220222A.webp)
 
 The **Sidebar > Layout Options** _(denoted by <span mi icon>layers</span> when Sidebar is minimized)_ allows you to
 adjust how Users are displayed on the User Directory. To learn more, see [Layouts](/app/layouts).
 
 ## User Details Page
 
-![The User Page](https://cdn.directus.io/docs/v9/app-guide/user-directory/user-directory-20220222A/user-profile-20220222A.webp)
+![The User Page]({{CDN_URL}}/docs/v9/app-guide/user-directory/user-directory-20220222A/user-profile-20220222A.webp)
 
 A User's profile page can be accessed from the User Directory or by clicking the User Menu at the bottom of the
 [Module Bar](/app/overview#_1-module-bar). The profile page has the same features and functionality as the
@@ -88,7 +88,7 @@ A User's profile page can be accessed from the User Directory or by clicking the
 
 ### User Preferences
 
-![User Preferences](https://cdn.directus.io/docs/v9/app-guide/user-directory/user-directory-20220222A/user-preferences-20220222A.webp)
+![User Preferences]({{CDN_URL}}/docs/v9/app-guide/user-directory/user-directory-20220222A/user-preferences-20220222A.webp)
 
 - **Language** — The preferred App language/locale.
 - **Theme** — Light or Dark mode (or based on system preferences).
@@ -97,7 +97,7 @@ A User's profile page can be accessed from the User Directory or by clicking the
 
 ### Admin Options
 
-![Admin Options](https://cdn.directus.io/docs/v9/app-guide/user-directory/user-directory-20220222A/admin-options-20220222A.webp)
+![Admin Options]({{CDN_URL}}/docs/v9/app-guide/user-directory/user-directory-20220222A/admin-options-20220222A.webp)
 
 - **Status** — Sets User status as Draft, Invited, Active, Suspended, Archived.
 - **Role** — Defines the User's Role.
@@ -107,7 +107,7 @@ A User's profile page can be accessed from the User Directory or by clicking the
 
 ### Read-only Info
 
-![User Profile Sidebar Information](https://cdn.directus.io/docs/v9/app-guide/user-directory/user-directory-20220222A/user-profile-sidebar-information-20220309A.webp)
+![User Profile Sidebar Information]({{CDN_URL}}/docs/v9/app-guide/user-directory/user-directory-20220222A/user-profile-sidebar-information-20220309A.webp)
 
 Information in the Sidebar _(denoted by <span mi icon dark>info</span> when Sidebar is minimized)_ also includes the
 following read-only details:
@@ -119,9 +119,9 @@ following read-only details:
 ## View a User
 
 <video autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/app-guide/user-directory/user-directory-20220222A/viewing-a-user-20220222A.mp4" />
+	<source src="{{CDN_URL}}/docs/v9/app-guide/user-directory/user-directory-20220222A/viewing-a-user-20220222A.mp4" />
 	<p>
-		Your browser is not displaying the video for some reason. Here's a <a href="https://cdn.directus.io/docs/v9/app-guide/user-directory/user-directory-20220222A/viewing-a-user-20220222A.mp4">link to the video</a> instead.
+		Your browser is not displaying the video for some reason. Here's a <a href="{{CDN_URL}}/docs/v9/app-guide/user-directory/user-directory-20220222A/viewing-a-user-20220222A.mp4">link to the video</a> instead.
 	</p>
 </video>
 

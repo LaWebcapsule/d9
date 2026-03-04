@@ -17,7 +17,7 @@ To configure roles programmatically, see our API documentation on [roles](/refer
 ## View a Role
 
 <video title="Create a Role" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/users-roles-permissions/roles-20220909/view-a-role-20220908A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/users-roles-permissions/roles-20220909/view-a-role-20220908A.mp4" type="video/mp4" />
 </video>
 
 To view an existing role, navigate to **Settings > Roles & Permissions > [Role]**. Now you can see the role's
@@ -26,7 +26,7 @@ permissions and other details.
 ## Create a Role
 
 <video title="Create a Role" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/users-roles-permissions/roles-20220909/create-a-role-20220908A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/users-roles-permissions/roles-20220909/create-a-role-20220908A.mp4" type="video/mp4" />
 </video>
 
 To create a role, follow these steps.
@@ -48,7 +48,7 @@ Next, you will likely need to [configure the role's details](#configure-role-det
 ## Configure Role Details
 
 <video title="Configure Role Details" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/users-roles-permissions/roles-20220909/configure-role-details-20220907A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/users-roles-permissions/roles-20220909/configure-role-details-20220907A.mp4" type="video/mp4" />
 </video>
 
 In addition to defining permissions, roles come with a number of other configuration options. To configure a role's
@@ -81,7 +81,7 @@ later.
 ## Delete a Role
 
 <video title="Create a Role" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/users-roles-permissions/roles-20220909/delete-a-role-20220907A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/users-roles-permissions/roles-20220909/delete-a-role-20220907A.mp4" type="video/mp4" />
 </video>
 
 To delete a role, follow these steps.

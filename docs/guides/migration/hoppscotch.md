@@ -41,7 +41,7 @@ make sure you have a static access token for both projects.
 
 ### Retrieve Data Model Snapshot From Source Project
 
-![Screenshot of Hoppscotch annotated with numbers associated with the below points.](https://cdn.directus.io/docs/v9/cookbook/migration-hoppscotch/snapshot.webp)
+![Screenshot of Hoppscotch annotated with numbers associated with the below points.]({{CDN_URL}}/docs/v9/cookbook/migration-hoppscotch/snapshot.webp)
 
 1. Make sure `GET` is selected in the method dropdown.
 2. In the URL field, enter your source Directus project URL followed by `/schema/snapshot`.
@@ -51,7 +51,7 @@ make sure you have a static access token for both projects.
 
 ### Retrieve Data Model Diff
 
-![Screenshot of Hoppscotch annotated with numbers associated with the below points.](https://cdn.directus.io/docs/v9/cookbook/migration-hoppscotch/diff.webp)
+![Screenshot of Hoppscotch annotated with numbers associated with the below points.]({{CDN_URL}}/docs/v9/cookbook/migration-hoppscotch/diff.webp)
 
 This section will create a "diff" that describes all differences between your source and target project's data models.
 
@@ -65,7 +65,7 @@ This section will create a "diff" that describes all differences between your so
 
 ### Apply Diff To Target Project
 
-![Screenshot of Hoppscotch annotated with numbers associated with the below points.](https://cdn.directus.io/docs/v9/cookbook/migration-hoppscotch/apply.webp)
+![Screenshot of Hoppscotch annotated with numbers associated with the below points.]({{CDN_URL}}/docs/v9/cookbook/migration-hoppscotch/apply.webp)
 
 1. Make sure `POST` is selected in the method dropdown.
 2. In the URL field, enter your target Directus project URL followed by `/schema/apply`.

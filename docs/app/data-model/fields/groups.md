@@ -4,7 +4,7 @@
 
 ## Accordion
 
-![An accordion interface that allows use to expand and collapse different fields.](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-accordion.webp)
+![An accordion interface that allows use to expand and collapse different fields.]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-accordion.webp)
 
 Group interface that allows user to show and hide certain fields within the group by clicking on each field.
 
@@ -13,9 +13,9 @@ Group interface that allows user to show and hide certain fields within the grou
 
 ## Detail Group
 
-![A group of form fields that are currently hidden behind a toggle.](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-detailgroup-closed.webp)
+![A group of form fields that are currently hidden behind a toggle.]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-detailgroup-closed.webp)
 
-![A group of form fields that are currently visible but can be hidden behind a toggle.](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-detailgroup-open.webp)
+![A group of form fields that are currently visible but can be hidden behind a toggle.]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-detailgroup-open.webp)
 
 Group interface that allows user to show or hide all fields within the group by clicking on the header toggle.
 
@@ -25,7 +25,7 @@ Group interface that allows user to show or hide all fields within the group by 
 
 ## Raw Group
 
-![A group of form fields](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-rawgroup.webp)
+![A group of form fields]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-rawgroup.webp)
 
 Interface that groups multiple fields together, but always displays them.
 
@@ -36,4 +36,4 @@ Interface that groups multiple fields together, but always displays them.
 Any fields that you add within a Group will also maintain that grouping throughout the App Studio in filters, dropdowns,
 and more.
 
-![Content collection interface that shows a highlighted dropdown with several different groups of fields.](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-group-filter.webp)
+![Content collection interface that shows a highlighted dropdown with several different groups of fields.]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-group-filter.webp)

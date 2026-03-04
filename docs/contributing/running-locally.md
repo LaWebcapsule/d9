@@ -22,7 +22,7 @@ You will also need to have the package manager [pnpm](https://pnpm.io) installed
 
 ## 1. Fork the Directus repository
 
-Go to the [repository](https://github.com/LaWebcapsule/directus9) and fork it to your GitHub account. A fork is your
+Go to the [repository]({{GITHUB_URL}}) and fork it to your GitHub account. A fork is your
 copy of the Directus repository which allows you to freely experiment with changes without affecting the original
 project.
 
@@ -48,15 +48,15 @@ pnpm build
 ## 5. Create a `.env` file
 
 Create an `.env` file under the `api` folder using vars from the online
-[config help](https://docs.directus.io/self-hosted/config-options).
+[config help]({{DOCS_URL}}/self-hosted/config-options).
 
 ::: tip Config Values
 
-The `KEY`& `SECRET` config options from [Security](https://docs.directus.io/self-hosted/config-options.html#security)
+The `KEY`& `SECRET` config options from [Security]({{DOCS_URL}}/self-hosted/config-options.html#security)
 are mandatory.
 
-Also the [Database Configuration](https://docs.directus.io/self-hosted/config-options.html#database) must be specified.
-You might want to use the [docker-compose.yml](https://github.com/LaWebcapsule/directus9/blob/main/docker-compose.yml)
+Also the [Database Configuration]({{DOCS_URL}}/self-hosted/config-options.html#database) must be specified.
+You might want to use the [docker-compose.yml]({{GITHUB_URL}}/blob/main/docker-compose.yml)
 file to spin up a test database.
 
 :::
@@ -151,7 +151,7 @@ introduction to [Contributing](/contributing/introduction).
 
 ::: tip Debugging
 
-Check our Wiki for a [guide](https://github.com/LaWebcapsule/directus9/wiki/debugging) on debugging the app and API.
+Check our Wiki for a [guide]({{GITHUB_URL}}/wiki/debugging) on debugging the app and API.
 
 :::
 

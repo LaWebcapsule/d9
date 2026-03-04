@@ -10,7 +10,7 @@ readTime: 2 min read
 > maintain project safety and integrity, this module is only available to Administrators.
 
 <video autoplay playsinline muted loop controls>
-<source src="https://cdn.directus.io/docs/v9/app-guide/settings/settings-20220308A/settings-20220308A.mp4" type="video/mp4" />
+<source src="{{CDN_URL}}/docs/v9/app-guide/settings/settings-20220308A/settings-20220308A.mp4" type="video/mp4" />
 </video>
 
 ::: warning Administrators Only
@@ -35,7 +35,7 @@ Aside from the above pages, there are three shorthand links:
   is automatically included, such as: version number, operating system, and environment type.
 
 - **Request Feature**\
-  A direct link to [submit a new feature request](https://github.com/LaWebcapsule/directus9/discussions/new) on GitHub. Feature
+  A direct link to [submit a new feature request]({{GITHUB_URL}}/discussions/new) on GitHub. Feature
   requests are a great way to let our team know what should be prioritized next. Learn more about making feature requests
   in the [Contributing > Introduction](/contributing/introduction#feature-requests).
 

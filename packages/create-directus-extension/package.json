@@ -1,6 +1,6 @@
 {
 	"name": "@wbce-d9/create-directus-extension",
-	"version": "9.26.14",
+	"version": "9.26.15",
 	"description": "A small util that will scaffold a Directus extension",
 	"keywords": [
 		"directus",
@@ -35,6 +35,6 @@
 	"dependencies": {
 		"@wbce-d9/constants": "workspace:*",
 		"@wbce-d9/extensions-sdk": "workspace:*",
-		"inquirer": "9.1.5"
+		"inquirer": "catalog:"
 	}
 }

@@ -1,5 +1,11 @@
 # tests-blackbox
 
+## 10.0.3
+
+### Patch Changes
+
+- 5b4677d: Bump lodash-es from 4.17.21 to 4.17.23
+
 ## 10.0.2
 
 ### Patch Changes

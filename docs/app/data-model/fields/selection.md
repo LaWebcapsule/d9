@@ -4,7 +4,7 @@
 
 ## Toggle
 
-![A toggle form input with label named "Enabled"](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-toggle.webp)
+![A toggle form input with label named "Enabled"]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-toggle.webp)
 
 A checkbox input that allows user to toggle value between on and off / true and false.
 
@@ -18,7 +18,7 @@ A checkbox input that allows user to toggle value between on and off / true and 
 
 ## Datetime
 
-![A date picker input. User can select a calendar date and input a time. ](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-datetime.webp)
+![A date picker input. User can select a calendar date and input a time. ]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-datetime.webp)
 
 Date picker input that allows user to select a date and time.
 
@@ -28,9 +28,9 @@ Date picker input that allows user to select a date and time.
 
 ## Repeater
 
-![A standard form text input](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-repeater.webp)
+![A standard form text input]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-repeater.webp)
 
-![A standard form text input](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-repeater-open.webp)
+![A standard form text input]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-repeater-open.webp)
 
 Interface for repeating groups of fields.
 
@@ -56,7 +56,7 @@ Value is stored as a JSON array of objects.
 
 ## Map
 
-![An interactive map interface that shows a single point on the east coast of the United States. Map has buttons for zoom, search, and full screen.](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-map.webp)
+![An interactive map interface that shows a single point on the east coast of the United States. Map has buttons for zoom, search, and full screen.]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-map.webp)
 
 Interface that shows geospatial data on an interactive map.
 
@@ -65,7 +65,7 @@ Interface that shows geospatial data on an interactive map.
 
 ## Color
 
-![A text input for color hex codes that allows user to select color modes ](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-color.webp)
+![A text input for color hex codes that allows user to select color modes ]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-color.webp)
 
 A color picker interface that allows users to input color codes and convert between different color modes.
 
@@ -75,7 +75,7 @@ A color picker interface that allows users to input color codes and convert betw
 
 ## Dropdown
 
-![A select input with a dropdown of options.](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-dropdown.webp)
+![A select input with a dropdown of options.]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-dropdown.webp)
 
 Input that allows user to select a value from a list of options.
 
@@ -90,7 +90,7 @@ Input that allows user to select a value from a list of options.
 
 ## Icon
 
-![A select input with a dropdown grid of icon choices.](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-icon.webp)
+![A select input with a dropdown grid of icon choices.]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-icon.webp)
 
 Search input that allows user to select from a list of icons.
 
@@ -98,7 +98,7 @@ Search input that allows user to select from a list of icons.
 
 ## Checkboxes
 
-![A form input with multiple checkboxes.](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-checkboxes.webp)
+![A form input with multiple checkboxes.]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-checkboxes.webp)
 
 Input that allows user to select multiple checkboxes.
 
@@ -114,7 +114,7 @@ Input that allows user to select multiple checkboxes.
 
 ## Checkboxes (Tree)
 
-![A form input with a nested tree of multiple parent and child checkboxes.](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-checkboxes-tree.webp)
+![A form input with a nested tree of multiple parent and child checkboxes.]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-checkboxes-tree.webp)
 
 Nested tree of checkboxes that can be expanded or collapsed.
 
@@ -127,7 +127,7 @@ Nested tree of checkboxes that can be expanded or collapsed.
 
 ## Dropdown (Multiple)
 
-![A select input where user can select multiple options from a dropdown.](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-dropdown-multiple.webp)
+![A select input where user can select multiple options from a dropdown.]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-dropdown-multiple.webp)
 
 Input that allows user to select multiple values from a list of options.
 
@@ -142,7 +142,7 @@ Input that allows user to select multiple values from a list of options.
 
 ## Radio Buttons
 
-![A radio button form input with different options to select](https://cdn.directus.io/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-radio-buttons.webp)
+![A radio button form input with different options to select]({{CDN_URL}}/docs/v9/configuration/data-model/fields/interfaces-20230308/interface-radio-buttons.webp)
 
 Radio button input that allows users to select a single value from multiple choices.
 

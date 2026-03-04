@@ -212,6 +212,6 @@ Set up your free Cloud account and learn Directus hands-on in the [Quickstart Gu
 
 :::tip Enterprise Cloud
 
-Need advanced configuration, unlimited scalability, and dedicated support? [Contact us](https://directus.io/contact)
+Need advanced configuration, unlimited scalability, and dedicated support? [Contact us]({{WEBSITE_URL}}contact)
 
 :::

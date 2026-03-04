@@ -1,5 +1,13 @@
 # @wbce-d9/extensions-sdk
 
+## 10.0.2
+
+### Patch Changes
+
+- Updated dependencies [1f4d43f]
+  - @wbce-d9/composables@10.0.1
+  - @wbce-d9/utils@10.0.1
+
 ## 10.0.1
 
 ### Patch Changes

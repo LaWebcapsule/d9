@@ -21,7 +21,7 @@ sections will focus on.
 ## Invite a User
 
 <video title="Invite a User" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/users-roles-permissions/users-20220909/invite-a-user-20220907A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/users-roles-permissions/users-20220909/invite-a-user-20220907A.mp4" type="video/mp4" />
 </video>
 
 To invite people to become users via email and automatically assign them a role in the process, follow these steps.
@@ -40,7 +40,7 @@ Instead of comma-separated emails, you can also add new emails line-by-line.
 ## Create a User
 
 <video title="Create a User" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/users-roles-permissions/users-20220909/create-new-user-20220907A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/users-roles-permissions/users-20220909/create-new-user-20220907A.mp4" type="video/mp4" />
 </video>
 
 To create a user and assign their role _(and other details)_ follow these steps.
@@ -53,7 +53,7 @@ To create a user and assign their role _(and other details)_ follow these steps.
 ## Assign Role to Existing User
 
 <video title="Add an Existing User" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/users-roles-permissions/users-20220909/assign-to-existing-role-20220909A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/users-roles-permissions/users-20220909/assign-to-existing-role-20220909A.mp4" type="video/mp4" />
 </video>
 
 To assign a role to an existing user, follow these steps.
@@ -68,7 +68,7 @@ To assign a role to an existing user, follow these steps.
 ## Remove User's Role
 
 <video title="Remove User from Role" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/users-roles-permissions/users-20220909/remove-user-role-20220908A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/users-roles-permissions/users-20220909/remove-user-role-20220908A.mp4" type="video/mp4" />
 </video>
 
 To remove a user from a role, follow these steps.

@@ -243,7 +243,7 @@ or to rely on a different method altogether. As of right now, we've chosen
 While we recognize this is still a draft spec, the SEARCH method has been used extensively before in the WebDAV world
 ([spec](https://tools.ietf.org/html/rfc5323)), and compared to the other available options, it feels like the "cleanest"
 and most correct to handle this moving forward. As with everything else, if you have any ideas, opinions, or concerns,
-[we'd love to hear your thoughts](https://github.com/LaWebcapsule/directus9/discussions/new).
+[we'd love to hear your thoughts]({{GITHUB_URL}}/discussions/new).
 
 Useful reading:
 

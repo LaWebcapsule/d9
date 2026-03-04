@@ -43,7 +43,7 @@ permissions and other built-in features.
 
 :::
 
-![Original File](https://cdn.directus.io/docs/v9/reference/files/original-20220216A.jpg) _Original File Used — 602KB and
+![Original File]({{CDN_URL}}/docs/v9/reference/files/original-20220216A.jpg) _Original File Used — 602KB and
 1800x1200_
 
 ---
@@ -124,7 +124,7 @@ Below are four possible qualities (200x200 cover) to visually compare the balanc
 
 | 25%                                                                                             | 50%                                                                                             | 75%                                                                                             | 100%                                                                                               |
 | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| ![25%](https://cdn.directus.io/docs/v9/reference/files/200-200-cover-25-20220216A.jpg)<br>_4KB_ | ![50%](https://cdn.directus.io/docs/v9/reference/files/200-200-cover-50-20220216A.jpg)<br>_6KB_ | ![75%](https://cdn.directus.io/docs/v9/reference/files/200-200-cover-75-20220216A.jpg)<br>_8KB_ | ![100%](https://cdn.directus.io/docs/v9/reference/files/200-200-cover-100-20220216A.jpg)<br>_38KB_ |
+| ![25%]({{CDN_URL}}/docs/v9/reference/files/200-200-cover-25-20220216A.jpg)<br>_4KB_ | ![50%]({{CDN_URL}}/docs/v9/reference/files/200-200-cover-50-20220216A.jpg)<br>_6KB_ | ![75%]({{CDN_URL}}/docs/v9/reference/files/200-200-cover-75-20220216A.jpg)<br>_8KB_ | ![100%]({{CDN_URL}}/docs/v9/reference/files/200-200-cover-100-20220216A.jpg)<br>_38KB_ |
 
 ### Preset
 

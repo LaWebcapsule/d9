@@ -43,7 +43,7 @@ Directus is an SQL database wrapper. A database is a set of data stored in a com
 organized, accessible, and scalable. The specific way you structure your data within a database is called your data
 model.
 
-![A Database Schema](https://cdn.directus.io/docs/v9/configuration/data-model/data-model-20220805/database-schema-20220805A.webp)
+![A Database Schema]({{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/database-schema-20220805A.webp)
 
 ### Database vs Excel
 
@@ -52,7 +52,7 @@ data in Excel spreadsheets. You know how you can build a table on one sheet in E
 sheet, then link the rows of each table together? That is pretty much how a relational data model works. But there are
 some key points where Excel and relational databases differ.
 
-![Data in an Excel Spreadsheet](https://cdn.directus.io/docs/v9/configuration/data-model/data-model-20220805/spreadsheet-20220805A.webp)
+![Data in an Excel Spreadsheet]({{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/spreadsheet-20220805A.webp)
 
 Many times, we store data as a table in Excel, but that's not always the case, as the program serves tons of other
 purposes. Excel lets you make your data stylized _(bold, italicized, colored, custom fonts, etc.)_, set dynamic
@@ -60,7 +60,7 @@ functions in cells, add graphics like charts and graphs, and input any kind of d
 enforced structure. Your Excel spreadsheet is a blank canvas, designed to store up to tens of thousands of rows of
 information.
 
-![A data table](https://cdn.directus.io/docs/v9/configuration/data-model/data-model-20220805/datatable-20220805A.webp)
+![A data table]({{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/datatable-20220805A.webp)
 
 There is no stylization within databases. They strictly store raw data values in a structured way. Any time you want to
 style data, build a function, put data into a graph, _etc.,_ you must create that functionality in your app or website.
@@ -69,7 +69,7 @@ trillions_, of rows of information.
 
 ### Data Tables
 
-![A Data Table: rows and columns](https://cdn.directus.io/docs/v9/configuration/data-model/data-model-20220805/rows-and-columns.webp)
+![A Data Table: rows and columns]({{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/rows-and-columns.webp)
 
 <!-- image should note rows and columns. -->
 
@@ -79,7 +79,7 @@ tables are further broken down into columns and rows.
 
 ### Columns
 
-![A Column](https://cdn.directus.io/docs/v9/configuration/data-model/data-model-20220805/columns-20220805A.webp)
+![A Column]({{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/columns-20220805A.webp)
 
 Columns are categories that store one kind of information. Each column has a unique, descriptive name and stores one
 unit of information in each of its [cell values](#cell-values). Columns keep the data organized, consistent, and easily
@@ -89,7 +89,7 @@ accessible. The columns you choose to add to a data table will completely depend
 
 ### Cell Values
 
-![Cell Values](https://cdn.directus.io/docs/v9/configuration/data-model/data-model-20220805/datatable-cell-value-20220805A.webp)
+![Cell Values]({{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/datatable-cell-value-20220805A.webp)
 
 Each value in a column is stored in its own cell. In general, you want to create columns that save _atomic_ values. That
 means create the column to store the smallest indivisible units There is no restriction for the kinds of information to
@@ -115,14 +115,14 @@ unexpected and even dangerous behaviors in your program.
 
 ### Rows
 
-![Rows](https://cdn.directus.io/docs/v9/configuration/data-model/data-model-20220805/row-20220805A.webp)
+![Rows]({{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/row-20220805A.webp)
 
 Each row stores data associated to a unique record, event, object, entity, observation, etc. Data tables can contain
 millions, _even billions and trillions_ of rows of data.
 
 ### Primary Keys
 
-![Primary Key](https://cdn.directus.io/docs/v9/configuration/data-model/data-model-20220805/primary-keys-20220805A.webp)
+![Primary Key]({{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/primary-keys-20220805A.webp)
 
 In order to uniquely identify and track each row, every data table must have a primary key column. A primary key is a
 unique ID that identifies a specific row. Any pattern or system could be used to generate primary keys, so long as it
@@ -132,7 +132,7 @@ differentiate it from other rows.
 
 ### Foreign Keys
 
-![Foreign Keys](https://cdn.directus.io/docs/v9/configuration/data-model/data-model-20220805/foreign-keys-20220805A.webp)
+![Foreign Keys]({{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/foreign-keys-20220805A.webp)
 
 Since primary keys uniquely identify each and every row in a data table, they are the perfect tool to create
 relationships. If you want to relationally link rows between two data tables, you create a column to store _foreign
@@ -168,7 +168,7 @@ guide on [relationships](/configuration/data-model/relationships).
 
 ### Database Schemas
 
-![Data Table to schema](https://cdn.directus.io/docs/v9/configuration/data-model/data-model-20220805/datatable-to-schema-20220805A.webp)
+![Data Table to schema]({{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/datatable-to-schema-20220805A.webp)
 
 In our examples so far, we have seen and described actual [data tables](#data-tables). As you design your relational
 data model, you will need to create a schema to keep track of its complexity.
@@ -205,7 +205,7 @@ irrelevant to the current learning point, we omit their details so you can focus
 Please note too, that with more complex schemas, containing dozens _(or maybe hundreds!)_ of relationally linked data
 tables, you usually include datatype information as well as a visualization of how each and every table interlinks.
 
-![A Complex Schema](https://cdn.directus.io/docs/v9/configuration/data-model/data-model-20220805/complex-schema.webp)
+![A Complex Schema]({{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/complex-schema.webp)
 
 ### Avoid Data Duplication
 
@@ -245,7 +245,7 @@ data is displayed on each user profile page, for chat messaging and other types 
 situation in many projects_. In this case, the author name and other details would also need to exist in the `users`
 table.
 
-![Duplicate Data](https://cdn.directus.io/docs/v9/configuration/data-model/data-model-20220805/duplicate-data-20220829A.webp)
+![Duplicate Data]({{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/duplicate-data-20220829A.webp)
 
 This creates duplicate data. There are two big problems with this:
 
@@ -315,7 +315,7 @@ between `blog` and `users`.
 
 ### Working With Relational Data Models
 
-![Database, Backend, Frontend](https://cdn.directus.io/docs/v9/configuration/data-model/data-model-20220805/database-backend-frontend-20220805A.webp)
+![Database, Backend, Frontend]({{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/database-backend-frontend-20220805A.webp)
 
 Once you've designed your data model conceptually, you typically build and interact with it using SQL, or Structured
 Querying Language. This language is used to create, read & query, update, and delete anything and everything in the
@@ -349,7 +349,7 @@ manage a data model is time consuming.
 ## Data Models in Directus
 
 <video title="Settings > Data Model" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/data-model/data-model-20220805/data-model-overview-20220805A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/data-model-overview-20220805A.mp4" type="video/mp4" />
 </video>
 
 All relational data model concepts listed above apply in Directus. You get complete, un-opinionated, relational data
@@ -378,7 +378,7 @@ Directus terms and map them to classic relational database concepts.
 ## Collections
 
 <video title="Collections" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/data-model/data-model-20220805/collections-20220805A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/collections-20220805A.mp4" type="video/mp4" />
 </video>
 
 A collection _is a set of [items](#items)_. This can be a 1-1 match-up with a data table in SQL, a group of other
@@ -391,7 +391,7 @@ Data Model**. From there, click a collection to open its configurations page. To
 ## Fields
 
 <video title="Fields" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/data-model/data-model-20220805/fields-20220805A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/fields-20220805A.mp4" type="video/mp4" />
 </video>
 
 Fields are database columns, but with a twist.
@@ -405,7 +405,7 @@ see our guide on [fields](/configuration/data-model/fields/).
 ## Items
 
 <video title="Collections" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/data-model/data-model-20220805/items-20220805A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/items-20220805A.mp4" type="video/mp4" />
 </video>
 
 Items are data table rows, but with a twist.
@@ -426,7 +426,7 @@ Directus abstracts type differences between SQL vendors with a
 ## Keys and IDs
 
 <video title="Keys and IDs" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/data-model/data-model-20220805/keys-and-ids-20220805A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/keys-and-ids-20220805A.mp4" type="video/mp4" />
 </video>
 
 Primary keys are called IDs in Directus fairly frequently. When you
@@ -444,7 +444,7 @@ supports the following types of IDs:
 ## Relationships
 
 <video title="Relations" autoplay playsinline muted loop controls>
-	<source src="https://cdn.directus.io/docs/v9/configuration/data-model/data-model-20220805/relationships-20220805A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/relationships-20220805A.mp4" type="video/mp4" />
 </video>
 
 Directus supports all standard [types of relationships](#types-of-relationships), as well as a few more of its own

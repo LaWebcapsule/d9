@@ -25,7 +25,7 @@ Link to tutorial
 ## Toggle Hidden Collections
 
 <video autoplay playsinline muted loop controls title="Toggle Hidden Collections">
-	<source src="https://cdn.directus.io/docs/v9/app-guide/content/content-collections/content-collections-20220816/toggle-hidden-collections-20220816A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/app-guide/content/content-collections/content-collections-20220816/toggle-hidden-collections-20220816A.mp4" type="video/mp4" />
 </video>
 
 Some projects may have dozens or even hundreds of collections, which can be overwhelming to sort through. To ease this
@@ -48,7 +48,7 @@ like to block users' access permissions, please see
 ## Adjust Page Layout
 
 <video autoplay playsinline muted loop controls title="Layouts">
-	<source src="https://cdn.directus.io/docs/v9/app-guide/content/content-collections/content-collections-20220415A/adjust-page-layout-20220415A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/app-guide/content/content-collections/content-collections-20220415A/adjust-page-layout-20220415A.mp4" type="video/mp4" />
 </video>
 
 Layouts determine how you view or interact with Items in a Collection. Whether your Collection contains blog posts,
@@ -58,7 +58,7 @@ project management tasks, geo-coordinates, temporal data or beyond; Layouts pres
 ## Search Items
 
 <video autoplay playsinline muted loop controls title="Search Items">
-	<source src="https://cdn.directus.io/docs/v9/app-guide/content/content-collections/content-collections-20220415A/search-items-20220419A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/app-guide/content/content-collections/content-collections-20220415A/search-items-20220419A.mp4" type="video/mp4" />
 </video>
 
 Find all Items with one or more Fields containing your searched value, excluding any Items which have been
@@ -71,7 +71,7 @@ Find all Items with one or more Fields containing your searched value, excluding
 ## Filter Items
 
 <video autoplay playsinline muted loop controls title="Filter Items">
-	<source src="https://cdn.directus.io/docs/v9/app-guide/content/content-collections/content-collections-20220415A/filter-items-2022019A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/app-guide/content/content-collections/content-collections-20220415A/filter-items-2022019A.mp4" type="video/mp4" />
 </video>
 
 Filters allow you to conditionally select Items from a Collection. Use-cases include customizing Item search results,
@@ -81,7 +81,7 @@ and more. To Learn More, see our guide on [Filters](/app/filters).
 ## Manually Sort Items
 
 <video autoplay playsinline muted loop controls title="Batch Edit Items">
-	<source src="https://cdn.directus.io/docs/v9/app-guide/content/content-collections/content-collections-20220415A/manually-sort-items-20220415A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/app-guide/content/content-collections/content-collections-20220415A/manually-sort-items-20220415A.mp4" type="video/mp4" />
 </video>
 
 Drag and drop Items to custom sort them as desired. This is only possible on certain Layouts, such as the default
@@ -112,7 +112,7 @@ This means that while the values in this Sort Field do get updated and modified,
 ## Automatically Sort Items
 
 <video autoplay playsinline muted loop controls title="Automatically Sort Items">
-	<source src="https://cdn.directus.io/docs/v9/app-guide/content/content-collections/content-collections-20220415A/automatically-sort-items-20220415A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/app-guide/content/content-collections/content-collections-20220415A/automatically-sort-items-20220415A.mp4" type="video/mp4" />
 </video>
 
 Sort Items alphabetically or numerically, in ascending or descending order. Sorting is not possible on certain Layouts,
@@ -128,7 +128,7 @@ Automatic sorting is a non-destructive action which does not change your data.
 ## View Archived Items
 
 <video autoplay playsinline muted loop controls title="View Archived Items">
-	<source src="https://cdn.directus.io/docs/v9/app-guide/content/content-collections/content-collections-20220415A/view-archived-items.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/app-guide/content/content-collections/content-collections-20220415A/view-archived-items.mp4" type="video/mp4" />
 </video>
 
 The no-code app allows you to hide archived Items, display them alongside other Items, or display archived Items only.
@@ -151,7 +151,7 @@ Only available if an [Archive field](/configuration/data-model/collections#archi
 ## Create a Bookmark
 
 <video autoplay playsinline muted loop controls title="Create Presets and Bookmarks">
-	<source src="https://cdn.directus.io/docs/v9/app-guide/content/content-collections/content-collections-20220415A/presets-and-bookmarks-20220415A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/app-guide/content/content-collections/content-collections-20220415A/presets-and-bookmarks-20220415A.mp4" type="video/mp4" />
 </video>
 
 Save how a Collection Page looks so that you can return to the exact same view later. This includes details such as the
@@ -173,7 +173,7 @@ To learn more, see our guide on [Presets and Bookmarks](/configuration/presets-b
 
 ## Import / Export Items
 
-![Import and Export Items](https://cdn.directus.io/docs/v9/app-guide/content/content-collections/content-collections-20220415A/imports-exports-20220416A.webp)
+![Import and Export Items]({{CDN_URL}}/docs/v9/app-guide/content/content-collections/content-collections-20220415A/imports-exports-20220416A.webp)
 
 The Content, User Directory and File Library modules allow importing and exporting of multiple Items stored as files.
 This makes it quick and easy to handle tasks like uploading and downloading new customer information; pulling down sales
@@ -183,7 +183,7 @@ data for transformation, reports, analysis, and beyond. To learn more, see how t
 ## Batch Delete, Archive or Edit Items
 
 <video autoplay playsinline muted loop controls title="Batch Edit Items">
-	<source src="https://cdn.directus.io/docs/v9/app-guide/content/content-items/content-items-20220415A/batch-edit-items-20220415A.mp4
+	<source src="{{CDN_URL}}/docs/v9/app-guide/content/content-items/content-items-20220415A/batch-edit-items-20220415A.mp4
 " type="video/mp4" />
 </video>
 

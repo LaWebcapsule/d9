@@ -1,5 +1,7 @@
 .env
 .npmrc
+[A-Z]+_URL
+[A-Z]+_EMAIL
 [A-Z0-9]{6}
 (A|a)sync
 (A|a)utocomplete

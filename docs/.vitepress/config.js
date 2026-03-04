@@ -1,4 +1,53 @@
 import { defineConfig } from 'vitepress';
+import { URLS, EMAILS } from './constants.js';
+
+// Vite plugin to replace variables in markdown files before processing
+function markdownVariablesPlugin() {
+	const replacements = {
+		'{{WEBSITE_URL}}': URLS.WEBSITE,
+		'{{CLOUD_URL}}': URLS.CLOUD,
+		'{{DOCS_URL}}': URLS.DOCS,
+		'{{CDN_URL}}': URLS.CDN,
+		'{{GITHUB_URL}}': URLS.GITHUB,
+		'{{GITHUB_DIRECTUS_URL}}': URLS.GITHUB_DIRECTUS,
+		'{{GITHUB_COMMUNITY_URL}}': URLS.GITHUB_COMMUNITY,
+		'{{LOCALES_URL}}': URLS.LOCALES,
+		'{{TWITTER_URL}}': URLS.TWITTER,
+		'{{DISCORD_CHAT_URL}}': URLS.DISCORD_CHAT,
+		'{{DISCORD_INVITE_URL}}': URLS.DISCORD_INVITE,
+		'{{AWESOME_URL}}': URLS.AWESOME,
+		'{{YOUTUBE_URL}}': URLS.YOUTUBE,
+		'{{EXAMPLE_URL}}': URLS.EXAMPLE,
+		'{{LDAP_URL}}': URLS.LDAP,
+		'{{NPM_URL}}': URLS.NPM,
+		'{{DOCKER_HUB_URL}}': URLS.DOCKER_HUB,
+		'{{G2_REVIEWS_URL}}': URLS.G2_REVIEWS,
+		'{{CAPTERRA_URL}}': URLS.CAPTERRA,
+		'{{TRUSTRADIUS_URL}}': URLS.TRUSTRADIUS,
+		'{{PRODUCTHUNT_URL}}': URLS.PRODUCTHUNT,
+		'{{SECURITY_EMAIL}}': EMAILS.SECURITY,
+		'{{INFO_EMAIL}}': EMAILS.INFO,
+		'{{SUPPORT_EMAIL}}': EMAILS.SUPPORT,
+	};
+
+	return {
+		name: 'markdown-variables',
+		enforce: 'pre',
+		transform(code, id) {
+			if (!id.endsWith('.md')) return null;
+
+			let result = code;
+			for (const [pattern, value] of Object.entries(replacements)) {
+				result = result.replaceAll(pattern, value);
+			}
+
+			if (result !== code) {
+				return { code: result, map: null };
+			}
+			return null;
+		},
+	};
+}
 
 export default defineConfig({
 	base: '/',
@@ -6,6 +55,9 @@ export default defineConfig({
 	title: 'Directus Docs',
 	description: 'Directus. An Instant App & API for your SQL Database.',
 	ignoreDeadLinks: true,
+	vite: {
+		plugins: [markdownVariablesPlugin()],
+	},
 	markdown: {
 		theme: 'material-theme-palenight',
 		toc: {
@@ -128,9 +180,9 @@ gtag('config', 'UA-24637628-7');
 		nav: [
 			{ text: 'Docs', link: '/' },
 			// { text: 'Cookbook', link: '/cookbook/add-a-recipe', activeMatch: '/cookbook/' },
-			{ text: 'Website', link: 'https://directus.io/' },
-			{ text: 'Cloud', link: 'https://directus.cloud/' },
-			{ text: 'GitHub', link: 'https://github.com/LaWebcapsule/directus9' },
+			{ text: 'Website', link: URLS.WEBSITE },
+			{ text: 'Cloud', link: URLS.CLOUD },
+			{ text: 'GitHub', link: URLS.GITHUB },
 		],
 		algolia: {
 			appId: 'T5BDNEU205',
@@ -142,7 +194,7 @@ gtag('config', 'UA-24637628-7');
 			'/': sidebar(),
 		},
 		editLink: {
-			pattern: 'https://github.com/LaWebcapsule/directus9/edit/main/docs/:path',
+			pattern: `${URLS.GITHUB}/edit/main/docs/:path`,
 		},
 	},
 });

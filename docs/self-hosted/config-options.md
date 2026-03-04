@@ -823,7 +823,7 @@ configured in AD, or fallback to the `DEFAULT_ROLE_ID`.
 AUTH_PROVIDERS="ldap"
 
 AUTH_LDAP_DRIVER="ldap"
-AUTH_LDAP_CLIENT_URL="ldap://ldap.directus.io"
+AUTH_LDAP_CLIENT_URL="{{LDAP_URL}}"
 AUTH_LDAP_BIND_DN="CN=Bind User,OU=Users,DC=ldap,DC=directus,DC=io"
 AUTH_LDAP_BIND_PASSWORD="p455w0rd"
 AUTH_LDAP_USER_DN="OU=Users,DC=ldap,DC=directus,DC=io"

@@ -13,15 +13,15 @@ If you're experiencing issues or think you have found a problem in Directus, be 
 [Reporting a Bug](/contributing/introduction#bug-reporting):
 
 1. Ensure your server and database meet the [minimum requirements](/self-hosted/docker-guide.html#supported-databases).
-2. Ensure you’re on the [latest version](https://github.com/LaWebcapsule/directus9/releases/latest) of Directus.
+2. Ensure you’re on the [latest version]({{GITHUB_URL}}/releases/latest) of Directus.
 3. Stop `CTRL+C` and restart the server `npx directus start`.
 4. Run the database migration script: `directus database migrate:latest`\
    _Note: backup your database first._
 5. Disable any data-caching within your project.
 6. Test any app issues with both browser extensions and caching disabled _(i.e. Incognito Mode)_.
 7. Confirm the issue is not related to your own custom code.
-8. Check for [existing Issues](https://github.com/LaWebcapsule/directus9/issues?q=is%3Aissue) (and
-   [Discussions](https://github.com/LaWebcapsule/directus9/discussions)) that match your problem.
+8. Check for [existing Issues]({{GITHUB_URL}}/issues?q=is%3Aissue) (and
+   [Discussions]({{GITHUB_URL}}/discussions)) that match your problem.
 
 If you're still experiencing a problem after completing the above steps, you can chat through things on our
 [community support](#community-support) or [report a bug](/contributing/introduction#bug-reporting).
@@ -30,11 +30,11 @@ If you're still experiencing a problem after completing the above steps, you can
 
 ### Community Support
 
-[GitHub Discussions](https://github.com/LaWebcapsule/directus9/discussions) is a great first place to reach out for
+[GitHub Discussions]({{GITHUB_URL}}/discussions) is a great first place to reach out for
 help. Our community and core developers often check this platform and answer posts. It has the added benefit of being an
 archival resource for others developers with similar questions.
 
-Our [Discord Community](https://directus.chat) is another great way to get assistance. Please keep all questions in the
+Our [Discord Community]({{DISCORD_CHAT_URL}}) is another great way to get assistance. Please keep all questions in the
 help channels, be considerate, and remember that you are getting free help from the community.
 
 :::warning No Guaranteed Response Time
@@ -50,21 +50,21 @@ Basic and Premium Support offer direct communication with the Directus Core Team
 Enterprise Projects, and Premium Support adds 24/7 response times for critical software issues only.
 
 Cloud customers and Self-Hosted users interested in learning more about our monthly retainer agreements should contact
-us at [support@directus.io](mailto:support@directus.io).
+us at [{{SUPPORT_EMAIL}}](mailto:{{SUPPORT_EMAIL}}).
 
 ## Sponsored Work
 
 ### Commissioned Features
 
 If you need a specific feature added to Directus faster than the normal development timeline,
-[reach out to us](https://directus.io/contact) for a quote. Our parent agency will often help subsidize the cost of
+[reach out to us]({{WEBSITE_URL}}contact) for a quote. Our parent agency will often help subsidize the cost of
 developing new features if they pass our [80/20 Rule](/contributing/introduction#feature-requests) and can be merged
 into the core codebase. Other custom/proprietary development will be built bespoke within our robust extension system.
 
 ### Expedited Fixes
 
 We triage all reported bugs based on priority and how long the fix is estimated to take. If you need a specific issue
-resolved sooner, [reach out to us](https://directus.io/contact) for a quote.
+resolved sooner, [reach out to us]({{WEBSITE_URL}}contact) for a quote.
 
 ## Frequently Asked Questions
 
@@ -86,7 +86,7 @@ stable, however new issues still arise, some of which may be triaged with a lowe
 
 If you need, you can contact us about [sponsoring expedited fixes](#expedited-fixes) or
 [commissioning new features](#commissioned-features). You can also
-[submit a pull request](https://github.com/LaWebcapsule/directus9/pulls) — after all, it is open-source!
+[submit a pull request]({{GITHUB_URL}}/pulls) — after all, it is open-source!
 
 ### Can you give an ETA for this feature/fix?
 

@@ -55,7 +55,7 @@ Async/Sync ->
 
 ## What's a Flow?
 
-![What's a Flow?](https://cdn.directus.io/docs/v9/configuration/flows/flows/flows-20220603A/whats-a-flow-20220603A.webp)
+![What's a Flow?]({{CDN_URL}}/docs/v9/configuration/flows/flows/flows-20220603A/whats-a-flow-20220603A.webp)
 
 <!--
 <video title="What's a Flow" autoplay playsinline muted loop controls>
@@ -116,7 +116,7 @@ create a flow, which we discuss in the next section.
 ## Configure A Flow
 
 <video autoplay playsinline muted loop controls title="Create a Flow">
-	<source src="https://cdn.directus.io/docs/v9/configuration/flows/flows/flows-20220603A/create-a-flow-20220603A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/flows/flows/flows-20220603A/create-a-flow-20220603A.mp4" type="video/mp4" />
 </video>
 
 ### Create a Flow
@@ -197,7 +197,7 @@ Now that we know how to create and configure a flow, it's time to get a firmer u
 
 <!--
 <video title="The data chain" autoplay playsinline muted loop controls>
-<source src="https://cdn.directus.io/docs/v9/" type="video/mp4" />
+<source src="{{CDN_URL}}/docs/v9/" type="video/mp4" />
 </video>
 -->
 
@@ -263,7 +263,7 @@ Remember, `$trigger`, `$accountability`, and `$last` begin with `$`, but not `op
 
 <!--
 <video title="Use data chain Keys as Variables" autoplay playsinline muted loop controls>
-<source src="https://cdn.directus.io/docs/v9/" type="video/mp4" />
+<source src="{{CDN_URL}}/docs/v9/" type="video/mp4" />
 </video>
 -->
 
@@ -320,14 +320,14 @@ access data dynamically in these input options as well.
 
 <!--
 <video autoplay playsinline muted loop controls title="">
-	<source src="https://cdn.directus.io/docs/v9/configuration/flows/flows/" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/flows/flows/" type="video/mp4" />
 </video>
 -->
 
 ## Logs
 
 <video autoplay playsinline muted loop controls title="">
-	<source src="https://cdn.directus.io/docs/v9/configuration/flows/flows/flows-20220603A/logs-20220603A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/configuration/flows/flows/flows-20220603A/logs-20220603A.mp4" type="video/mp4" />
 </video>
 
 Accessible from the sidebar, logs store information for each flow execution. Each log will display information from

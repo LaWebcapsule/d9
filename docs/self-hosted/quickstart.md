@@ -66,7 +66,7 @@ Login using the admin credentials you configured during the installation in Step
 
 Once logged in, you're greeted with the option to create your first Collection:
 
-![Directus Empty State](https://cdn.directus.io/docs/v9/getting-started/quickstart/quickstart-20220217A/empty-state-20220217A.webp)
+![Directus Empty State]({{CDN_URL}}/docs/v9/getting-started/quickstart/quickstart-20220217A/empty-state-20220217A.webp)
 
 Follow the prompts and create a Collection. For the sake of this demo, we'll be calling ours `articles`, but feel free
 to make it your own!
@@ -83,7 +83,7 @@ With the Collection created, it's time to start adding some Fields. Click the **
 **"Input"**:
 
 <video autoplay playsinline muted loop controls>
-<source src="https://cdn.directus.io/docs/v9/getting-started/quickstart/quickstart-20220217A/add-field-20220217A.mp4" type="video/mp4" />
+<source src="{{CDN_URL}}/docs/v9/getting-started/quickstart/quickstart-20220217A/add-field-20220217A.mp4" type="video/mp4" />
 </video>
 
 We'll be calling our Field `title`. While Directus offers a range of powerful field customization options, we'll be
@@ -101,7 +101,7 @@ Now that we have a Collection with a Field configured, it's time to start adding
 Module (top left), and click <span mi btn>add</span> in the top-right to get started. This will take you to the
 Create/Edit Item page:
 
-![Directus Create Item](https://cdn.directus.io/docs/v9/getting-started/quickstart/quickstart-20220217A/create-item-20220217A.webp)
+![Directus Create Item]({{CDN_URL}}/docs/v9/getting-started/quickstart/quickstart-20220217A/create-item-20220217A.webp)
 
 Once you're happy with your creation, click <span mi btn>check</span> in the top-right to save your Item to the
 database.
@@ -123,7 +123,7 @@ Directus ships with a special **"Public"** role that controls what data is retur
 the Public Role, find your Collection, and click the icon under the <span mi icon>visibility</span> icon (read/view
 permission) to allow the Public Role to read the Items in your Collection.
 
-![Directus Permissions](https://cdn.directus.io/docs/v9/getting-started/quickstart/quickstart-20220217A/permissions-20220217A.webp)
+![Directus Permissions]({{CDN_URL}}/docs/v9/getting-started/quickstart/quickstart-20220217A/permissions-20220217A.webp)
 
 ::: tip More Info on Roles & Permissions
 

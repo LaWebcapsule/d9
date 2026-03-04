@@ -11,13 +11,13 @@ readTime: 3 min read
 > things like dropdown options, placeholder text, field notes, and more.
 
 <video autoplay playsinline muted loop controls>
-<source src="https://cdn.directus.io/docs/v9/configuration/translation-strings/translation-strings-20220615A/translation-strings-20220615A.mp4" type="video/mp4" />
+<source src="{{CDN_URL}}/docs/v9/configuration/translation-strings/translation-strings-20220615A/translation-strings-20220615A.mp4" type="video/mp4" />
 </video>
 
 ## Create a Translation String
 
 <video autoplay playsinline muted loop controls>
-<source src="https://cdn.directus.io/docs/v9/configuration/translation-strings/translation-strings-20220616A/create-and-manage-a-trasnlation-string-20220616A.mp4" type="video/mp4" />
+<source src="{{CDN_URL}}/docs/v9/configuration/translation-strings/translation-strings-20220616A/create-and-manage-a-trasnlation-string-20220616A.mp4" type="video/mp4" />
 </video>
 
 To create a Translation String, follow these steps.
@@ -34,7 +34,7 @@ To create a Translation String, follow these steps.
 ## Use a Translation String
 
 <video autoplay playsinline muted loop controls>
-<source src="https://cdn.directus.io/docs/v9/configuration/translation-strings/translation-strings-20220616A/assign-and-remove-translation-string-20220616A.mp4" type="video/mp4" />
+<source src="{{CDN_URL}}/docs/v9/configuration/translation-strings/translation-strings-20220616A/assign-and-remove-translation-string-20220616A.mp4" type="video/mp4" />
 </video>
 
 Throughout the Settings Module, you will notice certain input fields have a <span mi icon>translate</span> icon on them.

@@ -27,10 +27,10 @@
 		"access": "public"
 	},
 	"devDependencies": {
-		"@wbce-d9/tsconfig": "2.0.0",
-		"typescript": "5.0.4"
+		"@wbce-d9/tsconfig": "catalog:",
+		"typescript": "catalog:"
 	},
 	"dependencies": {
-		"zod": "3.22.3"
+		"zod": "catalog:"
 	}
 }

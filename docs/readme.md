@@ -5,21 +5,21 @@
 ## 🐰 Introduction
 
 This is the official documentation for the Directus data platform. These docs are also available via
-[a public website](https://docs.directus.io).
+[a public website]({{DOCS_URL}}).
 
-**[Learn more about Directus](https://directus.io)**
+**[Learn more about Directus]({{WEBSITE_URL}})**
 
 <br />
 
 ## 🤔 Community Help
 
-[The Directus Documentation](https://docs.directus.io) is a great place to start, or explore these other channels:
+[The Directus Documentation]({{DOCS_URL}}) is a great place to start, or explore these other channels:
 
-- [Discord](https://directus.chat) (Questions, Live Discussions)
-- [GitHub Issues](https://github.com/LaWebcapsule/directus9/issues) (Report Bugs)
-- [GitHub Discussions](https://github.com/LaWebcapsule/directus9/discussions) (Feature Requests)
-- [Twitter](https://twitter.com/directus) (Latest News)
-- [YouTube](https://www.youtube.com/c/DirectusVideos/featured) (Video Tutorials)
+- [Discord]({{DISCORD_CHAT_URL}}) (Questions, Live Discussions)
+- [GitHub Issues]({{GITHUB_URL}}/issues) (Report Bugs)
+- [GitHub Discussions]({{GITHUB_URL}}/discussions) (Feature Requests)
+- [Twitter]({{TWITTER_URL}}) (Latest News)
+- [YouTube]({{YOUTUBE_URL}}/featured) (Video Tutorials)
 
 <br />
 

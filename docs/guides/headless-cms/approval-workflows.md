@@ -38,7 +38,7 @@ content creation process.
 There are an infinite number of possible workflows you could configure. But for this recipe, we will configure a simple
 workflow where `writers` and `editors` work together to create, co-edit and publish `articles`.
 
-![A Workflow](https://cdn.directus.io/docs/v9/configuration/users-roles-permissions/workflows-20220909/workflows-20220909B.webp)
+![A Workflow]({{CDN_URL}}/docs/v9/configuration/users-roles-permissions/workflows-20220909/workflows-20220909B.webp)
 
 For this recipe, our workflow will have three stages, `draft`, `under review`, and `published`, which will be defined in
 a `status` field.
@@ -53,7 +53,7 @@ a `status` field.
 This whole workflow is created with permissions. All we need to do to create these stages is change the `author` and
 `editor` permissions for each item in `articles` conditionally, based on the value of `status`.
 
-![A Workflow](https://cdn.directus.io/docs/v9/configuration/users-roles-permissions/workflows-20220909/workflows-20220909A.webp)
+![A Workflow]({{CDN_URL}}/docs/v9/configuration/users-roles-permissions/workflows-20220909/workflows-20220909A.webp)
 
 ## How-To Guide
 

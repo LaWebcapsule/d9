@@ -23,27 +23,27 @@ or contact us for bulk merch pricing. We'll get it shipped as soon as sizing and
 
 **GitHub Stars**\
 As an open-source project, stars are a primary metric by which we measure our success. It only takes a few seconds to head
-to the [Directus GitHub Repo](https://github.com/LaWebcapsule/directus9) and click the star. With enough activity in a short
+to the [Directus GitHub Repo]({{GITHUB_URL}}) and click the star. With enough activity in a short
 period of time, we get _even more exposure_ on GitHub's trending page!
 
 **Social Posts**\
-Engage with us on social media. Follow us! A quick post mentioning [@directus](https://twitter.com/directus) goes a long
+Engage with us on social media. Follow us! A quick post mentioning [@directus]({{TWITTER_URL}}) goes a long
 way! _Plus, we re-tweet the team's favorite shout-outs to our 45K+ followers._
 
 **Testimonials**\
 _One sentence._ Even that was a sentence and it was only two words! If you're a fan of Directus, we'd love to hear why with
 a short endorsement... More importantly, potential new users _need to hear your testimonial_ to see if the product is right
-for them! Shoot us an [email](mailto:info@directus.io), [Tweet](https://twitter.com/directus), or [Discord](https://directus.chat)
+for them! Shoot us an [email](mailto:{{INFO_EMAIL}}), [Tweet]({{TWITTER_URL}}), or [Discord]({{DISCORD_CHAT_URL}})
 message with your name, title, and company.
 
 **Reviews**\
 The following popular rating platforms allow you to post your rating and testimonial publicly, which automatically gives
 it more exposure.
 
-- [G2](https://www.g2.com/products/directus/reviews)
-- [Capterra](https://www.capterra.com/p/156619/Directus)
-- [TrustRadius](https://www.trustradius.com/products/directus/reviews)
-- [Product Hunt](https://www.producthunt.com/posts/directus-9)
+- [G2]({{G2_REVIEWS_URL}})
+- [Capterra]({{CAPTERRA_URL}})
+- [TrustRadius]({{TRUSTRADIUS_URL}})
+- [Product Hunt]({{PRODUCTHUNT_URL}})
 
 ## Community Engagement
 
@@ -56,7 +56,7 @@ to compensate the top community contributors. Donate to sponsor more [community 
 
 **Code Pull Requests**\
 Squashing bugs, optimizing the codebase, increasing test coverage, and adding new features, are all extremely valuable. Obviously,
-you're making the platform better for yourself as well. _That's a double whammy!_ [Go make your PR on GitHub!](https://github.com/directus)
+you're making the platform better for yourself as well. _That's a double whammy!_ [Go make your PR on GitHub!]({{GITHUB_DIRECTUS_URL}})
 
 Not quite a software engineer yet? We have plenty of documentation that can always use some extra attention. Learn more
 in our [Contributors Guide](/contributing/introduction).
@@ -65,11 +65,11 @@ in our [Contributors Guide](/contributing/introduction).
 
 **Bug Reporting**\
 If you find an issue in Directus, no matter how small, we'd love to hear about it. Proper bug reporting helps our team improve
-platform stability. [Report a bug on GitHub](https://github.com/LaWebcapsule/directus9/issues/new)
+platform stability. [Report a bug on GitHub]({{GITHUB_URL}}/issues/new)
 
 **App Translations**\
 Every button, element, or other line of text in the app is [fully translatable](/contributing/translations). These translations
-make our app an international platform. Our [Crowdin integration](https://locales.directus.io) makes polishing existing translations
+make our app an international platform. Our [Crowdin integration]({{LOCALES_URL}}) makes polishing existing translations
 or creating new ones a breeze.
 
 ## Financial Support
@@ -79,7 +79,7 @@ many expenses. Here are a few support avenues that help us keep the lights on.**
 
 **Premium Support**\
 _Software engineering is hard!_ Let our Core Team help you better manage your Directus project with a dedicated Premium Support
-agreement so your devs can focus on your app's core business logic. [Contact the Team](https://directus.io/contact) for more
+agreement so your devs can focus on your app's core business logic. [Contact the Team]({{WEBSITE_URL}}contact) for more
 info.
 
 **Sponsored Work**\
@@ -103,6 +103,6 @@ Test out Directus Cloud now with the [Quickstart Guide](/getting-started/quickst
 
 :::tip Enterprise Cloud
 
-Need total customization, unlimited scalability, and dedicated support? [Contact us](https://directus.io/contact)
+Need total customization, unlimited scalability, and dedicated support? [Contact us]({{WEBSITE_URL}}contact)
 
 :::

@@ -1,6 +1,6 @@
 {
 	"name": "@wbce-d9/storage-driver-cloudinary",
-	"version": "10.0.0",
+	"version": "10.0.1",
 	"type": "module",
 	"scripts": {
 		"build": "tsc --build",
@@ -31,14 +31,14 @@
 	"dependencies": {
 		"@wbce-d9/storage": "workspace:*",
 		"@wbce-d9/utils": "workspace:*",
-		"p-queue": "7.3.4",
-		"undici": "6.23.0"
+		"p-queue": "catalog:",
+		"undici": "7.20.0"
 	},
 	"devDependencies": {
-		"@ngneat/falso": "6.4.0",
-		"@vitest/coverage-c8": "0.30.1",
-		"@wbce-d9/tsconfig": "2.0.0",
-		"typescript": "5.0.4",
-		"vitest": "0.30.1"
+		"@wbce-d9/tsconfig": "workspace:*",
+		"@ngneat/falso": "catalog:",
+		"@vitest/coverage-c8": "catalog:",
+		"typescript": "catalog:",
+		"vitest": "catalog:"
 	}
 }

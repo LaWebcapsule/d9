@@ -27,18 +27,18 @@
 		"access": "public"
 	},
 	"devDependencies": {
-		"@types/express": "4.17.17",
-		"@types/geojson": "7946.0.10",
 		"@wbce-d9/constants": "workspace:*",
 		"@wbce-d9/schema": "workspace:*",
-		"@wbce-d9/tsconfig": "2.0.0",
-		"express": "^4.21.2",
-		"geojson": "0.5.0",
-		"knex": "3.1.0",
-		"pino": "8.11.0",
-		"typescript": "5.0.4",
-		"vue": "3.2.47",
-		"vue-router": "4.1.6",
-		"zod": "3.22.3"
+		"@types/geojson": "catalog:",
+		"@wbce-d9/tsconfig": "catalog:",
+		"express": "catalog:",
+		"geojson": "catalog:",
+		"knex": "catalog:",
+		"pino": "catalog:",
+		"typescript": "catalog:",
+		"vue": "catalog:",
+		"vue-router": "catalog:",
+		"zod": "catalog:",
+		"@types/express": "4.17.17"
 	}
 }

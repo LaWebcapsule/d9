@@ -1,5 +1,12 @@
 # @wbce-d9/storage-driver-gcs
 
+## 10.0.1
+
+### Patch Changes
+
+- Updated dependencies [1f4d43f]
+  - @wbce-d9/utils@10.0.1
+
 ## 10.0.0
 
 ### Major Changes

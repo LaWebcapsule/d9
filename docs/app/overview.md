@@ -8,7 +8,7 @@ readTime: 3 min read
 > The App is a no-code presentation layer for your data, content, and assets. It uses an intuitive left-to-right visual
 > hierarchy for general organization and navigation.
 
-<img src="https://cdn.directus.io/docs/v9/app-guide/overview/app-overview-20220810A.svg" alt="Directus Application Overview" class="no-shadow" />
+<img src="{{CDN_URL}}/docs/v9/app-guide/overview/app-overview-20220810A.svg" alt="Directus Application Overview" class="no-shadow" />
 
 ## 1. Module Bar
 

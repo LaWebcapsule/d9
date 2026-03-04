@@ -342,15 +342,15 @@ following drivers:
 ## Title Formatter
 
 Special Casing — If you are trying to update the specific casing (uppercase/lowercase) for a word (e.g., `Dna` to `DNA`)
-you will want to add the edge-case to the [Format Title package](https://github.com/directus/format-title). If you feel
-the case passes our [80/20 rule](https://docs.directus.io/contributing/introduction#feature-requests) you should submit
+you will want to add the edge-case to the [Format Title package]({{GITHUB_DIRECTUS_URL}}/format-title). If you feel
+the case passes our [80/20 rule]({{DOCS_URL}}/contributing/introduction#feature-requests) you should submit
 a Pull Request to the codebase, otherwise you can update this in your instance.
 
 ## Translations
 
 The platform supports internationalization across its entire Admin App. Many languages are currently supported, with
 more being added all the time. Anyone can add or refine any languages through the integration with
-[Crowdin](https://locales.directus.io).
+[Crowdin]({{LOCALES_URL}}).
 
 In addition to the App itself being multilingual, the platform allows translating your schema too. By default,
 collections and field names come from the database's naming, but you can override this in different languages.

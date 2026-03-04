@@ -12,12 +12,12 @@ readTime: 2 min read
 
 ## Crowdin
 
-Our [Crowdin](https://locales.directus.io) page provides an external interface for managing all of the different
+Our [Crowdin]({{LOCALES_URL}}) page provides an external interface for managing all of the different
 language translations for the App. You can update and extend existing languages, or request a new language be added.
 
 ## Working with Existing Languages
 
-1. Navigate to [Crowdin](https://locales.directus.io)
+1. Navigate to [Crowdin]({{LOCALES_URL}})
 2. Click on the desired language
 3. Click **Translate All** in the header
 4. Log in to Crowdin, or register an account as needed
@@ -50,4 +50,4 @@ using the "Comment" section.
 ## Requesting a New Language
 
 To add a new language to the Crowdin service, you can make a request via Crowdin's **Discussions** section, or reach out
-to a Core Team member via [Discord](https://directus.chat).
+to a Core Team member via [Discord]({{DISCORD_CHAT_URL}}).

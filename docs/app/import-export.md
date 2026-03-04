@@ -33,7 +33,7 @@ This page details Importing and Exporting of Items as files via the no-code app.
 ## Import Items
 
 <video autoplay playsinline muted loop controls title="Import Data From a File">
-	<source src="https://cdn.directus.io/docs/v9/app-guide/imports-exports/imports-exports-20220415A/import-items-20220416A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/app-guide/imports-exports/imports-exports-20220415A/import-items-20220416A.mp4" type="video/mp4" />
 </video>
 
 To import Items from a file, follow the steps below.
@@ -62,7 +62,7 @@ Add link
 ## Export Items
 
 <video autoplay playsinline muted loop controls title="Export Data to a File">
-	<source src="https://cdn.directus.io/docs/v9/app-guide/imports-exports/imports-exports-20220415A/export-items-20220416A.mp4
+	<source src="{{CDN_URL}}/docs/v9/app-guide/imports-exports/imports-exports-20220415A/export-items-20220416A.mp4
 " type="video/mp4" />
 </video>
 
@@ -102,7 +102,7 @@ permissions for the related Collection and a firm understanding of the relationa
 ## Export Items Menu
 
 <video autoplay playsinline muted loop controls title="Export Data to a File">
-	<source src="https://cdn.directus.io/docs/v9/app-guide/imports-exports/imports-exports-20220415A/export-items-menu-20220416A.mp4" type="video/mp4" />
+	<source src="{{CDN_URL}}/docs/v9/app-guide/imports-exports/imports-exports-20220415A/export-items-menu-20220416A.mp4" type="video/mp4" />
 </video>
 
 This menu provides granular control over exactly which Items and Fields are exported, how they are exported, and where
