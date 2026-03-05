@@ -13,6 +13,11 @@ Skills derived from real development sessions on d9. These prevent known pitfall
 | [cdn-to-local-assets-migration](./d9/cdn-to-local-assets-migration/) | 1.0.0 | Migrate CDN-hosted doc assets to local files | migration, docs |
 | [ses-eu-west3-setup](./d9/ses-eu-west3-setup/) | 1.0.0 | Configure AWS SES in eu-west-3 for EU email delivery | infra, aws |
 | [d9-fork-setup](./d9/d9-fork-setup/) | 1.0.0 | Complete d9 dev environment setup (2 days → 2 hours) | setup, onboarding |
+| [crlf-docker-entrypoint](./d9/crlf-docker-entrypoint/) | 1.0.0 | Prevent shell script failures from Windows CRLF line endings in Docker | docker, windows |
+| [d9-key-secret-env](./d9/d9-key-secret-env/) | 1.0.0 | Ensure KEY and SECRET env vars are set with distinct values | auth, config |
+| [d9-migration-session-tracking](./d9/d9-migration-session-tracking/) | 1.0.0 | Fix silent migration failure on session_id columns causing 500 on login | migration, database |
+| [pnpm-ci-true-docker](./d9/pnpm-ci-true-docker/) | 1.0.0 | Set CI=true in Docker to avoid pnpm 10+ TTY prompts | docker, pnpm |
+| [pnpm-deploy-require-path](./d9/pnpm-deploy-require-path/) | 1.0.0 | Fix Cannot find module errors for transitive deps with pnpm deploy | docker, pnpm |
 
 ## SkillOps — Meta Skills (`skillops/`)
 

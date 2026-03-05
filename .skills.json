@@ -16,7 +16,12 @@
         "vitepress-logo-sizing",
         "cdn-to-local-assets-migration",
         "ses-eu-west3-setup",
-        "d9-fork-setup"
+        "d9-fork-setup",
+        "crlf-docker-entrypoint",
+        "d9-key-secret-env",
+        "d9-migration-session-tracking",
+        "pnpm-ci-true-docker",
+        "pnpm-deploy-require-path"
       ]
     },
     "skillops": {
