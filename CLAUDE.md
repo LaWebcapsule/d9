@@ -27,8 +27,9 @@ Pipeline flow:
 3. **anonymize-session** — Clean & decontextualize sensitive data locally before sharing
 4. **format-skill** — Generate SKILL.md or AMENDMENT.yaml
 5. **refine-skill-design** — Audit & improve SKILL.md quality (ASQM >= 17 target)
-6. **discover-skills** — Search external catalogs for existing skills before creating new ones
-7. **curate-skills** — Score, tag, and audit skills (runs in CI)
+6. **submit-skill** — Git branch + commit + push + PR creation (automates the last mile)
+7. **discover-skills** — Search external catalogs for existing skills before creating new ones
+8. **curate-skills** — Score, tag, and audit skills (runs in CI on PR)
 
 Verification: `node scripts/verify-skill-structure.mjs --all` and `node scripts/verify-registry.mjs`
 

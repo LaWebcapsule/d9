@@ -32,6 +32,7 @@ Drop the `skillops/` folder into any repo to enable community skill contribution
 | [anonymize-session](./skillops/anonymize-session/) | 1.1.0 | Clean & decontextualize sensitive info before sharing (runs locally) | pipeline, security |
 | [format-skill](./skillops/format-skill/) | 1.0.0 | Generate SKILL.md or AMENDMENT.yaml from anonymized experience | pipeline, formatting |
 | [refine-skill-design](./skillops/refine-skill-design/) | 1.0.0 | Audit & improve SKILL.md quality using ASQM meta-audit | meta, quality |
+| [submit-skill](./skillops/submit-skill/) | 1.0.0 | Git branch + commit + push + PR creation for validated skills | pipeline, git |
 | [discover-skills](./skillops/discover-skills/) | 1.0.0 | Find skills from external catalogs to fill capability gaps | meta, discovery |
 | [curate-skills](./skillops/curate-skills/) | 1.0.0 | Score (ASQM), tag, normalize, and audit all skills | meta, curation |
 
