@@ -22,20 +22,36 @@ Drop the `skillops/` folder into any repo to enable community skill contribution
 
 | Skill | Version | Description | Tags |
 |-------|---------|-------------|------|
-| [detect-xp](./skillops/detect-xp/) | 1.0.0 | Detect reusable error/solution patterns during sessions | pipeline, detection |
+| [detect-xp](./skillops/detect-xp/) | 2.0.0 | Detect reusable error/solution patterns during sessions | pipeline, detection |
 | [match-existing](./skillops/match-existing/) | 1.0.0 | Compare experience against existing skills (new/amendment/duplicate) | pipeline, comparison |
-| [anonymize-session](./skillops/anonymize-session/) | 1.0.0 | Clean sensitive info before sharing (runs locally) | pipeline, security |
+| [anonymize-session](./skillops/anonymize-session/) | 1.1.0 | Clean & decontextualize sensitive info before sharing (runs locally) | pipeline, security |
 | [format-skill](./skillops/format-skill/) | 1.0.0 | Generate SKILL.md or AMENDMENT.yaml from anonymized experience | pipeline, formatting |
+| [refine-skill-design](./skillops/refine-skill-design/) | 1.0.0 | Audit & improve SKILL.md quality using ASQM meta-audit | meta, quality |
+| [discover-skills](./skillops/discover-skills/) | 1.0.0 | Find skills from external catalogs to fill capability gaps | meta, discovery |
 | [curate-skills](./skillops/curate-skills/) | 1.0.0 | Score (ASQM), tag, normalize, and audit all skills | meta, curation |
+
+### Verification Tools
+
+```bash
+# Validate a single skill
+node scripts/verify-skill-structure.mjs .claude/skills/d9/rebuild-plugins-before-deploy
+
+# Validate all skills
+node scripts/verify-skill-structure.mjs --all
+
+# Check registry consistency
+node scripts/verify-registry.mjs
+```
 
 ## How to contribute
 
 1. Work on d9 with Claude Code — `detect-xp` will detect reusable patterns
 2. Say "Yes" when prompted to contribute
-3. The pipeline handles comparison, anonymization, and formatting automatically
-4. Open a PR with the generated skill file
-5. `curate-skills` runs in CI to score and check for overlaps
-6. A maintainer reviews and merges
+3. The pipeline handles comparison, anonymization, formatting, and quality checks automatically
+4. `refine-skill-design` ensures the skill meets quality standards (ASQM >= 17)
+5. Open a PR with the generated skill file
+6. `curate-skills` runs in CI to score and check for overlaps
+7. A maintainer reviews and merges
 
 ## How to reuse SkillOps in another project
 

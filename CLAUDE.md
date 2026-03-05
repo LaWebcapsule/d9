@@ -19,11 +19,18 @@ Project-specific skills derived from real debugging sessions. Read these before 
 - **d9-fork-setup** — Complete dev environment setup guide
 
 ### SkillOps Pipeline (`.claude/skills/skillops/`)
-When you detect a non-trivial error → investigation → resolution pattern during a session, follow the SkillOps pipeline:
-1. **detect-xp** — Detect the pattern and propose to contribute
+**IMPORTANT — Active monitoring**: After EVERY error resolution and after EVERY multi-step investigation (>3 tool calls), check if the pattern is worth capturing. Do NOT wait for the "perfect" pattern — propose immediately. Read `detect-xp/SKILL.md` for the full trigger system.
+
+Pipeline flow:
+1. **detect-xp** — Detect the pattern and propose to contribute (check after EVERY error fix!)
 2. **match-existing** — Compare with existing skills (new / amendment / duplicate)
-3. **anonymize-session** — Clean sensitive data locally before sharing
+3. **anonymize-session** — Clean & decontextualize sensitive data locally before sharing
 4. **format-skill** — Generate SKILL.md or AMENDMENT.yaml
+5. **refine-skill-design** — Audit & improve SKILL.md quality (ASQM >= 17 target)
+6. **discover-skills** — Search external catalogs for existing skills before creating new ones
+7. **curate-skills** — Score, tag, and audit skills (runs in CI)
+
+Verification: `node scripts/verify-skill-structure.mjs --all` and `node scripts/verify-registry.mjs`
 
 Read the full skill SKILL.md files for detailed instructions.
 

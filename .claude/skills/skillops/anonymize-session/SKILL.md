@@ -1,13 +1,14 @@
 ---
 name: anonymize-session
-description: Clean sensitive information from extracted experiences before sharing. Runs entirely locally — nothing leaves without human validation.
+description: Clean sensitive information from extracted experiences before sharing. Decontextualize project-specific details into generic patterns. Runs entirely locally — nothing leaves without human validation.
 tags: [pipeline, skillops, security, meta-skill]
-version: 1.0.0
+version: 1.1.0
 license: MIT
 recommended_scope: project
 metadata:
   author: la-webcapsule
   source: skillops-pipeline
+  inspired_by: ai-cortex/decontextualize-text
 related_skills: [detect-xp, match-existing, format-skill]
 ---
 
@@ -15,7 +16,21 @@ related_skills: [detect-xp, match-existing, format-skill]
 
 ## Purpose
 
-Clean all sensitive, personal, and project-specific information from an extracted experience before it can be shared as a skill contribution. This skill runs ENTIRELY LOCALLY — nothing leaves the developer's machine without explicit human validation.
+Clean all sensitive, personal, and project-specific information from an extracted experience before it can be shared as a skill contribution. Beyond simple redaction, **decontextualize** the experience so it becomes a generic, reusable pattern — not just a sanitized copy of a specific session.
+
+This skill runs ENTIRELY LOCALLY — nothing leaves the developer's machine without explicit human validation.
+
+## Core Objective
+
+**Primary Goal**: Transform a project-specific experience into a generic, reusable skill while removing all sensitive data.
+
+**Success Criteria**:
+1. Zero PII, secrets, or credentials remain in output
+2. Project-specific details are generalized (not just placeholder-replaced)
+3. The output is useful to someone who has never seen the original project
+4. The developer explicitly approved the final version
+
+**Acceptance Test**: A reviewer reading the output cannot determine which company, project, or person generated it, but CAN understand and apply the technical lesson.
 
 ## Triggers
 
@@ -63,6 +78,17 @@ Apply replacements in order (most specific first):
 - Package names and versions
 - Framework/tool names
 - Command structures (with args redacted if sensitive)
+
+### Step 2.5: Decontextualize
+
+Go beyond simple redaction — **generalize** the experience:
+
+- Replace project-specific error messages with the generic pattern: `"ENOENT: /home/arthur/deuillotheque/config.yml"` → `"ENOENT on a config file when the path is resolved before the working directory is set"`
+- Abstract specific tool versions into ranges: `"Node 24.1.0"` → `"Node >= 24 (breaking change from v22)"`
+- Replace specific file structures with generic descriptions: `"plugins/endpoints/newsletter/index.ts"` → `"a custom endpoint plugin file"`
+- Generalize company-specific workflows: `"our Webcapsule deploy pipeline"` → `"a CI/CD deployment pipeline"`
+
+**The goal**: someone reading the output should think "this could happen to me" rather than "this happened to someone else".
 
 ### Step 3: Preview to developer
 

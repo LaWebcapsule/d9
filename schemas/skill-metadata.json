@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "skill-metadata.json",
+  "title": "SKILL.md Frontmatter Schema",
+  "description": "Validates the YAML frontmatter of a SKILL.md file in the SkillOps format.",
+  "type": "object",
+  "required": ["name", "description", "tags", "version"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$",
+      "description": "Skill name in kebab-case, must match directory name"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "One-line description of what the skill does"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+      "minItems": 1,
+      "maxItems": 10,
+      "description": "Categorization tags in kebab-case"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version (major.minor.patch)"
+    },
+    "license": {
+      "type": "string",
+      "enum": ["MIT", "Apache-2.0", "GPL-3.0", "BSD-3-Clause", "ISC"],
+      "description": "SPDX license identifier"
+    },
+    "recommended_scope": {
+      "type": "string",
+      "enum": ["project", "user", "global"],
+      "description": "Recommended installation scope"
+    },
+    "related_skills": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Names of skills that this one interacts with"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "author": { "type": "string" },
+        "source": { "type": "string" },
+        "integrated_by": { "type": "string" },
+        "inspired_by": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    },
+    "output_schema": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    }
+  },
+  "additionalProperties": false
+}

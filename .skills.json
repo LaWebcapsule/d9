@@ -28,6 +28,8 @@
         "match-existing",
         "anonymize-session",
         "format-skill",
+        "refine-skill-design",
+        "discover-skills",
         "curate-skills"
       ]
     }
