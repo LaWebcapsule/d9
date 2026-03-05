@@ -102,18 +102,18 @@ export default defineComponent({
 
 	.logo {
 		position: absolute;
-		top: 18px;
-		left: 10px;
-		width: 40px;
-		height: 32px;
+		top: 12.5px;
+		left: 12.5px;
+		width: 35px;
+		height: 35px;
 		margin: 0 auto;
-		background-image: url('../../../assets/sprite.svg');
-		background-position: 0% 0%;
-		background-size: 600px 32px;
+		background-image: url('../../../assets/sprite.png');
+		background-position: 0px 0px;
+		background-size: 490px 35px;
 	}
 
 	.running {
-		animation: 560ms run steps(14) infinite;
+		animation: 560ms run steps(13) infinite;
 	}
 }
 

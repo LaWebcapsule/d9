@@ -81,7 +81,7 @@ watch(
 watch(
 	() => serverStore.info?.project?.project_name,
 	(projectName) => {
-		document.title = projectName || 'Directus';
+		document.title = projectName || 'd9';
 	},
 	{ immediate: true }
 );
