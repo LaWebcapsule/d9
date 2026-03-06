@@ -199,7 +199,7 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 			email: email,
 			external_identifier: identifier,
 			role: this.config['defaultRoleId'],
-			auth_data: tokenSet.refresh_token && JSON.stringify({ refreshToken: tokenSet.refresh_token }),
+			auth_data: tokenSet.refresh_token ? JSON.stringify({ refreshToken: tokenSet.refresh_token }) : null,
 		};
 
 		return [tokenSet, userInfo, userPayload];

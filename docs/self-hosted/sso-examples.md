@@ -91,6 +91,18 @@ AUTH_KEYCLOAK_ISSUER_URL="http://<your_keycloak_domain>/realms/<your_keycloak_re
 AUTH_KEYCLOAK_IDENTIFIER_KEY="email"
 ```
 
+## Authentik
+
+Ensure RSA signing key
+
+```
+AUTH_AUTHENTIK_DRIVER="openid"
+AUTH_AUTHENTIK_CLIENT_ID="..."
+AUTH_AUTHENTIK_CLIENT_SECRET="..."
+AUTH_AUTHENTIK_ISSUER_URL="http://<your_authentik_domain>/application/o/<your_app_name>/.well-known/openid-configuration"
+AUTH_AUTHENTIK_SCOPE="openid profile email offline_access"  # offline_access is required to get refresh_token
+```
+
 ## GitHub
 
 ```

@@ -623,7 +623,7 @@ export class AuthorizationService {
 
 						for (let i = 0; i < originalItems.length; i++) {
 							const originalItem: Item = originalItems[i]!;
-							const emptyItemsToAdd = originalItem[fieldKey].length - field.update?.length - field.delete?.length;
+							const emptyItemsToAdd = field.update?.length - originalItem[fieldKey].length - field.delete?.length;
 							const finalArrayToValidate = arrayToValidate.concat(Array(emptyItemsToAdd).fill({}));
 
 							// validate partial items until the last key
