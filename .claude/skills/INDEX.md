@@ -18,6 +18,7 @@ Skills derived from real development sessions on d9. These prevent known pitfall
 | [d9-migration-session-tracking](./d9/d9-migration-session-tracking/) | 1.0.0 | Fix silent migration failure on session_id columns causing 500 on login | migration, database |
 | [pnpm-ci-true-docker](./d9/pnpm-ci-true-docker/) | 1.0.0 | Set CI=true in Docker to avoid pnpm 10+ TTY prompts | docker, pnpm |
 | [pnpm-deploy-require-path](./d9/pnpm-deploy-require-path/) | 1.0.0 | Fix Cannot find module errors for transitive deps with pnpm deploy | docker, pnpm |
+| [isolated-vm-node-lts-prebuild](./d9/isolated-vm-node-lts-prebuild/) | 1.0.0 | Use Node LTS to avoid silent 30s compilation of isolated-vm from source | environment, nodejs |
 
 ## SkillOps — Meta Skills (`skillops/`)
 

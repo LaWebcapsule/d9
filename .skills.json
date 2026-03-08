@@ -21,7 +21,8 @@
         "d9-key-secret-env",
         "d9-migration-session-tracking",
         "pnpm-ci-true-docker",
-        "pnpm-deploy-require-path"
+        "pnpm-deploy-require-path",
+        "isolated-vm-node-lts-prebuild"
       ]
     },
     "skillops": {
