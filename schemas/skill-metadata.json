@@ -43,6 +43,11 @@
       "items": { "type": "string" },
       "description": "Names of skills that this one interacts with"
     },
+    "session_tokens": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Approximate number of tokens consumed during the session that produced this skill. Used to quantify community contributions and tokens saved by future users."
+    },
     "metadata": {
       "type": "object",
       "properties": {

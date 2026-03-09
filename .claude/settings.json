@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash $CLAUDE_PROJECT_DIR/.claude/hooks/session-briefing.sh",
+            "command": "bash \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/session-briefing.sh",
             "timeout": 10
           }
         ]
@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash $CLAUDE_PROJECT_DIR/.claude/hooks/session-briefing.sh",
+            "command": "bash \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/session-briefing.sh",
             "timeout": 10
           }
         ]
@@ -28,7 +28,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash $CLAUDE_PROJECT_DIR/.claude/hooks/detect-xp-reminder.sh",
+            "command": "bash \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/detect-xp-reminder.sh",
             "timeout": 5
           }
         ]

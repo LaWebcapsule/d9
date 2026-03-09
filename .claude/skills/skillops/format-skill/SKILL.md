@@ -38,6 +38,7 @@ tags: [auto-detected from context]
 version: 1.0.0
 license: MIT
 recommended_scope: project
+session_tokens: [estimated tokens consumed during the debugging session — ask the user or read from Claude Code usage stats]
 metadata:
   author: anonymous-contributor
   source: session-contribution

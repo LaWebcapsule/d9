@@ -52,6 +52,8 @@ Follow `format-skill` to generate:
 - **New skill** → `SKILL.md` with proper frontmatter, triggers, actions, errors prevented
 - **Amendment** → `AMENDMENT.yaml` with target skill reference and additions
 
+**Include `session_tokens` in the frontmatter.** Ask the user how many tokens were consumed in this session (visible in Claude Code's usage display), or estimate based on conversation length (~500 tokens per agent message exchange). This field tracks the cost of the debugging session so the community can quantify tokens saved by each skill.
+
 Preview the file content to the user. **WAIT for approval.**
 
 ### Step 5: Quality check
@@ -63,21 +65,27 @@ node scripts/verify-skill-structure.mjs .claude/skills/<category>/<name>
 
 If score < 17, suggest improvements following `refine-skill-design`. If score < 10, do NOT proceed — fix first.
 
-### Step 6: Submit
+### Step 6: Submit (clean branch)
 
-Follow `submit-skill` to automate the last mile:
+Follow `submit-skill` to automate the last mile. **CRITICAL SAFETY**:
 
 1. Show what will be committed (files + diff)
 2. **WAIT for user confirmation**
-3. Create branch `skill/<name>`
-4. Stage skill files + update `.skills.json` and `.claude/skills/INDEX.md`
-5. Commit with message `skill: add <name>` (or `skill: amend <name>`)
-6. Push and create PR via `gh pr create` (or show manual instructions if `gh` unavailable)
-7. Show the PR URL
+3. Stash any uncommitted changes on the working branch
+4. Create a **clean branch from `origin/main`** (NOT from the current branch)
+5. Cherry-pick ONLY the skill files, registry updates, and verification scripts
+6. Commit with message `skill: add <name>` (or `skill: amend <name>`)
+7. Push and create PR via `gh pr create` (or show manual instructions if `gh` unavailable)
+8. **Return to the working branch** and restore stash
+9. Show the PR URL
+
+**Why clean branch?** The user's working branch may contain private work, configs, or secrets. By branching from `origin/main`, only the skill files end up in the PR — zero risk of leaking anything else.
 
 ## Important
 
 - **Every step requires user confirmation** — never auto-proceed
 - **Nothing leaves the machine until Step 6** — all processing is local
 - **The user can cancel at any point** — no side effects until the final push
+- **The working branch is NEVER pushed** — only the clean skill/ branch is
+- **session_tokens tracks community value** — each skill's token cost helps quantify how much the community saves
 - If this is a fresh session with no patterns to detect, ask the user to describe what they learned

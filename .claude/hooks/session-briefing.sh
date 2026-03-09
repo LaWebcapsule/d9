@@ -77,6 +77,9 @@ if [ -d "$SKILLS_DIR/skillops" ]; then
   done
 fi
 
+echo "## Contribute"
+echo "Had an interesting debugging session? Run **/skillops** to contribute your experience as a shared skill."
+echo ""
 echo "## Verification"
 echo "- Structure: node scripts/verify-skill-structure.mjs --all"
 echo "- Registry: node scripts/verify-registry.mjs"

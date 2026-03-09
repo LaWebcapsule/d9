@@ -4,6 +4,16 @@
 
 d9 is an open-source fork of Directus 9 (GPLv3), focused on performance and EU regulatory compliance. Maintained by La Webcapsule.
 
+## Contributing
+
+### The easiest way to contribute: `/skillops`
+
+Every debugging session is a potential contribution. When you solve a non-trivial problem while working on d9, run the **`/skillops`** command to share your experience as a reusable skill.
+
+The pipeline handles everything: it detects the pattern, anonymizes your session data, formats a proper skill file, and opens a PR — all from a single command. Your working branch is never pushed; only the skill files are submitted via a clean branch from `origin/main`.
+
+Each skill tracks the `session_tokens` consumed during the original debugging session. This lets the community quantify how many tokens are saved every time another developer benefits from your contribution instead of debugging the same issue from scratch.
+
 ## Skills
 
 This project includes AI agent skills in `.claude/skills/`:
@@ -27,7 +37,7 @@ Pipeline flow:
 3. **anonymize-session** — Clean & decontextualize sensitive data locally before sharing
 4. **format-skill** — Generate SKILL.md or AMENDMENT.yaml
 5. **refine-skill-design** — Audit & improve SKILL.md quality (ASQM >= 17 target)
-6. **submit-skill** — Git branch + commit + push + PR creation (automates the last mile)
+6. **submit-skill** — Clean branch from origin/main + commit + push + PR (only skill files)
 7. **discover-skills** — Search external catalogs for existing skills before creating new ones
 8. **curate-skills** — Score, tag, and audit skills (runs in CI on PR)
 
