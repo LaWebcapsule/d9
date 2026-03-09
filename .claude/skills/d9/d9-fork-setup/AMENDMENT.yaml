@@ -1,0 +1,20 @@
+---
+type: amendment
+target_skill: d9-fork-setup
+target_version: 1.0.0
+source_sessions: 1
+proposed_version: 1.1.0
+---
+
+# Additions
+
+## Actions (amend step 1)
+1. Install Node.js 22 LTS (recommended). Avoid Node 25+ for development — `isolated-vm` (a native addon dependency) has no prebuilt binaries for non-LTS versions and must compile from source via `node-gyp`, adding ~30s to every fresh `pnpm install`.
+
+## Errors Prevented (append)
+- **Unexpectedly slow `pnpm install` on Node 25+**
+  The `isolated-vm` package ships prebuilt binaries only for LTS Node versions (18, 20, 22). On Node 25, `node-gyp` compiles it from source, adding ~30s to install time. This is not an error — no message warns you — just a surprising delay. Fix: use Node 22 LTS, or accept the extra compilation time. (5min confusion)
+
+## Triggers (append)
+- Developer is choosing which Node version to use for d9 development
+- `pnpm install` is unexpectedly slow on a non-LTS Node version
