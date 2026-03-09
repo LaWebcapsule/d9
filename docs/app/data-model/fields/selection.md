@@ -4,7 +4,7 @@
 
 ## Toggle
 
-![A toggle form input with label named "Enabled"](/images/interface-toggle.webp)
+!A toggle form input with label named "Enabled"
 
 A checkbox input that allows user to toggle value between on and off / true and false.
 
@@ -18,7 +18,7 @@ A checkbox input that allows user to toggle value between on and off / true and 
 
 ## Datetime
 
-![A date picker input. User can select a calendar date and input a time. ](/images/interface-datetime.webp)
+!A date picker input. User can select a calendar date and input a time. 
 
 Date picker input that allows user to select a date and time.
 
@@ -28,16 +28,16 @@ Date picker input that allows user to select a date and time.
 
 ## Repeater
 
-![A standard form text input](/images/interface-repeater.webp)
+!A standard form text input
 
-![A standard form text input](/images/interface-repeater-open.webp)
+!A standard form text input
 
 Interface for repeating groups of fields.
 
-You can use any [Text & Number](/configuration/data-model/fields/text-numbers),
-[Selection](/configuration/data-model/fields/selection), or [Other](/configuration/data-model/fields/other) fields
-within a Repeater. [Relational](/configuration/data-model/fields/relational.md),
-[Presentation](/configuration/data-model/fields/presentation.md), or [Group](/configuration/data-model/fields/groups.md)
+You can use any Text & Number,
+Selection, or Other fields
+within a Repeater. Relational,
+Presentation, or Group
 fields are not allowed.
 
 Value is stored as a JSON array of objects.
@@ -56,7 +56,7 @@ Value is stored as a JSON array of objects.
 
 ## Map
 
-![An interactive map interface that shows a single point on the east coast of the United States. Map has buttons for zoom, search, and full screen.](/images/interface-map.webp)
+!An interactive map interface that shows a single point on the east coast of the United States. Map has buttons for zoom, search, and full screen.
 
 Interface that shows geospatial data on an interactive map.
 
@@ -65,7 +65,7 @@ Interface that shows geospatial data on an interactive map.
 
 ## Color
 
-![A text input for color hex codes that allows user to select color modes ](/images/interface-color.webp)
+!A text input for color hex codes that allows user to select color modes 
 
 A color picker interface that allows users to input color codes and convert between different color modes.
 
@@ -75,7 +75,7 @@ A color picker interface that allows users to input color codes and convert betw
 
 ## Dropdown
 
-![A select input with a dropdown of options.](/images/interface-dropdown.webp)
+!A select input with a dropdown of options.
 
 Input that allows user to select a value from a list of options.
 
@@ -90,7 +90,7 @@ Input that allows user to select a value from a list of options.
 
 ## Icon
 
-![A select input with a dropdown grid of icon choices.](/images/interface-icon.webp)
+!A select input with a dropdown grid of icon choices.
 
 Search input that allows user to select from a list of icons.
 
@@ -98,7 +98,7 @@ Search input that allows user to select from a list of icons.
 
 ## Checkboxes
 
-![A form input with multiple checkboxes.](/images/interface-checkboxes.webp)
+!A form input with multiple checkboxes.
 
 Input that allows user to select multiple checkboxes.
 
@@ -114,7 +114,7 @@ Input that allows user to select multiple checkboxes.
 
 ## Checkboxes (Tree)
 
-![A form input with a nested tree of multiple parent and child checkboxes.](/images/interface-checkboxes-tree.webp)
+!A form input with a nested tree of multiple parent and child checkboxes.
 
 Nested tree of checkboxes that can be expanded or collapsed.
 
@@ -127,7 +127,7 @@ Nested tree of checkboxes that can be expanded or collapsed.
 
 ## Dropdown (Multiple)
 
-![A select input where user can select multiple options from a dropdown.](/images/interface-dropdown-multiple.webp)
+!A select input where user can select multiple options from a dropdown.
 
 Input that allows user to select multiple values from a list of options.
 
@@ -142,7 +142,7 @@ Input that allows user to select multiple values from a list of options.
 
 ## Radio Buttons
 
-![A radio button form input with different options to select](/images/interface-radio-buttons.webp)
+!A radio button form input with different options to select
 
 Radio button input that allows users to select a single value from multiple choices.
 

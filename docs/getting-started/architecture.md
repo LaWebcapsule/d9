@@ -13,7 +13,7 @@ storage, all in one place.
 
 Here's how the platform architecture breaks down.
 
-![d9 Architecture Graphic](/images/d9-architecture-20220512A.webp)
+!d9 Architecture Graphic
 
 ## The Database
 

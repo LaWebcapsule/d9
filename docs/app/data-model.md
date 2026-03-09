@@ -43,7 +43,7 @@ d9 is an SQL database wrapper. A database is a set of data stored in a computer,
 organized, accessible, and scalable. The specific way you structure your data within a database is called your data
 model.
 
-![A Database Schema](/images/database-schema-20220805A.webp)
+!A Database Schema
 
 ### Database vs Excel
 
@@ -52,7 +52,7 @@ data in Excel spreadsheets. You know how you can build a table on one sheet in E
 sheet, then link the rows of each table together? That is pretty much how a relational data model works. But there are
 some key points where Excel and relational databases differ.
 
-![Data in an Excel Spreadsheet](/images/spreadsheet-20220805A.webp)
+!Data in an Excel Spreadsheet
 
 Many times, we store data as a table in Excel, but that's not always the case, as the program serves tons of other
 purposes. Excel lets you make your data stylized _(bold, italicized, colored, custom fonts, etc.)_, set dynamic
@@ -60,7 +60,7 @@ functions in cells, add graphics like charts and graphs, and input any kind of d
 enforced structure. Your Excel spreadsheet is a blank canvas, designed to store up to tens of thousands of rows of
 information.
 
-![A data table](/images/datatable-20220805A.webp)
+!A data table
 
 There is no stylization within databases. They strictly store raw data values in a structured way. Any time you want to
 style data, build a function, put data into a graph, _etc.,_ you must create that functionality in your app or website.
@@ -69,7 +69,7 @@ trillions_, of rows of information.
 
 ### Data Tables
 
-![A Data Table: rows and columns](/images/rows-and-columns.webp)
+!A Data Table: rows and columns
 
 <!-- image should note rows and columns. -->
 
@@ -79,7 +79,7 @@ tables are further broken down into columns and rows.
 
 ### Columns
 
-![A Column](/images/columns-20220805A.webp)
+!A Column
 
 Columns are categories that store one kind of information. Each column has a unique, descriptive name and stores one
 unit of information in each of its [cell values](#cell-values). Columns keep the data organized, consistent, and easily
@@ -89,7 +89,7 @@ accessible. The columns you choose to add to a data table will completely depend
 
 ### Cell Values
 
-![Cell Values](/images/datatable-cell-value-20220805A.webp)
+!Cell Values
 
 Each value in a column is stored in its own cell. In general, you want to create columns that save _atomic_ values. That
 means create the column to store the smallest indivisible units There is no restriction for the kinds of information to
@@ -115,14 +115,14 @@ unexpected and even dangerous behaviors in your program.
 
 ### Rows
 
-![Rows](/images/row-20220805A.webp)
+!Rows
 
 Each row stores data associated to a unique record, event, object, entity, observation, etc. Data tables can contain
 millions, _even billions and trillions_ of rows of data.
 
 ### Primary Keys
 
-![Primary Key](/images/primary-keys-20220805A.webp)
+!Primary Key
 
 In order to uniquely identify and track each row, every data table must have a primary key column. A primary key is a
 unique ID that identifies a specific row. Any pattern or system could be used to generate primary keys, so long as it
@@ -132,7 +132,7 @@ differentiate it from other rows.
 
 ### Foreign Keys
 
-![Foreign Keys](/images/foreign-keys-20220805A.webp)
+!Foreign Keys
 
 Since primary keys uniquely identify each and every row in a data table, they are the perfect tool to create
 relationships. If you want to relationally link rows between two data tables, you create a column to store _foreign
@@ -164,11 +164,11 @@ There are several ways you can relationally link tables:
   the related tables' names.
 
 To learn more about how these relationships work conceptually, as well as how they are handled within d9, see our
-guide on [relationships](/configuration/data-model/relationships).
+guide on [relationships](/app/data-model/relationships).
 
 ### Database Schemas
 
-![Data Table to schema](/images/datatable-to-schema-20220805A.webp)
+!Data Table to schema
 
 In our examples so far, we have seen and described actual [data tables](#data-tables). As you design your relational
 data model, you will need to create a schema to keep track of its complexity.
@@ -205,7 +205,7 @@ irrelevant to the current learning point, we omit their details so you can focus
 Please note too, that with more complex schemas, containing dozens _(or maybe hundreds!)_ of relationally linked data
 tables, you usually include datatype information as well as a visualization of how each and every table interlinks.
 
-![A Complex Schema](/images/complex-schema.webp)
+!A Complex Schema
 
 ### Avoid Data Duplication
 
@@ -245,7 +245,7 @@ data is displayed on each user profile page, for chat messaging and other types 
 situation in many projects_. In this case, the author name and other details would also need to exist in the `users`
 table.
 
-![Duplicate Data](/images/duplicate-data-20220829A.webp)
+!Duplicate Data
 
 This creates duplicate data. There are two big problems with this:
 
@@ -286,7 +286,7 @@ blog
 - author_img
 ```
 
-As described in the section on [Rows](/configuration/data-model#rows), we want each row in a data table to represent one
+As described in the section on [Rows](/app/data-model#rows), we want each row in a data table to represent one
 unique record, event, object, entity, observation, etc. To do this, we can remove the `author_name` column from the
 `blog` table and replace it with an `author_id` foreign key table, which stores foreign keys from the `users` table.
 
@@ -315,7 +315,7 @@ between `blog` and `users`.
 
 ### Working With Relational Data Models
 
-![Database, Backend, Frontend](/images/database-backend-frontend-20220805A.webp)
+!Database, Backend, Frontend
 
 Once you've designed your data model conceptually, you typically build and interact with it using SQL, or Structured
 Querying Language. This language is used to create, read & query, update, and delete anything and everything in the
@@ -380,7 +380,7 @@ collections, or a readonly view.
 
 You access all collections, including built-in system collections required to power your project, under **Settings >
 Data Model**. From there, click a collection to open its configurations page. To learn more, see our guide on
-[collections](/configuration/data-model/collections).
+[collections](/app/data-model/collections).
 
 ## Fields
 
@@ -391,7 +391,7 @@ Remember, SQL database columns store pure, raw data. From there, developers buil
 how this data is displayed and interacted with. In d9, fields encompass column configurations, as well as custom
 configuration over how to the data is displayed and interacted with in the Data Studio. d9 also has
 [alias fields](/getting-started/glossary#alias), which are virtual and do not match directly to a column. To learn more,
-see our guide on [fields](/configuration/data-model/fields/).
+see our guide on [fields](/app/data-model/fields).
 
 ## Items
 
@@ -415,7 +415,7 @@ d9 abstracts type differences between SQL vendors with a
 
 
 Primary keys are called IDs in d9 fairly frequently. When you
-[create a collection](/configuration/data-model/collections#create-a-collection), you must add an `id` field. d9
+[create a collection](/app/data-model/collections#create-a-collection), you must add an `id` field. d9
 supports the following types of IDs:
 
 - **Auto-Incremented Integer** — IDs increment `1`, `2`, `3` up to `2^31-1` or `2,147,483,647`.
@@ -430,4 +430,4 @@ supports the following types of IDs:
 
 
 d9 supports all standard [types of relationships](#types-of-relationships), as well as a few more of its own
-compound types. To learn more, see our guide on [relationships](/configuration/data-model/relationships).
+compound types. To learn more, see our guide on [relationships](/app/data-model/relationships).

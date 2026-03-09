@@ -4,7 +4,7 @@
 
 ## Accordion
 
-![An accordion interface that allows use to expand and collapse different fields.](/images/interface-accordion.webp)
+!An accordion interface that allows use to expand and collapse different fields.
 
 Group interface that allows user to show and hide certain fields within the group by clicking on each field.
 
@@ -13,9 +13,9 @@ Group interface that allows user to show and hide certain fields within the grou
 
 ## Detail Group
 
-![A group of form fields that are currently hidden behind a toggle.](/images/interface-detailgroup-closed.webp)
+!A group of form fields that are currently hidden behind a toggle.
 
-![A group of form fields that are currently visible but can be hidden behind a toggle.](/images/interface-detailgroup-open.webp)
+!A group of form fields that are currently visible but can be hidden behind a toggle.
 
 Group interface that allows user to show or hide all fields within the group by clicking on the header toggle.
 
@@ -25,7 +25,7 @@ Group interface that allows user to show or hide all fields within the group by 
 
 ## Raw Group
 
-![A group of form fields](/images/interface-rawgroup.webp)
+!A group of form fields
 
 Interface that groups multiple fields together, but always displays them.
 
@@ -36,4 +36,4 @@ Interface that groups multiple fields together, but always displays them.
 Any fields that you add within a Group will also maintain that grouping throughout the App Studio in filters, dropdowns,
 and more.
 
-![Content collection interface that shows a highlighted dropdown with several different groups of fields.](/images/interface-group-filter.webp)
+!Content collection interface that shows a highlighted dropdown with several different groups of fields.

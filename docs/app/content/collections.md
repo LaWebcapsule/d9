@@ -27,7 +27,7 @@ Link to tutorial
 
 Some projects may have dozens or even hundreds of collections, which can be overwhelming to sort through. To ease this
 problem, Admins can choose to
-[hide collections by default](/configuration/data-model/collections.html#toggle-collection-visibility) on the Navigation
+hide collections by default on the Navigation
 bar. Users can then show or hide hidden collections as desired. To toggle collection visibility, follow these steps.
 
 1. Navigate to the Content Module.
@@ -38,7 +38,7 @@ bar. Users can then show or hide hidden collections as desired. To toggle collec
 
 This functionality is purely aesthetic, provided to help you _visually cleanup_ the Navigation Bar. For admins who'd
 like to block users' access permissions, please see
-[users, roles and permissions](/configuration/users-roles-permissions).
+[users, roles and permissions](/app/users-roles-permissions).
 
 :::
 
@@ -72,7 +72,7 @@ and more. To Learn More, see our guide on [Filters](/app/filters).
 Drag and drop Items to custom sort them as desired. This is only possible on certain Layouts, such as the default
 [Table Layout](/app/layouts#table-layout). To sort a Collection's Items, follow these steps.
 
-1. Be sure [a sort field](/configuration/data-model/collections#sort-field) has been configured under **"Settings > Data
+1. Be sure [a sort field](/app/data-model/collections#sort-field) has been configured under **"Settings > Data
    Model > Collection"**.\
    _(Shown in the video)_
 2. Navigate to the Content Module and select the desired Collection.
@@ -83,7 +83,7 @@ Drag and drop Items to custom sort them as desired. This is only possible on cer
 
 ::: warning Manual Sorting Requires Configuration
 
-Only available if a [sort field](/configuration/data-model/collections#sort-field) has been configured.
+Only available if a [sort field](/app/data-model/collections#sort-field) has been configured.
 
 :::
 
@@ -123,7 +123,7 @@ an archived Item is displayed, follow these steps.
 
 :::warning Archiving Requires Configuration
 
-Only available if an [Archive field](/configuration/data-model/collections#archive) has been configured.
+Only available if an [Archive field](/app/data-model/collections#archive) has been configured.
 
 :::
 
@@ -143,13 +143,13 @@ Your Bookmark will appear in the Navigation Bar, under the associated Collection
 
 :::tip Learn More
 
-To learn more, see our guide on [Presets and Bookmarks](/configuration/presets-bookmarks).
+To learn more, see our guide on [Presets and Bookmarks](/app/presets-bookmarks).
 
 :::
 
 ## Import / Export Items
 
-![Import and Export Items](/images/imports-exports-20220416A.webp)
+!Import and Export Items
 
 The Content, User Directory and File Library modules allow importing and exporting of multiple Items stored as files.
 This makes it quick and easy to handle tasks like uploading and downloading new customer information; pulling down sales

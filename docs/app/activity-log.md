@@ -12,14 +12,14 @@ readTime: 2 min read
 
 :::tip Before You Begin
 
-We recommend you try the [Quickstart Guide](/getting-started/quickstart.md) to get an overview of the platform.
+We recommend you try the Quickstart Guide to get an overview of the platform.
 
 :::
 
 :::tip Learn More
 
 To manage the Activity Log programmatically, please see our guide on the
-[Activity Log API](/reference/system/activity.md).
+Activity Log API.
 
 :::
 
@@ -46,7 +46,7 @@ please see [Revert an Item](/app/content/items#revert-an-item).
 
 ## View an Activity Log Item
 
-![Activity Log Default Fields](/images/activity-log-default-fields-20220816A.webp)
+!Activity Log Default Fields
 
 Click any item in the Activity Log and a side drawer will open, displaying its logged details. The following information
 is stored for each item.

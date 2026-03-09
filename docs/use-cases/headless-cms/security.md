@@ -24,7 +24,7 @@ In this guide, we'll cover some best practices for keeping your d9 Headless CMS 
 
 d9 makes it super easy to share your content with our REST and GraphQL APIs.
 
-The Public role within [Roles and Permissions](/configuration/users-roles-permissions#roles) defines what content is
+The Public role within [Roles and Permissions](/app/users-roles-permissions#roles) defines what content is
 available without authentication. To be safe, all permissions are turned off by default. This means that no data is
 available via the API without providing a proper [access token](/reference/authentication#access-tokens). Your use case
 may allow all data to be public, but it may instead require restricted access.
@@ -33,10 +33,10 @@ may allow all data to be public, but it may instead require restricted access.
 
 - On your public role, only enable read access.
 - Consider defining a
-  [Custom Permission](/configuration/users-roles-permissions/permissions#configure-custom-permissions) for read
+  [Custom Permission](/app/users-roles-permissions/permissions#configure-custom-permissions) for read
   operations to control which items are available and which fields within those items consumers can see.
 
-  ![The custom permissions interface for the Public role is displayed. The Item Permissions table is active and one Rule is active - "Status" Equals "Published".](/images/custom-permissions.webp)
+  !The custom permissions interface for the Public role is displayed. The Item Permissions table is active and one Rule is active - "Status" Equals "Published".
 
   Standard read permissions grant access to ALL data within a collection which means the general public could see
   unpublished content you might not want them to see.
@@ -58,7 +58,7 @@ levels of data.
 For each of these roles, allow access only to the collections and specific CRUD operations that each role needs to
 perform their function.
 
-Our guide on [Content Approval Workflows](/cookbook/permissions/basic-workflows) is helpful for scoping roles and
+Our guide on Content Approval Workflows is helpful for scoping roles and
 permissions.
 
 ## Obscure Access Tokens and URLs
@@ -109,16 +109,16 @@ But when it’s time to go to production and add all your different users, we re
 1. **Enable and enforce two-factor authentication.**
 
    Two-factor authentication can be enforced for each specific role by checking the Require 2FA field in a
-   [role's settings](/configuration/users-roles-permissions/roles#configure-role-details).
+   [role's settings](/app/users-roles-permissions/roles#configure-role-details).
 
-   ![The Administrator role settings page is displayed. The Require 2FA form field is highlighted and enabled.](/images/2fa-role.webp)
+   !The Administrator role settings page is displayed. The Require 2FA form field is highlighted and enabled.
 
    Individual users can enable two-factor authentication by checking the Two-Factor Authentication field on their own
    [user detail page](/app/user-directory#user-details-page) and confirming their password.
 
-   ![A sample user's detail page is shown. The Two-Factor Authentication form field is highlighted. ](/images/2fa-user.webp)
+   !A sample user's detail page is shown. The Two-Factor Authentication form field is highlighted. 
 
 2. **Enable the Strong option for Auth Password Policy under
-   [Project Settings > Security](/configuration/project-settings#security).**
+   [Project Settings > Security](/app/project-settings#security).**
 
-   ![The Project Settings page is shown. The Security section is highlighted. Within the Security, section there are two fields shown: Auth Password Policy and Auth Login Attempts.](/images/security-project-settings.webp)
+   !The Project Settings page is shown. The Security section is highlighted. Within the Security, section there are two fields shown: Auth Password Policy and Auth Login Attempts.

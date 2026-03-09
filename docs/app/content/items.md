@@ -37,7 +37,7 @@ To create an Item, follow these steps.
 
 ::: tip Singletons
 
-If the collection is configured as a [Singleton](/configuration/data-model/collections#collection-setup) in the data
+If the collection is configured as a [Singleton](/app/data-model/collections#collection-setup) in the data
 model settings, the App will skip step two above and automatically open the Item Page.
 
 :::
@@ -96,7 +96,7 @@ To archive an Item, follow these steps.
 
 ::: warning Requires Configuration
 
-Requires an [Archive field](/configuration/data-model/collections#archive) to be configured within the Collection's data
+Requires an [Archive field](/app/data-model/collections#archive) to be configured within the Collection's data
 model settings.
 
 :::

@@ -12,7 +12,7 @@ readTime: 5 min read
 > restricting Item access permissions for specific Users or Roles, building dashboard analytics with the Insights
 > module, and more.
 
-![Filters](/images/filters-20220303A.webp)
+!Filters
 
 ::: warning There Are Two Filters Documents
 
@@ -26,8 +26,8 @@ This page is a non-technical guide to using Filters. For more technical info, se
 ::: tip Assumed Knowledge
 
 Filters are intuitive to use, but get quite nuanced as complexity increases. In order to use Filters effectively, you
-will need to understand the Field _(aka [data model](/configuration/data-model))_ being filtered as well as any relevant
-[Users, Roles and Permissions](/configuration/users-roles-permissions.md).
+will need to understand the Field _(aka [data model](/app/data-model))_ being filtered as well as any relevant
+Users, Roles and Permissions.
 
 :::
 
@@ -59,7 +59,7 @@ automatically display. An exhaustive list of Operators and what they do can be f
 `AND` Groups give the option to filter for Items that meet _all of several criteria_. On the other hand, `OR` Groups
 filter for Items that meet _any one of several criteria_.
 
-![AND/OR Groups](/images/and-or-groups-20220303A.webp)
+!AND/OR Groups
 
 1. Click "Add Filter".
 2. Click "And/OR Group" at the very top of the dropdown menu.
@@ -114,7 +114,7 @@ Here are step-by-step instructions on how to filter by Fields in other Collectio
 
 ## Unfilterable Fields
 
-![Unfilterable Fields](/images/unfilterable-fields-20220303A.webp)
+!Unfilterable Fields
 
 Not all Fields can be filtered. As seen above in [Filtering by Related Collections](#filtering-by-related-collections),
 Alias Fields cannot be filtered; they instead provide a dropdown menu to access Fields from a related Collection.

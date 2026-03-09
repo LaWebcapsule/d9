@@ -9,7 +9,7 @@ readTime: 7 min read
 > full-featured Digital Asset Management (DAM) system for storing, organizing, browsing, and transforming your various
 > files and assets.
 
-![File Library](/images/file-library-20220307A.webp)
+!File Library
 
 ::: warning More Documents on Folder and File Management
 
@@ -28,7 +28,7 @@ Familiarity with the [Collections Page](/app/content/collections) will be helpfu
 
 The File Library acts as one big [Folder](#folders) to store all uploaded [Files](#files). Sub-folders can be created
 within the File Library to help Files stay organized. Folders and File information are stored in regular Collections,
-which means [User and Role access permissions](/configuration/users-roles-permissions.md) are fully configurable and
+which means User and Role access permissions are fully configurable and
 granular on both Folders and Files. Multiple files can be uploaded at once through the app and also programmatically via
 the API. Any type of file can be uploaded, _not just images_. When a Folder is selected from the Navigation Bar, the
 [File Listing Page](#folders) is presented. This page has all the same features and functionalities as the
@@ -54,7 +54,7 @@ When a file is clicked in the File Listing Page, the File Details Page appears. 
 and embeds, with core Fields included out-of-the-box (see below), and the ability for Administrators to add additional
 custom Fields. This page has the same features and functionality as the [Item Page](/getting-started/glossary#items).
 
-![Files](/images/files-20220305A.webp)
+!Files
 
 ### Action Buttons
 
@@ -80,7 +80,7 @@ constraint of your File Field to `SET NULL` or `CASCADE` when the File is delete
 The Files Collection comes pre-configured with the following Fields out of the box. New Fields can be created and
 customized as needed in **Settings > Data Model**. However the pre-configured Fields cannot be changed or deleted.
 
-![File Details](/images/file-details-20220305A.webp)
+!File Details
 
 - **Preview** – A preview of the image or file.
 - **Title** – A title for the File.
@@ -95,7 +95,7 @@ customized as needed in **Settings > Data Model**. However the pre-configured Fi
 
 The file sidebar also includes the following details, which are not editable and serve as metadata.
 
-![File Sidebar](/images/file-sidebar-20220305A.webp)
+!File Sidebar
 
 - **Type** – The MIME type of the file, displayed in the App as a formatted media type.
 - **Dimensions** – _Images only_. The width and height of the image in pixels.
@@ -144,7 +144,7 @@ When a file is replaced, its existing info and all relationships are kept.
 
 Folders provide the organization system for Files.
 
-![Folders](/images/folders-20220305A.webp)
+!Folders
 
 They can be named, renamed, and nested as sub-folders anywhere in the Folder hierarchy. Once a Folder is selected from
 the Navigation Bar, File Listing Page opens. The File Listing Page displays all Files within a Folder. It also enables

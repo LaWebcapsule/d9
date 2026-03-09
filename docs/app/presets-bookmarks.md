@@ -12,20 +12,20 @@ readTime: 3 min read
 
 :::tip Before You Begin
 
-We recommend you read through the [Quickstart Guide](/getting-started/quickstart.md) to get an overview of the platform
-first, then see our guide on the [Collection Page](/app/content/collections.md) so you're familiar with its features and
+We recommend you read through the Quickstart Guide to get an overview of the platform
+first, then see our guide on the Collection Page so you're familiar with its features and
 functionalities.
 
 :::
 
 :::tip Learn More
 
-To manage Presets and Bookmarks programmatically, see our [API guide on Presets](/reference/system/presets.md).
+To manage Presets and Bookmarks programmatically, see our API guide on Presets.
 
 :::
 
-Remember, a [Collection Page](/app/content/collections.md) enables you to customize how its items are presented. That
-is, it lets you sort, search, or filter items and even change [Layouts](/app/layouts.md). In some cases, you may need to
+Remember, a Collection Page enables you to customize how its items are presented. That
+is, it lets you sort, search, or filter items and even change Layouts. In some cases, you may need to
 apply the same display adjustments again and again. Presets save these adjustments, like a snapshot. You can create
 presets for all project collections, as well as `directus_activity`, `directus_files` and `directus_users`.
 
@@ -56,7 +56,7 @@ becomes a Bookmark. If **Name** is left blank, the preset will be a Default. To 
    - **Scope** — Defines which users have access to this preset.
    - **Layout** — Selects a Layout for the preset, which is adjusted from the Sidebar.
    - **Name** — Sets a name, which determines if the preset is a Default or Bookmark. Note that this field supports
-     [Translation Strings](/configuration/translation-strings.md).
+     Translation Strings.
 4. Scroll down to the **Layout Preview** section and make any other adjustments or configurations as desired. Each
    preset saves all of the information needed to recreate this Layout Preview, just as it is shown.
 5. Click <span mi btn>check</span> to confirm.

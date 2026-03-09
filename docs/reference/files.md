@@ -43,7 +43,7 @@ permissions and other built-in features.
 
 :::
 
-![Original File](/images/original-20220216A.jpg) _Original File Used — 602KB and
+!Original File _Original File Used — 602KB and
 1800x1200_
 
 ---
@@ -71,7 +71,7 @@ exist, it is dynamically generated and immediately returned.
 
 ### Preset Transformations
 
-- **`key`** — This **key** of the [Storage Asset Preset](/configuration/project-settings#files-thumbnails), a shortcut
+- **`key`** — This **key** of the [Storage Asset Preset](/app/project-settings#files-thumbnails), a shortcut
   for the below parameters
 
 ### Custom Transformations
@@ -124,7 +124,7 @@ Below are four possible qualities (200x200 cover) to visually compare the balanc
 
 | 25%                                                                                             | 50%                                                                                             | 75%                                                                                             | 100%                                                                                               |
 | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| ![25%](/images/200-200-cover-25-20220216A.jpg)<br>_4KB_ | ![50%](/images/200-200-cover-50-20220216A.jpg)<br>_6KB_ | ![75%](/images/200-200-cover-75-20220216A.jpg)<br>_8KB_ | ![100%](/images/200-200-cover-100-20220216A.jpg)<br>_38KB_ |
+| !25%<br>_4KB_ | !50%<br>_6KB_ | !75%<br>_8KB_ | !100%<br>_38KB_ |
 
 ### Preset
 

@@ -4,9 +4,9 @@
 
 ## Hash
 
-![Form text input. Value is "value to hash on save"](/images/interface-hash.webp)
+!Form text input. Value is "value to hash on save"
 
-![Form text input that shows the value is securely hashed.](/images/interface-hash-secure.webp)
+!Form text input that shows the value is securely hashed.
 
 Text input that allows users to hash the value on save. Both the API and SDK provide methods to
 [verify the hash]({{DOCS_URL}}/reference/system/utilities.html#verify-a-hash).
@@ -17,7 +17,7 @@ Text input that allows users to hash the value on save. Both the API and SDK pro
 
 ## Slider
 
-![A standard form text input](/images/interface-slider.webp)
+!A standard form text input
 
 Range input that allows users to select a number with an interactive slider.
 

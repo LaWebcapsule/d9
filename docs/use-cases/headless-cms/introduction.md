@@ -26,7 +26,7 @@ Learn more about [Headless CMS Concepts](/use-cases/headless-cms/concepts).
 - [Image transformations](/reference/files.html#requesting-a-thumbnail) to keep your website fast AND your art direction
   intact.
 - Quickly [build dashboards](/app/insights) that help your team make better decisions.
-- Create powerful, automated content approval and [publishing workflows](/cookbook/permissions/basic-workflows) without
+- Create powerful, automated content approval and publishing workflows without
   writing any code.
 
 ## Guides & Tutorials

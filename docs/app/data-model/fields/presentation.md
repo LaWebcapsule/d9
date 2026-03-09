@@ -4,7 +4,7 @@
 
 ## Divider
 
-![A horizontal divider between two form fields](/images/interface-divider.webp)
+!A horizontal divider between two form fields
 
 A horizontal divider to separate fields into different sections.
 
@@ -15,9 +15,9 @@ A horizontal divider to separate fields into different sections.
 
 ## Button Links
 
-![A group of two buttons. One primary button. One default button.](/images/interface-buttonlinks.webp)
+!A group of two buttons. One primary button. One default button.
 
-![A form for creating new Button Links. Form has four fields: "Label", "Icon", "Type", "URL"](/images/interface-buttonlinks-new.webp)
+!A form for creating new Button Links. Form has four fields: "Label", "Icon", "Type", "URL"
 
 Group of one or more buttons that link to a preset or dynamic url.
 
@@ -30,11 +30,11 @@ Group of one or more buttons that link to a preset or dynamic url.
 
 ## Notice
 
-![A standard warning notice in yellow with a hazard icon.](/images/interface-notice.webp)
+!A standard warning notice in yellow with a hazard icon.
 
 An alert or notice interface to notify users of important information.
 
 - **Color**: `Primary`, `Normal`, `Info`, `Success`, `Warning`, `Danger`
 - **Icon**: Icon to display in the Notice.
-- **Text**: Enter your notice content. You can also use [Translation Strings](/configuration/translation-strings) here
+- **Text**: Enter your notice content. You can also use [Translation Strings](/app/translation-strings) here
   to provide notices in different languages.

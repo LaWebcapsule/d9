@@ -29,7 +29,7 @@ All configuration options are described in detail below.
 
 ## General
 
-![How to Configure General Project Settings](/images/general-project-settings-20220811A.webp)
+!How to Configure General Project Settings
 
 - **Project Name** — Sets the name on the [Navigation Bar](/app/overview.html#_2-navigation-bar), as well as login and
   public pages.
@@ -75,7 +75,7 @@ it easier to identify different d9 projects.
 
 ## Security
 
-![How to Configure Security in Project Settings](/images/security-project-settings-20220811A.webp)
+!How to Configure Security in Project Settings
 
 - **Auth Password Policy** — Sets a policy requirement for all user's passwords via a JavaScript regex. Supports the
   following options:
@@ -117,7 +117,7 @@ To learn more, please see the API guide on [transformation presets](/reference/f
 
 ## Mapping
 
-![How to Configure Mapping in d9](/images/mapping-project-settings-20220815A.webp)
+!How to Configure Mapping in d9
 
 - **Mapbox Access Token** — Create a [Mapbox Access Token](https://docs.mapbox.com/help/glossary/access-token) and enter
   it here to improve the platform's mapping experience.

@@ -121,7 +121,7 @@ technical concepts, including [Project](/getting-started/glossary#projects) (dat
 
 <!--
 @TODO getting-started > learn-directus
-For more information on d9-specific terms, see the guide on [how to learn d9](/getting-started/learn-directus).
+For more information on d9-specific terms, see the guide on [how to learn d9](/getting-started/quickstart).
 -->
 
 :::

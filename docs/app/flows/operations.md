@@ -16,13 +16,13 @@ readTime: 5 min read
 
 On this page, we'll explain what each operation does, the value it appends to the data chain, how to make use of its
 configuration options, as well as any well as other relevant details. We will assume you have read the documentation on
-[Flows](/configuration/flows) and [Triggers](/configuration/flows/triggers).
+[Flows](/app/flows) and [Triggers](/app/flows/triggers).
 
 :::
 
 ## Condition
 
-![Condition](/images/condition-20220603A.webp)
+!Condition
 
 A **Condition** operation lets you choose a **success path** or **failure path** by validating data passed into it with
 [Filter Rules](/reference/filter-rules).
@@ -41,7 +41,7 @@ append an array containing an object you can use to help debug the misconfigurat
 
 :::warning
 
-When using an [Event Hook](/configuration/flows/triggers.md#event-hook) configured to be **Action (Blocking)**, if your
+When using an Event Hook configured to be **Action (Blocking)**, if your
 flow ends with a condition that executes with a `reject` path, it will cancel your database transaction.
 
 :::
@@ -114,7 +114,7 @@ Make sure your `return` value is valid JSON.
 :::tip Throwing Errors
 
 If you throw an error in a **Run Script** operation, it will immediately break your flow chain and stop execution of
-subsequent flows. If you used a ["Blocking" Event hook](/configuration/flows/triggers.md#event-hook), throwing an error
+subsequent flows. If you used a "Blocking" Event hook, throwing an error
 will cancel the original event transaction to the database.
 
 :::
@@ -129,7 +129,7 @@ Script** operation is no longer supported. If your script requires a third-party
 
 ## Create Data
 
-![Create Data](/images/create-data-20220603A.webp)
+!Create Data
 
 This operation creates item(s) in a collection.
 
@@ -165,7 +165,7 @@ To learn about payload requirements when creating an item, see [API Reference > 
 
 ## Delete Data
 
-![Delete Data](/images/delete-data-20220603A.webp)
+!Delete Data
 
 This operation deletes item(s) from a collection.
 
@@ -196,7 +196,7 @@ triggers other event hooks.
 
 ## Read Data
 
-![Read Data](/images/read-data-20220603A.webp)
+!Read Data
 
 This operation reads item(s) from a collection and adds them onto the data chain. You may select Items by their ID or by
 running a query.
@@ -228,7 +228,7 @@ triggers other event hooks.
 
 ## Update Data
 
-![Update Data](/images/update-data-20220603A.webp)
+!Update Data
 
 This operation updates item(s) in a collection. You may select item(s) to update by their ID or by running a query.
 
@@ -266,15 +266,15 @@ To learn about `payload` requirements when updating an item, see [API Reference 
 
 ## Log to Console
 
-![Log to Console](/images/log-to-console-20220603A.webp)
+!Log to Console
 
-This operation outputs information to the server-side console as well as the [Logs](/configuration/flows#logs) within
+This operation outputs information to the server-side console as well as the [Logs](/app/flows#logs) within
 the Data Studio. This is a key tool for troubleshooting flow configuration. A Log operation's key will have a null value
 on the data chain.
 
 **Options**
 
-- **Message** — Sets a [log message](/configuration/flows#logs).
+- **Message** — Sets a [log message](/app/flows#logs).
 
 **Payload**
 
@@ -283,11 +283,11 @@ append a `null` value on the `operationKey`.
 
 **More Details**
 
-For more details, see the section on [Logs](/configuration/flows#logs).
+For more details, see the section on [Logs](/app/flows#logs).
 
 ## Send Email
 
-![Send Email](/images/send-email-20220603A.webp)
+!Send Email
 
 This operation sends off emails.
 
@@ -319,7 +319,7 @@ may send it there automatically.
 
 ## Send Notification
 
-![Send Notification](/images/send-notification-20220603A.webp)
+!Send Notification
 
 This operation pushes notifications to d9 Users. If the operation executes successfully, a list containing the IDs
 of all sent notifications generated is appended under this operation's key.
@@ -346,7 +346,7 @@ You can input an array of UUIDs in the `To` input option to send off multiple em
 
 ## Webhook / Request URL
 
-![Webhook / Request URL](/images/webhook-20220603A.webp)
+!Webhook / Request URL
 
 This operation makes a request to another URL.
 
@@ -363,7 +363,7 @@ When an operation completes successfully, the `response` is appended under its `
 
 ## Sleep
 
-![Sleep](/images/sleep-20220603A.webp)
+!Sleep
 
 This operation creates a delay in the Flow for a given amount of milliseconds, then continues to the next operation.
 
@@ -377,7 +377,7 @@ This operation does not generate data. It will append a `null` value on its `ope
 
 ## Transform Payload
 
-![Transform Payload](/images/transform-payload-20220603A.webp)
+!Transform Payload
 
 This operation lets you custom define your own JSON payload for use in subsequent operations. This enables you to take
 multiple sources of data and "tidy them up" into a single payload.
@@ -411,10 +411,10 @@ Then you could stitch together all this data to create a new JSON object, like s
 
 ## Trigger Flow
 
-![Trigger Flow](/images/trigger-flow-20220603A.webp)
+!Trigger Flow
 
 This operation starts another flow and _(optionally)_ passes data into it. It should be used in combination with the
-[Another Flow](/configuration/flows/triggers#another-flow) trigger.
+[Another Flow](/app/flows/triggers#another-flow) trigger.
 
 **Options**
 

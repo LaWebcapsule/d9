@@ -166,7 +166,7 @@ npx directus roles create --role <role-name>
 ```
 
 These roles are created with the
-[minimum permissions required](/configuration/users-roles-permissions#configure-system-permissions) to properly access
+[minimum permissions required](/app/users-roles-permissions#configure-system-permissions) to properly access
 the App by default.
 
 To create a new role with admin access, set the `--admin` flag to `true`, such as
@@ -255,4 +255,4 @@ Useful when you need to parse data using tools like `jq` for example.
 <!-- ### Extending
 
 To find how you can extend the CLI and write custom commands, check how we make d9 highly extensible on our
-[extensions overview page](/concepts/extensions). -->
+[extensions overview page](/extensions/introduction). -->

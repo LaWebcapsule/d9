@@ -95,7 +95,7 @@ Layout used in the Content Module. It includes the following controls.
 
 ::: warning Manual Sorting Requires Configuration
 
-Only available if you [configure a sort field](/configuration/data-model/collections#sort-field) in the Collection's
+Only available if you [configure a sort field](/app/data-model/collections#sort-field) in the Collection's
 Data Model Settings.
 
 :::
@@ -153,7 +153,7 @@ controls.
 
 :::tip Configuration Requirements
 
-To use this Layout, the Collection will need at least one datetime [Field](/configuration/data-model/fields.md) to set a
+To use this Layout, the Collection will need at least one datetime Field to set a
 start time, but ideally two datetime Fields _(to set a start time and end time)_.
 
 :::
@@ -237,7 +237,7 @@ _There is no Subheader for the Kanban Layout._
 
 :::tip Configuration Requirements
 
-To make this Layout work, you will need to configure an appropriate status [Field](/configuration/data-model/fields.md)
+To make this Layout work, you will need to configure an appropriate status Field
 on the Collection, then identify this Field under **"Group By"** in the Layout Options menu.
 
 :::

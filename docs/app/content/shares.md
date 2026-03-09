@@ -29,7 +29,7 @@ permissions. We welcome any [pull-requests](/contributing/introduction) to addre
 
 ::: warning Users, Roles and Permissions!
 
-You will need to understand how [Users, Roles, and Permissions](/configuration/users-roles-permissions) work in d9
+You will need to understand how [Users, Roles, and Permissions](/app/users-roles-permissions) work in d9
 to configure Shares properly.
 
 :::
@@ -52,7 +52,7 @@ to configure Shares properly.
    your new Share under **Shares** in the sidebar.
 8. Click the <span mi icon>more_horiz</span> button on the right side of your Share.
 
-![copy send edit delete shares menu](/images/Copy-send-edit-delete-shares-menu-20220217A.webp)
+!copy send edit delete shares menu
 
 9. Here you have 4 options:
    - **Copy Link** – Creates a hyperlink that you can copy and paste.
@@ -72,7 +72,7 @@ tab.
 
 ## Share Options Menu
 
-![Share Options Menu](/images/share-options-menu-20220217A.webp)
+!Share Options Menu
 
 - **Name** – Adds a name to describe the Share.
 - **Role** – [Assigns a Role](#assigning-a-role) from which the Share will inherit permissions.
@@ -96,7 +96,7 @@ You can share any Item you want. However, Users with other Roles will likely hav
 Any Share will inherit the same read permissions as the Role it was associated with in the Share Options Menu.
 
 This system allows for absolutely granular configuration options on Shares... _but it also means you'll need to
-understand [Users, Roles, and Permissions](/configuration/users-roles-permissions) thoroughly to use Shares properly_.
+understand [Users, Roles, and Permissions](/app/users-roles-permissions) thoroughly to use Shares properly_.
 Here are some highlights of what you can do:
 
 - Set the Collections a Role can view or share.
@@ -118,7 +118,7 @@ linked Collections.
 The Role option in the [Share Options Menu](#share-options-menu) lets you associate a Role to the Share. The Share will
 then inherit permissions of that Role.
 
-![Select Role for Share](/images/select-existing-role-menu-20220217A.webp)
+!Select Role for Share
 
 ### Assign an Existing Role
 
@@ -133,7 +133,7 @@ _If your Role has the correct permissions configured_, you can create a new Role
 in the Share Options Menu. However, you will still need to navigate to **Settings > Roles and Permissions > [Role
 Name]** to configure any read permissions.
 
-![Creating / Editing a Role within Shares](/images/creating-and-edit-roles-menu-20220217A.webp)
+!Creating / Editing a Role within Shares
 
 ### Create a New Role
 
