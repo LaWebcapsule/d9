@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 import type { AuthorizationParameters, BaseClient, Client, TokenSet } from 'openid-client';
 import { Issuer, generators } from 'openid-client';
 import { getAuthProvider } from '../../auth.js';
-import { ACCESS_COOKIE_OPTIONS, REFRESH_COOKIE_OPTIONS } from '../../constants.js';
+import { ACCESS_COOKIE_OPTIONS, OAUTH2_COOKIE_CLEAR_OPTIONS, OAUTH2_COOKIE_OPTIONS, REFRESH_COOKIE_OPTIONS } from '../../constants.js';
 import env from '../../env.js';
 import {
 	InvalidConfigException,
@@ -159,7 +159,7 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 				redirectUriWithParams.searchParams.set('redirect', payload['redirect'] as string);
 				finalRedirectUri = redirectUriWithParams.toString();
 			}
-
+			
 			tokenSet = await client.callback(
 				finalRedirectUri,
 				{ code: payload['code'], state: payload['state'], iss: payload['iss'] },
@@ -236,10 +236,7 @@ export function createOpenIDAuthRouter(providerName: string): Router {
 
 			const cookieName = `openid.${providerName}.${state || ''}`;
 
-			res.cookie(cookieName, token, {
-				httpOnly: true,
-				sameSite: 'lax',
-			});
+			res.cookie(cookieName, token, OAUTH2_COOKIE_OPTIONS);
 
 			return res.redirect(authUrl);
 		}),
@@ -307,7 +304,7 @@ export function createOpenIDAuthRouter(providerName: string): Router {
 			let authResponse;
 
 			try {
-				res.clearCookie(cookieName);
+				res.clearCookie(cookieName, OAUTH2_COOKIE_CLEAR_OPTIONS);
 
 				authResponse = await authenticationService.login(providerName, {
 					code: req.query['code'],
