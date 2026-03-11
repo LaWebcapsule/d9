@@ -28,7 +28,10 @@ This comparison happens BEFORE anonymization so the developer sees the diff in t
 
 ### Step 1: Load existing skills
 
-Read all SKILL.md files from `.claude/skills/` directory (excluding pipeline skills: detect-xp, match-existing, anonymize-session, format-skill, curate-skills).
+Read all SKILL.md files from the `LaWebcapsule/d9-skills` repo. Either:
+- Use `gh api` to list and read skill files from the remote repo
+- Or if a local clone exists (e.g., from a previous submit), read from there
+- Fallback: read from `.claude/skills/d9/` if available locally
 
 ### Step 2: Compare semantically
 

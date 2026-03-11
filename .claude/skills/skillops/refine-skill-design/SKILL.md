@@ -48,7 +48,7 @@ Audit and improve an existing SKILL.md to maximize its ASQM score. Apply a struc
 
 Check the SKILL.md for required sections:
 ```
-✅ YAML frontmatter (name, description, tags, version)
+✅ YAML frontmatter (name, description — Agent Skills standard; license, metadata optional)
 ✅ Purpose section
 ✅ Triggers section
 ✅ Behavior section (with numbered steps)

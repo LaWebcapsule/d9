@@ -4,7 +4,7 @@
   "title": "SKILL.md Frontmatter Schema",
   "description": "Validates the YAML frontmatter of a SKILL.md file in the SkillOps format.",
   "type": "object",
-  "required": ["name", "description", "tags", "version"],
+  "required": ["name", "description"],
   "properties": {
     "name": {
       "type": "string",

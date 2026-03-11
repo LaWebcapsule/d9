@@ -30,21 +30,23 @@ This is the final local step before the developer submits a PR.
 
 Generate a complete SKILL.md:
 
+**IMPORTANT**: Skills MUST follow the [Agent Skills Open Standard](https://agentskills.io/specification).
+Only `name` and `description` are required in frontmatter. Everything else goes into `metadata`.
+
 ```yaml
 ---
 name: [auto-generated-kebab-case]
-description: [one-line description from the experience]
-tags: [auto-detected from context]
-version: 1.0.0
+description: [one-line description, max 1024 chars — what it does + when to use it]
 license: MIT
-recommended_scope: project
-session_tokens: [estimated tokens consumed during the debugging session — ask the user or read from Claude Code usage stats]
 metadata:
+  version: "1.0.0"
+  tags: [auto-detected from context]
+  session_tokens: [estimated tokens consumed — ask the user or read from Claude Code usage stats]
   author: anonymous-contributor
   source: session-contribution
 ---
 
-# Skill: [Human Readable Name]
+# [Human Readable Name]
 
 ## Purpose
 [Why this skill matters — what problem it prevents]
@@ -54,7 +56,7 @@ metadata:
 - [trigger 1]
 - [trigger 2]
 
-## Actions
+## Behavior
 [Step by step what to do]
 1. [step 1]
 2. [step 2]
@@ -67,7 +69,25 @@ metadata:
   how long it typically takes to figure out]
 
 ## Restrictions
-[What NOT to do, edge cases to watch for]
+
+### Hard Boundaries
+[NEVER / MUST / ALWAYS rules]
+
+### Soft Boundaries
+[Prefer / by default / when possible rules]
+
+## Self-Check
+- [ ] [Verification item 1]
+- [ ] [Verification item 2]
+- [ ] [Verification item 3]
+
+## Examples
+
+### Example 1: [Happy path]
+[Before/After or Scenario/Fix]
+
+### Example 2 (Edge Case): [Edge case description]
+[Before/After or Scenario/Fix]
 ```
 
 ### Case 2: Amendment
@@ -103,21 +123,20 @@ proposed_version: [bumped patch or minor]
 Skill file generated successfully!
 
   Type: [New Skill / Amendment to X]
-  File: .claude/skills/[name]/SKILL.md (or AMENDMENT.yaml)
+  File: .claude/skills/d9/[name]/SKILL.md (or AMENDMENT.yaml)
 
-  To contribute this skill:
-  1. Create a new branch: git checkout -b skill/[name]
-  2. The file has been placed in .claude/skills/[name]/
-  3. Commit: git add .claude/skills/[name]/ && git commit -m "skill: add [name]"
-  4. Push and open a PR with the "skill-contribution" template
+  Target repo: LaWebcapsule/d9-skills (skills/[name]/SKILL.md)
+  The submit-skill step will handle cloning, copying, and PR creation.
 
   [View file]  [Edit before submitting]  [Cancel]
 ```
 
-### Step 4: Place the file
+### Step 4: Place the file locally
 
-- For NEW: create `.claude/skills/[name]/SKILL.md`
-- For AMENDMENT: create `.claude/skills/[target-skill]/AMENDMENT.yaml`
+- For NEW: create `.claude/skills/d9/[name]/SKILL.md` (local staging area)
+- For AMENDMENT: create `.claude/skills/d9/[target-skill]/AMENDMENT.yaml`
+
+**Note**: These files are staged locally. The `submit-skill` step will clone `LaWebcapsule/d9-skills`, copy the skill files into `skills/[name]/`, and open a PR on that repo.
 
 ## Naming Convention
 

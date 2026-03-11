@@ -1,6 +1,6 @@
 # /skillops — Contribute your experience as a shared skill
 
-You are running the SkillOps pipeline. This command orchestrates the full flow to capture a reusable pattern from the current session and submit it as a skill contribution.
+You are running the SkillOps pipeline. This command orchestrates the full flow to capture a reusable pattern from the current session and submit it as a skill to the **[d9-skills](https://github.com/LaWebcapsule/d9-skills)** plugin repo.
 
 ## Instructions
 
@@ -31,7 +31,7 @@ If no patterns are found in the conversation, tell the user and ask them to desc
 
 ### Step 2: Match against existing skills
 
-For each selected pattern, read all SKILL.md files in `.claude/skills/d9/` and compare semantically. Follow `match-existing` to determine:
+For each selected pattern, clone or fetch `LaWebcapsule/d9-skills` and read all SKILL.md files in `skills/`. Compare semantically. Follow `match-existing` to determine:
 
 - **DUPLICATE** (>95% similar) → inform and skip (unless user overrides)
 - **AMENDMENT** (70-95% similar) → show diff, ask if amendment or new
@@ -48,44 +48,45 @@ Follow `anonymize-session`:
 
 ### Step 4: Format
 
-Follow `format-skill` to generate:
-- **New skill** → `SKILL.md` with proper frontmatter, triggers, actions, errors prevented
-- **Amendment** → `AMENDMENT.yaml` with target skill reference and additions
+Follow `format-skill` to generate a SKILL.md in **Agent Skills Open Standard** format:
+- Only `name` and `description` are required in frontmatter
+- `license`, `metadata` (version, tags, session_tokens, author) are optional
+- Body: Purpose, Triggers, Behavior, Errors Prevented, Restrictions, Self-Check, Examples
 
-**Include `session_tokens` in the frontmatter.** Ask the user how many tokens were consumed in this session (visible in Claude Code's usage display), or estimate based on conversation length (~500 tokens per agent message exchange). This field tracks the cost of the debugging session so the community can quantify tokens saved by each skill.
+**Include `session_tokens` in metadata.** Ask the user how many tokens were consumed in this session (visible in Claude Code's usage display), or estimate based on conversation length (~500 tokens per agent message exchange).
 
 Preview the file content to the user. **WAIT for approval.**
 
 ### Step 5: Quality check
 
-Run the structure verification:
+Write the file locally to `.claude/skills/d9/<name>/SKILL.md` and run validation:
 ```bash
-node scripts/verify-skill-structure.mjs .claude/skills/<category>/<name>
+node scripts/verify-skill-structure.mjs .claude/skills/d9/<name>
 ```
 
 If score < 17, suggest improvements following `refine-skill-design`. If score < 10, do NOT proceed — fix first.
 
-### Step 6: Submit (clean branch)
+### Step 6: Submit (to d9-skills repo)
 
-Follow `submit-skill` to automate the last mile. **CRITICAL SAFETY**:
+Follow `submit-skill` to automate the last mile. **Target: `LaWebcapsule/d9-skills`**
 
-1. Show what will be committed (files + diff)
+1. Show what will be submitted (files list)
 2. **WAIT for user confirmation**
-3. Stash any uncommitted changes on the working branch
-4. Create a **clean branch from `origin/main`** (NOT from the current branch)
-5. Cherry-pick ONLY the skill files, registry updates, and verification scripts
+3. Clone `LaWebcapsule/d9-skills` to a temp directory
+4. Create branch `skill/<name>` in the clone
+5. Copy skill files from `.claude/skills/d9/<name>/` into `skills/<name>/`
 6. Commit with message `skill: add <name>` (or `skill: amend <name>`)
-7. Push and create PR via `gh pr create` (or show manual instructions if `gh` unavailable)
-8. **Return to the working branch** and restore stash
+7. Push and create PR via `gh pr create --repo LaWebcapsule/d9-skills`
+8. Clean up temp directory
 9. Show the PR URL
 
-**Why clean branch?** The user's working branch may contain private work, configs, or secrets. By branching from `origin/main`, only the skill files end up in the PR — zero risk of leaking anything else.
+**Why external repo?** Skills are a plugin, separate from the d9 codebase. This follows the Supabase agent-skills pattern and allows anyone to install skills without cloning the main repo: `npx skills add LaWebcapsule/d9-skills`.
 
 ## Important
 
 - **Every step requires user confirmation** — never auto-proceed
 - **Nothing leaves the machine until Step 6** — all processing is local
 - **The user can cancel at any point** — no side effects until the final push
-- **The working branch is NEVER pushed** — only the clean skill/ branch is
+- **The main repo is NEVER modified** — skills are submitted to `LaWebcapsule/d9-skills`
 - **session_tokens tracks community value** — each skill's token cost helps quantify how much the community saves
 - If this is a fresh session with no patterns to detect, ask the user to describe what they learned

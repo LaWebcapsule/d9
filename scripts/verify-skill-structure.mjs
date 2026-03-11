@@ -11,7 +11,8 @@
 import { readFileSync, readdirSync, statSync } from 'fs';
 import { join, resolve } from 'path';
 
-const REQUIRED_FRONTMATTER = ['name', 'description', 'tags', 'version'];
+const REQUIRED_FRONTMATTER = ['name', 'description'];
+const RECOMMENDED_FRONTMATTER_META = ['license', 'metadata'];
 const REQUIRED_SECTIONS = ['Purpose', 'Triggers', 'Behavior', 'Restrictions', 'Self-Check'];
 const RECOMMENDED_SECTIONS = ['Examples'];
 
