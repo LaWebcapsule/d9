@@ -104,7 +104,7 @@ export class SharesService extends ItemsService {
 				item: record.share_item,
 				collection: record.share_collection,
 			},
-			refresh_token: refreshToken,
+			session_id: sessionId,
 		};
 
 		const accessToken = jwt.sign(tokenPayload, env['SECRET'] as string, {
