@@ -104,6 +104,22 @@ export const ACCESS_COOKIE_CLEAR_OPTIONS: CookieOptions = (() => {
 	return rest;
 })();
 
+export const OAUTH2_COOKIE_OPTIONS: CookieOptions = {
+	httpOnly: true,
+	domain: env['OAUTH2_TOKEN_COOKIE_DOMAIN']|| env['ACCESS_TOKEN_COOKIE_DOMAIN'],
+	maxAge: getMilliseconds(env['OAUTH2_TOKEN_TTL']||env["ACCESS_TOKEN_TTL"]),
+	secure: (env['OAUTH2_TOKEN_COOKIE_SECURE'] || env['ACCESS_TOKEN_COOKIE_SECURE']) ?? false,
+	sameSite: ((env['OAUTH2_TOKEN_COOKIE_SAME_SITE']) as 'lax' | 'strict' | 'none') || 'lax',
+	path: '/auth',
+}
+
+export const OAUTH2_COOKIE_CLEAR_OPTIONS: CookieOptions = (() => {
+	const { ...rest } = ACCESS_COOKIE_OPTIONS;
+	delete rest.maxAge;
+	delete rest.expires;
+	return rest;
+})();
+
 export const OAS_REQUIRED_SCHEMAS = ['Diff', 'Schema', 'Query', 'x-metadata'];
 
 /** Formats from which transformation is supported */
