@@ -59,7 +59,7 @@ parts of the docs in dire need of some tender love and care? Feel free to open a
 
 ### Helping Others
 
-The d9 community is growing quickly, which also means there's more and more people that have questions. Helping
+The d9 community is launching, and we welcome questions and contributions. Helping
 out your fellow developers by answering questions on
 [GitHub Discussions](https://github.com/LaWebcapsule/directus9/discussions/categories/q-a) is a great way to help the
 project.
