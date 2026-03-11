@@ -1,6 +1,9 @@
 # User preferences
 .DS_Store
 
+# External skill repos (cloned for development/testing)
+d9-skills/
+
 # Dependencies
 node_modules
 
