@@ -188,7 +188,7 @@ export class AuthenticationService {
 			role: user.role,
 			app_access: user.app_access,
 			admin_access: user.admin_access,
-			refresh_token: refreshToken,
+			session_id: sessionId,
 		};
 
 		const customClaims = await emitter.emitFilter(
@@ -389,7 +389,7 @@ export class AuthenticationService {
 			role: record.role_id,
 			app_access: record.role_app_access,
 			admin_access: record.role_admin_access,
-			refresh_token: newRefreshToken,
+			session_id: sessionId,
 		};
 
 		if (record.share_id) {
