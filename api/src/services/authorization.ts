@@ -593,9 +593,6 @@ export class AuthorizationService {
 			return relation.meta.one_field in payloadWithPresets;
 		});
 
-		console.log("here for")
-		console.log(collection)
-
 		for (const relation of relationsToProcess) {
 			// Nested array of individual items
 			const fieldKey = relation.meta!.one_field!;
