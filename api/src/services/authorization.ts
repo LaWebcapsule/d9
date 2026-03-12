@@ -624,11 +624,13 @@ export class AuthorizationService {
 						for (let i = 0; i < originalItems.length; i++) {
 							const originalItem: Item = originalItems[i]!;
 							const alreadyExistingItems = originalItem[fieldKey].length;
-							const updatedItemsIds = field.update.map((f: any)=>f.id);
-							const deletedItemsIds = field.update.map((f:any)=>f.id);
-							const twoTimesCountedItems = (originalItem[fieldKey] as Array<string>).reduce((n, item, index)=>{
-								return updatedItemsIds.includes(item) || deletedItemsIds.includes(item) 
-							},0)
+							const updatedItemsIds = field.update.map((f: any) => f.id);
+							const deletedItemsIds = field.update.map((f: any) => f.id);
+
+							const twoTimesCountedItems = (originalItem[fieldKey] as Array<string>).reduce((n, item) => {
+								return n + Number(updatedItemsIds.includes(item) || deletedItemsIds.includes(item));
+							}, 0);
+
 							const emptyItemsToAdd = alreadyExistingItems - twoTimesCountedItems;
 							const finalArrayToValidate = arrayToValidate.concat(Array(emptyItemsToAdd).fill({}));
 
