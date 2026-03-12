@@ -65,7 +65,7 @@ export const handler = async (req: Request, _res: Response, next: NextFunction) 
 					})
 					.from('directus_sessions AS s')
 					.leftJoin('directus_users AS u', 's.user', 'u.id')
-					.where('s.token', payload.refresh_token)
+					.where('s.session_id', payload.session_id)
 					.andWhere('s.expires', '>=', new Date())
 					.first();
 
