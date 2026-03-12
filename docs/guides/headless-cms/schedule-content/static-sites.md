@@ -66,7 +66,7 @@ field `status` that controls the published state.
 
 3. Add a new field to your content Collection.
 
-   !The interface for creating a new field is shown. The field type Datetime is selected. The Key is named date_published. The field for Use 24-Hour format is checked.
+![The interface for creating a new field is shown. The field type Datetime is selected. The Key is named date_published. The field for Use 24-Hour format is checked.](/images/scheduling-content-publish-date.webp)
 
    a. Choose **Datetime** for the Type.
 
@@ -78,7 +78,7 @@ field `status` that controls the published state.
 
 4. [Create or update an Item](/app/content/items) inside your Collection
 
-   !A content item within the Articles collection is shown. The title is "What is Headless CMS?". English translations are also shown with a Summary field. The Summary reads "A quick overview of what Headless CMS is and how it's beneficial to your team."
+![A content item within the Articles collection is shown. The title is "What is Headless CMS?". English translations are also shown with a Summary field. The Summary reads "A quick overview of what Headless CMS is and how it's beneficial to your team."](/images/scheduling-content-create-content-scheduled.webp)
 
    a. Set the `status` field to `scheduled`
 
@@ -90,13 +90,13 @@ field `status` that controls the published state.
 
 5. [Create a new Flow](/app/flows#create-a-flow)
 
-   !Under the Creating a New Flow interface, the Flow Setup tab is shown. The name of the new flow is Published Scheduled Articles. The status is Active. The Description field reads "This is triggered every 15 minutes to publish any scheduled articles". The icon selected is "Fiber New". For the Color field, a green color with the hex code #2ECDA7 is selected. Track Activity & Logs is selected.
+![Under the Creating a New Flow interface, the Flow Setup tab is shown. The name of the new flow is Published Scheduled Articles. The status is Active. The Description field reads "This is triggered every 15 minutes to publish any scheduled articles". The icon selected is "Fiber New". For the Color field, a green color with the hex code #2ECDA7 is selected. Track Activity & Logs is selected.](/images/scheduling-content-flow-setup.webp)
 
    Give it a memorable name and short description like `Publish Scheduled Articles`.
 
 6. [Complete the Trigger Setup](/app/flows/triggers#triggers)
 
-   !Under the Creating New Flow interface, the Trigger Setup tab is shown. The selected trigger is Schedule(CRON). The Interval field has a value of "* 15 * * * *".
+![Under the Creating New Flow interface, the Trigger Setup tab is shown. The selected trigger is Schedule(CRON). The Interval field has a value of "* 15 * * * *".](/images/scheduling-content-trigger.webp)
 
    a. For **Type**, Select [Schedule (CRON)](/app/flows/triggers#schedule-cron). This will trigger this flow
    at regular intervals of time.

@@ -52,7 +52,7 @@ to configure Shares properly.
    your new Share under **Shares** in the sidebar.
 8. Click the <span mi icon>more_horiz</span> button on the right side of your Share.
 
-!copy send edit delete shares menu
+![copy send edit delete shares menu](/images/Copy-send-edit-delete-shares-menu-20220217A.webp)
 
 9. Here you have 4 options:
    - **Copy Link** – Creates a hyperlink that you can copy and paste.
@@ -72,7 +72,7 @@ tab.
 
 ## Share Options Menu
 
-!Share Options Menu
+![Share Options Menu](/images/share-options-menu-20220217A.webp)
 
 - **Name** – Adds a name to describe the Share.
 - **Role** – [Assigns a Role](#assigning-a-role) from which the Share will inherit permissions.
@@ -118,7 +118,7 @@ linked Collections.
 The Role option in the [Share Options Menu](#share-options-menu) lets you associate a Role to the Share. The Share will
 then inherit permissions of that Role.
 
-!Select Role for Share
+![Select Role for Share](/images/select-existing-role-menu-20220217A.webp)
 
 ### Assign an Existing Role
 
@@ -133,7 +133,7 @@ _If your Role has the correct permissions configured_, you can create a new Role
 in the Share Options Menu. However, you will still need to navigate to **Settings > Roles and Permissions > [Role
 Name]** to configure any read permissions.
 
-!Creating / Editing a Role within Shares
+![Creating / Editing a Role within Shares](/images/creating-and-edit-roles-menu-20220217A.webp)
 
 ### Create a New Role
 

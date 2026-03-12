@@ -4,7 +4,7 @@
 
 ## Divider
 
-!A horizontal divider between two form fields
+![A horizontal divider between two form fields](/images/interface-divider.webp)
 
 A horizontal divider to separate fields into different sections.
 
@@ -15,9 +15,9 @@ A horizontal divider to separate fields into different sections.
 
 ## Button Links
 
-!A group of two buttons. One primary button. One default button.
+![A group of two buttons. One primary button. One default button.](/images/interface-buttonlinks.webp)
 
-!A form for creating new Button Links. Form has four fields: "Label", "Icon", "Type", "URL"
+![A form for creating new Button Links. Form has four fields: "Label", "Icon", "Type", "URL"](/images/interface-buttonlinks-new.webp)
 
 Group of one or more buttons that link to a preset or dynamic url.
 
@@ -30,7 +30,7 @@ Group of one or more buttons that link to a preset or dynamic url.
 
 ## Notice
 
-!A standard warning notice in yellow with a hazard icon.
+![A standard warning notice in yellow with a hazard icon.](/images/interface-notice.webp)
 
 An alert or notice interface to notify users of important information.
 

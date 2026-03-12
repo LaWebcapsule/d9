@@ -1,85 +1,168 @@
-# d9 — Docker Compose
-# Usage: docker compose up -d
+# This compose file is meant to spin up a copy of all supported database vendors + Redis and S3 (Minio).
+# For production use see the docker compose file example in the docs:
+#     https://github.com/LaWebcapsule/directus9/tree/main/docs
 #
-# Default credentials:
-#   d9 Admin:  admin@example.com / d9-admin-password
-#   Postgres:  d9 / d9
-#   Redis:     no auth
+# ONLY FOR DEBUGGING. THIS IS NOT INTENDED FOR PRODUCTION USE.
 #
-# Override any variable via a .env file in the same directory.
+# Ports:
+#   Postgres:        5100
+#   MySQL (8):       5101
+#   MariaDB:         5102
+#   MS SQL:          5103
+#   Oracle:          5104
+#   Redis:           5105
+#   Minio (S3):      5106
+#   Azure            5107
+#   MySQL (5.7):     5108
+#   Memcached:       5109
+#   Keycloak:        5110
+#   Postgres (10):   5111
+#   Minio Admin:     5112
+#   CockroachDB:     5113
+#
+# Credentials:
+#   Postgres:
+#     User:          postgres
+#     Password:      secret
+#
+#   MySQL:
+#     User:          root
+#     Password:      secret
+#
+#   MariaDB:
+#     User:          root
+#     Password:      secret
+#
+#   MS SQL:
+#     User:          sa
+#     Password:      Test@123
+#
+#   Oracle DB:
+#     User:          secretsysuser
+#     Password:      secretpassword
+#     Role:          SYSDEFAULT
+#     SID:           XE
+#
+#   Redis:
+#     n/a
+#
+#   Minio:
+#     Key:           minioadmin
+#     Secret:        minioadmin
+#     (Make sure to set S3_FORCE_PATH_STYLE to true)
+#
+#   Azure Blob Storage
+#     Name:          devstoreaccount1
+#     Key:           Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==
+#     Container:     devstoreaccount1
+#
+#   Memcached
+#     n/a
+#
+#   Keycloak
+#     User:          admin
+#     Password:      secret
+#
+#   CockroachDB
+#     User:          admin
+#     Password:      --
 
+version: '3.1'
 services:
-  d9:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "${D9_PORT:-8055}:8055"
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    environment:
-      # --- Required secrets ---
-      KEY: "${DIRECTUS_KEY:-d9-unique-identifier-key}"
-      SECRET: "${DIRECTUS_SECRET:-change-me-to-a-random-value}"
-      ADMIN_EMAIL: "${ADMIN_EMAIL:-admin@example.com}"
-      ADMIN_PASSWORD: "${ADMIN_PASSWORD:-d9-admin-password}"
-
-      # --- Database ---
-      DB_CLIENT: pg
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_DATABASE: "${DB_DATABASE:-d9}"
-      DB_USER: "${DB_USER:-d9}"
-      DB_PASSWORD: "${DB_PASSWORD:-d9}"
-
-      # --- Cache (Redis) ---
-      CACHE_ENABLED: "true"
-      CACHE_STORE: redis
-      CACHE_REDIS: "redis://redis:6379"
-
-      # --- Storage ---
-      STORAGE_LOCATIONS: local
-      STORAGE_LOCAL_ROOT: /directus/uploads
-
-      # --- Misc ---
-      PUBLIC_URL: "${PUBLIC_URL:-http://localhost:8055}"
-      LOG_LEVEL: "${LOG_LEVEL:-info}"
-    volumes:
-      - d9-uploads:/directus/uploads
-      - d9-extensions:/directus/extensions
-    restart: unless-stopped
-
   postgres:
-    image: postgres:16-alpine
+    image: postgis/postgis:13-3.1-alpine
     environment:
-      POSTGRES_DB: "${DB_DATABASE:-d9}"
-      POSTGRES_USER: "${DB_USER:-d9}"
-      POSTGRES_PASSWORD: "${DB_PASSWORD:-d9}"
-    volumes:
-      - d9-db:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-d9} -d ${DB_DATABASE:-d9}"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
-    restart: unless-stopped
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: directus
+    ports:
+      - 5100:5432
+
+  mysql:
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: directus
+    ports:
+      - 5101:3306
+    cap_add:
+      - SYS_NICE
+
+  maria:
+    image: mariadb:10.7
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: directus
+    ports:
+      - 5102:3306
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Test@123
+    ports:
+      - 5103:1433
+
+  oracle:
+    image: quillbuilduser/oracle-18-xe-micro-sq
+    ports:
+      - 5104:1521
+    environment:
+      - OPATCH_JRE_MEMORY_OPTIONS=-Xms128m -Xmx256m -XX:PermSize=16m -XX:MaxPermSize=32m -Xss1m
+      - ORACLE_ALLOW_REMOTE=true
+    shm_size: '1gb' # more like smh-size amirite 🥁
 
   redis:
-    image: redis:7-alpine
-    volumes:
-      - d9-redis:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
-    restart: unless-stopped
+    image: redis:6-alpine
+    ports:
+      - 5105:6379
 
-volumes:
-  d9-db:
-  d9-redis:
-  d9-uploads:
-  d9-extensions:
+  minio:
+    image: minio/minio:latest
+    command: server /data/minio/ --console-address :9001
+    ports:
+      - 5106:9000
+      - 5112:9001
+
+  azure:
+    image: mcr.microsoft.com/azure-storage/azurite
+    ports:
+      - 5107:10000
+
+  mysql5:
+    image: mysql:5
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: directus
+    ports:
+      - 5108:3306
+
+  memcached:
+    image: memcached:latest
+    ports:
+      - 5109:11211
+
+  keycloak:
+    image: jboss/keycloak:latest
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: secret
+      DB_ADDR: ''
+      DB_VENDOR: h2
+    ports:
+      - 5110:8080
+
+  postgres10:
+    image: postgis/postgis:10-3.1-alpine
+    environment:
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: directus
+    ports:
+      - 5111:5432
+
+  cockroachdb:
+    image: cockroachdb/cockroach:latest-v21.1
+    command: start-single-node --cluster-name=example-single-node --insecure
+    ports:
+      - 5113:26257

@@ -43,7 +43,7 @@ d9 is an SQL database wrapper. A database is a set of data stored in a computer,
 organized, accessible, and scalable. The specific way you structure your data within a database is called your data
 model.
 
-!A Database Schema
+![A Database Schema](/images/database-schema-20220805A.webp)
 
 ### Database vs Excel
 
@@ -52,7 +52,7 @@ data in Excel spreadsheets. You know how you can build a table on one sheet in E
 sheet, then link the rows of each table together? That is pretty much how a relational data model works. But there are
 some key points where Excel and relational databases differ.
 
-!Data in an Excel Spreadsheet
+![Data in an Excel Spreadsheet](/images/spreadsheet-20220805A.webp)
 
 Many times, we store data as a table in Excel, but that's not always the case, as the program serves tons of other
 purposes. Excel lets you make your data stylized _(bold, italicized, colored, custom fonts, etc.)_, set dynamic
@@ -60,7 +60,7 @@ functions in cells, add graphics like charts and graphs, and input any kind of d
 enforced structure. Your Excel spreadsheet is a blank canvas, designed to store up to tens of thousands of rows of
 information.
 
-!A data table
+![A data table](/images/datatable-20220805A.webp)
 
 There is no stylization within databases. They strictly store raw data values in a structured way. Any time you want to
 style data, build a function, put data into a graph, _etc.,_ you must create that functionality in your app or website.
@@ -69,7 +69,7 @@ trillions_, of rows of information.
 
 ### Data Tables
 
-!A Data Table: rows and columns
+![A Data Table: rows and columns](/images/rows-and-columns.webp)
 
 <!-- image should note rows and columns. -->
 
@@ -79,7 +79,7 @@ tables are further broken down into columns and rows.
 
 ### Columns
 
-!A Column
+![A Column](/images/columns-20220805A.webp)
 
 Columns are categories that store one kind of information. Each column has a unique, descriptive name and stores one
 unit of information in each of its [cell values](#cell-values). Columns keep the data organized, consistent, and easily
@@ -89,7 +89,7 @@ accessible. The columns you choose to add to a data table will completely depend
 
 ### Cell Values
 
-!Cell Values
+![Cell Values](/images/datatable-cell-value-20220805A.webp)
 
 Each value in a column is stored in its own cell. In general, you want to create columns that save _atomic_ values. That
 means create the column to store the smallest indivisible units There is no restriction for the kinds of information to
@@ -115,14 +115,14 @@ unexpected and even dangerous behaviors in your program.
 
 ### Rows
 
-!Rows
+![Rows](/images/row-20220805A.webp)
 
 Each row stores data associated to a unique record, event, object, entity, observation, etc. Data tables can contain
 millions, _even billions and trillions_ of rows of data.
 
 ### Primary Keys
 
-!Primary Key
+![Primary Key](/images/primary-keys-20220805A.webp)
 
 In order to uniquely identify and track each row, every data table must have a primary key column. A primary key is a
 unique ID that identifies a specific row. Any pattern or system could be used to generate primary keys, so long as it
@@ -132,7 +132,7 @@ differentiate it from other rows.
 
 ### Foreign Keys
 
-!Foreign Keys
+![Foreign Keys](/images/foreign-keys-20220805A.webp)
 
 Since primary keys uniquely identify each and every row in a data table, they are the perfect tool to create
 relationships. If you want to relationally link rows between two data tables, you create a column to store _foreign
@@ -168,7 +168,7 @@ guide on [relationships](/app/data-model/relationships).
 
 ### Database Schemas
 
-!Data Table to schema
+![Data Table to schema](/images/datatable-to-schema-20220805A.webp)
 
 In our examples so far, we have seen and described actual [data tables](#data-tables). As you design your relational
 data model, you will need to create a schema to keep track of its complexity.
@@ -205,7 +205,7 @@ irrelevant to the current learning point, we omit their details so you can focus
 Please note too, that with more complex schemas, containing dozens _(or maybe hundreds!)_ of relationally linked data
 tables, you usually include datatype information as well as a visualization of how each and every table interlinks.
 
-!A Complex Schema
+![A Complex Schema](/images/complex-schema.webp)
 
 ### Avoid Data Duplication
 
@@ -245,7 +245,7 @@ data is displayed on each user profile page, for chat messaging and other types 
 situation in many projects_. In this case, the author name and other details would also need to exist in the `users`
 table.
 
-!Duplicate Data
+![Duplicate Data](/images/duplicate-data-20220829A.webp)
 
 This creates duplicate data. There are two big problems with this:
 
@@ -315,7 +315,7 @@ between `blog` and `users`.
 
 ### Working With Relational Data Models
 
-!Database, Backend, Frontend
+![Database, Backend, Frontend](/images/database-backend-frontend-20220805A.webp)
 
 Once you've designed your data model conceptually, you typically build and interact with it using SQL, or Structured
 Querying Language. This language is used to create, read & query, update, and delete anything and everything in the

@@ -149,7 +149,7 @@ To learn more, see our guide on [Presets and Bookmarks](/app/presets-bookmarks).
 
 ## Import / Export Items
 
-!Import and Export Items
+![Import and Export Items](/images/imports-exports-20220416A.webp)
 
 The Content, User Directory and File Library modules allow importing and exporting of multiple Items stored as files.
 This makes it quick and easy to handle tasks like uploading and downloading new customer information; pulling down sales

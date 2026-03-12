@@ -54,7 +54,7 @@ Discussion on our GitHub Discussions board: https://github.com/LaWebcapsule/dire
 
 ### Document the Project
 
-The [d9 Docs](https://github.com/LaWebcapsule/directus9/tree/docs-d9/docs) are living documents that can always be improved on. Notice any
+The [d9 Docs](./docs/) are living documents that can always be improved on. Notice any
 parts of the docs in dire need of some tender love and care? Feel free to open a Pull Request!
 
 ### Helping Others

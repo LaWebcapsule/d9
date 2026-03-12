@@ -1,6 +1,10 @@
 <p>&nbsp;</p>
 
-<a href="https://d9.dev" target="_blank" rel="noopener noreferrer"><img width="250" alt="d9 Logo" src="https://raw.githubusercontent.com/LaWebcapsule/directus9/docs-d9/docs/public/logo-light.svg"></a>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="../docs/public/logo-readme-light.svg">
+  <source media="(prefers-color-scheme: light)" srcset="../docs/public/logo-readme.svg">
+  <img alt="d9 Logo" src="../docs/public/logo-readme.svg" width="250">
+</picture>
 
 <p>&nbsp;</p>
 

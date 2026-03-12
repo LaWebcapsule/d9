@@ -57,7 +57,7 @@ with them.
 
 2. [Complete the Trigger Setup](/app/flows/triggers#triggers)
 
-   !The Trigger Setup tab of the Creating New Flow interface is show. The Event Hook type is selected. The Type field value is "Action(Non-Blocking)". In the Scope field, "items.create" and "items.update" are selected.
+![The Trigger Setup tab of the Creating New Flow interface is show. The Event Hook type is selected. The Type field value is "Action(Non-Blocking)". In the Scope field, "items.create" and "items.update" are selected.](/images/static-site-build-trigger.webp)
 
    a. Choose **Event Hook** for the trigger.
 

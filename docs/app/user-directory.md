@@ -9,7 +9,7 @@ readTime: 7 min read
 > are the individual accounts for logging in to the App. Each User belongs to a [Role](/getting-started/glossary#roles)
 > which defines its [Permissions](/getting-started/glossary#permissions).
 
-!User Directory Page
+![User Directory Page](/images/user-directory-20220222A.webp)
 
 <!-- @TODO getting-started > learn-directus
 
@@ -35,8 +35,7 @@ edit/delete/archive, import/export from files, etc.
 
 ## User Directory Page
 
-	<p>
-	</p>
+
 
 The User Directory Page lists all Users in a Project, with a navigation that allows quick access to Users by Role. This
 page has the same functionality as the [Collection Page](/app/content/collections).
@@ -58,14 +57,14 @@ _The following are only visible once Users are selected._
 
 ### Layout Options
 
-!User Directory Layout Options
+![User Directory Layout Options](/images/user-directory-layout-options-20220222A.webp)
 
 The **Sidebar > Layout Options** _(denoted by <span mi icon>layers</span> when Sidebar is minimized)_ allows you to
 adjust how Users are displayed on the User Directory. To learn more, see [Layouts](/app/layouts).
 
 ## User Details Page
 
-!The User Page
+![The User Page](/images/user-profile-20220222A.webp)
 
 A User's profile page can be accessed from the User Directory or by clicking the User Menu at the bottom of the
 [Module Bar](/app/overview#_1-module-bar). The profile page has the same features and functionality as the
@@ -84,7 +83,7 @@ A User's profile page can be accessed from the User Directory or by clicking the
 
 ### User Preferences
 
-!User Preferences
+![User Preferences](/images/user-preferences-20220222A.webp)
 
 - **Language** — The preferred App language/locale.
 - **Theme** — Light or Dark mode (or based on system preferences).
@@ -93,7 +92,7 @@ A User's profile page can be accessed from the User Directory or by clicking the
 
 ### Admin Options
 
-!Admin Options
+![Admin Options](/images/admin-options-20220222A.webp)
 
 - **Status** — Sets User status as Draft, Invited, Active, Suspended, Archived.
 - **Role** — Defines the User's Role.
@@ -103,7 +102,7 @@ A User's profile page can be accessed from the User Directory or by clicking the
 
 ### Read-only Info
 
-!User Profile Sidebar Information
+![User Profile Sidebar Information](/images/user-profile-sidebar-information-20220309A.webp)
 
 Information in the Sidebar _(denoted by <span mi icon dark>info</span> when Sidebar is minimized)_ also includes the
 following read-only details:
@@ -114,8 +113,7 @@ following read-only details:
 
 ## View a User
 
-	<p>
-	</p>
+
 
 Users are referenced throughout the app, often for accountability purposes. Hovering over a User in this context will
 provide a popover with basic information. Clicking that popover will navigate you to a view of that User's profile page.

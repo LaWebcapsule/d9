@@ -12,7 +12,7 @@ readTime: 7 min read
 > assigned a [role](/getting-started/glossary#roles) which defines its
 > [access permissions](/getting-started/glossary#permissions).
 
-!Users, Roles and Permissions
+![Users, Roles and Permissions](/images/users-roles-permissions-20220907A.webp)
 
 :::tip Before You Begin
 
@@ -135,7 +135,7 @@ optional. You may configure your own system as desired.
 
 ## d9 Users
 
-!Users in the d9 Data Studio
+![Users in the d9 Data Studio](/images/users-20220807A.webp)
 
 Within the Data Studio, users are managed within the User Directory. However, there are some
 controls available to assign users to roles in **Settings > Roles and Permissions**.
@@ -144,7 +144,7 @@ To learn more, please see our guide on users.
 
 ## d9 Roles
 
-!Roles in the d9 Data Studio
+![Roles in the d9 Data Studio](/images/roles-20220907A.webp)
 
 You can create as many roles as you need for your project. d9 also comes with built-in administrator and public
 roles, which cannot be deleted.
@@ -160,7 +160,7 @@ To learn more, see our guide on roles.
 
 ## d9 Permissions
 
-!Roles in the d9 Data Studio
+![Roles in the d9 Data Studio](/images/roles-20220907A.webp)
 
 d9 offers an extremely granular, yet easy to configure permissions system. When you
 [create a role](#create-a-role), all permissions are turned off by default, allowing you to explicitly grant permissions
@@ -177,7 +177,7 @@ To learn more, see our guide on permissions.
 
 ## Workflows
 
-!Workflows in the d9
+![Workflows in the d9](/images/workflows-20220909A.webp)
 
 Workflows are a way to setup structured stages to content authoring and data management. They are created primarily with
 custom access permissions, but can be enhanced with email notifications, custom Interfaces

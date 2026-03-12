@@ -68,7 +68,7 @@ Navigate to the content module and enter the global collection. Collections will
 as a singleton, it will launch directly into the one-item form. Enter information in the title and description field and
 hit save.
 
-!A form named "Global" has two inputs - a title and a description, each filled with some text.
+![A form named "Global" has two inputs - a title and a description, each filled with some text.](/images/next-global-config.webp)
 
 By default, new collections are not accessible to the public. Navigate to Settings -> Roles & Permissions -> Public and
 give Read access to the Global collection.
@@ -213,7 +213,7 @@ Update the returned HTML:
 
 Visit `http://localhost:3000` and you should now see a blog post listing, with latest items first.
 
-!A page with a title of "Blog". On it is a list of three items - each with a title, author, and date. The title is a link.
+![A page with a title of "Blog". On it is a list of three items - each with a title, author, and date. The title is a link.](/images/next-blog-listing.webp)
 
 ### Create Blog Post Listing
 
@@ -257,7 +257,7 @@ Some key notes about this code snippet.
 
 Click on any of the blog post links, and it will take you to a blog post page complete with a header image.
 
-!A blog post page shows an image, a title, and a number of paragraphs.
+![A blog post page shows an image, a title, and a number of paragraphs.](/images/next-blog-single.webp)
 
 ## Add Navigation
 

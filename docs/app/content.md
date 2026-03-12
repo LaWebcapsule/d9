@@ -27,7 +27,7 @@ Link to tutorial
 
 ## Collection Page
 
-!Collection Overview
+![Collection Overview](/images/collection-page-20220415A.webp)
 
 The Content Module consists of Collection Pages and Item Pages. Use the Navigation Bar on the left to move between
 Collections. Each Collection Page displays all Items in its Collection and comes with highly configurable
@@ -45,7 +45,7 @@ results in changes to the data model. To learn more, see our guide on
 
 ## Item Page
 
-!Article Overview
+![Article Overview](/images/item-page-20220215A.webp)
 
 When you click an Item on the Collection page, its Item Page will open. The Item Page is a form that enables you to
 view, edit or delete an Item and its field values. You can also comment on, share, archive, or revert an Item from this

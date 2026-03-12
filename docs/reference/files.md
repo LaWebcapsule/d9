@@ -43,7 +43,7 @@ permissions and other built-in features.
 
 :::
 
-!Original File _Original File Used — 602KB and
+![Original File](/images/original-20220216A.jpg) _Original File Used — 602KB and
 1800x1200_
 
 ---

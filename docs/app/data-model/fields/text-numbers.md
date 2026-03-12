@@ -5,7 +5,7 @@
 
 ## Input
 
-!A standard form text input
+![A standard form text input](/images/interface-input.webp)
 
 A standard form input.
 
@@ -19,7 +19,7 @@ A standard form input.
 
 ## Autocomplete Input (API)
 
-!An autocomplete form text input that shows a dropdown list of options based on a search query
+![An autocomplete form text input that shows a dropdown list of options based on a search query](/images/interface-autocomplete.webp)
 
 A search input that will populate dropdown choices by making a request to a given URL.
 
@@ -33,7 +33,7 @@ A search input that will populate dropdown choices by making a request to a give
 
 ## Code
 
-!A code editor input
+![A code editor input](/images/interface-code.webp)
 
 Code editor for pre-formatted text.
 
@@ -46,7 +46,7 @@ Code editor for pre-formatted text.
 
 ## Textarea
 
-!A standard form textarea input
+![A standard form textarea input](/images/interface-textarea.webp)
 
 Textarea input for longer plain text.
 
@@ -55,7 +55,7 @@ Textarea input for longer plain text.
 
 ## WYSIWYG
 
-!A What You See Is What You Get (WYSIWYG) form input that has a toolbar for formatting
+![A What You See Is What You Get (WYSIWYG) form input that has a toolbar for formatting](/images/interface-wysiwyg.webp)
 
 The What You See Is What You Get (WYSIWYG) interface provides a text area with rich formatting options in the toolbar.
 
@@ -71,7 +71,7 @@ The What You See Is What You Get (WYSIWYG) interface provides a text area with r
 
 ## Markdown
 
-!A markdown text editor with a toolbar with formatting options. Edit and preview tabs.
+![A markdown text editor with a toolbar with formatting options. Edit and preview tabs.](/images/interface-markdown.webp)
 
 Markdown text editor with formatting options in the toolbar. You can switch between Edit and Preview modes.
 
@@ -86,7 +86,7 @@ Markdown text editor with formatting options in the toolbar. You can switch betw
 
 ## Tags
 
-!A standard form text input where user can select, add, and remove tags.
+![A standard form text input where user can select, add, and remove tags.](/images/interface-tags.webp)
 
 A text input that allows users to apply any number of tags. When adding new tag, press Enter to save the tag.
 

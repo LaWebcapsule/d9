@@ -91,7 +91,7 @@ npm init @wbce-d9/directus-extension@latest
 
 ## Links
 
-- **[Documentation](https://docs.d9.dev)** — Full reference and guides
+- **[Documentation](./docs/)** — Full reference and guides
 - **[GitHub](https://github.com/LaWebcapsule/directus9)** — Source code and issues
 - **[Contributing](./contributing.md)** — How to contribute to d9
 

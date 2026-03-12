@@ -55,7 +55,7 @@ Async/Sync ->
 
 ## What's a Flow?
 
-!What's a Flow?
+![What's a Flow?](/images/whats-a-flow-20220603A.webp)
 
 <!--
 <video title="What's a Flow" autoplay playsinline muted loop controls>

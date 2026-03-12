@@ -46,7 +46,7 @@ please see [Revert an Item](/app/content/items#revert-an-item).
 
 ## View an Activity Log Item
 
-!Activity Log Default Fields
+![Activity Log Default Fields](/images/activity-log-default-fields-20220816A.webp)
 
 Click any item in the Activity Log and a side drawer will open, displaying its logged details. The following information
 is stored for each item.

@@ -36,7 +36,7 @@ may allow all data to be public, but it may instead require restricted access.
   [Custom Permission](/app/users-roles-permissions/permissions#configure-custom-permissions) for read
   operations to control which items are available and which fields within those items consumers can see.
 
-  !The custom permissions interface for the Public role is displayed. The Item Permissions table is active and one Rule is active - "Status" Equals "Published".
+![The custom permissions interface for the Public role is displayed. The Item Permissions table is active and one Rule is active - "Status" Equals "Published".](/images/custom-permissions.webp)
 
   Standard read permissions grant access to ALL data within a collection which means the general public could see
   unpublished content you might not want them to see.
@@ -111,7 +111,7 @@ But when it’s time to go to production and add all your different users, we re
    Two-factor authentication can be enforced for each specific role by checking the Require 2FA field in a
    [role's settings](/app/users-roles-permissions/roles#configure-role-details).
 
-   !The Administrator role settings page is displayed. The Require 2FA form field is highlighted and enabled.
+![The Administrator role settings page is displayed. The Require 2FA form field is highlighted and enabled.](/images/2fa-role.webp)
 
    Individual users can enable two-factor authentication by checking the Two-Factor Authentication field on their own
    [user detail page](/app/user-directory#user-details-page) and confirming their password.
@@ -121,4 +121,4 @@ But when it’s time to go to production and add all your different users, we re
 2. **Enable the Strong option for Auth Password Policy under
    [Project Settings > Security](/app/project-settings#security).**
 
-   !The Project Settings page is shown. The Security section is highlighted. Within the Security, section there are two fields shown: Auth Password Policy and Auth Login Attempts.
+![The Project Settings page is shown. The Security section is highlighted. Within the Security, section there are two fields shown: Auth Password Policy and Auth Login Attempts.](/images/security-project-settings.webp)

@@ -66,7 +66,7 @@ export const MODULE_BAR_DEFAULT = [
 		enabled: true,
 		name: '$t:documentation',
 		icon: 'help',
-		url: 'https://docs.d9.dev',
+		url: 'https://github.com/LaWebcapsule/directus9/tree/main/docs',
 	},
 	{
 		type: 'module',

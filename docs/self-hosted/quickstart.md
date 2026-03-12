@@ -66,7 +66,7 @@ Login using the admin credentials you configured during the installation in Step
 
 Once logged in, you're greeted with the option to create your first Collection:
 
-!d9 Empty State
+![d9 Empty State](/images/empty-state-20220217A.webp)
 
 Follow the prompts and create a Collection. For the sake of this demo, we'll be calling ours `articles`, but feel free
 to make it your own!
@@ -98,7 +98,7 @@ Now that we have a Collection with a Field configured, it's time to start adding
 Module (top left), and click <span mi btn>add</span> in the top-right to get started. This will take you to the
 Create/Edit Item page:
 
-!d9 Create Item
+![d9 Create Item](/images/create-item-20220217A.webp)
 
 Once you're happy with your creation, click <span mi btn>check</span> in the top-right to save your Item to the
 database.
@@ -120,7 +120,7 @@ d9 ships with a special **"Public"** role that controls what data is returned to
 the Public Role, find your Collection, and click the icon under the <span mi icon>visibility</span> icon (read/view
 permission) to allow the Public Role to read the Items in your Collection.
 
-!d9 Permissions
+![d9 Permissions](/images/permissions-20220217A.webp)
 
 ::: tip More Info on Roles & Permissions
 
