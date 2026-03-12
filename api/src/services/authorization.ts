@@ -630,7 +630,6 @@ export class AuthorizationService {
 							const twoTimesCountedItems = (originalItem[fieldKey] as Array<string|number>).reduce((n: number, item) => {
 								return n + Number(updatedItemsIds.includes(item) || deletedItemsIds.includes(item));
 							}, 0);
-							console.log(twoTimesCountedItems);
 
 							const emptyItemsToAdd = alreadyExistingItems - twoTimesCountedItems;
 							const finalArrayToValidate = arrayToValidate.concat(Array(emptyItemsToAdd).fill({}));
