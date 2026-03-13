@@ -141,6 +141,7 @@ devs
 DigitalOcean
 DigitalOcean's
 d9
+d9[-.](.*)
 directus
 Directus
 directus_(.*)
