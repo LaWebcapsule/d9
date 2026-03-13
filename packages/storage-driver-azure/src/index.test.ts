@@ -110,7 +110,10 @@ describe('#constructor', () => {
 
 	test('Creates blob service client and sets containerClient', () => {
 		const mockSignedCredentials = {} as StorageSharedKeyCredential;
-		vi.mocked(StorageSharedKeyCredential).mockImplementationOnce(function () { return mockSignedCredentials; } as any);
+
+		vi.mocked(StorageSharedKeyCredential).mockImplementationOnce(function () {
+			return mockSignedCredentials;
+		} as any);
 
 		const mockContainerClient = {} as ContainerClient;
 
@@ -118,7 +121,9 @@ describe('#constructor', () => {
 			getContainerClient: vi.fn().mockReturnValue(mockContainerClient),
 		} as unknown as BlobServiceClient;
 
-		vi.mocked(BlobServiceClient).mockImplementation(function () { return mockBlobServiceClient; } as any);
+		vi.mocked(BlobServiceClient).mockImplementation(function () {
+			return mockBlobServiceClient;
+		} as any);
 
 		const driver = new DriverAzure({
 			containerName: sample.config.containerName,
@@ -137,7 +142,10 @@ describe('#constructor', () => {
 
 	test('Allows overriding endpoint with optional setting', () => {
 		const mockSignedCredentials = {} as StorageSharedKeyCredential;
-		vi.mocked(StorageSharedKeyCredential).mockImplementationOnce(function () { return mockSignedCredentials; } as any);
+
+		vi.mocked(StorageSharedKeyCredential).mockImplementationOnce(function () {
+			return mockSignedCredentials;
+		} as any);
 
 		const mockContainerClient = {} as ContainerClient;
 
@@ -145,7 +153,9 @@ describe('#constructor', () => {
 			getContainerClient: vi.fn().mockReturnValue(mockContainerClient),
 		} as unknown as BlobServiceClient;
 
-		vi.mocked(BlobServiceClient).mockImplementation(function () { return mockBlobServiceClient; } as any);
+		vi.mocked(BlobServiceClient).mockImplementation(function () {
+			return mockBlobServiceClient;
+		} as any);
 
 		const driver = new DriverAzure({
 			containerName: sample.config.containerName,

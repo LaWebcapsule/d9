@@ -1098,7 +1098,9 @@ describe('Integration Tests', () => {
 				schema: schemas[schema].schema,
 			});
 
-			const itemsServiceCacheClearSpy = vi.spyOn(itemsService.cache, 'clear' as never).mockResolvedValue(() => vi.fn());
+			const itemsServiceCacheClearSpy = vi
+				.spyOn(itemsService.cache as NonNullable<typeof itemsService.cache>, 'clear')
+				.mockResolvedValue(undefined);
 
 			await itemsService.updateBatch(items);
 

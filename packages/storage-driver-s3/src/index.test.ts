@@ -374,7 +374,10 @@ describe('#read', () => {
 		const mockGetObjectCommand = {} as GetObjectCommand;
 
 		vi.mocked(driver['client'].send).mockReturnValue({ Body: sample.stream } as unknown as void);
-		vi.mocked(GetObjectCommand).mockImplementation(function () { return mockGetObjectCommand; } as any);
+
+		vi.mocked(GetObjectCommand).mockImplementation(function () {
+			return mockGetObjectCommand;
+		} as any);
 
 		const stream = await driver.read(sample.path.input, sample.range);
 
@@ -404,7 +407,10 @@ describe('#stat', () => {
 
 	test('Calls #send with HeadObjectCommand', async () => {
 		const mockHeadObjectCommand = {} as HeadObjectCommand;
-		vi.mocked(HeadObjectCommand).mockImplementation(function () { return mockHeadObjectCommand; } as any);
+
+		vi.mocked(HeadObjectCommand).mockImplementation(function () {
+			return mockHeadObjectCommand;
+		} as any);
 
 		await driver.stat(sample.path.input);
 
@@ -499,7 +505,10 @@ describe('#copy', () => {
 
 	test('Executes CopyObjectCommand', async () => {
 		const mockCommand = {} as CopyObjectCommand;
-		vi.mocked(CopyObjectCommand).mockImplementation(function () { return mockCommand; } as any);
+
+		vi.mocked(CopyObjectCommand).mockImplementation(function () {
+			return mockCommand;
+		} as any);
 
 		await driver.copy(sample.path.src, sample.path.dest);
 
@@ -569,7 +578,10 @@ describe('#write', () => {
 
 	test('Waits for upload to be done', async () => {
 		const mockUpload = { done: vi.fn() };
-		vi.mocked(Upload).mockImplementation(function () { return mockUpload; } as any);
+
+		vi.mocked(Upload).mockImplementation(function () {
+			return mockUpload;
+		} as any);
 
 		await driver.write(sample.path.input, sample.stream);
 
@@ -589,7 +601,10 @@ describe('#delete', () => {
 
 	test('Executes DeleteObjectCommand', async () => {
 		const mockDeleteObjectCommand = {} as DeleteObjectCommand;
-		vi.mocked(DeleteObjectCommand).mockImplementation(function () { return mockDeleteObjectCommand; } as any);
+
+		vi.mocked(DeleteObjectCommand).mockImplementation(function () {
+			return mockDeleteObjectCommand;
+		} as any);
 
 		await driver.delete(sample.path.input);
 
@@ -612,7 +627,11 @@ describe('#list', () => {
 
 	test('Calls send with the command', async () => {
 		const mockListObjectsV2Command = {} as ListObjectsV2Command;
-		vi.mocked(ListObjectsV2Command).mockImplementation(function () { return mockListObjectsV2Command; } as any);
+
+		vi.mocked(ListObjectsV2Command).mockImplementation(function () {
+			return mockListObjectsV2Command;
+		} as any);
+
 		vi.mocked(driver['client'].send).mockResolvedValue({} as unknown as void);
 
 		await driver.list(sample.path.input).next();

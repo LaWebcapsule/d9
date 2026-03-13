@@ -1030,7 +1030,10 @@ describe('#uploadChunk', () => {
 		};
 
 		vi.mocked(fetch).mockResolvedValue(mockResponse as unknown as Response);
-		vi.mocked(FormData).mockImplementation(function () { return mockFormData; } as any);
+
+		vi.mocked(FormData).mockImplementation(function () {
+			return mockFormData;
+		} as any);
 	});
 
 	test('Creates FormData object', async () => {

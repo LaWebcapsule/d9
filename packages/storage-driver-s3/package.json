@@ -37,6 +37,7 @@
 	},
 	"devDependencies": {
 		"@ngneat/falso": "catalog:",
+		"@types/node": "catalog:",
 		"@vitest/coverage-v8": "catalog:",
 		"@wbce-d9/tsconfig": "catalog:",
 		"typescript": "catalog:",

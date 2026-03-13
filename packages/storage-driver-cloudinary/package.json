@@ -35,9 +35,10 @@
 		"undici": "7.20.0"
 	},
 	"devDependencies": {
-		"@wbce-d9/tsconfig": "workspace:*",
 		"@ngneat/falso": "catalog:",
+		"@types/node": "catalog:",
 		"@vitest/coverage-v8": "catalog:",
+		"@wbce-d9/tsconfig": "workspace:*",
 		"typescript": "catalog:",
 		"vitest": "catalog:"
 	}

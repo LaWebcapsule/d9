@@ -33,7 +33,11 @@ beforeEach(() => {
 	};
 
 	vi.mocked(axios.getUri).mockReturnValue(sample.url);
-	vi.mocked(URL).mockImplementation(function () { return { hostname: sample.hostname }; } as any);
+
+	vi.mocked(URL).mockImplementation(function () {
+		return { hostname: sample.hostname };
+	} as any);
+
 	vi.mocked(lookup).mockResolvedValue({ address: sample.ip } as LookupAddress);
 	vi.mocked(isIP).mockReturnValue(0);
 });
