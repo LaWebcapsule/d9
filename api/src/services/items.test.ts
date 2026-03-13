@@ -61,6 +61,7 @@ describe('Integration Tests', () => {
 
 	afterEach(() => {
 		tracker.reset();
+		vi.clearAllMocks();
 	});
 
 	describe('createOne', () => {

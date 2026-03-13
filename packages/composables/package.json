@@ -31,7 +31,7 @@
 	"devDependencies": {
 		"@wbce-d9/types": "workspace:*",
 		"@types/lodash-es": "catalog:",
-		"@vitest/coverage-c8": "catalog:",
+		"@vitest/coverage-v8": "catalog:",
 		"@vue/test-utils": "catalog:",
 		"@wbce-d9/tsconfig": "catalog:",
 		"axios": "catalog:",

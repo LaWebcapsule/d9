@@ -110,7 +110,7 @@ describe('#constructor', () => {
 
 	test('Creates blob service client and sets containerClient', () => {
 		const mockSignedCredentials = {} as StorageSharedKeyCredential;
-		vi.mocked(StorageSharedKeyCredential).mockReturnValueOnce(mockSignedCredentials);
+		vi.mocked(StorageSharedKeyCredential).mockImplementationOnce(function () { return mockSignedCredentials; } as any);
 
 		const mockContainerClient = {} as ContainerClient;
 
@@ -118,7 +118,7 @@ describe('#constructor', () => {
 			getContainerClient: vi.fn().mockReturnValue(mockContainerClient),
 		} as unknown as BlobServiceClient;
 
-		vi.mocked(BlobServiceClient).mockReturnValue(mockBlobServiceClient);
+		vi.mocked(BlobServiceClient).mockImplementation(function () { return mockBlobServiceClient; } as any);
 
 		const driver = new DriverAzure({
 			containerName: sample.config.containerName,
@@ -136,30 +136,28 @@ describe('#constructor', () => {
 	});
 
 	test('Allows overriding endpoint with optional setting', () => {
-		test('Creates blob service client and sets containerClient', () => {
-			const mockSignedCredentials = {} as StorageSharedKeyCredential;
-			vi.mocked(StorageSharedKeyCredential).mockReturnValueOnce(mockSignedCredentials);
+		const mockSignedCredentials = {} as StorageSharedKeyCredential;
+		vi.mocked(StorageSharedKeyCredential).mockImplementationOnce(function () { return mockSignedCredentials; } as any);
 
-			const mockContainerClient = {} as ContainerClient;
+		const mockContainerClient = {} as ContainerClient;
 
-			const mockBlobServiceClient = {
-				getContainerClient: vi.fn().mockReturnValue(mockContainerClient),
-			} as unknown as BlobServiceClient;
+		const mockBlobServiceClient = {
+			getContainerClient: vi.fn().mockReturnValue(mockContainerClient),
+		} as unknown as BlobServiceClient;
 
-			vi.mocked(BlobServiceClient).mockReturnValue(mockBlobServiceClient);
+		vi.mocked(BlobServiceClient).mockImplementation(function () { return mockBlobServiceClient; } as any);
 
-			const driver = new DriverAzure({
-				containerName: sample.config.containerName,
-				accountName: sample.config.accountName,
-				accountKey: sample.config.accountKey,
-				endpoint: sample.config.endpoint,
-			});
-
-			expect(BlobServiceClient).toHaveBeenCalledWith(sample.config.endpoint, mockSignedCredentials);
-
-			expect(mockBlobServiceClient.getContainerClient).toHaveBeenCalledWith(sample.config.containerName);
-			expect(driver['containerClient']).toBe(mockContainerClient);
+		const driver = new DriverAzure({
+			containerName: sample.config.containerName,
+			accountName: sample.config.accountName,
+			accountKey: sample.config.accountKey,
+			endpoint: sample.config.endpoint,
 		});
+
+		expect(BlobServiceClient).toHaveBeenCalledWith(sample.config.endpoint, mockSignedCredentials);
+
+		expect(mockBlobServiceClient.getContainerClient).toHaveBeenCalledWith(sample.config.containerName);
+		expect(driver['containerClient']).toBe(mockContainerClient);
 	});
 
 	test('Defaults root path to empty string', () => {

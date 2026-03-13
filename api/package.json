@@ -177,7 +177,7 @@
 		"@types/supertest": "catalog:",
 		"@types/uuid": "catalog:",
 		"@types/wellknown": "catalog:",
-		"@vitest/coverage-c8": "catalog:",
+		"@vitest/coverage-v8": "catalog:",
 		"@wbce-d9/tsconfig": "catalog:",
 		"supertest": "catalog:",
 		"typescript": "catalog:",

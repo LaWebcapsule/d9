@@ -125,7 +125,7 @@ describe('#constructor', () => {
 			bucket: vi.fn().mockReturnValue(mockBucket),
 		} as unknown as Storage;
 
-		vi.mocked(Storage).mockReturnValue(mockStorage);
+		vi.mocked(Storage).mockImplementation(function () { return mockStorage; } as any);
 
 		const driver = new DriverGCS({
 			bucket: sample.config.bucket,
