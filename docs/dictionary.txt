@@ -140,6 +140,7 @@ destructured
 devs
 DigitalOcean
 DigitalOcean's
+d9
 directus
 Directus
 directus_(.*)
