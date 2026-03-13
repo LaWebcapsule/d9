@@ -10,15 +10,13 @@
 
 # d9 — Open Data Platform
 
-**d9** is an open-source fork of [Directus 9](https://github.com/directus/directus) (GPLv3), maintained independently by [La Webcapsule](https://github.com/LaWebcapsule). While Directus 10+ moved to a premium licensing model, d9 preserves a fully open-source data platform with a focus on **performance** and **European regulatory compliance**.
+**d9** is an open-source fork of [Directus 9](https://github.com/directus/directus) (GPLv3), maintained independently by [La Webcapsule](https://github.com/LaWebcapsule). As Directus 10+ is now a premium open-source software, this repository aims to maintain a standard openSource version of Directus 9.
 
 > d9 is not affiliated with, endorsed by, or connected to the Directus core team or Monospace Inc.
 
 ## Why d9?
 
 - **Open-source permanence** — d9 stays GPLv3, forever. No premium gates, no vendor lock-in.
-- **Performance** — Optimized runtime for demanding workloads.
-- **EU regulatory compliance** — Built with European regulatory requirements in mind (GDPR, data sovereignty).
 - **Drop-in compatibility** — Same database schema as Directus 9. Migrate in minutes, not days.
 
 ## Features
