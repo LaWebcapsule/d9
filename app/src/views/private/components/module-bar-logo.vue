@@ -107,13 +107,13 @@ export default defineComponent({
 		width: 35px;
 		height: 35px;
 		margin: 0 auto;
-		background-image: url('../../../assets/sprite.png');
-		background-position: 0px 0px;
-		background-size: 490px 35px;
+		background-image: url('../../../assets/logo-loader.svg');
+		background-size: 35px 35px;
+		background-repeat: no-repeat;
 	}
 
 	.running {
-		animation: 560ms run steps(13) infinite;
+		animation: 1s spin linear infinite;
 	}
 }
 
@@ -130,9 +130,9 @@ export default defineComponent({
 	opacity: 0;
 }
 
-@keyframes run {
+@keyframes spin {
 	100% {
-		background-position: 100%;
+		transform: rotate(360deg);
 	}
 }
 </style>
