@@ -34,10 +34,11 @@
 	},
 	"devDependencies": {
 		"@ngneat/falso": "catalog:",
-		"@vitest/coverage-c8": "catalog:",
+		"@types/node": "catalog:",
+		"@types/semver": "7.5.8",
+		"@vitest/coverage-v8": "catalog:",
 		"@wbce-d9/tsconfig": "catalog:",
 		"typescript": "catalog:",
-		"vitest": "catalog:",
-		"@types/semver": "7.5.8"
+		"vitest": "catalog:"
 	}
 }

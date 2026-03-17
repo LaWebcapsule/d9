@@ -29,7 +29,8 @@
 		"access": "public"
 	},
 	"devDependencies": {
-		"@vitest/coverage-c8": "catalog:",
+		"@types/node": "catalog:",
+		"@vitest/coverage-v8": "catalog:",
 		"@wbce-d9/tsconfig": "catalog:",
 		"typescript": "catalog:",
 		"vitest": "catalog:"

@@ -2,7 +2,7 @@ import type { SchemaOverview } from '@wbce-d9/types';
 import type { Knex } from 'knex';
 import knex from 'knex';
 import { createTracker, MockClient, Tracker } from 'knex-mock-client';
-import type { MockedFunction, SpyInstance } from 'vitest';
+import type { MockedFunction, MockInstance } from 'vitest';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { RecordNotUniqueException } from '../exceptions/database/record-not-unique.js';
 import { ForbiddenException, InvalidPayloadException } from '../exceptions/index.js';
@@ -75,12 +75,12 @@ describe('Integration Tests', () => {
 	describe('Services / Users', () => {
 		let service: UsersService;
 		let mailService: MailService;
-		let superCreateManySpy: SpyInstance;
-		let superUpdateManySpy: SpyInstance;
-		let checkUniqueEmailsSpy: SpyInstance;
-		let checkPasswordPolicySpy: SpyInstance;
-		let checkRemainingAdminExistenceSpy: SpyInstance;
-		let checkRemainingActiveAdminSpy: SpyInstance;
+		let superCreateManySpy: MockInstance;
+		let superUpdateManySpy: MockInstance;
+		let checkUniqueEmailsSpy: MockInstance;
+		let checkPasswordPolicySpy: MockInstance;
+		let checkRemainingAdminExistenceSpy: MockInstance;
+		let checkRemainingActiveAdminSpy: MockInstance;
 
 		beforeEach(() => {
 			service = new UsersService({
@@ -710,7 +710,7 @@ describe('Integration Tests', () => {
 				await expect(promise).resolves.not.toThrow();
 
 				expect(superUpdateManySpy.mock.lastCall![0]).toEqual([1]);
-				expect(superUpdateManySpy.mock.lastCall![1]).toContain({ role: 'invite-role' });
+				expect(superUpdateManySpy.mock.lastCall![1]).toMatchObject({ role: 'invite-role' });
 			});
 		});
 	});
