@@ -17,7 +17,7 @@ author: Eron Powell
 
 <!-- **Skill Level:** {{$frontmatter.skill_level}}\ -->
 
-**Directus Version:** {{$frontmatter.directus_version}}
+**d9 Version:** {{$frontmatter.directus_version}}
 
 <!-- **Tags:** {{$frontmatter.tags.join(", ")}} -->
 
@@ -25,11 +25,11 @@ author: Eron Powell
 
 ## Explanation
 
-Remember, your basic [CRUDS permissions](/configuration/users-roles-permissions/permissions.md#configure-permissions)
+Remember, your basic CRUDS permissions
 define what a role can and can't do to all items in a collection.
-[Custom access permissions](/configuration/users-roles-permissions/permissions.md#configure-custom-permissions) take
+Custom access permissions take
 things a step further and let you define what a role can and can't do to each item in a collection, _based on its
-[field values](/configuration/data-model/fields.md)_.
+field values_.
 
 Workflows are when you use these permissions techniques to create structured stages to content or data creation. In
 simplest terms, it is when you have two or more roles, and you give them different permissions at each stage in the
@@ -38,7 +38,7 @@ content creation process.
 There are an infinite number of possible workflows you could configure. But for this recipe, we will configure a simple
 workflow where `writers` and `editors` work together to create, co-edit and publish `articles`.
 
-![A Workflow]({{CDN_URL}}/docs/v9/configuration/users-roles-permissions/workflows-20220909/workflows-20220909B.webp)
+![A Workflow](/images/workflows-20220909A.webp)
 
 For this recipe, our workflow will have three stages, `draft`, `under review`, and `published`, which will be defined in
 a `status` field.
@@ -53,7 +53,7 @@ a `status` field.
 This whole workflow is created with permissions. All we need to do to create these stages is change the `author` and
 `editor` permissions for each item in `articles` conditionally, based on the value of `status`.
 
-![A Workflow]({{CDN_URL}}/docs/v9/configuration/users-roles-permissions/workflows-20220909/workflows-20220909A.webp)
+![A Workflow](/images/workflows-20220909A.webp)
 
 ## How-To Guide
 
@@ -61,8 +61,8 @@ This whole workflow is created with permissions. All we need to do to create the
 
 To implement a workflow, you'll need:
 
-- An understanding of [permissions](/configuration/users-roles-permissions.md) and [filters](/reference/filter-rules.md)
-  in Directus.
+- An understanding of permissions and filters
+  in d9.
 - A collection with some kind of content. In this recipe, we'll use a collection called `articles`.
 - A field on that collection to validate conditionally. We'll use a `status` field.
 - Two _(or more)_ roles that will work to author content. We'll use `writer` and `editor` roles.
@@ -75,13 +75,13 @@ To implement a workflow, you'll need:
 
 To create a structured workflow for `articles`, follow these steps.
 
-1. First, [create a field](/configuration/data-model/fields.md#create-a-field-standard) to track the article status.
+1. First, create a field to track the article status.
    We'll call this field `status`, but it could be named anything.
-2. [Create a field](/configuration/data-model/fields.md#create-a-field-advanced) with a Dropdown Interface. Name it
+2. Create a field with a Dropdown Interface. Name it
    `status` and add the stages _(`draft`, `under review` and `published`)_ needed for your content creation process.
-3. Next, [create two roles](/configuration/users-roles-permissions/roles.md#create-a-role): `author` and `editor`.
+3. Next, create two roles: `author` and `editor`.
 4. Finally, configure
-   [custom access permissions](/configuration/users-roles-permissions/permissions.md#configure-custom-permissions) for
+   custom access permissions for
    each role based on the value of the `status` field.
    - For the `author` role:
      - Set a filter under **Create > Use Custom > Field Validation** to ensure the author can only create articles with
@@ -135,7 +135,7 @@ explicit set of permissions each role has at each stage.
 
 :::tip Next Steps
 
-Workflows can be further enhanced with custom [Interfaces](/extensions/interfaces.md) as well as
-[flows](/configuration/flows.md).
+Workflows can be further enhanced with custom Interfaces as well as
+flows.
 
 :::

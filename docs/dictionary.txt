@@ -16,7 +16,7 @@
 (C|c)heckboxes
 (C|c)loudinary
 (C|c)loudinary's
-(C|c)odebase
+(C|c)odebase[.-]?(.*)
 (C|c)onfigs?
 (C|c)ustomizable
 (D|d)atacenter
@@ -140,6 +140,8 @@ destructured
 devs
 DigitalOcean
 DigitalOcean's
+d9
+d9[-.](.*)
 directus
 Directus
 directus_(.*)
@@ -236,6 +238,7 @@ middleware
 misconfiguration
 misconfigurations
 Mongo
+mp4
 monorepo's
 more_horiz
 multitenant
@@ -372,6 +375,7 @@ VPC
 Vue
 Vue's
 WebDAV
+Webcapsule
 webhosting
 webpage
 whitelabeling

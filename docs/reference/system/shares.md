@@ -1,5 +1,5 @@
 ---
-description: REST and GraphQL API documentation on using Shares in Directus
+description: REST and GraphQL API documentation on using Shares in d9
 readTime: 5 min read
 pageClass: page-reference
 ---
@@ -67,7 +67,7 @@ The maximum number of times the shared item can be viewed.
 
 ## List Shares
 
-List all shares that exist in Directus.
+List all shares that exist in d9.
 
 ### Query Parameters
 

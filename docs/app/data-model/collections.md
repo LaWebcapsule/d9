@@ -19,21 +19,15 @@ API documentation
 
 ## Overview
 
-<video title="Overview" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/data-model-20220805/collections-20220805A.mp4" type="video/mp4" />
-</video>
 
 Collections are data tables. Typically, you access items within a collection in the [Content Module](/app/content).
 
 ## System Collections
 
-<video title="System Collections" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/collections/collections-20220805/system-collections-20220805A.mp4" type="video/mp4" />
-</video>
 
 System collections store the data and configuration details required to power your project.
 
-Since system collections store information that powers your Directus project. You cannot reconfigure system collections
+Since system collections store information that powers your d9 project. You cannot reconfigure system collections
 or any of their default fields, as any reconfigurations would break your project. However, you _can_ create and
 configure new fields on a system collection. This lets you safely customize your data model as desired.
 
@@ -42,34 +36,31 @@ each system collection is responsible for, as well as where to find relevant App
 
 | System Collection | Purpose                                                                                                                              | APP                                                                               | API                                              |
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- | ------------------------------------------------ |
-| Activity          | Tracks and stores all events within Directus, giving full accountability over everything.                                            | [Activity Log](/configuration/activity-log)                                       | [Activity](/reference/system/activity)           |
-| Collections       | Stores data table & configuration details each and every Collection.                                                                 | [Collections](/configuration/data-model/collections)                              | [Collections](/reference/system/collections)     |
+| Activity          | Tracks and stores all events within d9, giving full accountability over everything.                                            | [Activity Log](/app/activity-log)                                       | [Activity](/reference/system/activity)           |
+| Collections       | Stores data table & configuration details each and every Collection.                                                                 | [Collections](/app/data-model/collections)                              | [Collections](/reference/system/collections)     |
 | Dashboards        | Stores dashboard configuration details and all relationally linked panels.                                                           | [Insights](/app/insights)                                                         | **N/A**                                          |
-| Fields            | Stores configuration details for each field.                                                                                         | [Fields](/configuration/data-model/fields/)                                       | [Fields](/reference/system/fields)               |
+| Fields            | Stores configuration details for each field.                                                                                         | [Fields](/app/data-model/fields)                                       | [Fields](/reference/system/fields)               |
 | Files             | This stores file location from asset storage as well as any data associated with that file.                                          | [File Library](/app/file-library)                                                 | [Files](/reference/files)                        |
-| Flows             | Stores basic logic required for Flows, which enable event-triggered task automation.                                                 | [Flows](/configuration/flows)                                                     | [Flows](/reference/system/flows)                 |
+| Flows             | Stores basic logic required for Flows, which enable event-triggered task automation.                                                 | [Flows](/app/flows)                                                     | [Flows](/reference/system/flows)                 |
 | Folders           | Stores information required for Folders, which provide virtual file asset management.                                                | [Folders](/app/file-library#folders)                                              | [Folders](/reference/system/folders)             |
 | Migrations        | Used by our install/upgrade process to track when migration scripts for a specific release have been run.                            | It has no relevant app functionality.                                             | **N/A**                                          |
 | Notifications     | Stores details about in-app notifications.                                                                                           | [Module Bar](/app/overview#_1-module-bar) and [Sidebar](/app/overview#_4-sidebar) | [Notifications](/reference/system/notifications) |
-| Operations        | Stores information required for Operations, which are a part of [Flows](#flows).                                                     | [Operations](/configuration/flows)                                                | [Operations](/reference/system/operations.md)    |
+| Operations        | Stores information required for Operations, which are a part of [Flows](#flows).                                                     | [Operations](/app/flows)                                                | Operations    |
 | Panels            | This stores information about individual analytics panels, which are displayed on [Dashboards](#dashboards).                         | [Insights](/app/insights)                                                         | **N/A**                                          |
-| Permissions       | This stores the access permissions configured for roles.                                                                             | [Users, Roles & Permissions](/configuration/users-roles-permissions)              | [Permissions](/reference/system/permissions)     |
-| Presets           | This stores details for presets and bookmarks.                                                                                       | [Presents & Bookmarks](/configuration/presets-bookmarks)                          | [Presets](/reference/system/presets)             |
-| Relations         | This stores information about relationships between collections.                                                                     | [Relationships](/configuration/data-model/relationships)                          | [Relations](/reference/system/relations)         |
-| Revisions         | Revisions are changes/edits made to Items. Directus keeps track of edits made, so you're able to revert to a previous state at will. | [Revert an Item](/app/content/items#revert-an-item)                               | [Revisions](/reference/system/revisions)         |
-| Roles             | Stores information about each role created.                                                                                          | [Users, Roles, and Permissions](/configuration/users-roles-permissions)           | [Roles](/reference/system/roles)                 |
+| Permissions       | This stores the access permissions configured for roles.                                                                             | [Users, Roles & Permissions](/app/users-roles-permissions)              | [Permissions](/reference/system/permissions)     |
+| Presets           | This stores details for presets and bookmarks.                                                                                       | [Presents & Bookmarks](/app/presets-bookmarks)                          | [Presets](/reference/system/presets)             |
+| Relations         | This stores information about relationships between collections.                                                                     | [Relationships](/app/data-model/relationships)                          | [Relations](/reference/system/relations)         |
+| Revisions         | Revisions are changes/edits made to Items. d9 keeps track of edits made, so you're able to revert to a previous state at will. | [Revert an Item](/app/content/items#revert-an-item)                               | [Revisions](/reference/system/revisions)         |
+| Roles             | Stores information about each role created.                                                                                          | [Users, Roles, and Permissions](/app/users-roles-permissions)           | [Roles](/reference/system/roles)                 |
 | Sessions          | Stores information about each user session, for system purposes.                                                                     | **N/A**                                                                           | **N/A**                                          |
-| Settings          | Stores all configurations made within **Settings > Project Settings**.                                                               | [Project Settings](/configuration/project-settings)                               | [settings](/reference/system/settings)           |
+| Settings          | Stores all configurations made within **Settings > Project Settings**.                                                               | [Project Settings](/app/project-settings)                               | [settings](/reference/system/settings)           |
 | Shares            | Stores all information regarding data shares.                                                                                        | [Data Sharing](/app/content/shares)                                               |                                                  |
 | Users             | Stores information about each user within the platform.                                                                              | [User Directory](/app/user-directory)                                             | [Users](/reference/system/relations)             |
-| Webhooks          | Stores all information about configured webhooks.                                                                                    | [Webhooks](/configuration/webhooks)                                               | [Webhooks](/reference/system/relations)          |
+| Webhooks          | Stores all information about configured webhooks.                                                                                    | [Webhooks](/app/webhooks)                                               | [Webhooks](/reference/system/relations)          |
 
 ## Create a Collection
 
-<video title="Create a Collection" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/collections/collections-20220805/create-a-collection-20220805A.mp4
 " type="video/mp4" />
-</video>
 
 To create a collection, follow these steps.
 
@@ -79,7 +70,7 @@ To create a collection, follow these steps.
 3. Optional: Make any other configurations as desired.
    - **Singleton** — Toggles whether the collection is a [Singleton](#collection-setup).
    - **Primary Key Field** — Sets the name of the primary key field, defaults to `id`.
-   - **Type** — Sets the [type of ID](/configuration/data-model/fields/#keys-and-ids) to use for this collection.
+   - **Type** — Sets the [type of ID](/app/data-model/fields#keys-and-ids) to use for this collection.
 4. Click <span mi btn>arrow_forward</span> to confirm.
 5. Enable and rename the other Optional System Fields as desired:
    - **Status** — Stores item status.
@@ -99,30 +90,27 @@ displayed with [Collection Naming Translations](#collection-setup).
 
 :::warning Composite Keys
 
-Directus does not currently support composite keys. If your project uses composite keys, you will need to make an
+d9 does not currently support composite keys. If your project uses composite keys, you will need to make an
 adjustment to the data model.
 
 :::
 
 :::warning SQL Views
 
-Directus does not currently support creation of virtual tables via SQL Views.
+d9 does not currently support creation of virtual tables via SQL Views.
 
 :::
 
 ::: tip Database Tables
 
 Remember, a collection is simply a database table. Therefore, you can import or create a table directly in the database
-and it will automatically appear within your Directus project. The first time you manage that table, a
+and it will automatically appear within your d9 project. The first time you manage that table, a
 `directus_collections` record will be created with default values.
 
 :::
 
 ## Toggle Collection Visibility
 
-<video title="Hide a Collection" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/collections/collections-20220805/toggle-collection-visibility-20220805A.mp4" type="video/mp4" />
-</video>
 
 To toggle whether a collection is hidden by default in the Content Module, follow these steps.
 
@@ -132,7 +120,7 @@ To toggle whether a collection is hidden by default in the Content Module, follo
 
 :::tip
 
-Assuming a user has [access permissions](/configuration/users-roles-permissions), hidden collections can still be
+Assuming a user has [access permissions](/app/users-roles-permissions), hidden collections can still be
 viewed. They must right-click on the Navigation Bar and choose <span mi icon>visibility</span> **Show Hidden
 Collections**.
 
@@ -140,9 +128,6 @@ Collections**.
 
 ## Create a Folder
 
-<video title="Create a Folder" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/collections/collections-20220805/create-a-folder-20220805A.mp4" type="video/mp4" />
-</video>
 
 Folders allow you to sub-nest and group how collections are displayed. This feature simply changes how the collections
 are displayed under **Settings > Data Model** and in the Content Module. It has no impact on the data model. To create a
@@ -156,9 +141,6 @@ folder, follow these steps.
 
 ## Toggle Folder Display
 
-<video title="Toggle Folder Display" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/collections/collections-20220805/toggle-folder-display-20220805A.mp4" type="video/mp4" />
-</video>
 
 To toggle folder display, follow these steps.
 
@@ -170,9 +152,6 @@ To toggle folder display, follow these steps.
 
 ## Sort and Nest Collections
 
-<video title="Configure a Collection" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/collections/collections-20220805/sort-and-nest-collections.mp4" type="video/mp4" />
-</video>
 
 To sort and nest collections in **Settings > Data Model** and **Content Module**, follow these steps.
 
@@ -182,9 +161,6 @@ To sort and nest collections in **Settings > Data Model** and **Content Module**
 
 ## Configure a Collection
 
-<video title="Configure a Collection" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/collections/collections-20220805/configure-a-collection-20220805A.mp4" type="video/mp4" />
-</video>
 
 To configure a collection, follow these steps.
 
@@ -201,19 +177,13 @@ To configure a collection, follow these steps.
 
 ### Fields & Layout
 
-<video title="Fields and Layout" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/collections/collections-20220805/fields-and-layout-20220805A.mp4" type="video/mp4" />
-</video>
 
 This section allows you to create and configure fields, as well as configure how fields are displayed on the
 [Item Details Page](/app/content/items). To learn more, please see the documentation on
-[fields](/configuration/data-model/fields/).
+[fields](/app/data-model/fields).
 
 ### Collection Setup
 
-<video title="Collection Setup" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/collections/collections-20220805/collection-setup-20220805A.mp4" type="video/mp4" />
-</video>
 
 These controls allow you to modify how the collection is displayed within the Content Module.
 
@@ -229,13 +199,13 @@ These controls allow you to modify how the collection is displayed within the Co
 - **Singleton** — Toggle to bypass the [Collection Page](/app/content/collections) and take users to the
   [Item Details Page](/app/content/items).
 - **Collection Naming Translations** — Translate the collection name across multiple languages. When the default
-  language is changed in [Project Settings](/configuration/project-settings#general) or
+  language is changed in [Project Settings](/app/project-settings#general) or
   [User Details Page](/app/user-directory#user-details-page), the relevant translation, if any exists, will be used
   throughout the app.
 
 :::tip Collection Naming Translations
 
-By default, Directus uses the [Title Formatter](/getting-started/glossary#title-formatter) to display collection keys as
+By default, d9 uses the [Title Formatter](/getting-started/glossary#title-formatter) to display collection keys as
 human readable names, but you can also use translations to explicitly rename more technical table keys.
 
 :::
@@ -248,9 +218,6 @@ A collection that only contains one single item. For example, a website's **Abou
 
 ### Archive
 
-<video title="Archive" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/collections/collections-20220805/archive-20220805A.mp4" type="video/mp4" />
-</video>
 
 Selects a field to handle archiving items. This provides a _soft-delete_ functionality for items in a collection.
 Archived items will still exist in the collection and database, but are filtered within the Data Studio. To configure an
@@ -286,9 +253,6 @@ filtered out. This gives you the flexibility to manage archived items however yo
 
 ### Sort Field
 
-<video autoplay playsinline muted loop controls title="Batch Edit Items">
-	<source src="{{CDN_URL}}/docs/v9/app-guide/content/content-collections/content-collections-20220415A/manually-sort-items-20220415A.mp4" type="video/mp4" />
-</video>
 
 The sort feature enables users to [manually sort Items](/app/content/collections#manually-sort-items) within the Data
 Studio. This is typically shown on the **Content Module > Collection Page**. It can also be used for sorting items
@@ -300,7 +264,7 @@ unselectable in the Sort Field dropdown.
 
 To configure a sort field, follow these steps.
 
-1. [Create a Field](/configuration/data-model/fields/#create-a-field-standard) with an `INTEGER` data type.
+1. [Create a Field](/app/data-model/fields#create-a-field-standard) with an `INTEGER` data type.
 2. Choose a field from the dropdown under **Settings > Data Model > [Collection] > Sort**.
 3. Click <span mi btn>check</span> to confirm.
 
@@ -309,7 +273,7 @@ Once you sort field is configured, you may want to learn how to
 
 ::: tip Automatic Setup
 
-When you [create a Collection](/configuration/data-model/collections#create-a-collection), you have the option of
+When you [create a Collection](/app/data-model/collections#create-a-collection), you have the option of
 creating a **Sort** field. If you choose to include this field, the collection's sort settings will automatically be
 configured for you.
 
@@ -330,11 +294,8 @@ You can also set this field to be **Hidden** so it doesn't show up within the It
 
 ### Accountability
 
-<video title="Accountability" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/collections/collections-20220805/acountability-20220805A.mp4" type="video/mp4" />
-</video>
 
-By default, your Directus Project tracks all [activity](/reference/system/activity) and
+By default, your d9 Project tracks all [activity](/reference/system/activity) and
 [revisions](/reference/system/revisions) for collections. However, you can override this and choose what data is
 tracked.
 
@@ -353,9 +314,6 @@ Accountability is a log of _who does what_ in your project. It is for your team'
 
 ### Duplication
 
-<video title="Duplication" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/collections/collections-20220805/duplicate-20220805A.mp4" type="video/mp4" />
-</video>
 
 The **Save as Copy** option on the Item Details Page offers a way to effectively duplicate the current item. Since there
 may be unique or relational data within the item, it's important to control exactly what will be copied. Duplication
@@ -365,9 +323,6 @@ lets you configure which parent & relational field values will be copied when yo
 
 ## Delete a Collection
 
-<video title="Delete a Collection" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/data-model/collections/collections-20220805/delete-a-collection-20220805A.mp4" type="video/mp4" />
-</video>
 
 To delete a collection, follow these steps.
 

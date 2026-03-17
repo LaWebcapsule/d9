@@ -3,10 +3,6 @@
 > The Shares utility enables you to share an Item with anyone, regardless of their permissions, even if they are not
 > users within the project.
 
-<video autoplay playsinline muted loop controls>
-<source src="{{CDN_URL}}/docs/v9/app-guide/content/data-sharing/data-sharing-20220217A/data-shares-20220217A.mp4" type="video/mp4" />
-<p>Your browser is not displaying the video for some reason. Here's a <a href="{{CDN_URL}}/docs/v9/app-guide/content/data-sharing/data-sharing-20220217A/data-shares-20220217A.mp4">link to the video</a> instead.</p>
-</video>
 
 <!--
 @TODO
@@ -33,17 +29,13 @@ permissions. We welcome any [pull-requests](/contributing/introduction) to addre
 
 ::: warning Users, Roles and Permissions!
 
-You will need to understand how [Users, Roles, and Permissions](/configuration/users-roles-permissions) work in Directus
+You will need to understand how [Users, Roles, and Permissions](/app/users-roles-permissions) work in d9
 to configure Shares properly.
 
 :::
 
 ## How It Works
 
-<video autoplay playsinline muted loop controls>
-<source src="{{CDN_URL}}/docs/v9/app-guide/content/data-sharing/data-sharing-20220217A/how-shares-work-20220217A.mp4" type="video/mp4" />
-<p>If your browser is not displaying the video for some reason, here's a <a href="{{CDN_URL}}/docs/v9/app-guide/content/data-sharing/data-sharing-20220217A/how-shares-work-20220217A.mp4">link to the video</a> instead.</p>
-</video>
 
 1. Navigate to the Content Module.
 2. Navigate to the Collection of the Item you want to share.
@@ -60,7 +52,7 @@ to configure Shares properly.
    your new Share under **Shares** in the sidebar.
 8. Click the <span mi icon>more_horiz</span> button on the right side of your Share.
 
-![copy send edit delete shares menu]({{CDN_URL}}/docs/v9/app-guide/content/data-sharing/data-sharing-20220217A/copy-send-edit-delete-shares-menu-20220217A.webp)
+![copy send edit delete shares menu](/images/Copy-send-edit-delete-shares-menu-20220217A.webp)
 
 9. Here you have 4 options:
    - **Copy Link** – Creates a hyperlink that you can copy and paste.
@@ -72,7 +64,7 @@ Once the link is opened by a user, a custom page displaying the Shared Item will
 
 ::: warning Logout to test links
 
-If you open a Share link while logged in to Directus, it will redirect to the Item in the Directus App. When testing a
+If you open a Share link while logged in to d9, it will redirect to the Item in the d9 App. When testing a
 Share, make sure to log out of the app before opening the link, or simply open the link in another browser or incognito
 tab.
 
@@ -80,7 +72,7 @@ tab.
 
 ## Share Options Menu
 
-![Share Options Menu]({{CDN_URL}}/docs/v9/app-guide/content/data-sharing/data-sharing-20220217A/share-options-menu-20220217A.webp)
+![Share Options Menu](/images/share-options-menu-20220217A.webp)
 
 - **Name** – Adds a name to describe the Share.
 - **Role** – [Assigns a Role](#assigning-a-role) from which the Share will inherit permissions.
@@ -104,7 +96,7 @@ You can share any Item you want. However, Users with other Roles will likely hav
 Any Share will inherit the same read permissions as the Role it was associated with in the Share Options Menu.
 
 This system allows for absolutely granular configuration options on Shares... _but it also means you'll need to
-understand [Users, Roles, and Permissions](/configuration/users-roles-permissions) thoroughly to use Shares properly_.
+understand [Users, Roles, and Permissions](/app/users-roles-permissions) thoroughly to use Shares properly_.
 Here are some highlights of what you can do:
 
 - Set the Collections a Role can view or share.
@@ -126,7 +118,7 @@ linked Collections.
 The Role option in the [Share Options Menu](#share-options-menu) lets you associate a Role to the Share. The Share will
 then inherit permissions of that Role.
 
-![Select Role for Share]({{CDN_URL}}/docs/v9/app-guide/content/data-sharing/data-sharing-20220217A/select-existing-role-menu-20220217A.webp)
+![Select Role for Share](/images/select-existing-role-menu-20220217A.webp)
 
 ### Assign an Existing Role
 
@@ -141,7 +133,7 @@ _If your Role has the correct permissions configured_, you can create a new Role
 in the Share Options Menu. However, you will still need to navigate to **Settings > Roles and Permissions > [Role
 Name]** to configure any read permissions.
 
-![Creating / Editing a Role within Shares]({{CDN_URL}}/docs/v9/app-guide/content/data-sharing/data-sharing-20220217A/creating-and-edit-roles-menu-20220217A.webp)
+![Creating / Editing a Role within Shares](/images/creating-and-edit-roles-menu-20220217A.webp)
 
 ### Create a New Role
 

@@ -9,14 +9,14 @@ readTime: 7 min read
 > are the individual accounts for logging in to the App. Each User belongs to a [Role](/getting-started/glossary#roles)
 > which defines its [Permissions](/getting-started/glossary#permissions).
 
-![User Directory Page]({{CDN_URL}}/docs/v9/app-guide/user-directory/user-directory-20220222A/user-directory-20220222A.webp)
+![User Directory Page](/images/user-directory-20220222A.webp)
 
 <!-- @TODO getting-started > learn-directus
 
 :::tip Before You Begin
 
 To use this Module effectively, you will need to understand
-[Users, Roles and Permissions](/configuration/users-roles-permissions.md).
+Users, Roles and Permissions.
 
 :::
 -->
@@ -27,7 +27,7 @@ This Module is a management system that enables one to view, invite, create, edi
 information. Users can be created directly in the app, or invited to join via email.
 
 When a User is created, they must also be assigned a Role. This Role defines the User's data access permissions within
-Directus. In other words, it determines what a User can see and do inside the app.
+d9. In other words, it determines what a User can see and do inside the app.
 
 The User Directory is composed of two pages: The User Directory Page and the User Details Page. It has all the same
 features and functionality as the [Content Module](/app/content/collections) such as manual and automatic sorting, batch
@@ -35,12 +35,7 @@ edit/delete/archive, import/export from files, etc.
 
 ## User Directory Page
 
-<video title="User Directory Options" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/app-guide/user-directory/user-directory-20220222A/user-directory-options-20220222A.mp4" />
-	<p>
-		Your browser is not displaying the video for some reason. Here's a <a href="{{CDN_URL}}/docs/v9/app-guide/user-directory/user-directory-20220222A/user-directory-options-20220222A.mp4">link to the video</a> instead.
-	</p>
-</video>
+
 
 The User Directory Page lists all Users in a Project, with a navigation that allows quick access to Users by Role. This
 page has the same functionality as the [Collection Page](/app/content/collections).
@@ -51,9 +46,9 @@ page has the same functionality as the [Collection Page](/app/content/collection
 - **Sort Direction** — Toggles ascending & descending sort order.
 - **Search** — Enables classic type-based searching.
 - **Filter** — Enables advanced query-based search.
-- <span mi btn sec>person_add</span> — [Invite people](/configuration/users-roles-permissions#inviting-a-user) to become
+- <span mi btn sec>person_add</span> — [Invite people](/app/users-roles-permissions#inviting-a-user) to become
   Users via email.
-- <span mi btn>add</span> — [Create User](/configuration/users-roles-permissions#creating-a-user) manually.
+- <span mi btn>add</span> — [Create User](/app/users-roles-permissions#creating-a-user) manually.
 
 _The following are only visible once Users are selected._
 
@@ -62,19 +57,19 @@ _The following are only visible once Users are selected._
 
 ### Layout Options
 
-![User Directory Layout Options]({{CDN_URL}}/docs/v9/app-guide/user-directory/user-directory-20220222A/user-directory-layout-options-20220222A.webp)
+![User Directory Layout Options](/images/user-directory-layout-options-20220222A.webp)
 
 The **Sidebar > Layout Options** _(denoted by <span mi icon>layers</span> when Sidebar is minimized)_ allows you to
 adjust how Users are displayed on the User Directory. To learn more, see [Layouts](/app/layouts).
 
 ## User Details Page
 
-![The User Page]({{CDN_URL}}/docs/v9/app-guide/user-directory/user-directory-20220222A/user-profile-20220222A.webp)
+![The User Page](/images/user-profile-20220222A.webp)
 
 A User's profile page can be accessed from the User Directory or by clicking the User Menu at the bottom of the
 [Module Bar](/app/overview#_1-module-bar). The profile page has the same features and functionality as the
 [Item Page](/app/content/items). Administrators can add and customize Fields under
-[Settings > Data Model > Directus Users](/configuration/data-model), but the following are available by default.
+[Settings > Data Model > d9 Users](/app/data-model), but the following are available by default.
 
 - **First Name** — The given name.
 - **Last Name** — The family/surname.
@@ -88,7 +83,7 @@ A User's profile page can be accessed from the User Directory or by clicking the
 
 ### User Preferences
 
-![User Preferences]({{CDN_URL}}/docs/v9/app-guide/user-directory/user-directory-20220222A/user-preferences-20220222A.webp)
+![User Preferences](/images/user-preferences-20220222A.webp)
 
 - **Language** — The preferred App language/locale.
 - **Theme** — Light or Dark mode (or based on system preferences).
@@ -97,7 +92,7 @@ A User's profile page can be accessed from the User Directory or by clicking the
 
 ### Admin Options
 
-![Admin Options]({{CDN_URL}}/docs/v9/app-guide/user-directory/user-directory-20220222A/admin-options-20220222A.webp)
+![Admin Options](/images/admin-options-20220222A.webp)
 
 - **Status** — Sets User status as Draft, Invited, Active, Suspended, Archived.
 - **Role** — Defines the User's Role.
@@ -107,7 +102,7 @@ A User's profile page can be accessed from the User Directory or by clicking the
 
 ### Read-only Info
 
-![User Profile Sidebar Information]({{CDN_URL}}/docs/v9/app-guide/user-directory/user-directory-20220222A/user-profile-sidebar-information-20220309A.webp)
+![User Profile Sidebar Information](/images/user-profile-sidebar-information-20220309A.webp)
 
 Information in the Sidebar _(denoted by <span mi icon dark>info</span> when Sidebar is minimized)_ also includes the
 following read-only details:
@@ -118,12 +113,7 @@ following read-only details:
 
 ## View a User
 
-<video autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/app-guide/user-directory/user-directory-20220222A/viewing-a-user-20220222A.mp4" />
-	<p>
-		Your browser is not displaying the video for some reason. Here's a <a href="{{CDN_URL}}/docs/v9/app-guide/user-directory/user-directory-20220222A/viewing-a-user-20220222A.mp4">link to the video</a> instead.
-	</p>
-</video>
+
 
 Users are referenced throughout the app, often for accountability purposes. Hovering over a User in this context will
 provide a popover with basic information. Clicking that popover will navigate you to a view of that User's profile page.

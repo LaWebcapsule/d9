@@ -1,5 +1,5 @@
 ---
-description: REST and GraphQL API documentation on the Extensions collection in Directus.
+description: REST and GraphQL API documentation on the Extensions collection in d9.
 readTime: 1 min read
 pageClass: page-reference
 ---

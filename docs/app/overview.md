@@ -8,13 +8,13 @@ readTime: 3 min read
 > The App is a no-code presentation layer for your data, content, and assets. It uses an intuitive left-to-right visual
 > hierarchy for general organization and navigation.
 
-<img src="{{CDN_URL}}/docs/v9/app-guide/overview/app-overview-20220810A.svg" alt="Directus Application Overview" class="no-shadow" />
+<img src="/images/app-overview-d9.svg" alt="d9 Application Overview" class="no-shadow" />
 
 ## 1. Module Bar
 
 The leftmost section of the App is the module bar, which includes the:
 
-- **Project Logo** — Displays your configured project logo and project color (defaults to the Directus logo and color).
+- **Project Logo** — Displays your configured project logo and project color (defaults to the d9 logo and color).
   If configured, clicking this component will navigate to the Project URL. During platform activity, an indeterminate
   progress indicator will also be shown here.
 - **Module Navigation** — Allows navigating between the different modules your user has access to. Customizing the

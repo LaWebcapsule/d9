@@ -12,20 +12,20 @@ readTime: 3 min read
 
 :::tip Before You Begin
 
-We recommend you read through the [Quickstart Guide](/getting-started/quickstart.md) to get an overview of the platform
-first, then see our guide on the [Collection Page](/app/content/collections.md) so you're familiar with its features and
+We recommend you read through the Quickstart Guide to get an overview of the platform
+first, then see our guide on the Collection Page so you're familiar with its features and
 functionalities.
 
 :::
 
 :::tip Learn More
 
-To manage Presets and Bookmarks programmatically, see our [API guide on Presets](/reference/system/presets.md).
+To manage Presets and Bookmarks programmatically, see our API guide on Presets.
 
 :::
 
-Remember, a [Collection Page](/app/content/collections.md) enables you to customize how its items are presented. That
-is, it lets you sort, search, or filter items and even change [Layouts](/app/layouts.md). In some cases, you may need to
+Remember, a Collection Page enables you to customize how its items are presented. That
+is, it lets you sort, search, or filter items and even change Layouts. In some cases, you may need to
 apply the same display adjustments again and again. Presets save these adjustments, like a snapshot. You can create
 presets for all project collections, as well as `directus_activity`, `directus_files` and `directus_users`.
 
@@ -33,9 +33,6 @@ Admins can access and manage all presets under **Settings > Presets and Bookmark
 
 ## Create a Preset
 
-<video title="Create a Preset" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/presets-bookmarks/presets-bookmarks-20220819/create-a-preset-20220819B.mp4" type="video/mp4" />
-</video>
 
 There are two types or presets, Defaults and Bookmarks.
 
@@ -59,7 +56,7 @@ becomes a Bookmark. If **Name** is left blank, the preset will be a Default. To 
    - **Scope** — Defines which users have access to this preset.
    - **Layout** — Selects a Layout for the preset, which is adjusted from the Sidebar.
    - **Name** — Sets a name, which determines if the preset is a Default or Bookmark. Note that this field supports
-     [Translation Strings](/configuration/translation-strings.md).
+     Translation Strings.
 4. Scroll down to the **Layout Preview** section and make any other adjustments or configurations as desired. Each
    preset saves all of the information needed to recreate this Layout Preview, just as it is shown.
 5. Click <span mi btn>check</span> to confirm.
@@ -73,9 +70,6 @@ is: User, then Role, then Global.
 
 ## Edit a Preset
 
-<video title="Edit a Preset" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/presets-bookmarks/presets-bookmarks-20220819/edit-a-preset-20220819A.mp4" type="video/mp4" />
-</video>
 
 1. Navigate to **Settings > Presets & Bookmarks > [preset]**.
 2. Reconfigure your preset as desired.
@@ -83,9 +77,6 @@ is: User, then Role, then Global.
 
 ## Delete a Preset
 
-<video title="Delete a Preset" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/presets-bookmarks/presets-bookmarks-20220819/delete-a-preset-20220819A.mp4" type="video/mp4" />
-</video>
 
 1. Navigate to **Settings > Presets & Bookmarks > [preset]**.
 2. Click <span mi btn dngr>delete</span> in the page header and a popup will appear. Click **Confirm**.

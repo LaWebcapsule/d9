@@ -1,5 +1,5 @@
 ---
-description: REST and GraphQL API documentation on the Folders collection in Directus.
+description: REST and GraphQL API documentation on the Folders collection in d9.
 readTime: 4 min read
 pageClass: page-reference
 ---
@@ -36,7 +36,7 @@ Parent folder. Many-to-one to folders (recursive).
 
 ## List Folders
 
-List all folders that exist in Directus.
+List all folders that exist in d9.
 
 ### Query Parameters
 
@@ -82,7 +82,7 @@ query {
 
 ## Retrieve a Folder
 
-List all folders that exist in Directus.
+List all folders that exist in d9.
 
 ### Query Parameters
 

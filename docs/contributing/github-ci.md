@@ -1,13 +1,13 @@
 ---
 description:
-  This guide explains how to publish a forked version of Directus on NPM, Dockerhub and GHCR. You need to first create a
+  This guide explains how to publish a forked version of d9 on NPM, Dockerhub and GHCR. You need to first create a
   fork.
 readTime: 2 min read
 ---
 
 # GitHub CI
 
-> This guide explains how to publish a forked version of Directus on NPM, Dockerhub and GHCR. You need to first
+> This guide explains how to publish a forked version of d9 on NPM, Dockerhub and GHCR. You need to first
 > [create a fork](/contributing/running-locally)
 
 ::: warning Using a fork in production is neither supported nor recommended.

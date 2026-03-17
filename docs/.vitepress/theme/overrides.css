@@ -23,10 +23,15 @@
 }
 
 /**
- * Make logo size of the sidebar
+ * Logo sizing
  * -------------------------------------------------------------------------- */
 .VPNav .VPNavBar .VPNavBarTitle .logo {
-	height: unset;
+	height: 36px;
+	width: auto;
+}
+.VPSidebar .VPSidebarNav .logo {
+	height: 36px;
+	width: auto;
 }
 
 /**

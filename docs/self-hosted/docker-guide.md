@@ -1,5 +1,5 @@
 ---
-description: How to host Directus on Docker.
+description: How to host d9 on Docker.
 readTime: 3 min read
 ---
 
@@ -13,8 +13,8 @@ problems. If you can't or don't want to use Docker, we also publish an
 
 :::
 
-Directus is published to [Docker Hub]({{DOCKER_HUB_URL}}) under `directus/directus`. To use the
-latest Directus image from Docker Hub, run:
+d9 is published to [Docker Hub]({{DOCKER_HUB_URL}}) under `directus/directus`. To use the
+latest d9 image from Docker Hub, run:
 
 ```bash
 # Make sure to change sensitive values (KEY, SECRET, ...) in production
@@ -27,13 +27,13 @@ docker run \
 
 ### Installing Specific Versions
 
-To stick to a more specific version of Directus you can use one of the following tags:
+To stick to a more specific version of d9 you can use one of the following tags:
 
 - Full version, e.g. `9.0.0`
 - Minor releases, e.g. `9.0`
 - Major releases, e.g. `9`
 
-To use a specific version of Directus, run:
+To use a specific version of d9, run:
 
 ```bash
 # Make sure to change sensitive values (KEY, SECRET, ...) in production
@@ -59,7 +59,7 @@ ADMIN_PASSWORD="d1r3ctu5"
 Containers are ephemeral, and this means that whenever you stop a container, all the data associated with it is going to
 be removed [unless you persist them](https://docs.docker.com/storage) when creating your container.
 
-Directus image by default
+d9 image by default
 [will use the following locations]({{GITHUB_URL}}/blob/main/docker/Dockerfile#L56-L60) for
 data persistence (note that these can be changed through environment variables)
 
@@ -142,7 +142,7 @@ networks:
 
 ### Updating With Docker Compose
 
-If you are not using the `latest` tag for the Directus image you need to adjust your `docker-compose.yml` file to
+If you are not using the `latest` tag for the d9 image you need to adjust your `docker-compose.yml` file to
 increment the tag version number, e.g.:
 
 ```diff
@@ -162,10 +162,10 @@ started you will be on the latest version (or the version you specified).
 
 ## Supported Databases
 
-The Directus Docker Image contains all optional dependencies supported in the API. This means the Docker image can be
+The d9 Docker Image contains all optional dependencies supported in the API. This means the Docker image can be
 used with most of the supported databases and storage adapters without having to create a custom image.
 
-To run Directus, you currently need one of the following databases:
+To run d9, you currently need one of the following databases:
 
 | Database                              | Version     |
 | ------------------------------------- | ----------- |
@@ -186,7 +186,7 @@ to be enabled\
 ::: warning OracleDB
 
 OracleDB's Node client (`node-oracledb`) requires a couple more native dependencies, and specific configurations in
-order to run. The official Directus Docker image does not include these dependencies. See
+order to run. The official d9 Docker image does not include these dependencies. See
 [https://blogs.oracle.com/opal/dockerfiles-for-node-oracledb-are-easy-and-simple](https://blogs.oracle.com/opal/dockerfiles-for-node-oracledb-are-easy-and-simple)
 for more information on what to include for OracleDB.
 

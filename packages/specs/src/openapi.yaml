@@ -1,16 +1,16 @@
 openapi: 3.0.1
 info:
-  title: Directus
+  title: d9
   description: A real-time API and App dashboard for managing SQL database content.
   contact:
-    email: contact@directus.io
+    email: support@webcapsule.io
   license:
     name: GPL-3.0
     url: 'https://www.gnu.org/licenses/gpl-3.0.html'
   version: 9.0.0
 externalDocs:
-  description: Directus Docs
-  url: 'https://docs.directus.io'
+  description: d9 Docs
+  url: 'https://github.com/LaWebcapsule/directus9/tree/main/docs'
 tags:
   - name: Activity
     description:

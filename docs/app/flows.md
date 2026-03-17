@@ -1,18 +1,18 @@
 ---
 description:
-  Flows enable custom, event-driven data processing and task automation within Directus. Each flow is composed of one
+  Flows enable custom, event-driven data processing and task automation within d9. Each flow is composed of one
   trigger, followed by a series of operations.
 readTime: 5 min read
 ---
 
 # Flows
 
-> Flows enable custom, event-driven data processing and task automation within Directus. Each flow is composed of one
+> Flows enable custom, event-driven data processing and task automation within d9. Each flow is composed of one
 > trigger, followed by a series of operations.
 
 :::tip Before You Begin
 
-Please be sure to see the [Quickstart Guide](/getting-started/quickstart.md) to get a basic overview of the platform.
+Please be sure to see the Quickstart Guide to get a basic overview of the platform.
 
 :::
 
@@ -55,35 +55,34 @@ Async/Sync ->
 
 ## What's a Flow?
 
-![What's a Flow?]({{CDN_URL}}/docs/v9/configuration/flows/flows/flows-20220603A/whats-a-flow-20220603A.webp)
+![What's a Flow?](/images/whats-a-flow-20220603A.webp)
 
 <!--
 <video title="What's a Flow" autoplay playsinline muted loop controls>
 <source src="" type="video/mp4" />
-</video>
 -->
 
 Each flow is made up of three elements: A trigger, operations, and a data chain.
 
 ### **Triggers**
 
-Each flow begins with a [trigger](/configuration/flows/triggers), which defines the action or event that starts the
+Each flow begins with a [trigger](/app/flows/triggers), which defines the action or event that starts the
 Flow. This action or event could be some type of transaction within the app, an incoming webhook, a cron job, etc.
 
 ### Operations
 
-An [operation](/configuration/flows/operations) is an action or process performed within the flow. These enable you to
+An [operation](/app/flows/operations) is an action or process performed within the flow. These enable you to
 manage data: _send off emails, push in-app notifications, send webhooks, and beyond_.
 
 To put it in conceptual terms, operations do three things:
 
-- **Get data** from Directus or another outside service.
+- **Get data** from d9 or another outside service.
 - **Process data** a.k.a. transform it, validate it, or whatever.
-- **Send data** to Directus or another outside service.
+- **Send data** to d9 or another outside service.
 
 :::tip Developers
 
-You can even develop your own [custom operations](/extensions/operations.md) to fit any use-case.
+You can even develop your own custom operations to fit any use-case.
 
 :::
 
@@ -98,7 +97,7 @@ with [data chain variables](#data-chain-variables).
 
 Not every operation that executes in a flow does so successfully. In some cases, your operations are going to fail.
 Perhaps an operation tried to access data that doesn't exist, or a webhook operation fails for some reason, or perhaps
-you set a [condition](/configuration/flows/operations.md#condition) operation, which _fails by design_ when its
+you set a condition operation, which _fails by design_ when its
 condition is not met.
 
 These kinds of failed operations do not immediately stop your flow. Instead, flows let you implement
@@ -115,9 +114,6 @@ create a flow, which we discuss in the next section.
 
 ## Configure A Flow
 
-<video autoplay playsinline muted loop controls title="Create a Flow">
-	<source src="{{CDN_URL}}/docs/v9/configuration/flows/flows/flows-20220603A/create-a-flow-20220603A.mp4" type="video/mp4" />
-</video>
 
 ### Create a Flow
 
@@ -131,7 +127,7 @@ create a flow, which we discuss in the next section.
 
 :::tip
 
-To learn more, see the section below on [Logs](#logs) as well as the [Activity Log](/configuration/activity-log.html)
+To learn more, see the section below on [Logs](#logs) as well as the Activity Log
 documentation.
 
 :::
@@ -139,7 +135,7 @@ documentation.
 ### Configure a Trigger
 
 3. Click <span mi btn>arrow_forward</span> to navigate to **Trigger Setup**. Select a
-   [trigger](/configuration/flows/triggers) type and configure as desired.
+   [trigger](/app/flows/triggers) type and configure as desired.
 4. Click <span mi btn>done</span> in the menu header to confirm.
 
 You'll now see your trigger in an empty grid area. Its time to start adding operations.
@@ -147,8 +143,8 @@ You'll now see your trigger in an empty grid area. Its time to start adding oper
 ### Configure an Operation
 
 5. On the trigger panel, click <span mi>add</span> and the **Create Operation** side drawer will open.
-6. Choose a **Name**, an [operation](/configuration/flows/operations) type, and configure as desired.\
-   Directus will convert the name into a unique operation key, used on the [data chain](#the-data-chain).\
+6. Choose a **Name**, an [operation](/app/flows/operations) type, and configure as desired.\
+   d9 will convert the name into a unique operation key, used on the [data chain](#the-data-chain).\
    If you don't choose a name, the system will auto-generate a name and key for you.
 7. Next, click <span mi btn>done</span> in the page header to confirm and return to the flow grid area.
 8. From here, you can make the following optional configurations:
@@ -195,11 +191,6 @@ Now that we know how to create and configure a flow, it's time to get a firmer u
 
 ## The Data Chain
 
-<!--
-<video title="The data chain" autoplay playsinline muted loop controls>
-<source src="{{CDN_URL}}/docs/v9/" type="video/mp4" />
-</video>
--->
 
 Remember, each flow creates its own JSON object to store any data generated.
 
@@ -261,11 +252,6 @@ Remember, `$trigger`, `$accountability`, and `$last` begin with `$`, but not `op
 
 ## Data Chain Variables
 
-<!--
-<video title="Use data chain Keys as Variables" autoplay playsinline muted loop controls>
-<source src="{{CDN_URL}}/docs/v9/" type="video/mp4" />
-</video>
--->
 
 While [configuring your operations](#configure-an-operation), you can use keys from the data chain as variables to
 access data. Simply wrap the variable with quotes and _double mustaches_. For example:
@@ -309,8 +295,8 @@ You **cannot** pass any type of computation using double-moustache syntax.
 
 :::tip
 
-To perform computations on flow data, use the [script operation](/configuration/flows/operations.md#script) or a
-[webhook](/configuration/flows/operations.md#webhook).
+To perform computations on flow data, use the script operation or a
+webhook.
 
 :::
 
@@ -318,17 +304,9 @@ Certain operations use dropdowns, toggles, checkboxes, and other input options. 
 input raw values directly with [Toggle to Raw Editor](#configure-an-operation). You can use double-moustache syntax to
 access data dynamically in these input options as well.
 
-<!--
-<video autoplay playsinline muted loop controls title="">
-	<source src="{{CDN_URL}}/docs/v9/configuration/flows/flows/" type="video/mp4" />
-</video>
--->
 
 ## Logs
 
-<video autoplay playsinline muted loop controls title="">
-	<source src="{{CDN_URL}}/docs/v9/configuration/flows/flows/flows-20220603A/logs-20220603A.mp4" type="video/mp4" />
-</video>
 
 Accessible from the sidebar, logs store information for each flow execution. Each log will display information from
 triggers as well as each operation in the flow. To access a flow's logs, follow these steps.
@@ -358,7 +336,7 @@ because `$accountability` is generated by the trigger.
   _(These configuration options are not stored on the data chain)_.
 - **Payload** — Displays the data appended under this `<operationKey>`.
 
-Remember, the [Log to Console](/configuration/flows/operations.md#log-to-console) operation is a key debugging tool. It
+Remember, the Log to Console operation is a key debugging tool. It
 does not append data to the data chain. You will view your log message under **Options**. Therefore, anything you log
 will always be displayed as nested under a `message` key. For example, if you decide to log
 `"The last operation was a success"`, it will be displayed as:
