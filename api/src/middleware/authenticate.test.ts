@@ -118,7 +118,7 @@ test('Sets accountability to payload contents if valid token is passed', async (
 			admin_access: adminAccess,
 			share,
 			share_scope: shareScope,
-			refresh_token: 'test',
+			session_id: 'test',
 		},
 		env['SECRET'],
 		{ issuer: 'directus' }
@@ -169,7 +169,7 @@ test('Sets accountability to payload contents if valid token is passed', async (
 			admin_access: 0,
 			share,
 			share_scope: shareScope,
-			refresh_token: 'test',
+			session_id: 'test',
 		},
 		env['SECRET'],
 		{ issuer: 'directus' }

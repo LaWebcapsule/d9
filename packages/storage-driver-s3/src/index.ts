@@ -2,8 +2,10 @@ import type {
 	CopyObjectCommandInput,
 	GetObjectCommandInput,
 	ListObjectsV2CommandInput,
+	ObjectCannedACL,
 	PutObjectCommandInput,
 	S3ClientConfig,
+	ServerSideEncryption,
 } from '@aws-sdk/client-s3';
 import {
 	CopyObjectCommand,
@@ -147,11 +149,11 @@ export class DriverS3 implements Driver {
 		};
 
 		if (this.config.serverSideEncryption) {
-			params.ServerSideEncryption = this.config.serverSideEncryption;
+			params.ServerSideEncryption = this.config.serverSideEncryption as ServerSideEncryption;
 		}
 
 		if (this.config.acl) {
-			params.ACL = this.config.acl;
+			params.ACL = this.config.acl as ObjectCannedACL;
 		}
 
 		await this.client.send(new CopyObjectCommand(params));
@@ -169,11 +171,11 @@ export class DriverS3 implements Driver {
 		}
 
 		if (this.config.acl) {
-			params.ACL = this.config.acl;
+			params.ACL = this.config.acl as ObjectCannedACL;
 		}
 
 		if (this.config.serverSideEncryption) {
-			params.ServerSideEncryption = this.config.serverSideEncryption;
+			params.ServerSideEncryption = this.config.serverSideEncryption as ServerSideEncryption;
 		}
 
 		const upload = new Upload({

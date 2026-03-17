@@ -623,7 +623,18 @@ export class AuthorizationService {
 
 						for (let i = 0; i < originalItems.length; i++) {
 							const originalItem: Item = originalItems[i]!;
-							const emptyItemsToAdd = originalItem[fieldKey].length - field.update?.length - field.delete?.length;
+							const alreadyExistingItems = originalItem[fieldKey].length;
+							const updatedItemsIds: Array<string | number> = field.update.map((f: any) => f.id);
+							const deletedItemsIds: Array<string | number> = field.delete.map((f: any) => f?.id || f);
+
+							const twoTimesCountedItems = (originalItem[fieldKey] as Array<string | number>).reduce(
+								(n: number, item) => {
+									return n + Number(updatedItemsIds.includes(item) || deletedItemsIds.includes(item));
+								},
+								0
+							);
+
+							const emptyItemsToAdd = alreadyExistingItems - twoTimesCountedItems;
 							const finalArrayToValidate = arrayToValidate.concat(Array(emptyItemsToAdd).fill({}));
 
 							// validate partial items until the last key
