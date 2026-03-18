@@ -226,7 +226,7 @@ describe('createApp', async () => {
 			expect(response.body.a).toContain('y');
 		});
 
-		test('Should parse array index exactly at QS_ARRAY_LIMIT as array', async () => {
+		test('Should parse array index exactly at QS_ARRAY_LIMIT-1 as array', async () => {
 			const mockRouter = Router();
 
 			mockRouter.use('/test-query', (req, res) => {
@@ -236,8 +236,8 @@ describe('createApp', async () => {
 			mockGetEndpointRouter.mockReturnValueOnce(mockRouter);
 
 			const app = await createApp();
-			// QS_ARRAY_LIMIT is set to 5, so index 5 (exactly at limit) should still be parsed as array
-			const response = await request(app).get('/test-query?a[0]=x&a[5]=y');
+			// QS_ARRAY_LIMIT is set to 5, so index 4 (QS_ARRAY_LIMIT-1) is the last index parsed as array
+			const response = await request(app).get('/test-query?a[0]=x&a[4]=y');
 
 			expect(Array.isArray(response.body.a)).toBe(true);
 			expect(response.body.a).toContain('x');
@@ -255,10 +255,10 @@ describe('createApp', async () => {
 
 			const app = await createApp();
 			// QS_ARRAY_LIMIT is set to 5, so index 6 exceeds limit and converts to object
-			const response = await request(app).get('/test-query?a[0]=x&a[6]=y');
+			const response = await request(app).get('/test-query?a[0]=x&a[5]=y');
 
 			expect(Array.isArray(response.body.a)).toBe(false);
-			expect(response.body.a).toEqual({ '0': 'x', '6': 'y' });
+			expect(response.body.a).toEqual({ '0': 'x', '5': 'y' });
 		});
 
 		test('Should parse parameters within QS_PARAMETER_LIMIT', async () => {
