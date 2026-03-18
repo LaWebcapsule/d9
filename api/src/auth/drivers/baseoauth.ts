@@ -1,6 +1,5 @@
 import { parseJSON } from '@wbce-d9/utils';
-import type { Client, TokenSet } from 'openid-client';
-import { errors, generators } from 'openid-client';
+import * as oidc from 'openid-client';
 import getDatabase from '../../database/index.js';
 import emitter from '../../emitter.js';
 import { RecordNotUniqueException } from '../../exceptions/database/record-not-unique.js';
@@ -26,17 +25,17 @@ export interface UserPayload {
 }
 
 export abstract class BaseOAuthDriver extends LocalAuthDriver {
-	abstract getClient(): Promise<Client>;
+	abstract getClient(): Promise<oidc.Configuration>;
 	abstract getredirectUrl(): string;
 	abstract getUserService(): UsersService;
 	abstract getConfig(): Record<string, any>;
 	abstract getClientName(): string;
 	abstract getTokenSetAndUserInfo(
 		payload: Record<string, any>
-	): Promise<[TokenSet, Record<string, unknown>, UserPayload]>;
+	): Promise<[oidc.TokenEndpointResponse & oidc.TokenEndpointResponseHelpers, Record<string, unknown>, UserPayload]>;
 
 	generateCodeVerifier(): string {
-		return generators.codeVerifier();
+		return oidc.randomPKCECodeVerifier();
 	}
 
 	async fetchUserId(identifier: string): Promise<string | undefined> {
@@ -145,10 +144,10 @@ export abstract class BaseOAuthDriver extends LocalAuthDriver {
 		if (authData?.['refreshToken']) {
 			try {
 				const client = await this.getClient();
-				const tokenSet = await client.refresh(authData['refreshToken']);
+				const tokenSet = await oidc.refreshTokenGrant(client, authData['refreshToken']);
 
 				if (tokenSet.refresh_token) {
-					await client.revoke(tokenSet.refresh_token, 'refresh_token');
+					await oidc.tokenRevocation(client, tokenSet.refresh_token);
 				}
 
 				await this.getUserService().updateOne(user.id, {
@@ -182,7 +181,7 @@ export abstract class BaseOAuthDriver extends LocalAuthDriver {
 		if (authData?.['refreshToken']) {
 			try {
 				const client = await this.getClient();
-				const tokenSet = await client.refresh(authData['refreshToken']);
+				const tokenSet = await oidc.refreshTokenGrant(client, authData['refreshToken']);
 
 				// Update user refreshToken if provided
 				if (tokenSet.refresh_token) {
@@ -201,7 +200,7 @@ export abstract class BaseOAuthDriver extends LocalAuthDriver {
 	}
 
 	handleError = (e: any) => {
-		if (e instanceof errors.OPError) {
+		if (e instanceof oidc.ResponseBodyError) {
 			if (e.error === 'invalid_grant') {
 				// Invalid token
 				logger.trace(e, `[${this.getClientName()}] Invalid grant`);
@@ -214,7 +213,7 @@ export abstract class BaseOAuthDriver extends LocalAuthDriver {
 				service: 'openid',
 				message: e.error_description,
 			});
-		} else if (e instanceof errors.RPError) {
+		} else if (e instanceof oidc.ClientError) {
 			// Internal client error
 			logger.trace(e, `[${this.getClientName()}] Unknown RP error`);
 			return new InvalidCredentialsException();

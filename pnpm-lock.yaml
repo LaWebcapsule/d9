@@ -445,8 +445,8 @@ importers:
         specifier: 'catalog:'
         version: 3.2.0
       openid-client:
-        specifier: 5.4.0
-        version: 5.4.0
+        specifier: 6.8.2
+        version: 6.8.2
       ora:
         specifier: 'catalog:'
         version: 6.3.0
@@ -8348,8 +8348,8 @@ packages:
   joi@17.9.1:
     resolution: {integrity: sha512-FariIi9j6QODKATGBrEX7HZcja8Bsh3rfdGYy/Sb65sGlZWK/QWesU1ghk7aJWDj95knjXlQfSmzFSPPkLVsfw==}
 
-  jose@4.15.9:
-    resolution: {integrity: sha512-1vUQX+IdDMVPj4k8kOxgUqlcK518yluMuGZwqlr44FS1ppZB/5GWh4rZG89erpOBOJjU/OBsnCVFfapsRz6nEA==}
+  jose@6.2.1:
+    resolution: {integrity: sha512-jUaKr1yrbfaImV7R2TN/b3IcZzsw38/chqMpo2XJ7i2F8AfM/lA4G1goC3JVEwg0H7UldTmSt3P68nt31W7/mw==}
 
   joycon@3.1.1:
     resolution: {integrity: sha512-34wB/Y7MW7bzjKRjUKTa46I2Z7eV62Rkhva+KkopW7Qvv/OSWBqvkSY7vusOPrNuZcUG3tApvdVgNB8POj3SPw==}
@@ -9345,13 +9345,12 @@ packages:
     engines: {node: ^14.16.0 || >=16.10.0}
     hasBin: true
 
+  oauth4webapi@3.8.5:
+    resolution: {integrity: sha512-A8jmyUckVhRJj5lspguklcl90Ydqk61H3dcU0oLhH3Yv13KpAliKTt5hknpGGPZSSfOwGyraNEFmofDYH+1kSg==}
+
   object-assign@4.1.1:
     resolution: {integrity: sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==}
     engines: {node: '>=0.10.0'}
-
-  object-hash@2.2.0:
-    resolution: {integrity: sha512-gScRMn0bS5fH+IuwyIFgnh9zBdo4DV+6GhygmWM9HyNJSgS0hScp1f5vjtm7oIIOiT9trXrShAkLFSc2IqKNgw==}
-    engines: {node: '>= 6'}
 
   object-hash@3.0.0:
     resolution: {integrity: sha512-RSn9F68PjH9HqtltsSnqYC1XXoWe9Bju5+213R98cNGttag9q9yAOTzdbsqvIa7aNm5WffBZFpWYr2aWrklWAw==}
@@ -9368,10 +9367,6 @@ packages:
   object.assign@4.1.7:
     resolution: {integrity: sha512-nK28WOo+QIjBkDduTINE4JkF/UJJKyf2EJxvJKfblDpyg0Q+pkOHNTL0Qwy6NP6FhE/EnzV73BxxqcJaXY9anw==}
     engines: {node: '>= 0.4'}
-
-  oidc-token-hash@5.2.0:
-    resolution: {integrity: sha512-6gj2m8cJZ+iSW8bm0FXdGF0YhIQbKrfP4yWTNzxc31U6MOjfEmB1rHvlYvxI1B7t7BCi1F2vYTT6YhtQRG4hxw==}
-    engines: {node: ^10.13.0 || >=12.0.0}
 
   on-exit-leak-free@0.2.0:
     resolution: {integrity: sha512-dqaz3u44QbRXQooZLTUKU41ZrzYrcvLISVgbrzbyCMxpmSLJvZ3ZamIJIZ29P6OhZIkNIQKosdeM6t1LYbA9hg==}
@@ -9424,8 +9419,8 @@ packages:
   openapi3-ts@3.2.0:
     resolution: {integrity: sha512-/ykNWRV5Qs0Nwq7Pc0nJ78fgILvOT/60OxEmB3v7yQ8a8Bwcm43D4diaYazG/KBn6czA+52XYy931WFLMCUeSg==}
 
-  openid-client@5.4.0:
-    resolution: {integrity: sha512-hgJa2aQKcM2hn3eyVtN12tEA45ECjTJPXCgUh5YzTzy9qwapCvmDTVPWOcWVL0d34zeQoQ/hbG9lJhl3AYxJlQ==}
+  openid-client@6.8.2:
+    resolution: {integrity: sha512-uOvTCndr4udZsKihJ68H9bUICrriHdUVJ6Az+4Ns6cW55rwM5h0bjVIzDz2SxgOI84LKjFyjOFvERLzdTUROGA==}
 
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
@@ -21398,7 +21393,7 @@ snapshots:
       '@sideway/formula': 3.0.1
       '@sideway/pinpoint': 2.0.0
 
-  jose@4.15.9: {}
+  jose@6.2.1: {}
 
   joycon@3.1.1: {}
 
@@ -22714,9 +22709,9 @@ snapshots:
       tinyexec: 0.3.2
       ufo: 1.6.3
 
-  object-assign@4.1.1: {}
+  oauth4webapi@3.8.5: {}
 
-  object-hash@2.2.0: {}
+  object-assign@4.1.1: {}
 
   object-hash@3.0.0: {}
 
@@ -22732,8 +22727,6 @@ snapshots:
       es-object-atoms: 1.1.1
       has-symbols: 1.1.0
       object-keys: 1.1.1
-
-  oidc-token-hash@5.2.0: {}
 
   on-exit-leak-free@0.2.0: {}
 
@@ -22790,12 +22783,10 @@ snapshots:
     dependencies:
       yaml: 2.8.2
 
-  openid-client@5.4.0:
+  openid-client@6.8.2:
     dependencies:
-      jose: 4.15.9
-      lru-cache: 6.0.0
-      object-hash: 2.2.0
-      oidc-token-hash: 5.2.0
+      jose: 6.2.1
+      oauth4webapi: 3.8.5
 
   optionator@0.9.4:
     dependencies:

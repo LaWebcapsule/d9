@@ -3,8 +3,7 @@ import type { Accountability } from '@wbce-d9/types';
 import express, { Router } from 'express';
 import flatten from 'flat';
 import jwt from 'jsonwebtoken';
-import type { AuthorizationParameters, BaseClient, Client, TokenSet } from 'openid-client';
-import { Issuer, generators } from 'openid-client';
+import * as oidc from 'openid-client';
 import { getAuthProvider } from '../../auth.js';
 import {
 	ACCESS_COOKIE_OPTIONS,
@@ -32,12 +31,12 @@ import { isRedirectAllowedOnLogin } from '../../utils/is-redirect-allowed-on-log
 import { BaseOAuthDriver, type UserPayload } from './baseoauth.js';
 
 export class OpenIDAuthDriver extends BaseOAuthDriver {
-	client: Promise<Client>;
+	client: Promise<oidc.Configuration>;
 	redirectUrl: string;
 	usersService: UsersService;
 	config: Record<string, any>;
 
-	getClient(): Promise<BaseClient> {
+	getClient(): Promise<oidc.Configuration> {
 		return this.client;
 	}
 
@@ -78,44 +77,39 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 		this.usersService = new UsersService({ knex: this.knex, schema: this.schema });
 		this.config = additionalConfig;
 
-		this.client = new Promise((resolve, reject) => {
-			Issuer.discover(issuerUrl)
-				.then((issuer) => {
-					const supportedTypes = issuer.metadata['response_types_supported'] as string[] | undefined;
+		this.client = (async () => {
+			let config: oidc.Configuration;
 
-					if (!supportedTypes?.includes('code')) {
-						reject(
-							new InvalidConfigException('OpenID provider does not support required code flow', {
-								provider: additionalConfig['provider'],
-							})
-						);
-					}
-
-					resolve(
-						new issuer.Client({
-							client_id: clientId,
-							client_secret: clientSecret,
-							redirect_uris: [this.redirectUrl],
-							response_types: ['code'],
-							...clientOptionsOverrides,
-						})
-					);
-				})
-				.catch((e) => {
-					logger.error(e, '[OpenID] Failed to fetch provider config');
-					process.exit(1);
+			try {
+				config = await oidc.discovery(new URL(issuerUrl), clientId, {
+					client_secret: clientSecret,
+					...clientOptionsOverrides,
 				});
-		});
+			} catch (e) {
+				logger.error(e, '[OpenID] Failed to fetch provider config');
+				process.exit(1);
+			}
+
+			const supportedTypes = config!.serverMetadata().response_types_supported;
+
+			if (supportedTypes && !supportedTypes.includes('code')) {
+				throw new InvalidConfigException('OpenID provider does not support required code flow', {
+					provider: additionalConfig['provider'],
+				});
+			}
+
+			return config!;
+		})();
 	}
 
 	async generateAuthUrl(
 		codeVerifier: string,
 		prompt = false,
-		additionalParams?: AuthorizationParameters | undefined
+		additionalParams?: Record<string, string> | undefined
 	): Promise<string> {
 		try {
 			const client = await this.client;
-			const codeChallenge = generators.codeChallenge(codeVerifier);
+			const codeChallenge = await oidc.calculatePKCECodeChallenge(codeVerifier);
 			const paramsConfig = typeof this.config['params'] === 'object' ? this.config['params'] : {};
 
 			const redirectAfterLogin = additionalParams?.['redirect'];
@@ -129,7 +123,7 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 				finalRedirectUri = redirectUriWithParams.toString();
 			}
 
-			return client.authorizationUrl({
+			const params = {
 				scope: this.config['scope'] ?? 'openid profile email',
 				access_type: 'offline',
 				prompt: prompt ? 'consent' : undefined,
@@ -139,9 +133,14 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 				// Some providers require state even with PKCE
 				state: codeChallenge,
 				nonce: codeChallenge,
-				redirect_uri: finalRedirectUri,
+				redirect_uri: this.redirectUrl,
+				claims: JSON.stringify({
+					"xyz": "xyz"
+				}),
 				...additionalParams,
-			});
+			};
+
+			return oidc.buildAuthorizationUrl(client, params).href;
 		} catch (e) {
 			throw this.handleError(e);
 		}
@@ -149,37 +148,40 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 
 	async getTokenSetAndUserInfo(
 		payload: Record<string, any>
-	): Promise<[TokenSet, Record<string, unknown>, UserPayload]> {
-		let tokenSet;
-		let userInfo;
+	): Promise<[oidc.TokenEndpointResponse & oidc.TokenEndpointResponseHelpers, Record<string, unknown>, UserPayload]> {
+		let tokenSet: oidc.TokenEndpointResponse & oidc.TokenEndpointResponseHelpers;
+		let userInfo: Record<string, unknown>;
 
 		try {
 			const client = await this.client;
-			const codeChallenge = generators.codeChallenge(payload['codeVerifier']);
+			const codeChallenge = await oidc.calculatePKCECodeChallenge(payload['codeVerifier']);
 
-			let finalRedirectUri = this.redirectUrl;
+			const url = URL.parse(await this.generateAuthUrl(codeChallenge, payload['prompt'], payload)) as URL;
 
-			if (payload['redirect']) {
-				const redirectUriWithParams = new URL(this.redirectUrl);
-				redirectUriWithParams.searchParams.set('redirect', payload['redirect'] as string);
-				finalRedirectUri = redirectUriWithParams.toString();
-			}
-
-			tokenSet = await client.callback(
-				finalRedirectUri,
-				{ code: payload['code'], state: payload['state'], iss: payload['iss'] },
-				{ code_verifier: payload['codeVerifier'], state: codeChallenge, nonce: codeChallenge }
+			console.log(payload);
+			tokenSet = await oidc.authorizationCodeGrant(
+				client,
+				URL.parse(payload['callbackUrl']!) as URL,
+				{
+					pkceCodeVerifier: payload['codeVerifier'],
+					expectedState: codeChallenge,
+					expectedNonce: codeChallenge
+				},
+				{"xyz": "xyz"}
 			);
+			logger.info("got token set!!!!!!!");
+			console.log(tokenSet);
 
-			userInfo = tokenSet.claims();
+			userInfo = (tokenSet.claims() ?? {}) as Record<string, unknown>;
 
-			if (client.issuer.metadata['userinfo_endpoint']) {
+			if (client.serverMetadata().userinfo_endpoint) {
 				userInfo = {
 					...userInfo,
-					...(await client.userinfo(tokenSet.access_token!)),
+					...(await oidc.fetchUserInfo(client, tokenSet.access_token!, tokenSet.claims()?.sub ?? oidc.skipSubjectCheck)),
 				};
 			}
 		} catch (e) {
+			console.dir(e, {depth: 10});
 			throw this.handleError(e);
 		}
 
@@ -231,8 +233,11 @@ export function createOpenIDAuthRouter(providerName: string): Router {
 				issuer: 'directus',
 			});
 
-			const additionalParams = { ...req.query };
-			delete additionalParams['prompt'];
+			const additionalParams = Object.fromEntries(
+				Object.entries(req.query)
+					.filter(([k, v]) => k !== 'prompt' && typeof v === 'string')
+					.map(([k, v]) => [k, v as string])
+			);
 
 			const authUrl = await provider.generateAuthUrl(codeVerifier, prompt, additionalParams);
 
@@ -317,6 +322,7 @@ export function createOpenIDAuthRouter(providerName: string): Router {
 					state: req.query['state'],
 					iss: req.query['iss'],
 					redirect: validRedirectUrl,
+					callbackUrl: new URL(req.originalUrl, `http://${req.headers.host || env['PUBLIC_URL']}`)
 				});
 			} catch (error: any) {
 				// Prompt user for a new refresh_token if invalidated
