@@ -125,12 +125,11 @@ export default defineConfig({
 			{ text: 'Docs', link: '/' },
 			{ text: 'GitHub', link: URLS.GITHUB },
 		],
-		// TODO: configure Algolia DocSearch once crawler verification is complete
-		// algolia: {
-		// 	appId: '',
-		// 	apiKey: '',
-		// 	indexName: '',
-		// },
+		algolia: {
+			appId: 'DZTKF80XYJ',
+			apiKey: '6bdc1530bfb01204c81597a74278c4f4',
+			indexName: 'd9 documentation',
+		},
 		sidebar: {
 			'/': sidebar(),
 		},
