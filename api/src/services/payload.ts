@@ -127,7 +127,7 @@ export class PayloadService {
 			if (action === 'update') return new Date(helpers.date.writeTimestamp(new Date().toISOString()));
 			return value;
 		},
-		async 'system-only'({ action, value, accountability }) {
+		async 'system-only'({ value, accountability }) {
 			if (accountability && (value === null || value)){
 				throw new ForbiddenException();
 			}
