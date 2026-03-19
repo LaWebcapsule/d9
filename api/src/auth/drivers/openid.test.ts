@@ -7,6 +7,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
 
 const { mockAuthorizationUrl, mockCallback } = vi.hoisted(() => {
 	const mockAuthorizationUrl = vi.fn().mockReturnValue('https://provider.example.com/auth?state=mock-challenge');
+
 	const mockCallback = vi.fn().mockResolvedValue({
 		access_token: 'mock-access-token',
 		refresh_token: 'mock-refresh-token',
@@ -286,6 +287,7 @@ describe('OpenIDAuthDriver', () => {
 
 			expect(tokenSet).toHaveProperty('access_token', 'mock-access-token');
 			expect(userInfo).toHaveProperty('email', 'user@example.com');
+
 			expect(userPayload).toMatchObject({
 				provider: 'test-provider',
 				email: 'user@example.com',
