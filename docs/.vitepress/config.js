@@ -54,6 +54,7 @@ export default defineConfig({
 		},
 	},
 	head: [
+		['meta', { name: 'algolia-site-verification', content: '24FDF59F0748A8B5' }],
 		['link', { rel: 'shortcut icon', type: 'image/svg+xml', href: '/favicon.svg' }],
 		[
 			'link',
@@ -124,11 +125,12 @@ export default defineConfig({
 			{ text: 'Docs', link: '/' },
 			{ text: 'GitHub', link: URLS.GITHUB },
 		],
-		algolia: {
-			appId: 'T5BDNEU205',
-			apiKey: '76eb519cf1a4492777a6991f75c5252b',
-			indexName: 'directus',
-		},
+		// TODO: configure Algolia DocSearch once crawler verification is complete
+		// algolia: {
+		// 	appId: '',
+		// 	apiKey: '',
+		// 	indexName: '',
+		// },
 		sidebar: {
 			'/': sidebar(),
 		},
