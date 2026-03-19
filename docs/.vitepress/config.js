@@ -125,11 +125,12 @@ export default defineConfig({
 			{ text: 'Docs', link: '/' },
 			{ text: 'GitHub', link: URLS.GITHUB },
 		],
-		algolia: {
-			appId: 'T5BDNEU205',
-			apiKey: '76eb519cf1a4492777a6991f75c5252b',
-			indexName: 'directus',
-		},
+		// TODO: configure Algolia DocSearch once crawler verification is complete
+		// algolia: {
+		// 	appId: '',
+		// 	apiKey: '',
+		// 	indexName: '',
+		// },
 		sidebar: {
 			'/': sidebar(),
 		},
