@@ -112,16 +112,7 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 			const codeChallenge = await oidc.calculatePKCECodeChallenge(codeVerifier);
 			const paramsConfig = typeof this.config['params'] === 'object' ? this.config['params'] : {};
 
-			const redirectAfterLogin = additionalParams?.['redirect'];
 			delete additionalParams?.['redirect'];
-
-			let finalRedirectUri = this.redirectUrl;
-
-			if (redirectAfterLogin) {
-				const redirectUriWithParams = new URL(this.redirectUrl);
-				redirectUriWithParams.searchParams.set('redirect', redirectAfterLogin as string);
-				finalRedirectUri = redirectUriWithParams.toString();
-			}
 
 			const params = {
 				scope: this.config['scope'] ?? 'openid profile email',
@@ -134,9 +125,6 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 				state: codeChallenge,
 				nonce: codeChallenge,
 				redirect_uri: this.redirectUrl,
-				claims: JSON.stringify({
-					"xyz": "xyz"
-				}),
 				...additionalParams,
 			};
 
@@ -156,21 +144,17 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 			const client = await this.client;
 			const codeChallenge = await oidc.calculatePKCECodeChallenge(payload['codeVerifier']);
 
-			const url = URL.parse(await this.generateAuthUrl(codeChallenge, payload['prompt'], payload)) as URL;
+			const callbackUrl = new URL(payload['callbackPath'], this.redirectUrl)
 
-			console.log(payload);
 			tokenSet = await oidc.authorizationCodeGrant(
 				client,
-				URL.parse(payload['callbackUrl']!) as URL,
+				callbackUrl,
 				{
 					pkceCodeVerifier: payload['codeVerifier'],
 					expectedState: codeChallenge,
 					expectedNonce: codeChallenge
-				},
-				{"xyz": "xyz"}
+				}
 			);
-			logger.info("got token set!!!!!!!");
-			console.log(tokenSet);
 
 			userInfo = (tokenSet.claims() ?? {}) as Record<string, unknown>;
 
@@ -181,7 +165,6 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 				};
 			}
 		} catch (e) {
-			console.dir(e, {depth: 10});
 			throw this.handleError(e);
 		}
 
@@ -314,15 +297,13 @@ export function createOpenIDAuthRouter(providerName: string): Router {
 			let authResponse;
 
 			try {
-				res.clearCookie(cookieName, OAUTH2_COOKIE_CLEAR_OPTIONS);
-
 				authResponse = await authenticationService.login(providerName, {
 					code: req.query['code'],
 					codeVerifier: verifier,
 					state: req.query['state'],
 					iss: req.query['iss'],
 					redirect: validRedirectUrl,
-					callbackUrl: new URL(req.originalUrl, `http://${req.headers.host || env['PUBLIC_URL']}`)
+					callbackPath: req.originalUrl,
 				});
 			} catch (error: any) {
 				// Prompt user for a new refresh_token if invalidated
