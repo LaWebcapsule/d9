@@ -97,16 +97,13 @@ export class OAuth2AuthDriver extends BaseOAuthDriver {
 			const params: Record<string, string> = {
 				scope: this.config['scope'] ?? 'email',
 				access_type: 'offline',
+				prompt: prompt ? 'consent' : undefined,
 				...paramsConfig,
 				code_challenge: codeChallenge,
 				code_challenge_method: 'S256',
 				// Some providers require state even with PKCE
 				state: codeChallenge,
 			};
-
-			if (prompt) {
-				params['prompt'] = 'consent';
-			}
 
 			return oidc.buildAuthorizationUrl(this.client, params).href;
 		} catch (e) {
