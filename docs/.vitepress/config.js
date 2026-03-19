@@ -54,6 +54,7 @@ export default defineConfig({
 		},
 	},
 	head: [
+		['meta', { name: 'algolia-site-verification', content: '24FDF59F0748A8B5' }],
 		['link', { rel: 'shortcut icon', type: 'image/svg+xml', href: '/favicon.svg' }],
 		[
 			'link',
