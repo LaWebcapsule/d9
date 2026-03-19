@@ -1,9 +1,18 @@
 import env from './env.js';
 import { describe, test, expect } from 'vitest';
 
-const transports = ['ses'];
+const transports : string[] = [];
+
+
+if(env['EMAIL_SES_CONFIGURED']){
+	transports.push('ses');
+}
 
 describe('emails', () => {
+	if (!transports.length) {
+		test.skip('no transports configured (set EMAIL_SES_CONFIGURED to enable)', () => {});
+	}
+
 	for (const transport of transports) {
 		test(`should work with ${transport} transport`, async () => {
 			env['EMAIL_TRANSPORT'] = transport;
@@ -16,3 +25,4 @@ describe('emails', () => {
 		});
 	}
 });
+
