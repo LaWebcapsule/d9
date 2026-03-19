@@ -1,10 +1,9 @@
 import env from './env.js';
 import { describe, test, expect } from 'vitest';
 
-const transports : string[] = [];
+const transports: string[] = [];
 
-
-if(env['EMAIL_SES_CONFIGURED']){
+if (env['EMAIL_SES_CONFIGURED']) {
 	transports.push('ses');
 }
 
@@ -25,4 +24,3 @@ describe('emails', () => {
 		});
 	}
 });
-
