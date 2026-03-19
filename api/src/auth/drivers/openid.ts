@@ -118,16 +118,11 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 			const codeChallenge = generators.codeChallenge(codeVerifier);
 			const paramsConfig = typeof this.config['params'] === 'object' ? this.config['params'] : {};
 
-			const redirectAfterLogin = additionalParams?.['redirect'];
+			// Remove redirect from params passed to OAuth provider.
+			// The redirect target is stored in the JWT cookie (set by the router handler),
+			// NOT in the redirect_uri. Appending it to redirect_uri breaks strict OAuth
+			// providers like Azure AD that enforce exact redirect_uri matching (AADSTS50011).
 			delete additionalParams?.['redirect'];
-
-			let finalRedirectUri = this.redirectUrl;
-
-			if (redirectAfterLogin) {
-				const redirectUriWithParams = new URL(this.redirectUrl);
-				redirectUriWithParams.searchParams.set('redirect', redirectAfterLogin as string);
-				finalRedirectUri = redirectUriWithParams.toString();
-			}
 
 			return client.authorizationUrl({
 				scope: this.config['scope'] ?? 'openid profile email',
@@ -139,7 +134,7 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 				// Some providers require state even with PKCE
 				state: codeChallenge,
 				nonce: codeChallenge,
-				redirect_uri: finalRedirectUri,
+				redirect_uri: this.redirectUrl,
 				...additionalParams,
 			});
 		} catch (e) {
@@ -157,16 +152,8 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 			const client = await this.client;
 			const codeChallenge = generators.codeChallenge(payload['codeVerifier']);
 
-			let finalRedirectUri = this.redirectUrl;
-
-			if (payload['redirect']) {
-				const redirectUriWithParams = new URL(this.redirectUrl);
-				redirectUriWithParams.searchParams.set('redirect', payload['redirect'] as string);
-				finalRedirectUri = redirectUriWithParams.toString();
-			}
-
 			tokenSet = await client.callback(
-				finalRedirectUri,
+				this.redirectUrl,
 				{ code: payload['code'], state: payload['state'], iss: payload['iss'] },
 				{ code_verifier: payload['codeVerifier'], state: codeChallenge, nonce: codeChallenge }
 			);
