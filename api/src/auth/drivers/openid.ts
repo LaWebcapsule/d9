@@ -7,7 +7,6 @@ import * as oidc from 'openid-client';
 import { getAuthProvider } from '../../auth.js';
 import {
 	ACCESS_COOKIE_OPTIONS,
-	OAUTH2_COOKIE_CLEAR_OPTIONS,
 	OAUTH2_COOKIE_OPTIONS,
 	REFRESH_COOKIE_OPTIONS,
 } from '../../constants.js';
