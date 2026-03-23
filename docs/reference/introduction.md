@@ -1,12 +1,12 @@
 ---
-description: An introduction to the REST and GraphQL APIs in Directus.
+description: An introduction to the REST and GraphQL APIs in d9.
 readTime: 7 min read
 pageClass: page-reference
 ---
 
 # API Reference
 
-> Directus offers both a REST and GraphQL API to manage the data in the database. The API has predictable
+> d9 offers both a REST and GraphQL API to manage the data in the database. The API has predictable
 > resource-oriented URLs, relies on standard HTTP status codes, and uses JSON for input and output.
 
 ## Dynamic API
@@ -37,7 +37,7 @@ Useful references:
 
 ## Relational Data
 
-Directus only retrieves the fields in your items that explicitly have been requested. Relational data can be retrieved
+d9 only retrieves the fields in your items that explicitly have been requested. Relational data can be retrieved
 nested by using [the `fields` parameter](/reference/query#fields) in REST, or regular nested queries in GraphQL. This
 allows you to retrieve the author of your article included in the articles data, or fetch related log entry points for
 your app's analytics data for example.
@@ -61,7 +61,7 @@ your page, you could submit:
 ```
 
 This will create a new record in the related collection, and save its primary key in the `featured_article` field for
-this item. To update an existing item, simply provide the primary key with the updates, and Directus will treat it as an
+this item. To update an existing item, simply provide the primary key with the updates, and d9 will treat it as an
 update instead of a creation:
 
 ```json
@@ -263,7 +263,7 @@ user and system data. The only difference in the two endpoints are the root quer
 
 ## Error Codes
 
-Below are the global error codes used within Directus, and what they mean.
+Below are the global error codes used within d9, and what they mean.
 
 | Error Code               | HTTP Status | Description                                                     |
 | ------------------------ | ----------- | --------------------------------------------------------------- |

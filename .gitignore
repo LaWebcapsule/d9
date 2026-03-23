@@ -36,6 +36,12 @@ debug
 
 # Temporary files
 TODO
+*.csv
+.~lock.*
+
+# Docker (local only)
+docker-compose.prod.yml
+snapshots/
 
 # Directus
 /schema.yaml

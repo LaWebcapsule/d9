@@ -1,18 +1,18 @@
-import type { SpyInstance } from 'vitest';
-import { afterAll, beforeAll, expect, test, vi } from 'vitest';
+import type { MockInstance } from 'vitest';
+import { afterEach, beforeEach, expect, test, vi } from 'vitest';
+import { performance } from 'perf_hooks';
 import { stall } from './stall.js';
 
-let performanceNowSpy: SpyInstance;
+let performanceNowSpy: MockInstance;
 
-beforeAll(() => {
-	vi.useFakeTimers();
-
-	// fake timers doesn't fake performance.now(), so this is used to mock it
+beforeEach(() => {
+	vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
 	performanceNowSpy = vi.spyOn(performance, 'now').mockReturnValue(0);
 });
 
-afterAll(() => {
+afterEach(() => {
 	vi.useRealTimers();
+	vi.restoreAllMocks();
 });
 
 const STALL_TIME = 100;

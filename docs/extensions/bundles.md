@@ -1,5 +1,5 @@
 ---
-description: A guide on how to build extension bundles in Directus.
+description: A guide on how to build extension bundles in d9.
 readTime: 5 min read
 ---
 
@@ -9,7 +9,7 @@ readTime: 5 min read
 
 ## Create a Bundle
 
-When [scaffolding your Directus extension](/extensions/creating-extensions.html#scaffolding-your-directus-extension),
+When [scaffolding your d9 extension](/extensions/creating-extensions.html#scaffolding-your-directus-extension),
 select the `bundle` type. This will create a new empty bundle.
 
 ## Entries

@@ -18,9 +18,6 @@ To manage your project settings programmatically, see our API documentation on [
 
 ## Configure Project Settings
 
-<video title="How to Configure Project Settings" autoplay playsinline muted loop controls>
-<source src="{{CDN_URL}}/docs/v9/configuration/project-settings/project-settings-20220815/configure-a-project-20220815A.mp4" type="video/mp4" />
-</video>
 
 To configure Project Settings, follow these steps.
 
@@ -32,7 +29,7 @@ All configuration options are described in detail below.
 
 ## General
 
-![How to Configure General Project Settings]({{CDN_URL}}/docs/v9/configuration/project-settings/project-settings-20220815/general-project-settings-20220811A.webp)
+![How to Configure General Project Settings](/images/general-project-settings-20220811A.webp)
 
 - **Project Name** — Sets the name on the [Navigation Bar](/app/overview.html#_2-navigation-bar), as well as login and
   public pages.
@@ -42,9 +39,6 @@ All configuration options are described in detail below.
 
 ## Branding & Style
 
-<video title="How to Configure Branding and Style in Project Settings" autoplay playsinline muted loop controls>
-<source src="{{CDN_URL}}/docs/v9/configuration/project-settings/project-settings-20220815/branding-and-style-20220811A.mp4" type="video/mp4" />
-</video>
 
 - **Project Color** — Sets color on the project logo, FavIcon and login/public pages.
 - **Project Logo** — Adds a 40x40px logo at the top of the [Module Bar](/app/overview.html#_1-module-bar) and on the
@@ -62,15 +56,12 @@ All configuration options are described in detail below.
 ::: tip Browser FavIcon & Title
 
 The Project Color is also used to set a dynamic FavIcon and the Project Name is used in the browser's page title, making
-it easier to identify different Directus projects.
+it easier to identify different d9 projects.
 
 :::
 
 ## Modules
 
-<video title="How to Configure the Module Bar in Project Settings" autoplay playsinline muted loop controls>
-<source src="{{CDN_URL}}/docs/v9/configuration/project-settings/project-settings-20220815/module-bar-20220811A.mp4" type="video/mp4" />
-</video>
 
 - **Module Bar** — Allows the following customization of links displayed in the
   [Module Bar](/app/overview.html#_1-module-bar).
@@ -80,11 +71,11 @@ it easier to identify different Directus projects.
   - **Add Link** — To add a new custom link, click **Add Link** and fill in the details below.
     - **Name** — Sets the title of the module link, also shown in a tooltip on hover.
     - **Icon** — Selects an icon for the module button.
-    - **URL** — Should start with a `/` for links within the [Directus Data Studio](/app/overview).
+    - **URL** — Should start with a `/` for links within the [d9 Data Studio](/app/overview).
 
 ## Security
 
-![How to Configure Security in Project Settings]({{CDN_URL}}/docs/v9/configuration/project-settings/project-settings-20220815/security-project-settings-20220811A.webp)
+![How to Configure Security in Project Settings](/images/security-project-settings-20220811A.webp)
 
 - **Auth Password Policy** — Sets a policy requirement for all user's passwords via a JavaScript regex. Supports the
   following options:
@@ -97,9 +88,6 @@ it easier to identify different Directus projects.
 
 ## Files & Storage
 
-<video title="How to configure Files and Storage in Project Settings" autoplay playsinline muted loop controls>
-<source src="{{CDN_URL}}/docs/v9/configuration/project-settings/project-settings-20220815/transformation-presets-20220815A.mp4" type="video/mp4" />
-</video>
 
 The platform's file middleware allows for cropping and transforming image assets on the fly. This means you can simply
 request an original image, include any desired parameters, and you'll be served the new asset as a response.
@@ -129,7 +117,7 @@ To learn more, please see the API guide on [transformation presets](/reference/f
 
 ## Mapping
 
-![How to Configure Mapping in Directus]({{CDN_URL}}/docs/v9/configuration/project-settings/project-settings-20220815/mapping-project-settings-20220815A.webp)
+![How to Configure Mapping in d9](/images/mapping-project-settings-20220815A.webp)
 
 - **Mapbox Access Token** — Create a [Mapbox Access Token](https://docs.mapbox.com/help/glossary/access-token) and enter
   it here to improve the platform's mapping experience.
@@ -142,9 +130,6 @@ To learn more, please see the API guide on [transformation presets](/reference/f
 
 ## Image Editor
 
-<video title="How to configure Image Editor Project Settings in Directus" autoplay playsinline muted loop controls>
-<source src="{{CDN_URL}}/docs/v9/configuration/project-settings/project-settings-20220815/image-editor-20220815A.mp4" type="video/mp4" />
-</video>
 
 - **Custom Aspect Ratios** — Adds custom aspect ratios in the [image editor](/app/file-library#edit-an-image).
   - **Text** — Sets a name to identify the aspect ratio.

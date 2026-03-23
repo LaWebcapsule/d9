@@ -1,18 +1,18 @@
 ---
-description: A guide on how to build custom Modules in Directus.
+description: A guide on how to build custom Modules in d9.
 readTime: 5 min read
 ---
 
 # Custom Modules <small></small>
 
-> Custom Modules are completely open-ended components that allow you to create new experiences within the Directus
+> Custom Modules are completely open-ended components that allow you to create new experiences within the d9
 > platform. [Learn more about Modules](/getting-started/glossary#modules).
 
 ## Extension Entrypoint
 
 The entrypoint of your module is the `index` file inside the `src/` folder of your extension package. It exports a
 configuration object with options to configure the behavior of your module. When loading your module, this object is
-imported by the Directus host.
+imported by the d9 host.
 
 Example of an entrypoint:
 
@@ -37,7 +37,7 @@ export default {
 - `id` — The unique key for this module. It is good practice to scope proprietary modules with an author prefix.
 - `name` — The human-readable name for this module.
 - `icon` — An icon name from the [material icon set](/getting-started/glossary#material-icons), or the extended list of
-  Directus custom icons.
+  d9 custom icons.
 - `color` — A color associated with the module.
 - `routes` — Details the routes in your module. The routes are registered as nested routes with the module's `id`
   serving as the base path.
@@ -80,7 +80,7 @@ export default {};
 ```
 
 A route component provides a blank canvas for creating anything you need. You can use the globally registered
-`private-view` component to get access to Directus' page structure consisting of the module bar, the navigation, the
+`private-view` component to get access to d9' page structure consisting of the module bar, the navigation, the
 sidebar, the header and the main content area.
 
 ::: warning Enable the Module
@@ -91,7 +91,7 @@ Before a module appears in the module bar, it has to be enabled inside the proje
 
 ::: warning Vue Version
 
-The Directus App uses Vue 3. There might be 3rd party libraries that aren't yet compatible with Vue 3.
+The d9 App uses Vue 3. There might be 3rd party libraries that aren't yet compatible with Vue 3.
 
 :::
 
@@ -123,7 +123,7 @@ If you prefer to use the Vue Options API, you can inject the `api` and `stores` 
 
 ## Example: Accessing the API from within your extension
 
-The Directus App's Vue app instance provides a field called `api`, which can be injected into Vue components using
+The d9 App's Vue app instance provides a field called `api`, which can be injected into Vue components using
 [Vue's inject framework](https://v3.vuejs.org/guide/component-provide-inject.html). This `api` field contains a property
 called `api`, which is an authenticated Axios instance. Here's an example of how to use it:
 

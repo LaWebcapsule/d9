@@ -1,5 +1,5 @@
 ---
-description: A guide on how to build custom API endpoints in Directus.
+description: A guide on how to build custom API endpoints in d9.
 readTime: 3 min read
 ---
 

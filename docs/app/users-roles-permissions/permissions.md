@@ -1,35 +1,32 @@
 ---
 description:
-  Directus offers an extremely granular, yet easy to configure permissions system. When you create a role, all
+  d9 offers an extremely granular, yet easy to configure permissions system. When you create a role, all
   permissions are turned off by default.
 readTime:
 ---
 
 # Permissions
 
-> Directus offers an extremely granular, yet easy to configure permissions system. When you create a role, all
+> d9 offers an extremely granular, yet easy to configure permissions system. When you create a role, all
 > permissions are turned off by default. From here, you explicitly reconfigure its permissions for each collection as
 > desired.
 
 :::tip Learn More
 
-To configure permissions programmatically, see our API documentation on [permissions](/reference/system/permissions.md).
+To configure permissions programmatically, see our API documentation on permissions.
 
 :::
 
 ## Configure Permissions
 
-<video title="Configure Role Permissions" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/users-roles-permissions/permissions-20220909/configure-permissions-20220907A.mp4" type="video/mp4" />
-</video>
 
 To configure a role's access permissions, follow these steps.
 
 1. Navigate to **Settings > Roles & Permissions > [Role]** and scroll to **Permissions**.\
-   Each collection is a row. Its [CRUDS permissions](/configuration/users-roles-permissions.md#directus-permissions) are
+   Each collection is a row. Its CRUDS permissions are
    in columns.
 2. Click the icon of the collection and permission type that you want to set and a tooltip will appear. If you'd like to
-   adjust permissions for Directus system collections, then click **System Collections** to expand the menu and access
+   adjust permissions for d9 system collections, then click **System Collections** to expand the menu and access
    these collections.
 3. Click the icon in the relevant collection row and CRUDS permission column and a popup menu will appear with the
    following permission levels:
@@ -44,16 +41,13 @@ To configure a role's access permissions, follow these steps.
 
 ::: warning Admin Roles
 
-If you [configured the role's details](/configuration/users-roles-permissions/roles.md#configure-role-details) to have
+If you configured the role's details to have
 **Admin Access**, permission configuration is disabled.
 
 :::
 
 ## Configure Custom Permissions
 
-<video title="Configure Role Permissions" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/users-roles-permissions/permissions-20220909/custom-access-permissions-20220909A.mp4" type="video/mp4" />
-</video>
 
 To configure custom access permissions for a role, follow these steps.
 
@@ -62,9 +56,9 @@ To configure custom access permissions for a role, follow these steps.
 2. Configure custom access permission validations as desired. For each CRUDS permission, you will have one or more of
    the following sub-menus:
 
-   - **Item Permissions** — Set [filters](/app/filters.md) to define items the role is granted permissions.
+   - **Item Permissions** — Set filters to define items the role is granted permissions.
    - **Field Permissions** — Toggle to limit which fields the role is granted permissions.
-   - **Field Validation** — Set [filters](/app/filters.md) to define valid field values on create or update.
+   - **Field Validation** — Set filters to define valid field values on create or update.
    - **Field Presets** — Use JSON to set default field values on [create](/reference/items.html#create-an-item) or
      [update](/reference/items.html#update-an-item) of an item. The value will then appear on the item page, and can be
      overwritten if desired.
@@ -73,9 +67,6 @@ To configure custom access permissions for a role, follow these steps.
 
 ## Toggle All Collection Permissions
 
-<video title="Toggle all Collection Permissions" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/users-roles-permissions/permissions-20220909/toggle-all-permissions-20220907A.mp4" type="video/mp4" />
-</video>
 
 To grant or restrict all CRUDS permissions to a collection at once, follow these steps.
 
@@ -86,12 +77,9 @@ To grant or restrict all CRUDS permissions to a collection at once, follow these
 
 ## Reset System Permissions
 
-<video title="Reset System Permissions" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/users-roles-permissions/permissions-20220909/reset-system-permissions-20220908A.mp4" type="video/mp4" />
-</video>
 
 This is only available when **App Access** is enabled when you
-[configure role details](/configuration/users-roles-permissions/roles.md#configure-role-details). If you made any custom
+configure role details. If you made any custom
 configurations to system collections, these will be reverted. To reset system permissions, follow these steps.
 
 1. Navigate to **Settings > Roles & Permissions > [Role]**.

@@ -1,5 +1,5 @@
 ---
-description: REST and GraphQL API documentation for file access and management in Directus.
+description: REST and GraphQL API documentation for file access and management in d9.
 readTime: 10 min read
 pageClass: page-reference
 ---
@@ -38,12 +38,12 @@ This optional filename is also used in the Content-Disposition header when the `
 ::: warning Direct File Access
 
 While you may _technically_ be able to expose your storage adapters root file system and access your raw files through
-there, it is recommended that you always use the Directus API. This is the only way that you can take advantage of file
+there, it is recommended that you always use the d9 API. This is the only way that you can take advantage of file
 permissions and other built-in features.
 
 :::
 
-![Original File]({{CDN_URL}}/docs/v9/reference/files/original-20220216A.jpg) _Original File Used — 602KB and
+![Original File](/images/original-20220216A.jpg) _Original File Used — 602KB and
 1800x1200_
 
 ---
@@ -71,7 +71,7 @@ exist, it is dynamically generated and immediately returned.
 
 ### Preset Transformations
 
-- **`key`** — This **key** of the [Storage Asset Preset](/configuration/project-settings#files-thumbnails), a shortcut
+- **`key`** — This **key** of the [Storage Asset Preset](/app/project-settings#files-thumbnails), a shortcut
   for the below parameters
 
 ### Custom Transformations
@@ -96,7 +96,7 @@ grained control:
 
 ### Advanced Transformations
 
-For even more advanced control over the file generation, Directus exposes
+For even more advanced control over the file generation, d9 exposes
 [the full `sharp` API](https://sharp.pixelplumbing.com/api-operation) through the `transforms` query parameter. This
 parameter accepts a two-dimensional array with the format `[Operation, ...arguments]`.
 
@@ -124,7 +124,7 @@ Below are four possible qualities (200x200 cover) to visually compare the balanc
 
 | 25%                                                                                             | 50%                                                                                             | 75%                                                                                             | 100%                                                                                               |
 | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| ![25%]({{CDN_URL}}/docs/v9/reference/files/200-200-cover-25-20220216A.jpg)<br>_4KB_ | ![50%]({{CDN_URL}}/docs/v9/reference/files/200-200-cover-50-20220216A.jpg)<br>_6KB_ | ![75%]({{CDN_URL}}/docs/v9/reference/files/200-200-cover-75-20220216A.jpg)<br>_8KB_ | ![100%]({{CDN_URL}}/docs/v9/reference/files/200-200-cover-100-20220216A.jpg)<br>_38KB_ |
+| !25%<br>_4KB_ | !50%<br>_6KB_ | !75%<br>_8KB_ | !100%<br>_38KB_ |
 
 ### Preset
 
@@ -205,7 +205,7 @@ Location of the file.
 Tags for the file.
 
 `metadata` **object**\
-Any additional metadata Directus was able to scrape from the file. For images, this includes EXIF, IPTC, and ICC information.
+Any additional metadata d9 was able to scrape from the file. For images, this includes EXIF, IPTC, and ICC information.
 
 ```json
 {
@@ -248,7 +248,7 @@ Any additional metadata Directus was able to scrape from the file. For images, t
 
 ## List Files
 
-List all files that exist in Directus.
+List all files that exist in d9.
 
 ### Query Parameters
 

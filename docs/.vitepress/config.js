@@ -5,26 +5,15 @@ import { URLS, EMAILS } from './constants.js';
 function markdownVariablesPlugin() {
 	const replacements = {
 		'{{WEBSITE_URL}}': URLS.WEBSITE,
-		'{{CLOUD_URL}}': URLS.CLOUD,
 		'{{DOCS_URL}}': URLS.DOCS,
-		'{{CDN_URL}}': URLS.CDN,
 		'{{GITHUB_URL}}': URLS.GITHUB,
 		'{{GITHUB_DIRECTUS_URL}}': URLS.GITHUB_DIRECTUS,
 		'{{GITHUB_COMMUNITY_URL}}': URLS.GITHUB_COMMUNITY,
 		'{{LOCALES_URL}}': URLS.LOCALES,
-		'{{TWITTER_URL}}': URLS.TWITTER,
-		'{{DISCORD_CHAT_URL}}': URLS.DISCORD_CHAT,
-		'{{DISCORD_INVITE_URL}}': URLS.DISCORD_INVITE,
-		'{{AWESOME_URL}}': URLS.AWESOME,
-		'{{YOUTUBE_URL}}': URLS.YOUTUBE,
 		'{{EXAMPLE_URL}}': URLS.EXAMPLE,
 		'{{LDAP_URL}}': URLS.LDAP,
 		'{{NPM_URL}}': URLS.NPM,
 		'{{DOCKER_HUB_URL}}': URLS.DOCKER_HUB,
-		'{{G2_REVIEWS_URL}}': URLS.G2_REVIEWS,
-		'{{CAPTERRA_URL}}': URLS.CAPTERRA,
-		'{{TRUSTRADIUS_URL}}': URLS.TRUSTRADIUS,
-		'{{PRODUCTHUNT_URL}}': URLS.PRODUCTHUNT,
 		'{{SECURITY_EMAIL}}': EMAILS.SECURITY,
 		'{{INFO_EMAIL}}': EMAILS.INFO,
 		'{{SUPPORT_EMAIL}}': EMAILS.SUPPORT,
@@ -52,8 +41,8 @@ function markdownVariablesPlugin() {
 export default defineConfig({
 	base: '/',
 	lang: 'en-US',
-	title: 'Directus Docs',
-	description: 'Directus. An Instant App & API for your SQL Database.',
+	title: 'd9 Docs',
+	description: 'd9 — Open Data Platform. An Instant App & API for your SQL Database.',
 	ignoreDeadLinks: true,
 	vite: {
 		plugins: [markdownVariablesPlugin()],
@@ -65,52 +54,7 @@ export default defineConfig({
 		},
 	},
 	head: [
-		[
-			'script',
-			{
-				type: 'text/javascript',
-				async: true,
-				defer: true,
-				src: 'https://js-na1.hs-scripts.com/20534155.js',
-			},
-		],
-		[
-			'script',
-			{
-				type: 'text/javascript',
-				async: true,
-				src: 'https://ws.zoominfo.com/pixel/636535e8d10f825332bbd795',
-				'referrer-policy': 'unsafe-url',
-			},
-		],
-		[
-			'script',
-			{
-				type: 'text/javascript',
-				async: true,
-				defer: false,
-				src: 'https://www.googletagmanager.com/gtag/js?id=UA-24637628-7',
-			},
-		],
-		[
-			'script',
-			{},
-			`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-			new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-			j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-			'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-			})(window,document,'script','dataLayer','GTM-PTLT3GH');`,
-		],
-		[
-			'script',
-			{},
-			`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-
-gtag('config', 'UA-24637628-7');
-			`,
-		],
+		['meta', { name: 'algolia-site-verification', content: '24FDF59F0748A8B5' }],
 		['link', { rel: 'shortcut icon', type: 'image/svg+xml', href: '/favicon.svg' }],
 		[
 			'link',
@@ -179,18 +123,14 @@ gtag('config', 'UA-24637628-7');
 		},
 		nav: [
 			{ text: 'Docs', link: '/' },
-			// { text: 'Cookbook', link: '/cookbook/add-a-recipe', activeMatch: '/cookbook/' },
-			{ text: 'Website', link: URLS.WEBSITE },
-			{ text: 'Cloud', link: URLS.CLOUD },
 			{ text: 'GitHub', link: URLS.GITHUB },
 		],
 		algolia: {
-			appId: 'T5BDNEU205',
-			apiKey: '76eb519cf1a4492777a6991f75c5252b',
-			indexName: 'directus',
+			appId: 'DZTKF80XYJ',
+			apiKey: '6bdc1530bfb01204c81597a74278c4f4',
+			indexName: 'd9 documentation',
 		},
 		sidebar: {
-			// '/cookbook/': sidebarCookbooks(),
 			'/': sidebar(),
 		},
 		editLink: {
@@ -221,7 +161,7 @@ function sidebar() {
 					link: '/getting-started/support',
 				},
 				{
-					text: 'Backing Directus',
+					text: 'Supporting d9',
 					link: '/getting-started/backing-directus',
 				},
 				{

@@ -83,7 +83,7 @@ export abstract class BaseOAuthDriver extends LocalAuthDriver {
 			// Update user to update refresh_token and other properties that might have changed
 			await this.getUserService().updateOne(userId, {
 				...updatedUserPayload,
-				auth_data: userPayload.auth_data,
+				auth_data: userPayload.auth_data ?? null,
 			});
 
 			return userId;

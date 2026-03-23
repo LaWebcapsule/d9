@@ -1,93 +1,104 @@
-<p align="center"><img alt="Directus Logo" src="https://user-images.githubusercontent.com/522079/158864859-0fbeae62-9d7a-4619-b35e-f8fa5f68e0c8.png"></p>
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/public/logo-readme-light.svg">
+    <source media="(prefers-color-scheme: light)" srcset="docs/public/logo-readme.svg">
+    <img alt="d9 Logo" src="docs/public/logo-readme.svg" width="200">
+  </picture>
+</p>
 
 <br />
 
-**This repository is a fork of the Directus 9. Directus 9 was under GPLv3 license and so is this repository. As Directus
-10 is now <i>a premium open-source software</i>, this repository aims to maintain a standard openSource version of
-Directus 9. This repository is not bound to the directus core team.**
+# d9 — Open Data Platform
 
-## 🐰 Introduction
+**d9** is an open-source fork of [Directus 9](https://github.com/directus/directus) (GPLv3), maintained independently by [La Webcapsule](https://github.com/LaWebcapsule). As Directus 10+ is now a premium open-source software, this repository aims to maintain a standard openSource version of Directus 9.
 
-Directus is a real-time API and App dashboard for managing SQL database content.
+> d9 is not affiliated with, endorsed by, or connected to the Directus core team or Monospace Inc.
 
-- **Free & open-source.** No artificial limitations, vendor lock-in, or hidden paywalls.
-- **REST & GraphQL API.** Instantly layers a blazingly fast Node.js API on top of any SQL database.
-- **Manage pure SQL.** Works with new or existing SQL databases, no migration required.
-- **Choose your database.** Supports PostgreSQL, MySQL, SQLite, OracleDB, CockroachDB, MariaDB, and MS-SQL.
-- **On-Prem or Cloud.** Run locally, install on-premises, or use our
-  [self-service Cloud service](https://directus.io/pricing).
-- **Completely extensible.** Built to white-label, it is easy to customize our modular platform.
-- **A modern dashboard.** Our no-code Vue.js app is safe and intuitive for non-technical users, no training required.
+## Why d9?
 
-**[Learn more about Directus](https://directus.io)** • **[Documentation](https://docs.directus.io)**
+- **Open-source permanence** — d9 stays GPLv3, forever. No premium gates, no vendor lock-in.
+- **Drop-in compatibility** — Same database schema as Directus 9. Migrate in minutes, not days.
 
-<br />
+## Features
 
-## Migrating from directus@9.0.0^ to @wbce-d9@9.0.0^
+- **REST & GraphQL API** — Instantly layers a blazingly fast Node.js API on top of any SQL database.
+- **Manage pure SQL** — Works with new or existing SQL databases, no migration required.
+- **Multi-database support** — PostgreSQL, MySQL, SQLite, OracleDB, CockroachDB, MariaDB, and MS-SQL.
+- **Self-hosted** — Run on your own infrastructure. You own your data.
+- **Fully extensible** — Modular architecture, easy to customize with extensions.
+- **No-code Data Studio** — An intuitive Vue.js dashboard for non-technical users.
 
-You need to change your dependencies :
-
-1. In package.json
-
-```
-"directus":9.0.0^ --> "@wbce-d9/directus9": 10.0.0^
-"@directus/some-package" --> "@wbce-d9/some-package"
-```
-
-2. Update your dependencies :
-
-```
-npm update
-```
-
-3. If you have some code :
-
-```ts
-import {...} from "directus"
-import {...} from "@directus/some-package"
-```
-
-should become :
-
-```ts
-import {...} from "@wbce-d9/directus9"
-import {...} from "@wbce-d9/some-package"
-```
-
-4. You don't have to do any changes to your databases. Directus9 use the same schema as directus@9.0.0^. As a
-   consequence, you don't need other changes than the three steps below.
-
-## Migrating from version @wbce-d9@9.0.0^ to @wbce-d9@10.0.0^
-
-We've recognized and rectified an issue within Directus 9 related to Single Sign-On (SSO) management, ensuring
-standardization. While exceptionally uncommon, this could occasionally cause a discrepancy between your SSO user and
-Directus. Should this occur, we advise synchronizing Directus' external_id with your SSO. Please note that IDs are now
-case-sensitive.
-
-### JS SDK
-
-A JS sdk is also realeased under _@wbce-d9_, you can install it via:
+## Quick Start
 
 ```bash
-npm install --save @wbce-d9/sdk
+npm init @wbce-d9/directus-project@latest
 ```
 
-### Extensions
+Or with Docker:
 
-All classic Directus versions 9 extensions should work without any hurdle with this open source branch.
+```bash
+docker run -d -p 8055:8055 ghcr.io/lawebcapsule/directus9:latest
+```
 
-If you want to start building a new extension the utility tool is also realeased, use is as so:
+## Migrating from Directus 9
+
+d9 uses the same database schema as Directus 9. No database migration needed.
+
+### 1. Update your dependencies
+
+```json
+// package.json
+"directus": "9.x.x"           →  "@wbce-d9/directus9": "10.x.x"
+"@directus/some-package"       →  "@wbce-d9/some-package"
+```
+
+### 2. Update your imports
+
+```ts
+// Before
+import { ... } from "directus"
+import { ... } from "@directus/some-package"
+
+// After
+import { ... } from "@wbce-d9/directus9"
+import { ... } from "@wbce-d9/some-package"
+```
+
+### 3. Install & run
+
+```bash
+npm update
+npx directus start
+```
+
+## JS SDK
+
+```bash
+npm install @wbce-d9/sdk
+```
+
+## Extensions
+
+All Directus 9 extensions are compatible with d9 out of the box.
+
+To create a new extension:
 
 ```bash
 npm init @wbce-d9/directus-extension@latest
 ```
 
+## Links
+
+- **[Documentation](./docs/)** — Full reference and guides
+- **[GitHub](https://github.com/LaWebcapsule/directus9)** — Source code and issues
+- **[Contributing](./contributing.md)** — How to contribute to d9
+
 ## License
 
-Directus is released under the [GPLv3 license](./license). Monospace Inc owns all Directus trademarks, logos, and
-intellectual property on behalf of our project's community. Copyright © 2004-2020, Monospace Inc.
+d9 is released under the [GPLv3 license](./license).
 
-**This repository is a fork of the Directus 9. Directus 9 was under GPLv3 license and so is this repository. As Directus
-10 is now <i>a premium open-source software</i>, this repository aims to maintain a standard openSource version of
-Directus 9. This repository is not bound to the directus core team.**
+This repository is a fork of Directus 9, which was released under GPLv3 by Monospace Inc. d9 is an independent project maintained by La Webcapsule.
 
+## Asset Disclaimer
+
+This fork contains modified versions of the original Directus documentation assets (screenshots, diagrams, and videos). These assets have been altered to replace Directus branding with d9 branding and to remove any user-identifying information. No original Directus trademarks, logos, or personal data from Directus contributors are used in this project.

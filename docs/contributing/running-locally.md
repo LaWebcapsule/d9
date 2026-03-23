@@ -1,29 +1,29 @@
 ---
 description:
-  This guide explains how to install the _Development_ version of Directus locally so that you can work on the
+  This guide explains how to install the _Development_ version of d9 locally so that you can work on the
   platform's source code.
 readTime: 4 min read
 ---
 
 # Running Locally
 
-> This guide explains how to install the _Development_ version of Directus locally so that you can work on the
+> This guide explains how to install the _Development_ version of d9 locally so that you can work on the
 > platform's source code. To install the _Production_ version locally, please follow to our
 > [Docker Guide](/self-hosted/docker-guide).
 
 ::: tip Minimum Requirements
 
 You will need to have [the latest version of Node](https://nodejs.org/en/download/current) to _build_ a Development
-version of Directus.
+version of d9.
 
 You will also need to have the package manager [pnpm](https://pnpm.io) installed.
 
 :::
 
-## 1. Fork the Directus repository
+## 1. Fork the d9 repository
 
 Go to the [repository]({{GITHUB_URL}}) and fork it to your GitHub account. A fork is your
-copy of the Directus repository which allows you to freely experiment with changes without affecting the original
+copy of the d9 repository which allows you to freely experiment with changes without affecting the original
 project.
 
 ## 2. Clone from your repository
@@ -79,7 +79,7 @@ To start the initialization run the following command:
 pnpm --filter api cli bootstrap
 ```
 
-This will set-up the required tables for Directus and make sure all the migrations have run.
+This will set-up the required tables for d9 and make sure all the migrations have run.
 
 ## 7. Start the development server
 
@@ -146,7 +146,7 @@ If you encounter errors during this installation process, make sure your node ve
 
 ## 8. Make your fixes/changes
 
-At this point you are ready to start working on Directus! Before diving in however, it's worth reading through the
+At this point you are ready to start working on d9! Before diving in however, it's worth reading through the
 introduction to [Contributing](/contributing/introduction).
 
 ::: tip Debugging

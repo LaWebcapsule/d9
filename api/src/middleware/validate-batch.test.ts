@@ -40,7 +40,7 @@ test('Throws InvalidPayloadException on missing body', async () => {
 	await validateBatch('read')(mockRequest as Request, mockResponse as Response, nextFunction);
 
 	expect(nextFunction).toHaveBeenCalledTimes(1);
-	expect(vi.mocked(nextFunction).mock.calls[0][0]).toBeInstanceOf(InvalidPayloadException);
+	expect(vi.mocked(nextFunction).mock.calls[0]![0]).toBeInstanceOf(InvalidPayloadException);
 });
 
 test(`Short circuits on Array body in update/delete use`, async () => {
@@ -80,7 +80,7 @@ test(`Doesn't allow both query and keys in a batch delete`, async () => {
 	await validateBatch('delete')(mockRequest as Request, mockResponse as Response, nextFunction);
 
 	expect(nextFunction).toHaveBeenCalledTimes(1);
-	expect(vi.mocked(nextFunction).mock.calls[0][0]).toBeInstanceOf(FailedValidationException);
+	expect(vi.mocked(nextFunction).mock.calls[0]![0]).toBeInstanceOf(FailedValidationException);
 });
 
 test(`Requires 'data' on batch update`, async () => {
@@ -94,7 +94,7 @@ test(`Requires 'data' on batch update`, async () => {
 	await validateBatch('update')(mockRequest as Request, mockResponse as Response, nextFunction);
 
 	expect(nextFunction).toHaveBeenCalledTimes(1);
-	expect(vi.mocked(nextFunction).mock.calls[0][0]).toBeInstanceOf(FailedValidationException);
+	expect(vi.mocked(nextFunction).mock.calls[0]![0]).toBeInstanceOf(FailedValidationException);
 });
 
 test(`Calls next when all is well`, async () => {
@@ -108,5 +108,5 @@ test(`Calls next when all is well`, async () => {
 	await validateBatch('update')(mockRequest as Request, mockResponse as Response, nextFunction);
 
 	expect(nextFunction).toHaveBeenCalledTimes(1);
-	expect(vi.mocked(nextFunction).mock.calls[0][0]).toBeUndefined();
+	expect(vi.mocked(nextFunction).mock.calls[0]![0]).toBeUndefined();
 });

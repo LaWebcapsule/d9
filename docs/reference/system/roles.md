@@ -1,5 +1,5 @@
 ---
-description: REST and GraphQL API documentation on the Roles collection in Directus.
+description: REST and GraphQL API documentation on the Roles collection in d9.
 readTime: 5 min read
 pageClass: page-reference
 ---
@@ -58,7 +58,7 @@ The users in this role. One-to-many to [users](/reference/system/users).
 
 ## List Roles
 
-List all roles that exist in Directus.
+List all roles that exist in d9.
 
 ### Query Parameters
 

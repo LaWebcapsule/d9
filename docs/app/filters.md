@@ -12,7 +12,7 @@ readTime: 5 min read
 > restricting Item access permissions for specific Users or Roles, building dashboard analytics with the Insights
 > module, and more.
 
-![Filters]({{CDN_URL}}/docs/v9/app-guide/filters/filters-20220303A/filters-20220303A.webp)
+![Filters](/images/filters-20220303A.webp)
 
 ::: warning There Are Two Filters Documents
 
@@ -26,8 +26,8 @@ This page is a non-technical guide to using Filters. For more technical info, se
 ::: tip Assumed Knowledge
 
 Filters are intuitive to use, but get quite nuanced as complexity increases. In order to use Filters effectively, you
-will need to understand the Field _(aka [data model](/configuration/data-model))_ being filtered as well as any relevant
-[Users, Roles and Permissions](/configuration/users-roles-permissions.md).
+will need to understand the Field _(aka [data model](/app/data-model))_ being filtered as well as any relevant
+Users, Roles and Permissions.
 
 :::
 
@@ -35,9 +35,6 @@ A basic filter is composed of 3 parts: A **Field** from the Collection being Fil
 [Operator](/reference/filter-rules#filter-operators), and some specified **Value** to filter for within each Item's
 Field.
 
-<video autoplay playsinline muted loop controls title="How Filters Work">
-	<source src="{{CDN_URL}}/docs/v9/app-guide/filters/filters-20220303A/how-filters-work-20220303A.mp4" type="video/mp4" />
-</video>
 
 2. Click <span mi icon>filter_list</span> or **"Add Filter"**.
 3. Select the Field to filter by.
@@ -62,7 +59,7 @@ automatically display. An exhaustive list of Operators and what they do can be f
 `AND` Groups give the option to filter for Items that meet _all of several criteria_. On the other hand, `OR` Groups
 filter for Items that meet _any one of several criteria_.
 
-![AND/OR Groups]({{CDN_URL}}/docs/v9/app-guide/filters/filters-20220303A/and-or-groups-20220303A.webp)
+![AND/OR Groups](/images/and-or-groups-20220303A.webp)
 
 1. Click "Add Filter".
 2. Click "And/OR Group" at the very top of the dropdown menu.
@@ -85,11 +82,8 @@ conditions inside of OR Groups.
 
 The following video shows how to filter for Blog posts written within the past 60 days.
 
-<video autoplay playsinline muted loop controls title="How Filters Work">
-	<source src="{{CDN_URL}}/docs/v9/app-guide/filters/filters-20220303A/dynamic-variables-20220307A.mp4" type="video/mp4" />
-</video>
 
-The following Dynamic Variables are built into Directus to make Filtering easier: `$CURRENT_USER`, `$CURRENT_ROLE`,
+The following Dynamic Variables are built into d9 to make Filtering easier: `$CURRENT_USER`, `$CURRENT_ROLE`,
 `$NOW` and `$NOW(<adjustment>)`. For more information, please see the Dynamic Variables section in
 [Filter Rules](/reference/filter-rules).
 
@@ -112,9 +106,6 @@ one of these Fields, you can run Filters on the current Collection by Field valu
 
 Here are step-by-step instructions on how to filter by Fields in other Collections:
 
-<video autoplay playsinline muted loop controls title="How Filters Work">
-	<source src="{{CDN_URL}}/docs/v9/app-guide/filters/filters-20220303A/filtering-by-related-collections-20220303A.mp4" type="video/mp4" />
-</video>
 
 1. Click "Add Filter".
 2. Click the desired relational Field. This will pop down and display the related Collection Fields.
@@ -123,7 +114,7 @@ Here are step-by-step instructions on how to filter by Fields in other Collectio
 
 ## Unfilterable Fields
 
-![Unfilterable Fields]({{CDN_URL}}/docs/v9/app-guide/filters/filters-20220303A/unfilterable-fields-20220303A.webp)
+![Unfilterable Fields](/images/unfilterable-fields-20220303A.webp)
 
 Not all Fields can be filtered. As seen above in [Filtering by Related Collections](#filtering-by-related-collections),
 Alias Fields cannot be filtered; they instead provide a dropdown menu to access Fields from a related Collection.
@@ -132,22 +123,15 @@ Filters.
 
 ## Extensibility Options
 
-Directus Core is completely open-source, modular and extensible. Extensions allow you to expand or modify any part of
-Directus to fit your needs. Here are some great resources to get started down that track.
+d9 Core is completely open-source, modular and extensible. Extensions allow you to expand or modify any part of
+d9 to fit your needs. Here are some great resources to get started down that track.
 
 - [Extensions > Introduction](/extensions/introduction)
 - [Extensions > Creating Extensions](/extensions/creating-extensions)
 - [Contributing > Introduction](/contributing/introduction)
 - [Contributing > Codebase Overview](/contributing/codebase-overview)
 
-::: tip Accelerated Development
-
-Working on an enterprise project and looking to outsource or financially sponsor the development of a Shares extension?
-Contact [our team]({{WEBSITE_URL}}contact)
-
-:::
-
 ## More Help
 
-Looking for technical support for your non-enterprise project? Chat with thousands of engineers within our growing
-[Community on Discord]({{DISCORD_INVITE_URL}})
+Looking for technical support? Join our growing
+[community on GitHub Discussions]({{GITHUB_COMMUNITY_URL}}) or reach out at [support@webcapsule.io](mailto:{{SUPPORT_EMAIL}}).

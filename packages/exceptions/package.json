@@ -31,7 +31,7 @@
 	"devDependencies": {
 		"@wbce-d9/types": "workspace:*",
 		"@ngneat/falso": "catalog:",
-		"@vitest/coverage-c8": "catalog:",
+		"@vitest/coverage-v8": "catalog:",
 		"@wbce-d9/tsconfig": "catalog:",
 		"joi": "catalog:",
 		"typescript": "catalog:",

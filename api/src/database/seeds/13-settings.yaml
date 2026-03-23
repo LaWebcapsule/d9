@@ -7,7 +7,7 @@ columns:
     type: string
     length: 100
     nullable: false
-    default: 'Directus'
+    default: 'd9'
   project_url:
     type: string
     length: 255

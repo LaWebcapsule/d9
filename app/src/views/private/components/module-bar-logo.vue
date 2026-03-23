@@ -102,18 +102,18 @@ export default defineComponent({
 
 	.logo {
 		position: absolute;
-		top: 18px;
-		left: 10px;
-		width: 40px;
-		height: 32px;
+		top: 12.5px;
+		left: 12.5px;
+		width: 35px;
+		height: 35px;
 		margin: 0 auto;
-		background-image: url('../../../assets/sprite.svg');
-		background-position: 0% 0%;
-		background-size: 600px 32px;
+		background-image: url('../../../assets/logo-loader.svg');
+		background-size: 35px 35px;
+		background-repeat: no-repeat;
 	}
 
 	.running {
-		animation: 560ms run steps(14) infinite;
+		animation: 1s spin linear infinite;
 	}
 }
 
@@ -130,9 +130,9 @@ export default defineComponent({
 	opacity: 0;
 }
 
-@keyframes run {
+@keyframes spin {
 	100% {
-		background-position: 100%;
+		transform: rotate(360deg);
 	}
 }
 </style>

@@ -1,5 +1,5 @@
 ---
-description: A guide on how to build custom Email Templates in Directus.
+description: A guide on how to build custom Email Templates in d9.
 readTime: 1 min read
 ---
 
