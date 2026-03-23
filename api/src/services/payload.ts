@@ -128,9 +128,10 @@ export class PayloadService {
 			return value;
 		},
 		async 'system-only'({ value, accountability }) {
-			if (accountability && (value === null || value)){
+			if (accountability && (value === null || value)) {
 				throw new ForbiddenException();
 			}
+
 			return value;
 		},
 		async 'cast-csv'({ action, value }) {
