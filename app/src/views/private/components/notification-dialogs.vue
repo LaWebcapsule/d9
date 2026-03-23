@@ -10,7 +10,7 @@
 				</v-card-text>
 				<v-card-actions>
 					<v-button v-if="notification.type === 'error' && admin && notification.code === 'UNKNOWN'" secondary>
-						<a target="_blank" href="https://github.com/LaWebcapsule/directus9/issues/new?template=bug_report.yml">
+						<a target="_blank" href="https://github.com/LaWebcapsule/d9/issues/new?template=bug_report.yml">
 							{{ t('report_error') }}
 						</a>
 					</v-button>

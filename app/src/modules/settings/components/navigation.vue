@@ -79,12 +79,12 @@ export default defineComponent({
 				{
 					icon: 'bug_report',
 					name: t('report_bug'),
-					href: 'https://github.com/LaWebcapsule/directus9/issues/new?template=bug_report.yml',
+					href: 'https://github.com/LaWebcapsule/d9/issues/new?template=bug_report.yml',
 				},
 				{
 					icon: 'new_releases',
 					name: t('request_feature'),
-					href: 'https://github.com/LaWebcapsule/directus9/discussions/new?category=feature-requests',
+					href: 'https://github.com/LaWebcapsule/d9/discussions/new?category=feature-requests',
 				},
 			];
 		});

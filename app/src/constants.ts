@@ -66,7 +66,7 @@ export const MODULE_BAR_DEFAULT = [
 		enabled: true,
 		name: '$t:documentation',
 		icon: 'help',
-		url: 'https://github.com/LaWebcapsule/directus9/tree/main/docs',
+		url: 'https://d9.webcapsule.io/getting-started/introduction.html',
 	},
 	{
 		type: 'module',
