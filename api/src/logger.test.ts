@@ -51,7 +51,7 @@ describe('req.headers.authorization', () => {
 			},
 		});
 
-		expect(logOutput.mock.calls[0][0]).toMatchObject({
+		expect(logOutput.mock.calls[0]![0]).toMatchObject({
 			req: {
 				headers: {
 					authorization: REDACT_TEXT,
@@ -73,7 +73,7 @@ describe('req.headers.cookie', () => {
 			},
 		});
 
-		expect(logOutput.mock.calls[0][0]).toMatchObject({
+		expect(logOutput.mock.calls[0]![0]).toMatchObject({
 			req: {
 				headers: {
 					cookie: REDACT_TEXT,
@@ -93,7 +93,7 @@ describe('req.headers.cookie', () => {
 			},
 		});
 
-		expect(logOutput.mock.calls[0][0]).toMatchObject({
+		expect(logOutput.mock.calls[0]![0]).toMatchObject({
 			req: {
 				headers: {
 					cookie: REDACT_TEXT,
@@ -115,7 +115,7 @@ describe('res.headers', () => {
 			},
 		});
 
-		expect(logOutput.mock.calls[0][0]).toMatchObject({
+		expect(logOutput.mock.calls[0]![0]).toMatchObject({
 			res: {
 				headers: {
 					'set-cookie': REDACT_TEXT,
@@ -140,7 +140,7 @@ describe('res.headers', () => {
 			},
 		});
 
-		expect(logOutput.mock.calls[0][0]).toMatchObject({
+		expect(logOutput.mock.calls[0]![0]).toMatchObject({
 			res: {
 				headers: {
 					'set-cookie': REDACT_TEXT,

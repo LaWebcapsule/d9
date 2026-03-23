@@ -1,6 +1,6 @@
 import knex from 'knex';
 import { MockClient } from 'knex-mock-client';
-import type { SpyInstance } from 'vitest';
+import type { MockInstance } from 'vitest';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { MailService } from '../../services/mail/index.js';
 import * as mdUtil from '../../utils/md.js';
@@ -9,8 +9,8 @@ import config from './index.js';
 
 describe('Operations / Mail', () => {
 	let mockOperationContext: any;
-	let mailServiceSendSpy: SpyInstance;
-	let mdSpy: SpyInstance;
+	let mailServiceSendSpy: MockInstance;
+	let mdSpy: MockInstance;
 
 	beforeEach(async () => {
 		mockOperationContext = {
