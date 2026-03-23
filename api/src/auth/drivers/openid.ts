@@ -105,19 +105,16 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 	async generateAuthUrl(
 		codeVerifier: string,
 		prompt = false,
-		additionalParams?: Record<string, string> | undefined
+		additionalParams?: Record<string, string>
 	): Promise<string> {
 		try {
 			const client = await this.client;
 			const codeChallenge = await oidc.calculatePKCECodeChallenge(codeVerifier);
 			const paramsConfig = typeof this.config['params'] === 'object' ? this.config['params'] : {};
 
-			delete additionalParams?.['redirect'];
-
 			const params = {
 				scope: this.config['scope'] ?? 'openid profile email',
 				access_type: 'offline',
-				prompt: prompt ? 'consent' : undefined,
 				...paramsConfig,
 				code_challenge: codeChallenge,
 				code_challenge_method: 'S256',
@@ -127,6 +124,10 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 				redirect_uri: this.redirectUrl,
 				...additionalParams,
 			};
+
+			if(prompt){
+				params.prompt = 'consent'
+			}
 
 			return oidc.buildAuthorizationUrl(client, params).href;
 		} catch (e) {
@@ -215,13 +216,13 @@ export function createOpenIDAuthRouter(providerName: string): Router {
 				expiresIn: '5m',
 				issuer: 'directus',
 			});
-
+			
 			const additionalParams = Object.fromEntries(
 				Object.entries(req.query)
-					.filter(([k, v]) => k !== 'prompt' && typeof v === 'string')
+					.filter(([k, v]) => k !== 'prompt' && k !== 'redirect' && typeof v === 'string')
 					.map(([k, v]) => [k, v as string])
 			);
-
+			
 			const authUrl = await provider.generateAuthUrl(codeVerifier, prompt, additionalParams);
 
 			const urlParams = new URL(authUrl);
