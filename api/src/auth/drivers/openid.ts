@@ -5,11 +5,7 @@ import flatten from 'flat';
 import jwt from 'jsonwebtoken';
 import * as oidc from 'openid-client';
 import { getAuthProvider } from '../../auth.js';
-import {
-	ACCESS_COOKIE_OPTIONS,
-	OAUTH2_COOKIE_OPTIONS,
-	REFRESH_COOKIE_OPTIONS,
-} from '../../constants.js';
+import { ACCESS_COOKIE_OPTIONS, OAUTH2_COOKIE_OPTIONS, REFRESH_COOKIE_OPTIONS } from '../../constants.js';
 import env from '../../env.js';
 import {
 	InvalidConfigException,
@@ -124,8 +120,8 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 				...additionalParams,
 			};
 
-			if(prompt){
-				params.prompt = 'consent'
+			if (prompt) {
+				params.prompt = 'consent';
 			}
 
 			return oidc.buildAuthorizationUrl(client, params).href;
@@ -144,24 +140,24 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 			const client = await this.client;
 			const codeChallenge = await oidc.calculatePKCECodeChallenge(payload['codeVerifier']);
 
-			const callbackUrl = new URL(payload['callbackPath'], this.redirectUrl)
+			const callbackUrl = new URL(payload['callbackPath'], this.redirectUrl);
 
-			tokenSet = await oidc.authorizationCodeGrant(
-				client,
-				callbackUrl,
-				{
-					pkceCodeVerifier: payload['codeVerifier'],
-					expectedState: codeChallenge,
-					expectedNonce: codeChallenge
-				}
-			);
+			tokenSet = await oidc.authorizationCodeGrant(client, callbackUrl, {
+				pkceCodeVerifier: payload['codeVerifier'],
+				expectedState: codeChallenge,
+				expectedNonce: codeChallenge,
+			});
 
 			userInfo = (tokenSet.claims() ?? {}) as Record<string, unknown>;
 
 			if (client.serverMetadata().userinfo_endpoint) {
 				userInfo = {
 					...userInfo,
-					...(await oidc.fetchUserInfo(client, tokenSet.access_token!, tokenSet.claims()?.sub ?? oidc.skipSubjectCheck)),
+					...(await oidc.fetchUserInfo(
+						client,
+						tokenSet.access_token!,
+						tokenSet.claims()?.sub ?? oidc.skipSubjectCheck
+					)),
 				};
 			}
 		} catch (e) {
@@ -215,13 +211,13 @@ export function createOpenIDAuthRouter(providerName: string): Router {
 				expiresIn: '5m',
 				issuer: 'directus',
 			});
-			
+
 			const additionalParams = Object.fromEntries(
 				Object.entries(req.query)
 					.filter(([k, v]) => k !== 'prompt' && k !== 'redirect' && typeof v === 'string')
 					.map(([k, v]) => [k, v as string])
 			);
-			
+
 			const authUrl = await provider.generateAuthUrl(codeVerifier, prompt, additionalParams);
 
 			const urlParams = new URL(authUrl);
