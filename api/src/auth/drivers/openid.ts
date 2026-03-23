@@ -208,7 +208,7 @@ export function createOpenIDAuthRouter(providerName: string): Router {
 			}
 
 			const token = jwt.sign({ verifier: codeVerifier, redirect, prompt }, env['SECRET'] as string, {
-				expiresIn: '5m',
+				expiresIn: Math.floor(OAUTH2_COOKIE_OPTIONS.maxAge! / 1000),
 				issuer: 'directus',
 			});
 
