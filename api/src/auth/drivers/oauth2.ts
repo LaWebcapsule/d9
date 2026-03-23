@@ -5,11 +5,7 @@ import flatten from 'flat';
 import jwt from 'jsonwebtoken';
 import * as oidc from 'openid-client';
 import { getAuthProvider } from '../../auth.js';
-import {
-	ACCESS_COOKIE_OPTIONS,
-	OAUTH2_COOKIE_OPTIONS,
-	REFRESH_COOKIE_OPTIONS,
-} from '../../constants.js';
+import { ACCESS_COOKIE_OPTIONS, OAUTH2_COOKIE_OPTIONS, REFRESH_COOKIE_OPTIONS } from '../../constants.js';
 import env from '../../env.js';
 import {
 	InvalidConfigException,
@@ -102,9 +98,9 @@ export class OAuth2AuthDriver extends BaseOAuthDriver {
 				// Some providers require state even with PKCE
 				state: codeChallenge,
 			};
-			
-			if(prompt){
-				params['prompt'] = 'consent'
+
+			if (prompt) {
+				params['prompt'] = 'consent';
 			}
 
 			return oidc.buildAuthorizationUrl(this.client, params).href;
@@ -122,8 +118,7 @@ export class OAuth2AuthDriver extends BaseOAuthDriver {
 		try {
 			const codeChallenge = await oidc.calculatePKCECodeChallenge(payload['codeVerifier']);
 
-
-			const callbackUrl = new URL(payload['callbackPath'], this.redirectUrl)
+			const callbackUrl = new URL(payload['callbackPath'], this.redirectUrl);
 
 			tokenSet = await oidc.authorizationCodeGrant(this.client, callbackUrl, {
 				pkceCodeVerifier: payload['codeVerifier'],
