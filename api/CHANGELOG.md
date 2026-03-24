@@ -12,7 +12,7 @@
 ### Patch Changes
 
 - cdd19fe: Properly count alias array length in validate payload
-- 57db0c9: update qs version
+- 57db0c9: Update qs version
 - 5a896e5: Rebrand Directus to d9: update docs, logos, sidebar loader, and fix broken CDN image references
 - 6d89f94: Fix getIPFromReq to safely handle undefined IP values by returning an empty string instead of throwing an
   error
