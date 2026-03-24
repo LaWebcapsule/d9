@@ -107,7 +107,7 @@ export const ACCESS_COOKIE_CLEAR_OPTIONS: CookieOptions = (() => {
 export const OAUTH2_COOKIE_OPTIONS: CookieOptions = {
 	httpOnly: true,
 	domain: env['OAUTH2_TOKEN_COOKIE_DOMAIN'] || env['ACCESS_TOKEN_COOKIE_DOMAIN'],
-	maxAge: getMilliseconds(env['OAUTH2_TOKEN_TTL'] || env['ACCESS_TOKEN_TTL']),
+	maxAge: getMilliseconds(env['OAUTH2_TOKEN_TTL']),
 	secure: (env['OAUTH2_TOKEN_COOKIE_SECURE'] || env['ACCESS_TOKEN_COOKIE_SECURE']) ?? false,
 	sameSite: (env['OAUTH2_TOKEN_COOKIE_SAME_SITE'] as 'lax' | 'strict' | 'none') || 'lax',
 	path: '/auth',
