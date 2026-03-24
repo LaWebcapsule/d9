@@ -120,7 +120,7 @@ export default async function init(): Promise<void> {
 	process.stdout.write(`\nThe configuration can be found in ${chalk.green(rootPath + '/.env')}\n`);
 	process.stdout.write(`\nStart Directus by running:\n`);
 	process.stdout.write(`  ${chalk.blue('cd')} ${rootPath}\n`);
-	process.stdout.write(`  ${chalk.blue('npx directus')} start\n`);
+	process.stdout.write(`  ${chalk.blue('npx d9')} start\n`);
 
 	process.exit(0);
 }

@@ -51,7 +51,7 @@ yarn install @wbce-d9/directus9
 Create a new project with our simple CLI tool:
 
 ```
-npx directus init
+npx d9 init
 ```
 
 The above command will create a directory with your project name, then walk you through the database configuration and

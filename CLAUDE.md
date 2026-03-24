@@ -25,7 +25,7 @@ Every debugging session is a potential contribution. Run `/d9-skills:skillops` t
 
 ## Important rules
 
-- Code identifiers `@directus/`, `directus_*`, `DIRECTUS_*`, `npx directus`, `new Directus()` must NEVER be renamed
+- Code identifiers `@directus/`, `directus_*`, `DIRECTUS_*`, `npx d9`, `new Directus()` must NEVER be renamed
 - Plugins must be rebuilt (`pnpm build` in plugins/) before any deployment
 - AWS region is eu-west-3 (Paris) for all services
 - Contact: support@webcapsule.io
