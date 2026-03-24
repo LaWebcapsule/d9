@@ -43,7 +43,7 @@ post:
   requestBody:
     content:
       application/json:
-        # Intentionally empty, see https://github.com/LaWebcapsule/directus9/pull/16294
+        # Intentionally empty, see https://github.com/LaWebcapsule/d9/pull/16294
         schema:
   responses:
     '200':

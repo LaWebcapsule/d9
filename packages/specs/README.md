@@ -23,7 +23,7 @@ TODO
 ## Contributing
 
 Please report any and all quirks / issues you come across as
-[an issue](https://github.com/LaWebcapsule/directus9/issues/new).
+[an issue](https://github.com/LaWebcapsule/d9/issues/new).
 
 Pull requests are more than welcome and always appreciated. Please make sure to
 reach out a member of the core team in an issue before you start working on

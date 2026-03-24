@@ -27,8 +27,8 @@ Aurora/Redshift or Google Cloud Platform SQL.
 
 Learn more at...
 
-- [GitHub](https://github.com/LaWebcapsule/directus9)
-- [Documentation](https://github.com/LaWebcapsule/directus9/tree/main/docs)
+- [GitHub](https://github.com/LaWebcapsule/d9)
+- [Documentation](https://github.com/LaWebcapsule/d9/tree/main/docs)
 
 <p>&nbsp;</p>
 
@@ -105,11 +105,11 @@ import {...} from "@wbce-d9/some-package"
 
 ## Contributing
 
-Please report any and all issues [on our GitHub](https://github.com/LaWebcapsule/directus9/issues/new).
+Please report any and all issues [on our GitHub](https://github.com/LaWebcapsule/d9/issues/new).
 
 Pull-requests are more than welcome, and always appreciated. Please be sure to read our
-[Contributors Guide](https://github.com/LaWebcapsule/directus9/blob/main/contributing.md) before starting work on a new feature/fix, or
-reach out via [GitHub Discussions](https://github.com/LaWebcapsule/directus9/discussions) with any questions.
+[Contributors Guide](https://github.com/LaWebcapsule/d9/blob/main/contributing.md) before starting work on a new feature/fix, or
+reach out via [GitHub Discussions](https://github.com/LaWebcapsule/d9/discussions) with any questions.
 
 <p>&nbsp;</p>
 

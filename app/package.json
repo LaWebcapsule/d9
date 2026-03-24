@@ -6,10 +6,10 @@
 	"type": "module",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/LaWebcapsule/directus9.git",
+		"url": "https://github.com/LaWebcapsule/d9.git",
 		"directory": "app"
 	},
-	"funding": "https://github.com/LaWebcapsule/directus9?sponsor=1",
+	"funding": "https://github.com/LaWebcapsule/d9?sponsor=1",
 	"author": "Rijk van Zanten <rijkvanzanten@me.com>",
 	"exports": {
 		".": "./dist/index.html",

@@ -5,14 +5,14 @@
 	"homepage": "https://directus.io",
 	"type": "module",
 	"bugs": {
-		"url": "https://github.com/LaWebcapsule/directus9/issues"
+		"url": "https://github.com/LaWebcapsule/d9/issues"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/LaWebcapsule/directus9.git",
+		"url": "https://github.com/LaWebcapsule/d9.git",
 		"directory": "packages/extensions-sdk"
 	},
-	"funding": "https://github.com/LaWebcapsule/directus9?sponsor=1",
+	"funding": "https://github.com/LaWebcapsule/d9?sponsor=1",
 	"author": "Nicola Krumschmidt",
 	"exports": {
 		".": "./dist/index.js",
