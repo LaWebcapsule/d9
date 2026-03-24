@@ -13,7 +13,7 @@ problems. If you can't or don't want to use Docker, we also publish an
 
 :::
 
-d9 is published to [Docker Hub]({{DOCKER_HUB_URL}}) under `directus/directus`. To use the
+d9 is published to [Docker Hub]({{DOCKER_HUB_URL}}) under `lawebcapsule/d9`. To use the
 latest d9 image from Docker Hub, run:
 
 ```bash
@@ -22,16 +22,16 @@ docker run \
   -p 8055:8055 \
   -e KEY=255d861b-5ea1-5996-9aa3-922530ec40b1 \
   -e SECRET=6116487b-cda1-52c2-b5b5-c8022c45e263 \
-  directus/directus
+  lawebcapsule/d9
 ```
 
 ### Installing Specific Versions
 
 To stick to a more specific version of d9 you can use one of the following tags:
 
-- Full version, e.g. `9.0.0`
-- Minor releases, e.g. `9.0`
-- Major releases, e.g. `9`
+- Full version, e.g. `12.0.0`
+- Minor releases, e.g. `12.0`
+- Major releases, e.g. `12`
 
 To use a specific version of d9, run:
 
@@ -41,7 +41,7 @@ docker run \
   -p 8055:8055 \
   -e KEY=255d861b-5ea1-5996-9aa3-922530ec40b1 \
   -e SECRET=6116487b-cda1-52c2-b5b5-c8022c45e263 \
-  directus/directus:9.0.0
+  lawebcapsule/d9:12.0.0
 ```
 
 ### Configure Admin User
@@ -97,7 +97,7 @@ services:
 
   directus:
     container_name: directus
-    image: directus/directus:latest
+    image: lawebcapsule/d9:latest
     ports:
       - 8055:8055
     volumes:
@@ -146,8 +146,8 @@ If you are not using the `latest` tag for the d9 image you need to adjust your `
 increment the tag version number, e.g.:
 
 ```diff
--   image: directus/directus:9.0.0-rc.101
-+   image: directus/directus:9.0.0
+-   image: lawebcapsule/d9:9.0.0-rc.101
++   image: lawebcapsule/d9:9.0.0
 ```
 
 You can then issue the following two commands (from your docker-compose root):

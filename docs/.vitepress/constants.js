@@ -6,7 +6,7 @@ export const URLS = {
 	GITHUB_COMMUNITY: 'https://github.com/LaWebcapsule/directus9/discussions',
 	LOCALES: 'https://locales.directus.io',
 	NPM: 'https://www.npmjs.com/package/@wbce-d9/directus9',
-	DOCKER_HUB: 'https://github.com/LaWebcapsule/directus9/pkgs/container/directus9',
+	DOCKER_HUB: 'https://hub.docker.com/r/lawebcapsule/d9',
 };
 
 export const EMAILS = {

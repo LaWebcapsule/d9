@@ -24,7 +24,7 @@ like `KEY`, `SECRET`, `ADMIN_PASSWORD`, _etc._
 version: '3'
 services:
   directus:
-    image: directus/directus:latest
+    image: lawebcapsule/d9:latest
     ports:
       - 8055:8055
     volumes:

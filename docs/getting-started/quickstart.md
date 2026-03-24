@@ -13,7 +13,7 @@ readTime: 7 min read
 
 ## 1. Install & Start d9
 
-The fastest way to get started is with Docker:
+### With Docker (fastest way)
 
 ```bash
 docker run -d \
@@ -24,13 +24,36 @@ docker run -d \
   -e ADMIN_PASSWORD=your-password \
   -e DB_CLIENT=sqlite3 \
   -e DB_FILENAME=/directus/database/data.db \
-  ghcr.io/lawebcapsule/directus9:latest
+  lawebcapsule/d9:latest
 ```
 
-Or with npm:
+Once running, open `http://localhost:8055` in your browser and log in with the admin credentials you set above.
+
+### With npm
+
+Install d9 as an npm package:
 
 ```bash
-npm init @wbce-d9/directus-project@latest
+npm init
+npm install @wbce-d9/directus9
+```
+
+Create a `.env` file at the root of your directory with the following content:
+
+```
+KEY=some-random-key
+SECRET=another-random-key
+DB_CLIENT=sqlite3
+DB_FILENAME=./data.db
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=your-password
+```
+
+Then bootstrap and start the server:
+
+```bash
+npx directus bootstrap
+npx directus start
 ```
 
 Once running, open `http://localhost:8055` in your browser and log in with the admin credentials you set above.

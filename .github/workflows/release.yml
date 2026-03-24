@@ -7,7 +7,8 @@ on:
 
 env:
   GHCR_IMAGE: ghcr.io/${{ github.repository }}
-  DOCKERHUB_IMAGE: ${{ github.repository }}
+  DOCKERHUB_IMAGE: lawebcapsule/directus9
+  DOCKERHUB_IMAGE_OLD: lawebcapsule/d9
 
 jobs:
   create-release:
@@ -66,6 +67,7 @@ jobs:
         with:
           images: |
             ${{ env.DOCKERHUB_IMAGE }}
+            ${{ env.DOCKERHUB_IMAGE_OLD }}
             ${{ env.GHCR_IMAGE }}
           tags: |
             type=semver,pattern={{version}}
