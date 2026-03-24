@@ -29,7 +29,7 @@ docker run \
 
 To stick to a more specific version of d9 you can use one of the following tags:
 
-- Full version, e.g. `12.0.0`
+- Full version, e.g. `12.0.1`
 - Minor releases, e.g. `12.0`
 - Major releases, e.g. `12`
 
@@ -41,7 +41,7 @@ docker run \
   -p 8055:8055 \
   -e KEY=255d861b-5ea1-5996-9aa3-922530ec40b1 \
   -e SECRET=6116487b-cda1-52c2-b5b5-c8022c45e263 \
-  lawebcapsule/d9:12.0.0
+  lawebcapsule/d9:12.0.1
 ```
 
 ### Configure Admin User
