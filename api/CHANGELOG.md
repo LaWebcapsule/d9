@@ -1,5 +1,25 @@
 # @wbce-d9/api
 
+## 12.3.0
+
+### Minor Changes
+
+- 92162bc: Enable multi-tabs sessions
+- b1da816: Change the default config for the oauth2 cookie
+- 92162bc: Enable multi-tabs session
+- 2787990: Add "system-only" fields
+
+### Patch Changes
+
+- cdd19fe: Properly count alias array length in validate payload
+- 57db0c9: update qs version
+- 5a896e5: Rebrand Directus to d9: update docs, logos, sidebar loader, and fix broken CDN image references
+- 6d89f94: Fix getIPFromReq to safely handle undefined IP values by returning an empty string instead of throwing an
+  error
+- Updated dependencies [5a896e5]
+- Updated dependencies [6310473]
+  - @wbce-d9/app@10.0.0
+
 ## 12.2.0
 
 ### Minor Changes

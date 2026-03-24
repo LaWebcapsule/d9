@@ -1,5 +1,28 @@
 # directus9
 
+## 12.0.0
+
+### Major Changes
+
+- 6310473: Rebrand Directus 9 to d9 by La Webcapsule: new branding, logos, updated documentation site
+  (d9.webcapsule.io), and OpenID client fixes
+
+### Minor Changes
+
+- 92162bc: Enable multi-tabs sessions
+
+### Patch Changes
+
+- Updated dependencies [cdd19fe]
+- Updated dependencies [57db0c9]
+- Updated dependencies [92162bc]
+- Updated dependencies [b1da816]
+- Updated dependencies [92162bc]
+- Updated dependencies [5a896e5]
+- Updated dependencies [2787990]
+- Updated dependencies [6d89f94]
+  - @wbce-d9/api@12.3.0
+
 ## 11.0.8
 
 ### Patch Changes

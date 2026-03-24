@@ -1,5 +1,16 @@
 # @wbce-d9/app
 
+## 10.0.0
+
+### Major Changes
+
+- 6310473: Rebrand Directus 9 to d9 by La Webcapsule: new branding, logos, updated documentation site
+  (d9.webcapsule.io), and OpenID client fixes
+
+### Patch Changes
+
+- 5a896e5: Rebrand Directus to d9: update docs, logos, sidebar loader, and fix broken CDN image references
+
 ## 9.35.1
 
 ### Patch Changes
