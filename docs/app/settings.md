@@ -9,9 +9,6 @@ readTime: 2 min read
 > The Settings Module is where your entire Project is configured, making it the first place to go after installation. To
 > maintain project safety and integrity, this module is only available to Administrators.
 
-<video autoplay playsinline muted loop controls>
-<source src="{{CDN_URL}}/docs/v9/app-guide/settings/settings-20220308A/settings-20220308A.mp4" type="video/mp4" />
-</video>
 
 ::: warning Administrators Only
 
@@ -21,12 +18,12 @@ Only Administrators have access to the Settings Module.
 
 Settings are split into five distinct sections, each described below.
 
-- [Project Settings](/configuration/project-settings) — Setup branding and other global style options.
-- [Data Model](/configuration/data-model) — Create and modify [Collections](/getting-started/glossary#collections),
+- [Project Settings](/app/project-settings) — Setup branding and other global style options.
+- [Data Model](/app/data-model) — Create and modify [Collections](/getting-started/glossary#collections),
   [Relationships](/getting-started/glossary#relationships), form layout, and [Fields](/getting-started/glossary#fields).
-- [Roles & Permissions](/configuration/users-roles-permissions) — Create and manage access via Roles and Permissions.
-- [Presets & Bookmarks](/configuration/presets-bookmarks) — Set default views of data and configure bookmarks.
-- [Webhooks](/configuration/webhooks) — Use platform events to trigger external services.
+- [Roles & Permissions](/app/users-roles-permissions) — Create and manage access via Roles and Permissions.
+- [Presets & Bookmarks](/app/presets-bookmarks) — Set default views of data and configure bookmarks.
+- [Webhooks](/app/webhooks) — Use platform events to trigger external services.
 
 Aside from the above pages, there are three shorthand links:
 

@@ -1,13 +1,13 @@
 ---
 description:
-  If you're looking for the fastest way to get up-and-running with Directus, this guide will walk you through getting
+  If you're looking for the fastest way to get up-and-running with d9, this guide will walk you through getting
   things installed, configured, and modeled.
 readTime: 5 min read
 ---
 
 # Quickstart Guide
 
-> If you're looking for the fastest way to get up-and-running with Directus, this guide will walk you through getting
+> If you're looking for the fastest way to get up-and-running with d9, this guide will walk you through getting
 > things installed, configured, and modeled.
 
 ## Requirements
@@ -55,10 +55,10 @@ To learn more, visit the [Docker Guide](/self-hosted/docker-guide).
 
 ## 2. Login to App
 
-With the server running, you're now able to login to your new Directus project and start using it.
+With the server running, you're now able to login to your new d9 project and start using it.
 
 Our start command stated that the server started at port `8055`, which means we can navigate to `http://localhost:8055`
-to open Directus in the browser.
+to open d9 in the browser.
 
 Login using the admin credentials you configured during the installation in Step 1.
 
@@ -66,7 +66,7 @@ Login using the admin credentials you configured during the installation in Step
 
 Once logged in, you're greeted with the option to create your first Collection:
 
-![Directus Empty State]({{CDN_URL}}/docs/v9/getting-started/quickstart/quickstart-20220217A/empty-state-20220217A.webp)
+![d9 Empty State](/images/empty-state-20220217A.webp)
 
 Follow the prompts and create a Collection. For the sake of this demo, we'll be calling ours `articles`, but feel free
 to make it your own!
@@ -82,11 +82,8 @@ To learn more, see our documentation [Collections](/app/content/collections).
 With the Collection created, it's time to start adding some Fields. Click the **"Create Field"** button, and select
 **"Input"**:
 
-<video autoplay playsinline muted loop controls>
-<source src="{{CDN_URL}}/docs/v9/getting-started/quickstart/quickstart-20220217A/add-field-20220217A.mp4" type="video/mp4" />
-</video>
 
-We'll be calling our Field `title`. While Directus offers a range of powerful field customization options, we'll be
+We'll be calling our Field `title`. While d9 offers a range of powerful field customization options, we'll be
 sticking to the defaults for now. These defaults use the "String" datatype.
 
 ::: tip More Info on Fields
@@ -101,7 +98,7 @@ Now that we have a Collection with a Field configured, it's time to start adding
 Module (top left), and click <span mi btn>add</span> in the top-right to get started. This will take you to the
 Create/Edit Item page:
 
-![Directus Create Item]({{CDN_URL}}/docs/v9/getting-started/quickstart/quickstart-20220217A/create-item-20220217A.webp)
+![d9 Create Item](/images/create-item-20220217A.webp)
 
 Once you're happy with your creation, click <span mi btn>check</span> in the top-right to save your Item to the
 database.
@@ -114,16 +111,16 @@ To learn more, see our documentation on [Items](/app/content/items).
 
 ## 6. Set Role/Public Permissions
 
-By default, all content entered into Directus is considered private. This means that no data will be returned by the
+By default, all content entered into d9 is considered private. This means that no data will be returned by the
 API, unless requested by an authenticated user that has the correct permissions. In order to have the API return our
 items, we'll have to setup some permissions. Navigate to **Settings Module <span mi icon dark>chevron_right</span> Roles
 & Permissions**.
 
-Directus ships with a special **"Public"** role that controls what data is returned to non-authenticated users. Select
+d9 ships with a special **"Public"** role that controls what data is returned to non-authenticated users. Select
 the Public Role, find your Collection, and click the icon under the <span mi icon>visibility</span> icon (read/view
 permission) to allow the Public Role to read the Items in your Collection.
 
-![Directus Permissions]({{CDN_URL}}/docs/v9/getting-started/quickstart/quickstart-20220217A/permissions-20220217A.webp)
+![d9 Permissions](/images/permissions-20220217A.webp)
 
 ::: tip More Info on Roles & Permissions
 

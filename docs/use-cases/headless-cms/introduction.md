@@ -1,5 +1,5 @@
 ---
-description: Directus' Data Studio and APIs are the perfect choice for your Headless CMS.
+description: d9' Data Studio and APIs are the perfect choice for your Headless CMS.
 tags: []
 skill_level:
 directus_version:
@@ -26,12 +26,12 @@ Learn more about [Headless CMS Concepts](/use-cases/headless-cms/concepts).
 - [Image transformations](/reference/files.html#requesting-a-thumbnail) to keep your website fast AND your art direction
   intact.
 - Quickly [build dashboards](/app/insights) that help your team make better decisions.
-- Create powerful, automated content approval and [publishing workflows](/cookbook/permissions/basic-workflows) without
+- Create powerful, automated content approval and publishing workflows without
   writing any code.
 
 ## Guides & Tutorials
 
-### Learn Directus
+### Learn d9
 
 - [Create Re-Usable Page Components](/guides/headless-cms/reusable-components)
 - [Build Approval Workflows](/guides/headless-cms/approval-workflows)
@@ -40,8 +40,8 @@ Learn more about [Headless CMS Concepts](/use-cases/headless-cms/concepts).
 
 ### Build Your Project
 
-- [Build a Website with Directus and Next.js](/guides/headless-cms/build-static-website/next-13)
-- [Build a Website with Directus and Nuxt.js](/guides/headless-cms/build-static-website/nuxt-3)
+- [Build a Website with d9 and Next.js](/guides/headless-cms/build-static-website/next-13)
+- [Build a Website with d9 and Nuxt.js](/guides/headless-cms/build-static-website/nuxt-3)
 
 ### Deployment & Best Practice
 

@@ -12,30 +12,30 @@ readTime: 7 min read
 > assigned a [role](/getting-started/glossary#roles) which defines its
 > [access permissions](/getting-started/glossary#permissions).
 
-![Users, Roles and Permissions]({{CDN_URL}}/docs/v9/configuration/users-roles-permissions/users-roles-permissions-20220909/users-roles-permissions-20220907A.webp)
+![Users, Roles and Permissions](/images/users-roles-permissions-20220907A.webp)
 
 :::tip Before You Begin
 
-We recommend you try the [Quickstart Guide](/getting-started/quickstart.md) to get an overview of the platform.
+We recommend you try the Quickstart Guide to get an overview of the platform.
 
 :::
 
 :::tip Learn More
 
 To manage users, role and permissions programmatically via the API, please see our API guides on
-[users](/reference/system/users.md), [roles](/reference/system/roles.md), and
-[permissions](/reference/system/permissions.md).
+users, roles, and
+permissions.
 
 :::
 
-In order to understand how users, roles, and permissions work in Directus, a conceptual understanding of _how they work
+In order to understand how users, roles, and permissions work in d9, a conceptual understanding of _how they work
 in general_ will be helpful. The following few paragraphs will introduce you to how users, roles, and permissions work
 within a relational database. If you're already familiar with these concepts, feel free to skip to
-[How it Works in Directus](#how-it-works-in-directus).
+[How it Works in d9](#how-it-works-in-directus).
 
 ### Users
 
-Remember, [users are data](/reference/system/users.md). They are simply rows in a `users` data table. It may be easy to
+Remember, users are data. They are simply rows in a `users` data table. It may be easy to
 forget this if you are new to working with data models, as the term _users_ can create a warm place in our hearts which
 distinguishes or elevates it above and beyond term _"data"_. But from the perspective of the data model, that's not the
 case. Users are still just data.
@@ -59,7 +59,7 @@ other entity that can login and interact with the database.
 In many cases, your project will have multiple users doing the same thing _(managers, writers, subscribers, etc)_. If we
 assigned permissions directly to the user, we would have to configure the same permissions over and over, which makes it
 tedious to change configurations for all users doing the same job and also leads to a higher chance of misconfiguration.
-This problem is an example of [data duplication](/configuration/data-model.md#avoid-data-duplication). To avoid this, we
+This problem is an example of data duplication. To avoid this, we
 create roles, configure the role's permissions once, then assign the role to users as desired.
 
 Regardless of your project, your SQL database will _always_ need an administrator role and a public role. In addition,
@@ -109,18 +109,15 @@ deadline. Finally, you likely want to restrict each student's CRUD access to all
 
 It is common to have multiple, complex business rules in a project.
 
-## How it Works in Directus
+## How it Works in d9
 
-<video title="How Users, Roles, & Permissions Work" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/users-roles-permissions/users-roles-permissions-20220909/how-users-roles-and-permissions-work-20220909A.mp4" type="video/mp4" />
-</video>
 
-While you have full reign to configure these using SQL, Directus also provides a complete system to configure and manage
+While you have full reign to configure these using SQL, d9 also provides a complete system to configure and manage
 users, roles, and permissions without writing a single line of SQL. The process has three key steps.
 
-1. [Create a Role](/configuration/users-roles-permissions/roles.md#create-a-role)
-2. [Configure its Permissions](/configuration/users-roles-permissions/permissions.md#configure-role-permissions)
-3. [Assign Role to User](/configuration/users-roles-permissions/roles.md#assign-role-to-user)
+1. Create a Role
+2. Configure its Permissions
+3. Assign Role to User
 
 :::tip No Artificial Limits
 
@@ -131,25 +128,25 @@ complex granular permissions as desired.
 
 :::tip
 
-Remember, the following users, role and permissions systems built into Directus cannot be deleted, however using them is
+Remember, the following users, role and permissions systems built into d9 cannot be deleted, however using them is
 optional. You may configure your own system as desired.
 
 :::
 
-## Directus Users
+## d9 Users
 
-![Users in the Directus Data Studio]({{CDN_URL}}/docs/v9/configuration/users-roles-permissions/users-roles-permissions-20220909/users-20220807A.webp)
+![Users in the d9 Data Studio](/images/users-20220807A.webp)
 
-Within the Data Studio, users are managed within the [User Directory](/app/user-directory.md). However, there are some
+Within the Data Studio, users are managed within the User Directory. However, there are some
 controls available to assign users to roles in **Settings > Roles and Permissions**.
 
-To learn more, please see our guide on [users](/configuration/users-roles-permissions/users.md).
+To learn more, please see our guide on users.
 
-## Directus Roles
+## d9 Roles
 
-![Roles in the Directus Data Studio]({{CDN_URL}}/docs/v9/configuration/users-roles-permissions/users-roles-permissions-20220909/roles-20220907A.webp)
+![Roles in the d9 Data Studio](/images/roles-20220907A.webp)
 
-You can create as many roles as you need for your project. Directus also comes with built-in administrator and public
+You can create as many roles as you need for your project. d9 also comes with built-in administrator and public
 roles, which cannot be deleted.
 
 The administrator role provides full permissions for all data in the app, and this cannot be limited. You must always
@@ -159,31 +156,31 @@ The public role comes with all access permissions turned off by default, but thi
 Remember, any access permissions granted to this role will apply to everyone, including unauthenticated web traffic _and
 all existing users_. If you wish to keep the project private, simply keep all permissions turned off.
 
-To learn more, see our guide on [roles](/configuration/users-roles-permissions/roles.md).
+To learn more, see our guide on roles.
 
-## Directus Permissions
+## d9 Permissions
 
-![Roles in the Directus Data Studio]({{CDN_URL}}/docs/v9/configuration/users-roles-permissions/users-roles-permissions-20220909/permissions-20220907A.webp)
+![Roles in the d9 Data Studio](/images/roles-20220907A.webp)
 
-Directus offers an extremely granular, yet easy to configure permissions system. When you
+d9 offers an extremely granular, yet easy to configure permissions system. When you
 [create a role](#create-a-role), all permissions are turned off by default, allowing you to explicitly grant permissions
 as desired.
 
-There are two other key points to note about Directus. First, the term
-[custom access permissions](/configuration/users-roles-permissions/permissions.md#configure-custom-permissions) is used
+There are two other key points to note about d9. First, the term
+custom access permissions is used
 in place of [business rules](#business-rules), however the concept is the same. Second, instead of the standard CRUD
-permissions, Directus provides CRUDS permissions: _create, read, update, delete, and share_. This _fifth_ type of
-permission, share, defines whether a user has permissions to perform [data sharing](/app/content/shares.md) on items in
+permissions, d9 provides CRUDS permissions: _create, read, update, delete, and share_. This _fifth_ type of
+permission, share, defines whether a user has permissions to perform data sharing on items in
 a collection.
 
-To learn more, see our guide on [permissions](/configuration/users-roles-permissions/permissions.md).
+To learn more, see our guide on permissions.
 
 ## Workflows
 
-![Workflows in the Directus]({{CDN_URL}}/docs/v9/configuration/users-roles-permissions/workflows-20220909/workflows-20220909B.webp)
+![Workflows in the d9](/images/workflows-20220909A.webp)
 
 Workflows are a way to setup structured stages to content authoring and data management. They are created primarily with
-custom access permissions, but can be enhanced with email notifications, custom [Interfaces](/extensions/interfaces.md)
-as well as [flows](/configuration/flows.md). Directus supports endlessly configurable workflows.
+custom access permissions, but can be enhanced with email notifications, custom Interfaces
+as well as flows. d9 supports endlessly configurable workflows.
 
-To learn more, see our recipe on [basic workflows](/cookbook/permissions/basic-workflows.md).
+To learn more, see our recipe on basic workflows.

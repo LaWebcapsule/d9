@@ -1,5 +1,5 @@
 ---
-description: A guide on how to build custom hooks in Directus.
+description: A guide on how to build custom hooks in d9.
 readTime: 7 min read
 ---
 
@@ -46,7 +46,7 @@ the event.
 
 Filter hooks act on the event's payload before the event is fired. They allow you to check, modify, or cancel an event.
 
-Below is an example of canceling a `create` event by throwing a standard Directus exception.
+Below is an example of canceling a `create` event by throwing a standard d9 exception.
 
 ```js
 export default ({ filter }, { exceptions }) => {
@@ -109,7 +109,7 @@ The context object has the following properties:
 
 ### Init
 
-Init hooks execute at a defined point within the life cycle of Directus. Use init hook objects to inject logic into
+Init hooks execute at a defined point within the life cycle of d9. Use init hook objects to inject logic into
 internal services.
 
 The init register function receives two parameters:
@@ -123,7 +123,7 @@ The callback function itself receives one parameter:
 
 ### Schedule
 
-Schedule hooks execute at certain points in time rather than when Directus performs a specific action. This is supported
+Schedule hooks execute at certain points in time rather than when d9 performs a specific action. This is supported
 through [`node-cron`](https://www.npmjs.com/package/node-cron).
 
 To set up a scheduled event, provide a cron statement as the first parameter to the `schedule()` function. For example

@@ -10,24 +10,18 @@ readTime:
 
 :::tip Learn More
 
-To configure roles programmatically, see our API documentation on [roles](/reference/system/roles.md).
+To configure roles programmatically, see our API documentation on roles.
 
 :::
 
 ## View a Role
 
-<video title="Create a Role" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/users-roles-permissions/roles-20220909/view-a-role-20220908A.mp4" type="video/mp4" />
-</video>
 
 To view an existing role, navigate to **Settings > Roles & Permissions > [Role]**. Now you can see the role's
 permissions and other details.
 
 ## Create a Role
 
-<video title="Create a Role" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/users-roles-permissions/roles-20220909/create-a-role-20220908A.mp4" type="video/mp4" />
-</video>
 
 To create a role, follow these steps.
 
@@ -47,9 +41,6 @@ Next, you will likely need to [configure the role's details](#configure-role-det
 
 ## Configure Role Details
 
-<video title="Configure Role Details" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/users-roles-permissions/roles-20220909/configure-role-details-20220907A.mp4" type="video/mp4" />
-</video>
 
 In addition to defining permissions, roles come with a number of other configuration options. To configure a role's
 details, follow these steps.
@@ -73,16 +64,13 @@ details, follow these steps.
 
 Roles with _App Access_ enabled are created with the minimum permissions required to login to the app and access their
 own profile information. Roles that have neither _Admin_ nor _App Access_ enabled are created with public permissions.
-You can always [reconfigure permissions](/configuration/users-roles-permissions/permissions.md#configure-permissions)
+You can always reconfigure permissions
 later.
 
 :::
 
 ## Delete a Role
 
-<video title="Create a Role" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/configuration/users-roles-permissions/roles-20220909/delete-a-role-20220907A.mp4" type="video/mp4" />
-</video>
 
 To delete a role, follow these steps.
 
@@ -94,13 +82,13 @@ To delete a role, follow these steps.
 
 If you delete a role that still has users in it, those users will be given a `NULL` role, which limits them to public
 permissions. However, you can always
-[assign them a new role](/configuration/users-roles-permissions/users.md#assign-role-to-existing-user).
+assign them a new role.
 
 :::
 
 :::tip Built-in Roles
 
-Directus does not allow you to delete the built-in public role or administrator role. To learn more, please see the
-introductory section on [Directus Roles](/configuration/users-roles-permissions.html#directus-roles).
+d9 does not allow you to delete the built-in public role or administrator role. To learn more, please see the
+introductory section on d9 Roles.
 
 :::

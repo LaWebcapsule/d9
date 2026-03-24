@@ -1,5 +1,5 @@
 ---
-description: REST and GraphQL API documentation to access and manage Items in Directus.
+description: REST and GraphQL API documentation to access and manage Items in d9.
 readTime: 5 min read
 pageClass: page-reference
 ---
@@ -14,7 +14,7 @@ pageClass: page-reference
 ## The Item Object
 
 Items don't have a predefined schema. The format depends completely on how you configured your collections and fields in
-Directus. For the sake of documentation, we'll use a fictional articles collection with the following fields: `id`,
+d9. For the sake of documentation, we'll use a fictional articles collection with the following fields: `id`,
 `status`, `title`, `body`, `featured_image`, and `author`.
 
 ::: tip Relational Data
@@ -39,7 +39,7 @@ learn more.
 
 ## Get Items
 
-List all items that exist in Directus.
+List all items that exist in d9.
 
 ### Query Parameters
 
@@ -106,7 +106,7 @@ query {
 
 ## Get Item by ID
 
-Get an item that exists in Directus.
+Get an item that exists in d9.
 
 ### Query Parameters
 

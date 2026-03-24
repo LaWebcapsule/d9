@@ -10,15 +10,9 @@ readTime: 3 min read
 > Translation Strings are multilingual key-value pairs that you can use throughout the app. They enable you to translate
 > things like dropdown options, placeholder text, field notes, and more.
 
-<video autoplay playsinline muted loop controls>
-<source src="{{CDN_URL}}/docs/v9/configuration/translation-strings/translation-strings-20220615A/translation-strings-20220615A.mp4" type="video/mp4" />
-</video>
 
 ## Create a Translation String
 
-<video autoplay playsinline muted loop controls>
-<source src="{{CDN_URL}}/docs/v9/configuration/translation-strings/translation-strings-20220616A/create-and-manage-a-trasnlation-string-20220616A.mp4" type="video/mp4" />
-</video>
 
 To create a Translation String, follow these steps.
 
@@ -33,9 +27,6 @@ To create a Translation String, follow these steps.
 
 ## Use a Translation String
 
-<video autoplay playsinline muted loop controls>
-<source src="{{CDN_URL}}/docs/v9/configuration/translation-strings/translation-strings-20220616A/assign-and-remove-translation-string-20220616A.mp4" type="video/mp4" />
-</video>
 
 Throughout the Settings Module, you will notice certain input fields have a <span mi icon>translate</span> icon on them.
 While can always type static text into these input fields, this <span mi icon>translate</span> icon indicates that you
@@ -51,7 +42,7 @@ have the option assign a Translation String. To assign a Translation String, fol
 
 Your Translation String is set! Now the language-appropriate text will be shown based on the current language of the
 app. There are two ways to change the app language. First, administrators can set the Project's
-[default language](/configuration/project-settings#general). Second, Users can choose their own personal
+[default language](/app/project-settings#general). Second, Users can choose their own personal
 [language preference](/app/user-directory#user-preferences). Also note that if a language is chosen for which there is
 no Translation String, the translation key _(from step three)_ will be displayed instead.
 

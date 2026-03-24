@@ -10,9 +10,6 @@ readTime: 9 min read
 
 ## What's a Layout?
 
-<video autoplay playsinline muted loop controls title="Layouts Montage">
-	<source src="{{CDN_URL}}/docs/v9/app-guide/layouts/layouts-20220415A/layouts-montage-20220419A.mp4" type="video/mp4" />
-</video>
 
 Data models vary drastically in shape and purpose, from eCommerce platforms to IoT fleets and everything in between.
 While excel-style data tables often closely resemble how the data is stored in the database, this is not always the most
@@ -20,9 +17,6 @@ human-friendly way to view the data. Layouts provide intuitive displays to view 
 
 ## How it Works
 
-<video autoplay playsinline muted loop controls title="Adjust Item Layouts">
-	<source src="{{CDN_URL}}/docs/v9/app-guide/layouts/layouts-20220415A/adjust-page-layout-20220415A.mp4" type="video/mp4" />
-</video>
 
 To adjust an Item's Layout, follow these steps.
 
@@ -72,9 +66,6 @@ As you go through Layouts, it may be helpful to keep the following points in min
 
 ## Table Layout
 
-<video autoplay playsinline muted loop controls title="Table Layout">
-	<source src="{{CDN_URL}}/docs/v9/app-guide/layouts/Layouts-20221205/table-layout-20221202A.mp4" type="video/mp4" />
-</video>
 
 This Layout supports all forms of data, as it directly reflects how data is stored in a Collection. This is the default
 Layout used in the Content Module. It includes the following controls.
@@ -104,17 +95,14 @@ Layout used in the Content Module. It includes the following controls.
 
 ::: warning Manual Sorting Requires Configuration
 
-Only available if you [configure a sort field](/configuration/data-model/collections#sort-field) in the Collection's
+Only available if you [configure a sort field](/app/data-model/collections#sort-field) in the Collection's
 Data Model Settings.
 
 :::
 
 ## Card Layout
 
-<video autoplay playsinline muted loop controls title="Card Layout">
-	<source src="{{CDN_URL}}/docs/v9/app-guide/layouts/Layouts-20221205/card-layout-20221205A.mp4
 " type="video/mp4" />
-</video>
 
 This tiled Layout is ideal for Collections that prioritize an image _(e.g. a user or blog post)_. This is the default
 for both the [User Directory](/app/user-directory) and [File Library](/app/file-library). It includes the following
@@ -142,9 +130,6 @@ controls.
 
 ## Calendar Layout
 
-<video autoplay playsinline muted loop controls title="Calendar Layout">
-	<source src="{{CDN_URL}}/docs/v9/app-guide/layouts/Layouts-20221205/calendar-layout-20221205A.mp4" type="video/mp4" />
-</video>
 
 This Layout is ideal for Collections with time-oriented data _(e.g. events and appointments)_. It includes the following
 controls.
@@ -168,16 +153,13 @@ controls.
 
 :::tip Configuration Requirements
 
-To use this Layout, the Collection will need at least one datetime [Field](/configuration/data-model/fields.md) to set a
+To use this Layout, the Collection will need at least one datetime Field to set a
 start time, but ideally two datetime Fields _(to set a start time and end time)_.
 
 :::
 
 ## Map Layout
 
-<video autoplay playsinline muted loop controls title="Map Layout">
-	<source src="{{CDN_URL}}/docs/v9/app-guide/layouts/Layouts-20221205/map-layout-20221205A.mp4" type="video/mp4" />
-</video>
 
 This Layout is ideal for Collections that emphasize geospatial data. It provides a world map, with Items displayed as
 points, lines, and other geometry. The following options are available:
@@ -216,13 +198,10 @@ Link to Map Field
 
 ## Kanban Layout
 
-<video autoplay playsinline muted loop controls title="Kanban Layout">
-	<source src="{{CDN_URL}}/docs/v9/app-guide/layouts/Layouts-20221205/kanban-layout-20221205A.mp4" type="video/mp4" />
-</video>
 
 :::info Availability
 
-The Kanban Layout is only available in Directus Cloud and Enterprise Self-Hosted projects.
+The Kanban Layout is only available in d9 Cloud and Enterprise Self-Hosted projects.
 
 :::
 
@@ -258,7 +237,7 @@ _There is no Subheader for the Kanban Layout._
 
 :::tip Configuration Requirements
 
-To make this Layout work, you will need to configure an appropriate status [Field](/configuration/data-model/fields.md)
+To make this Layout work, you will need to configure an appropriate status Field
 on the Collection, then identify this Field under **"Group By"** in the Layout Options menu.
 
 :::

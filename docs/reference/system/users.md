@@ -1,12 +1,12 @@
 ---
-description: REST and GraphQL API documentation on the Users collection in Directus.
+description: REST and GraphQL API documentation on the Users collection in d9.
 readTime: 9 min read
 pageClass: page-reference
 ---
 
 # Users
 
-> Directus Users are the individual accounts that let you authenticate into the API and App. Each user belongs to a Role
+> d9 Users are the individual accounts that let you authenticate into the API and App. Each user belongs to a Role
 > which defines its granular Permissions. [Learn more about Users](/getting-started/glossary#users).
 
 ---
@@ -107,7 +107,7 @@ When this is enabled, the user will receive emails for notifications.
 
 ## List Users
 
-List all users that exist in Directus.
+List all users that exist in d9.
 
 ### Query Parameters
 

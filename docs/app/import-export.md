@@ -32,9 +32,6 @@ This page details Importing and Exporting of Items as files via the no-code app.
 
 ## Import Items
 
-<video autoplay playsinline muted loop controls title="Import Data From a File">
-	<source src="{{CDN_URL}}/docs/v9/app-guide/imports-exports/imports-exports-20220415A/import-items-20220416A.mp4" type="video/mp4" />
-</video>
 
 To import Items from a file, follow the steps below.
 
@@ -45,7 +42,7 @@ To import Items from a file, follow the steps below.
 4. Select the desired file and click **"open"**.
 5. Click **"Start Import"** to import the Items.
 
-The Items will now be in the Collection. The file itself will not be stored in the Directus Project.
+The Items will now be in the Collection. The file itself will not be stored in the d9 Project.
 
 :::tip Importing Relational Files
 
@@ -61,10 +58,7 @@ Add link
 
 ## Export Items
 
-<video autoplay playsinline muted loop controls title="Export Data to a File">
-	<source src="{{CDN_URL}}/docs/v9/app-guide/imports-exports/imports-exports-20220415A/export-items-20220416A.mp4
 " type="video/mp4" />
-</video>
 
 When exporting Items, the [Export Items Menu](#export-items-menu) provides granular control over exactly which Items and
 Fields are exported, how they are exported, and where they are exported. To export Items, follow the steps below.
@@ -85,7 +79,7 @@ Export your file to CSV to seamlessly open in excel.
 
 :::tip Exporting to File Library
 
-When downloading 2,500 or more Items, you will be required to download into the Directus Project's File Library. After
+When downloading 2,500 or more Items, you will be required to download into the d9 Project's File Library. After
 exporting, go to the File Library to download your file locally.
 
 :::
@@ -101,9 +95,6 @@ permissions for the related Collection and a firm understanding of the relationa
 
 ## Export Items Menu
 
-<video autoplay playsinline muted loop controls title="Export Data to a File">
-	<source src="{{CDN_URL}}/docs/v9/app-guide/imports-exports/imports-exports-20220415A/export-items-menu-20220416A.mp4" type="video/mp4" />
-</video>
 
 This menu provides granular control over exactly which Items and Fields are exported, how they are exported, and where
 they are exported.

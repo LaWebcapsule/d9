@@ -1,5 +1,5 @@
 ---
-description: REST and GraphQL API documentation on the Panels collection in Directus.
+description: REST and GraphQL API documentation on the Panels collection in d9.
 readTime: 5 min read
 pageClass: page-reference
 ---
@@ -84,7 +84,7 @@ User that created the panel. Many-to-one to [users](/reference/system/users).
 
 ## List Panels
 
-List all panels that exist in Directus.
+List all panels that exist in d9.
 
 ### Query Parameters
 

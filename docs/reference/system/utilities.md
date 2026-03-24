@@ -1,5 +1,5 @@
 ---
-description: REST and GraphQL API documentation on the Utilities collection in Directus.
+description: REST and GraphQL API documentation on the Utilities collection in d9.
 readTime: 3 min read
 pageClass: page-reference
 ---
@@ -271,7 +271,7 @@ n/a
 
 ## Clear the Internal Cache
 
-Resets both the data and schema cache of Directus. This endpoint is only available to admin users.
+Resets both the data and schema cache of d9. This endpoint is only available to admin users.
 
 ### Request Body
 

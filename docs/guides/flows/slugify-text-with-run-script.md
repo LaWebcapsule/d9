@@ -15,7 +15,7 @@ author: Eron Powell
 
 <!-- **Skill Level:** {{$frontmatter.skill_level}}\ -->
 
-**Directus Version:** {{$frontmatter.directus_version}}
+**d9 Version:** {{$frontmatter.directus_version}}
 
 <!-- **Tags:** {{$frontmatter.tags.join(", ")}} -->
 
@@ -31,11 +31,11 @@ English text.
 
 :::tip Requirements
 
-You'll need a string somewhere in your [data chain](/configuration/flows.md#data-chains).
+You'll need a string somewhere in your data chain.
 
 :::
 
-1. Create a [Run Script](/configuration/flows/operations.md#run-script) operation in your flow.
+1. Create a Run Script operation in your flow.
 2. Paste the following function into your Run Script operation.
 
 ```js

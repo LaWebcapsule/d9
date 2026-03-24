@@ -46,11 +46,16 @@ jobs:
         uses: ./.github/actions/prepare
 
       - name: Configure AWS Credentials
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
         uses: aws-actions/configure-aws-credentials@v5.1.0
         with:
           aws-region: eu-west-3
           role-to-assume: ${{ secrets.AWS_ROLE_ARN_TO_ASSUME_FOR_SES }}
           role-session-name: GHActionSession
+
+      - name: Enable SES test
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        run: echo "EMAIL_SES_CONFIGURED=true" >> $GITHUB_ENV
 
       - name: Run Tests
         run: pnpm test

@@ -2,11 +2,11 @@
 
 ![CI](https://github.com/directus/specs/workflows/CI/badge.svg?branch=master)
 
-## 🐰 Introduction
+## ☄️ Introduction
 
-Welcome to API specification for Directus.
+Welcome to API specification for d9.
 
-## ⚙️ Installation
+## Installation
 
 ### Start the swagger dev environment
 
@@ -16,29 +16,19 @@ Run
 npm run dev
 ```
 
-## ✨ Updating
+## Updating
 
 TODO
 
-## 🔧 Contributing
+## Contributing
 
 Please report any and all quirks / issues you come across as
 [an issue](https://github.com/LaWebcapsule/directus9/issues/new).
 
-Pull requests are more than welcome and always appreciated. Seeing this is in active development, please make sure to
-reach out a member of the core team in an issue or [on Discord](http://discord.gg/directus) before you start working on
+Pull requests are more than welcome and always appreciated. Please make sure to
+reach out a member of the core team in an issue before you start working on
 a feature or bug to ensure you don't work on the same thing as somebody else :)
 
-## ❤️ Supporting Directus
+## License
 
-Directus is a GPLv3-licensed open source project with development made possible by support from our core team,
-contributors, and sponsors. It's not easy building premium open-source software; if you would like to help ensure
-Directus stays free, please consider becoming a sponsor.
-
-- [Support us through GitHub Sponsors](https://github.com/sponsors/directus)
-- [One-time donation through PayPal](https://www.paypal.me/supportdirectus)
-
-## 📄 License
-
-Directus is released under [the GPLv3 license](./LICENSE). Monospace Inc. owns all Directus trademarks and logos on
-behalf of our project's community. Copyright © 2006-2020, Monospace Inc.
+d9 is a fork of Directus, released under [the GPLv3 license](./LICENSE).

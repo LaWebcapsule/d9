@@ -1,5 +1,5 @@
 ---
-description: REST and GraphQL API documentation on the Dashboards collection in Directus.
+description: REST and GraphQL API documentation on the Dashboards collection in d9.
 readTime: 5 min read
 pageClass: page-reference
 ---
@@ -55,7 +55,7 @@ Panels that are in this dashboard. One-to-may to [panels](/reference/system/pane
 
 ## List Dashboards
 
-List all dashboards that exist in Directus.
+List all dashboards that exist in d9.
 
 ### Query Parameters
 

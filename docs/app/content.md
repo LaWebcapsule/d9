@@ -27,7 +27,7 @@ Link to tutorial
 
 ## Collection Page
 
-![Collection Overview]({{CDN_URL}}/docs/v9/app-guide/content/content/content-20220415A/collection-page-20220415A.webp)
+![Collection Overview](/images/collection-page-20220415A.webp)
 
 The Content Module consists of Collection Pages and Item Pages. Use the Navigation Bar on the left to move between
 Collections. Each Collection Page displays all Items in its Collection and comes with highly configurable
@@ -39,13 +39,13 @@ more, see our guide on the [Collection Page](/app/content/collections).
 
 The Content module helps you manage Items. Collections are managed within the **Settings** menu, as these actions
 results in changes to the data model. To learn more, see our guide on
-[data model configuration](/configuration/data-model).
+[data model configuration](/app/data-model).
 
 :::
 
 ## Item Page
 
-![Article Overview]({{CDN_URL}}/docs/v9/app-guide/content/content/content-20220415A/item-page-20220215A.webp)
+![Article Overview](/images/item-page-20220215A.webp)
 
 When you click an Item on the Collection page, its Item Page will open. The Item Page is a form that enables you to
 view, edit or delete an Item and its field values. You can also comment on, share, archive, or revert an Item from this
@@ -53,9 +53,6 @@ form. To learn more, see our guide on the [Item Page](/app/content/items).
 
 ## Shares
 
-<video title="Data Sharing" autoplay playsinline muted loop controls>
-	<source src="{{CDN_URL}}/docs/v9/app-guide/content/content/content-20220415A/data-shares-20220415A.mp4" type="video/mp4" />
-</video>
 
 In any project, certain Collections will have limited access permissions. In some cases, you may need to share one of
 the Items within the collection with an individual or group of individuals who don't yet have permission. In this case,

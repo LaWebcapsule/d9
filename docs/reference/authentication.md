@@ -1,5 +1,5 @@
 ---
-description: API documentation on authentication in Directus.
+description: API documentation on authentication in d9.
 readTime: 5 min read
 pageClass: page-reference
 ---
@@ -7,14 +7,14 @@ pageClass: page-reference
 # Authentication
 
 > All data within the platform is private by default. The
-> [public role](/configuration/users-roles-permissions#configure-permissions) can be configured to expose data without
+> [public role](/app/users-roles-permissions#configure-permissions) can be configured to expose data without
 > authentication, or you can pass an access token to the API to access private data.
 
 ---
 
 ## Access Tokens
 
-There are two types of tokens that can be used to authenticate within Directus.
+There are two types of tokens that can be used to authenticate within d9.
 
 **Temporary Token (JWT)** are returned by the [login](#login) endpoint/mutation. These tokens have a relatively short
 expiration time, and are thus the most secure option to use. The tokens are returned with a `refresh_token` that can be

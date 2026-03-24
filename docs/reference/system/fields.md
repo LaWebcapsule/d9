@@ -1,5 +1,5 @@
 ---
-description: REST and GraphQL API documentation on the Fields collection in Directus.
+description: REST and GraphQL API documentation on the Fields collection in d9.
 readTime: 7 min read
 pageClass: page-reference
 ---
@@ -20,11 +20,11 @@ Name of the collection the field resides in.
 The identifier of the field. This matches the table column name.
 
 `type` **string**\
-The Directus data type of the field. See [Types](/getting-started/glossary#types) for possible options.
+The d9 data type of the field. See [Types](/getting-started/glossary#types) for possible options.
 
 #### Meta
 
-Directus metadata, primarily used in the Admin App. Meta is optional.
+d9 metadata, primarily used in the Admin App. Meta is optional.
 
 `id` **integer**\
 Primary key of the metadata row in `directus_fields`.
@@ -97,7 +97,7 @@ Precision for integer/float/decimal type fields.
 Scale for integer/float/decimal type fields.
 
 `is_nullable` **boolean**\
-Whether or not the column is nullable. This is what is used as the "required" state in Directus.
+Whether or not the column is nullable. This is what is used as the "required" state in d9.
 
 `is_primary_key` **boolean**\
 Whether or not the field is the primary key of the table.
@@ -307,7 +307,7 @@ This endpoint doesn't currently support any query parameters.
 Field key, also used as the column name.
 
 `type` **Required**\
-One of the Directus types. This in turn controls what datatype is used for the column in the database. Setting the type to
+One of the d9 types. This in turn controls what datatype is used for the column in the database. Setting the type to
 `alias` prevents a column from being created in the database.
 
 `meta`\

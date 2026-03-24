@@ -1,12 +1,12 @@
 ---
-description: REST and GraphQL API documentation on the Flows collection in Directus.
+description: REST and GraphQL API documentation on the Flows collection in d9.
 readTime: 5 min read
 pageClass: page-reference
 ---
 
 # Flows
 
-> Flows enable custom, event-driven data processing and task automation within Directus.
+> Flows enable custom, event-driven data processing and task automation within d9.
 
 ---
 
@@ -68,7 +68,7 @@ UUID of the operation connected to the trigger in the flow.
 
 ## List Flows
 
-List all flows that exist in Directus.
+List all flows that exist in d9.
 
 ### Query Parameters
 

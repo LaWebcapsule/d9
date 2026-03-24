@@ -6,7 +6,7 @@
 					<v-image :src="logoURL" :alt="info?.project.project_name || 'Logo'" />
 				</div>
 				<div v-else class="logo" :style="{ backgroundColor: info?.project?.project_color }">
-					<img src="./logo-light.svg" alt="Directus" class="directus-logo" />
+					<img src="./logo-light.svg" alt="d9" class="directus-logo" />
 				</div>
 				<div class="title">
 					<h1 class="type-title">{{ info?.project?.project_name }}</h1>

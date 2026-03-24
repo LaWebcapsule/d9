@@ -24,13 +24,10 @@ Link to tutorial
 
 ## Toggle Hidden Collections
 
-<video autoplay playsinline muted loop controls title="Toggle Hidden Collections">
-	<source src="{{CDN_URL}}/docs/v9/app-guide/content/content-collections/content-collections-20220816/toggle-hidden-collections-20220816A.mp4" type="video/mp4" />
-</video>
 
 Some projects may have dozens or even hundreds of collections, which can be overwhelming to sort through. To ease this
 problem, Admins can choose to
-[hide collections by default](/configuration/data-model/collections.html#toggle-collection-visibility) on the Navigation
+hide collections by default on the Navigation
 bar. Users can then show or hide hidden collections as desired. To toggle collection visibility, follow these steps.
 
 1. Navigate to the Content Module.
@@ -41,15 +38,12 @@ bar. Users can then show or hide hidden collections as desired. To toggle collec
 
 This functionality is purely aesthetic, provided to help you _visually cleanup_ the Navigation Bar. For admins who'd
 like to block users' access permissions, please see
-[users, roles and permissions](/configuration/users-roles-permissions).
+[users, roles and permissions](/app/users-roles-permissions).
 
 :::
 
 ## Adjust Page Layout
 
-<video autoplay playsinline muted loop controls title="Layouts">
-	<source src="{{CDN_URL}}/docs/v9/app-guide/content/content-collections/content-collections-20220415A/adjust-page-layout-20220415A.mp4" type="video/mp4" />
-</video>
 
 Layouts determine how you view or interact with Items in a Collection. Whether your Collection contains blog posts,
 project management tasks, geo-coordinates, temporal data or beyond; Layouts present Items in a more human-friendly way.
@@ -57,9 +51,6 @@ project management tasks, geo-coordinates, temporal data or beyond; Layouts pres
 
 ## Search Items
 
-<video autoplay playsinline muted loop controls title="Search Items">
-	<source src="{{CDN_URL}}/docs/v9/app-guide/content/content-collections/content-collections-20220415A/search-items-20220419A.mp4" type="video/mp4" />
-</video>
 
 Find all Items with one or more Fields containing your searched value, excluding any Items which have been
 [filtered out](#filter-items). To search through a Collection's Items, follow these steps.
@@ -70,9 +61,6 @@ Find all Items with one or more Fields containing your searched value, excluding
 
 ## Filter Items
 
-<video autoplay playsinline muted loop controls title="Filter Items">
-	<source src="{{CDN_URL}}/docs/v9/app-guide/content/content-collections/content-collections-20220415A/filter-items-2022019A.mp4" type="video/mp4" />
-</video>
 
 Filters allow you to conditionally select Items from a Collection. Use-cases include customizing Item search results,
 restricting Item access permissions for specific Users or Roles, building dashboard analytics with the Insights module,
@@ -80,14 +68,11 @@ and more. To Learn More, see our guide on [Filters](/app/filters).
 
 ## Manually Sort Items
 
-<video autoplay playsinline muted loop controls title="Batch Edit Items">
-	<source src="{{CDN_URL}}/docs/v9/app-guide/content/content-collections/content-collections-20220415A/manually-sort-items-20220415A.mp4" type="video/mp4" />
-</video>
 
 Drag and drop Items to custom sort them as desired. This is only possible on certain Layouts, such as the default
 [Table Layout](/app/layouts#table-layout). To sort a Collection's Items, follow these steps.
 
-1. Be sure [a sort field](/configuration/data-model/collections#sort-field) has been configured under **"Settings > Data
+1. Be sure [a sort field](/app/data-model/collections#sort-field) has been configured under **"Settings > Data
    Model > Collection"**.\
    _(Shown in the video)_
 2. Navigate to the Content Module and select the desired Collection.
@@ -98,7 +83,7 @@ Drag and drop Items to custom sort them as desired. This is only possible on cer
 
 ::: warning Manual Sorting Requires Configuration
 
-Only available if a [sort field](/configuration/data-model/collections#sort-field) has been configured.
+Only available if a [sort field](/app/data-model/collections#sort-field) has been configured.
 
 :::
 
@@ -111,9 +96,6 @@ This means that while the values in this Sort Field do get updated and modified,
 
 ## Automatically Sort Items
 
-<video autoplay playsinline muted loop controls title="Automatically Sort Items">
-	<source src="{{CDN_URL}}/docs/v9/app-guide/content/content-collections/content-collections-20220415A/automatically-sort-items-20220415A.mp4" type="video/mp4" />
-</video>
 
 Sort Items alphabetically or numerically, in ascending or descending order. Sorting is not possible on certain Layouts,
 such as the Map Layout. Layouts that do support automatic sorting have controls in slightly different locations. To
@@ -127,9 +109,6 @@ Automatic sorting is a non-destructive action which does not change your data.
 
 ## View Archived Items
 
-<video autoplay playsinline muted loop controls title="View Archived Items">
-	<source src="{{CDN_URL}}/docs/v9/app-guide/content/content-collections/content-collections-20220415A/view-archived-items.mp4" type="video/mp4" />
-</video>
 
 The no-code app allows you to hide archived Items, display them alongside other Items, or display archived Items only.
 To learn how to archive an Item, see our guide on the [Item Page](/app/content/items#archive-an-item). To change whether
@@ -144,15 +123,12 @@ an archived Item is displayed, follow these steps.
 
 :::warning Archiving Requires Configuration
 
-Only available if an [Archive field](/configuration/data-model/collections#archive) has been configured.
+Only available if an [Archive field](/app/data-model/collections#archive) has been configured.
 
 :::
 
 ## Create a Bookmark
 
-<video autoplay playsinline muted loop controls title="Create Presets and Bookmarks">
-	<source src="{{CDN_URL}}/docs/v9/app-guide/content/content-collections/content-collections-20220415A/presets-and-bookmarks-20220415A.mp4" type="video/mp4" />
-</video>
 
 Save how a Collection Page looks so that you can return to the exact same view later. This includes details such as the
 Layout, search queries, filters, custom sort & order, etc. To create a Bookmark from the Collection Page, follow these
@@ -167,13 +143,13 @@ Your Bookmark will appear in the Navigation Bar, under the associated Collection
 
 :::tip Learn More
 
-To learn more, see our guide on [Presets and Bookmarks](/configuration/presets-bookmarks).
+To learn more, see our guide on [Presets and Bookmarks](/app/presets-bookmarks).
 
 :::
 
 ## Import / Export Items
 
-![Import and Export Items]({{CDN_URL}}/docs/v9/app-guide/content/content-collections/content-collections-20220415A/imports-exports-20220416A.webp)
+![Import and Export Items](/images/imports-exports-20220416A.webp)
 
 The Content, User Directory and File Library modules allow importing and exporting of multiple Items stored as files.
 This makes it quick and easy to handle tasks like uploading and downloading new customer information; pulling down sales
@@ -182,10 +158,7 @@ data for transformation, reports, analysis, and beyond. To learn more, see how t
 
 ## Batch Delete, Archive or Edit Items
 
-<video autoplay playsinline muted loop controls title="Batch Edit Items">
-	<source src="{{CDN_URL}}/docs/v9/app-guide/content/content-items/content-items-20220415A/batch-edit-items-20220415A.mp4
 " type="video/mp4" />
-</video>
 
 It is possible to delete, archive, or edit multiple Items at once from the Collection Page. Deletion will permanently
 delete Items from the database, this cannot be reverted. When batch editing, the Item Page opens, allowing you to make
