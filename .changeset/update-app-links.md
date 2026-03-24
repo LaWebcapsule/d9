@@ -2,4 +2,4 @@
 '@wbce-d9/app': major
 ---
 
-Update app links: documentation now points to d9.webcapsule.io, report bug and request feature point to LaWebcapsule/d9
+Rebrand Directus 9 to d9 by La Webcapsule: new branding, logos, updated documentation site (d9.webcapsule.io), and OpenID client fixes
