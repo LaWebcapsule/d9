@@ -5,6 +5,7 @@
 ### Patch Changes
 
 - ccf0a8a: Update docker url
+- ccf0a8a: add d9 shortcut
 
 ## 12.0.0
 
