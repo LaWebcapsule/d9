@@ -14,7 +14,7 @@ readTime: 3 min read
 
 ## Monorepo
 
-The primary d9 repository is located at [`directus/directus`]({{GITHUB_URL}}) and
+The primary d9 repository is located at [`lawebcapsule/d9`]({{GITHUB_URL}}) and
 houses the Admin App (Vue.js 3 w/ Composition API), API (Node.js), API Specification (OpenAPI), and other smaller
 packages used internally. d9 follows a monorepo design similar to React or Babel — this page will outline our
 monorepo's design and structure.
