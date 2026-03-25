@@ -53,7 +53,8 @@
 		"./package.json": "./package.json"
 	},
 	"bin": {
-		"directus": "cli.js"
+		"directus": "cli.js",
+		"d9": "cli.js"
 	},
 	"dependencies": {
 		"@wbce-d9/api": "workspace:*"
