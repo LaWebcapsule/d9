@@ -14,7 +14,7 @@ readTime: 4 min read
 
 1. Backup your project
 2. Run `npm update`
-3. Run `npx directus database migrate:latest` to update the DB
+3. Run `npx d9 database migrate:latest` to update the DB
 
 ## Backing-up a Project
 
@@ -40,7 +40,7 @@ d9 can be reverted to an earlier version by going to your terminal, navigating i
 running `npm install directus@<version>`.
 
 If you ran any database migrations for a newer version, you can revert those by running
-`npx directus database migrate:down`
+`npx d9 database migrate:down`
 
 ## Deleting a Project
 
