@@ -1,6 +1,6 @@
 {
 	"name": "@wbce-d9/api",
-	"version": "12.2.0",
+	"version": "12.3.0",
 	"description": "Directus is a real-time API and App dashboard for managing SQL database content",
 	"type": "module",
 	"keywords": [
@@ -22,16 +22,16 @@
 		"framework",
 		"vue"
 	],
-	"homepage": "https://github.com/LaWebcapsule/directus9",
+	"homepage": "https://github.com/LaWebcapsule/d9",
 	"bugs": {
-		"url": "https://github.com/LaWebcapsule/directus9/issues"
+		"url": "https://github.com/LaWebcapsule/d9/issues"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/LaWebcapsule/directus9.git",
+		"url": "https://github.com/LaWebcapsule/d9.git",
 		"directory": "api"
 	},
-	"funding": "https://github.com/LaWebcapsule/directus9?sponsor=1",
+	"funding": "https://github.com/LaWebcapsule/d9?sponsor=1",
 	"license": "GPL-3.0-only",
 	"author": {
 		"name": "Monospace Inc",
