@@ -48,7 +48,7 @@ catalog:
   ora: '6.3.0'
   p-queue: '7.3.4'
   pino: '8.11.0'
-  rollup: '3.29.5'
+  rollup: '3.30.0'
   supertest: '6.3.3'
   typescript: '5.0.4'
   uuid: '9.0.0'
