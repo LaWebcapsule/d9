@@ -1,5 +1,11 @@
 # directus9
 
+## 12.0.1
+
+### Patch Changes
+
+- ccf0a8a: Update docker url
+
 ## 12.0.0
 
 ### Major Changes
