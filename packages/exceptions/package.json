@@ -10,10 +10,10 @@
 	"description": "Shared exceptions in Directus",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/LaWebcapsule/directus9.git",
+		"url": "https://github.com/LaWebcapsule/d9.git",
 		"directory": "packages/exceptions"
 	},
-	"funding": "https://github.com/LaWebcapsule/directus9?sponsor=1",
+	"funding": "https://github.com/LaWebcapsule/d9?sponsor=1",
 	"license": "GPL-3.0",
 	"author": "Rijk van Zanten <rijkvanzanten@me.com>",
 	"exports": {

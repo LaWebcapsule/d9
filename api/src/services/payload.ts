@@ -127,6 +127,13 @@ export class PayloadService {
 			if (action === 'update') return new Date(helpers.date.writeTimestamp(new Date().toISOString()));
 			return value;
 		},
+		async 'system-only'({ value, accountability }) {
+			if (accountability && (value === null || value)) {
+				throw new ForbiddenException();
+			}
+
+			return value;
+		},
 		async 'cast-csv'({ action, value }) {
 			if (Array.isArray(value) === false && typeof value !== 'string') return;
 

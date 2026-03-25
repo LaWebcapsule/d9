@@ -10,10 +10,10 @@
 	"homepage": "https://directus.io",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/LaWebcapsule/directus9.git",
+		"url": "https://github.com/LaWebcapsule/d9.git",
 		"directory": "packages/create-directus-extension"
 	},
-	"funding": "https://github.com/LaWebcapsule/directus9?sponsor=1",
+	"funding": "https://github.com/LaWebcapsule/d9?sponsor=1",
 	"license": "GPL-3.0-only",
 	"author": "Nicola Krumschmidt",
 	"contributors": [

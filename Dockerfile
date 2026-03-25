@@ -14,6 +14,7 @@ RUN corepack enable && corepack prepare
 COPY pnpm-lock.yaml .
 RUN pnpm fetch
 COPY . .
+ENV CI=true
 RUN pnpm install --recursive --offline --frozen-lockfile
 
 RUN : \

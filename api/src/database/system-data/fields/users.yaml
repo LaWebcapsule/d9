@@ -180,3 +180,6 @@ fields:
 
   - field: auth_data
     hidden: true
+    special:
+      - system-only
+      - conceal

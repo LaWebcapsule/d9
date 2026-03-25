@@ -63,6 +63,8 @@ fields:
       placeholder: $t:field_options.directus_files.filename_disk
     readonly: true
     width: half
+    special:
+      - system-only
 
   - field: filename_download
     interface: input
