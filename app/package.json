@@ -111,7 +111,7 @@
 		"escape-string-regexp": "5.0.0",
 		"file-saver": "2.0.5",
 		"flatpickr": "4.6.13",
-		"happy-dom": "20.0.2",
+		"happy-dom": "20.8.8",
 		"html-entities": "2.3.3",
 		"jsonlint-mod": "1.7.6",
 		"lodash": "4.17.23",
