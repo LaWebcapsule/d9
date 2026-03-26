@@ -32,7 +32,7 @@
 		"@wbce-d9/storage": "workspace:*",
 		"@wbce-d9/utils": "workspace:*",
 		"p-queue": "catalog:",
-		"undici": "7.20.0"
+		"undici": "7.24.0"
 	},
 	"devDependencies": {
 		"@ngneat/falso": "catalog:",
