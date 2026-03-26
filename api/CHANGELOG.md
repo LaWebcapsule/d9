@@ -1,5 +1,11 @@
 # @wbce-d9/api
 
+## 12.4.0
+
+### Minor Changes
+
+- b0cf593: Increment openid-client version
+
 ## 12.3.0
 
 ### Minor Changes
