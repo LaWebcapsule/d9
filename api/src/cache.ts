@@ -5,7 +5,6 @@ import Keyv from 'keyv';
 import env from './env.js';
 import logger from './logger.js';
 import { getMessenger } from './messenger.js';
-import { compress, decompress } from './utils/compress.js';
 import { getConfigFromEnv } from './utils/get-config-from-env.js';
 import { getMilliseconds } from './utils/get-milliseconds.js';
 import { validateEnv } from './utils/validate-env.js';
@@ -141,15 +140,13 @@ export async function setCacheValue(
 	value: Record<string, any> | Record<string, any>[],
 	ttl?: number
 ) {
-	const compressed = await compress(value);
-	await cache.set(key, compressed, ttl);
+	await cache.set(key, value, ttl);
 }
 
 export async function getCacheValue(cache: Keyv, key: string): Promise<any> {
 	const value = await cache.get(key);
 	if (!value) return undefined;
-	const decompressed = await decompress(value);
-	return decompressed;
+	return value;
 }
 
 function getKeyvInstance(store: Store, ttl: number | undefined, namespaceSuffix?: string): Keyv {
