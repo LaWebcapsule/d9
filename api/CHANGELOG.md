@@ -4,7 +4,7 @@
 
 ### Minor Changes
 
-- b0cf593: Increment openid-client version
+- b0cf593: Increment openid-client version.
 
 ## 12.3.0
 
