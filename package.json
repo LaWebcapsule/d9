@@ -62,7 +62,8 @@
 			"rollup@>=3.0.0 <3.30.0": "3.30.0",
 			"rollup@>=4.0.0 <4.59.0": ">=4.59.0",
 			"serialize-javascript@<=7.0.2": ">=7.0.3",
-			"svgo@>=2.1.0 <2.8.1": ">=2.8.1"
+			"svgo@>=2.1.0 <2.8.1": ">=2.8.1",
+			"handlebars@<4.7.7": ">=4.7.9"
 		},
 		"packageExtensions": {
 			"@vue/test-utils": {
