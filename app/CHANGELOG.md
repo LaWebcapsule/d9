@@ -1,5 +1,11 @@
 # @wbce-d9/app
 
+## 10.0.2
+
+### Patch Changes
+
+- 839d3c7: Bump happy-dom to 20.8.9 for security fix
+
 ## 10.0.1
 
 ### Patch Changes
