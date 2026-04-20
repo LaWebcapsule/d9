@@ -1,5 +1,13 @@
 # @wbce-d9/api
 
+## 12.4.1
+
+### Patch Changes
+
+- 205431f: Bump handlebars to 4.7.9 for security fix
+- Updated dependencies [205431f]
+  - @wbce-d9/app@10.0.1
+
 ## 12.4.0
 
 ### Minor Changes
