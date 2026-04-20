@@ -1,5 +1,11 @@
 # @wbce-d9/app
 
+## 10.0.1
+
+### Patch Changes
+
+- 205431f: Bump handlebars to 4.7.9 for security fix
+
 ## 10.0.0
 
 ### Major Changes

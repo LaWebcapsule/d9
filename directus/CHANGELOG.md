@@ -1,5 +1,13 @@
 # directus9
 
+## 12.0.3
+
+### Patch Changes
+
+- 205431f: Bump handlebars to 4.7.9 for security fix
+- Updated dependencies [205431f]
+  - @wbce-d9/api@12.4.1
+
 ## 12.0.2
 
 ### Patch Changes
