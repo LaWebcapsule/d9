@@ -195,7 +195,7 @@ overrides:
   rollup@>=4.0.0 <4.59.0: '>=4.59.0'
   serialize-javascript@<=7.0.2: '>=7.0.3'
   svgo@>=2.1.0 <2.8.1: '>=2.8.1'
-  handlebars@<4.7.7: '>=4.7.9'
+  handlebars@<4.7.8: ^4.7.9
 
 packageExtensionsChecksum: sha256-jygb7QknrYgYSzZe0hMyvEMitSRad62GWGwr5lKleag=
 
@@ -669,7 +669,7 @@ importers:
         version: 2.18.1
       nodemailer-mailgun-transport:
         specifier: 2.1.5
-        version: 2.1.5(ejs@4.0.1)(lodash@4.17.23)(pug@3.0.3)(underscore@1.13.7)
+        version: 2.1.5(ejs@4.0.1)(handlebars@4.7.9)(lodash@4.17.23)(pug@3.0.3)(underscore@1.13.7)
       oracledb:
         specifier: ^6.8.0
         version: 6.10.0
@@ -6273,7 +6273,7 @@ packages:
       haml-coffee: ^1.14.1
       hamlet: ^0.3.3
       hamljs: ^0.6.2
-      handlebars: '>=4.7.9'
+      handlebars: ^4.7.9
       hogan.js: ^3.0.2
       htmling: ^0.0.8
       jade: ^1.11.0
@@ -7679,8 +7679,8 @@ packages:
     resolution: {integrity: sha512-4haO1M4mLO91PW57BMsDFf75UmwoRX0GkdD+Faw+Lr+r/OZrOCS0pIBwOL1xCKQqnQzbNFGgK2V2CpBUPeFNTw==}
     hasBin: true
 
-  handlebars@4.7.8:
-    resolution: {integrity: sha512-vafaFqs8MZkRrSX7sFVUdo3ap/eNiLnb4IakshzvP56X5Nr1iGKAIqdX6tMlm6HcNRIkr6AxO5jFEoJzzpT8aQ==}
+  handlebars@4.7.9:
+    resolution: {integrity: sha512-4E71E0rpOaQuJR2A3xDZ+GM1HyWYv1clR58tC8emQNeQe3RH7MAzSbat+V0wG78LQBo6m6bzSG/L4pBuCsgnUQ==}
     engines: {node: '>=0.4.7'}
     hasBin: true
 
@@ -16600,7 +16600,7 @@ snapshots:
       fs-extra: 11.3.3
       glob: 8.1.0
       glob-promise: 6.0.7(glob@8.1.0)
-      handlebars: 4.7.8
+      handlebars: 4.7.9
       lazy-universal-dotenv: 4.0.0
       picomatch: 2.3.1
       pkg-dir: 5.0.0
@@ -16627,7 +16627,7 @@ snapshots:
       find-up: 5.0.0
       fs-extra: 11.3.3
       glob: 10.5.0
-      handlebars: 4.7.8
+      handlebars: 4.7.9
       lazy-universal-dotenv: 4.0.0
       node-fetch: 2.7.0(encoding@0.1.13)
       picomatch: 2.3.1
@@ -18912,11 +18912,12 @@ snapshots:
 
   console-control-strings@1.1.0: {}
 
-  consolidate@0.15.1(ejs@4.0.1)(lodash@4.17.23)(pug@3.0.3)(underscore@1.13.7):
+  consolidate@0.15.1(ejs@4.0.1)(handlebars@4.7.9)(lodash@4.17.23)(pug@3.0.3)(underscore@1.13.7):
     dependencies:
       bluebird: 3.7.2
     optionalDependencies:
       ejs: 4.0.1
+      handlebars: 4.7.9
       lodash: 4.17.23
       pug: 3.0.3
       underscore: 1.13.7
@@ -20423,7 +20424,7 @@ snapshots:
       pumpify: 1.5.1
       through2: 2.0.5
 
-  handlebars@4.7.8:
+  handlebars@4.7.9:
     dependencies:
       minimist: 1.2.8
       neo-async: 2.6.2
@@ -22558,9 +22559,9 @@ snapshots:
 
   node-xmllint@1.0.0: {}
 
-  nodemailer-mailgun-transport@2.1.5(ejs@4.0.1)(lodash@4.17.23)(pug@3.0.3)(underscore@1.13.7):
+  nodemailer-mailgun-transport@2.1.5(ejs@4.0.1)(handlebars@4.7.9)(lodash@4.17.23)(pug@3.0.3)(underscore@1.13.7):
     dependencies:
-      consolidate: 0.15.1(ejs@4.0.1)(lodash@4.17.23)(pug@3.0.3)(underscore@1.13.7)
+      consolidate: 0.15.1(ejs@4.0.1)(handlebars@4.7.9)(lodash@4.17.23)(pug@3.0.3)(underscore@1.13.7)
       form-data: 4.0.4
       mailgun.js: 8.2.2
     transitivePeerDependencies:
