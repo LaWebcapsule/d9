@@ -57,3 +57,4 @@ catalog:
   vue-router: '4.1.6'
   wellknown: '0.5.0'
   zod: '3.22.3'
+  liquidjs: '10.25.0'

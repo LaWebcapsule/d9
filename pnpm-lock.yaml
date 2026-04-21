@@ -105,6 +105,9 @@ catalogs:
     knex:
       specifier: 3.1.0
       version: 3.1.0
+    liquidjs:
+      specifier: 10.25.0
+      version: 10.25.0
     lodash-es:
       specifier: 4.17.23
       version: 4.17.23
@@ -421,8 +424,8 @@ importers:
         specifier: 2.3.3
         version: 2.3.3
       liquidjs:
-        specifier: 10.7.0
-        version: 10.7.0
+        specifier: 'catalog:'
+        version: 10.25.0
       lodash-es:
         specifier: 'catalog:'
         version: 4.17.23
@@ -8613,9 +8616,9 @@ packages:
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
-  liquidjs@10.7.0:
-    resolution: {integrity: sha512-AEgEgbybxc17h2WBl5DTzj1tNy18ANpM/KJ2LigkNBwd/8sBc0uDaJH/MnvUbv1t2Md5RArTTZj5Wq1MGncIbg==}
-    engines: {node: '>=14'}
+  liquidjs@10.25.0:
+    resolution: {integrity: sha512-XpO7AiGULTG4xcTlwkcTI5JreFG7b6esLCLp+aUSh7YuQErJZEoUXre9u9rbdb0057pfWG4l0VursvLd5Q/eAw==}
+    engines: {node: '>=16'}
     hasBin: true
 
   listr2@6.3.1:
@@ -21667,7 +21670,7 @@ snapshots:
 
   lines-and-columns@1.2.4: {}
 
-  liquidjs@10.7.0:
+  liquidjs@10.25.0:
     dependencies:
       commander: 10.0.1
 
