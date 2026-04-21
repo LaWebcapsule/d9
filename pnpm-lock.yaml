@@ -141,6 +141,9 @@ catalogs:
     typescript:
       specifier: 5.0.4
       version: 5.0.4
+    undici:
+      specifier: 7.24.0
+      version: 7.24.0
     uuid:
       specifier: 9.0.0
       version: 9.0.0
@@ -1313,8 +1316,8 @@ importers:
         specifier: 'catalog:'
         version: 7.3.4
       undici:
-        specifier: 7.20.0
-        version: 7.20.0
+        specifier: 'catalog:'
+        version: 7.24.0
     devDependencies:
       '@ngneat/falso':
         specifier: 'catalog:'
@@ -1481,8 +1484,8 @@ importers:
         specifier: 7.5.2
         version: 7.5.2
       undici:
-        specifier: 6.23.0
-        version: 6.23.0
+        specifier: 'catalog:'
+        version: 7.24.0
     devDependencies:
       '@ngneat/falso':
         specifier: 'catalog:'
@@ -11521,12 +11524,8 @@ packages:
   undici-types@7.16.0:
     resolution: {integrity: sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==}
 
-  undici@6.23.0:
-    resolution: {integrity: sha512-VfQPToRA5FZs/qJxLIinmU59u0r7LXqoJkCzinq3ckNJp3vKEh7jTWN589YQ5+aoAC/TGRLyJLCPKcLQbM8r9g==}
-    engines: {node: '>=18.17'}
-
-  undici@7.20.0:
-    resolution: {integrity: sha512-MJZrkjyd7DeC+uPZh+5/YaMDxFiiEEaDgbUSVMXayofAkDWF1088CDo+2RPg7B1BuS1qf1vgNE7xqwPxE0DuSQ==}
+  undici@7.24.0:
+    resolution: {integrity: sha512-jxytwMHhsbdpBXxLAcuu0fzlQeXCNnWdDyRHpvWsUl8vd98UwYdl9YTyn8/HcpcJPC3pwUveefsa3zTxyD/ERg==}
     engines: {node: '>=20.18.1'}
 
   unfetch@4.2.0:
@@ -25267,9 +25266,7 @@ snapshots:
 
   undici-types@7.16.0: {}
 
-  undici@6.23.0: {}
-
-  undici@7.20.0: {}
+  undici@7.24.0: {}
 
   unfetch@4.2.0: {}
 
