@@ -108,6 +108,9 @@ catalogs:
     liquidjs:
       specifier: 10.25.0
       version: 10.25.0
+    lodash:
+      specifier: 4.18.1
+      version: 4.18.1
     lodash-es:
       specifier: 4.18.1
       version: 4.18.1
@@ -679,7 +682,7 @@ importers:
         version: 2.18.1
       nodemailer-mailgun-transport:
         specifier: 2.1.5
-        version: 2.1.5(ejs@4.0.1)(handlebars@4.7.9)(lodash@4.17.23)(pug@3.0.3)(underscore@1.13.8)
+        version: 2.1.5(ejs@4.0.1)(handlebars@4.7.9)(lodash@4.18.1)(pug@3.0.3)(underscore@1.13.8)
       oracledb:
         specifier: ^6.8.0
         version: 6.10.0
@@ -934,8 +937,8 @@ importers:
         specifier: 1.7.6
         version: 1.7.6
       lodash:
-        specifier: 4.17.23
-        version: 4.17.23
+        specifier: 'catalog:'
+        version: 4.18.1
       mapbox-gl:
         specifier: 1.13.3
         version: 1.13.3
@@ -8703,6 +8706,9 @@ packages:
   lodash@4.17.23:
     resolution: {integrity: sha512-LgVTMpQtIopCi79SJeDiP0TfWi5CNEc/L/aRdTh3yIvmZXTnheWpKjSZhnvMl8iXbC1tFg9gdHHDMLoV7CnG+w==}
 
+  lodash@4.18.1:
+    resolution: {integrity: sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==}
+
   log-symbols@4.1.0:
     resolution: {integrity: sha512-8XPvpAA8uyhfteu8pIvQxpJZ7SYYdpUivZpGy6sFsBuKRY/7rQGavedeB8aK+Zkyq6upMFVL/9AW6vOYzfRyLg==}
     engines: {node: '>=10'}
@@ -16189,7 +16195,7 @@ snapshots:
       '@storybook/theming': 7.0.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@storybook/types': 7.0.6
       dequal: 2.0.3
-      lodash: 4.17.23
+      lodash: 4.18.1
       polished: 4.3.1
       prop-types: 15.8.1
       react-inspector: 6.0.2(react@18.3.1)
@@ -16227,7 +16233,7 @@ snapshots:
       '@storybook/preview-api': 7.0.6
       '@storybook/theming': 7.0.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@storybook/types': 7.0.6
-      lodash: 4.17.23
+      lodash: 4.18.1
       ts-dedent: 2.2.0
     optionalDependencies:
       react: 18.3.1
@@ -16383,7 +16389,7 @@ snapshots:
       '@types/lodash': 4.14.194
       color-convert: 2.0.1
       dequal: 2.0.3
-      lodash: 4.17.23
+      lodash: 4.18.1
       markdown-to-jsx: 7.7.17(react@18.3.1)
       memoizerific: 1.11.3
       polished: 4.3.1
@@ -16568,7 +16574,7 @@ snapshots:
       cross-spawn: 7.0.6
       globby: 11.1.0
       jscodeshift: 0.15.2(@babel/preset-env@7.29.0(@babel/core@7.29.0))
-      lodash: 4.17.23
+      lodash: 4.18.1
       prettier: 2.8.8
       recast: 0.23.11
     transitivePeerDependencies:
@@ -16682,7 +16688,7 @@ snapshots:
       fs-extra: 11.3.3
       globby: 11.1.0
       ip: 2.0.1
-      lodash: 4.17.23
+      lodash: 4.18.1
       node-fetch: 2.7.0(encoding@0.1.13)
       open: 8.4.2
       pretty-hrtime: 1.0.3
@@ -16730,7 +16736,7 @@ snapshots:
       express: 4.22.1
       fs-extra: 11.3.3
       globby: 11.1.0
-      lodash: 4.17.23
+      lodash: 4.18.1
       open: 8.4.2
       pretty-hrtime: 1.0.3
       prompts: 2.4.2
@@ -16798,7 +16804,7 @@ snapshots:
       '@storybook/types': 7.0.6
       '@types/doctrine': 0.0.3
       doctrine: 3.0.0
-      lodash: 4.17.23
+      lodash: 4.18.1
     transitivePeerDependencies:
       - supports-color
 
@@ -16815,7 +16821,7 @@ snapshots:
       '@storybook/theming': 7.0.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@storybook/types': 7.0.6
       dequal: 2.0.3
-      lodash: 4.17.23
+      lodash: 4.18.1
       memoizerific: 1.11.3
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
@@ -16852,7 +16858,7 @@ snapshots:
       '@storybook/types': 7.0.6
       '@types/qs': 6.14.0
       dequal: 2.0.3
-      lodash: 4.17.23
+      lodash: 4.18.1
       memoizerific: 1.11.3
       qs: 6.14.2
       synchronous-promise: 2.0.17
@@ -16869,7 +16875,7 @@ snapshots:
       '@storybook/types': 7.6.21
       '@types/qs': 6.14.0
       dequal: 2.0.3
-      lodash: 4.17.23
+      lodash: 4.18.1
       memoizerific: 1.11.3
       qs: 6.14.2
       synchronous-promise: 2.0.17
@@ -18918,13 +18924,13 @@ snapshots:
 
   console-control-strings@1.1.0: {}
 
-  consolidate@0.15.1(ejs@4.0.1)(handlebars@4.7.9)(lodash@4.17.23)(pug@3.0.3)(underscore@1.13.8):
+  consolidate@0.15.1(ejs@4.0.1)(handlebars@4.7.9)(lodash@4.18.1)(pug@3.0.3)(underscore@1.13.8):
     dependencies:
       bluebird: 3.7.2
     optionalDependencies:
       ejs: 4.0.1
       handlebars: 4.7.9
-      lodash: 4.17.23
+      lodash: 4.18.1
       pug: 3.0.3
       underscore: 1.13.8
     optional: true
@@ -21735,6 +21741,8 @@ snapshots:
 
   lodash@4.17.23: {}
 
+  lodash@4.18.1: {}
+
   log-symbols@4.1.0:
     dependencies:
       chalk: 4.1.2
@@ -22565,9 +22573,9 @@ snapshots:
 
   node-xmllint@1.0.0: {}
 
-  nodemailer-mailgun-transport@2.1.5(ejs@4.0.1)(handlebars@4.7.9)(lodash@4.17.23)(pug@3.0.3)(underscore@1.13.8):
+  nodemailer-mailgun-transport@2.1.5(ejs@4.0.1)(handlebars@4.7.9)(lodash@4.18.1)(pug@3.0.3)(underscore@1.13.8):
     dependencies:
-      consolidate: 0.15.1(ejs@4.0.1)(handlebars@4.7.9)(lodash@4.17.23)(pug@3.0.3)(underscore@1.13.8)
+      consolidate: 0.15.1(ejs@4.0.1)(handlebars@4.7.9)(lodash@4.18.1)(pug@3.0.3)(underscore@1.13.8)
       form-data: 4.0.4
       mailgun.js: 8.2.2
     transitivePeerDependencies:
