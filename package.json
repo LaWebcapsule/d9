@@ -67,7 +67,9 @@
 			"path-to-regexp@<0.1.13": "^0.1.13",
 			"flatted@<=3.4.1": "^3.4.2",
 			"immutable@<4.3.8": "^4.3.8",
-			"underscore@<=1.13.7": "^1.13.8"
+			"underscore@<=1.13.7": "^1.13.8",
+			"@xmldom/xmldom@<0.8.12": "0.8.12",
+			"defu@<=6.1.4": "6.1.5"
 		},
 		"packageExtensions": {
 			"@vue/test-utils": {
