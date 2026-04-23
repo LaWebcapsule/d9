@@ -1,5 +1,11 @@
 # @wbce-d9/app
 
+## 10.0.4
+
+### Patch Changes
+
+- 1b20ba2: Bump deps
+
 ## 10.0.3
 
 ### Patch Changes
