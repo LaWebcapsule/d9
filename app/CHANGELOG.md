@@ -1,5 +1,11 @@
 # @wbce-d9/app
 
+## 10.0.3
+
+### Patch Changes
+
+- eeea793: Fix vulnerabilities
+
 ## 10.0.2
 
 ### Patch Changes

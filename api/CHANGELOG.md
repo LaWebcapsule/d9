@@ -1,5 +1,15 @@
 # @wbce-d9/api
 
+## 12.4.3
+
+### Patch Changes
+
+- eeea793: Fix vulnerabilities
+- Updated dependencies [eeea793]
+  - @wbce-d9/storage-driver-cloudinary@10.0.2
+  - @wbce-d9/update-check@10.0.2
+  - @wbce-d9/app@10.0.3
+
 ## 12.4.2
 
 ### Patch Changes
