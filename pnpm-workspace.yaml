@@ -52,7 +52,7 @@ catalog:
   rollup: '3.30.0'
   supertest: '6.3.3'
   typescript: '5.0.4'
-  uuid: '9.0.0'
+  uuid: '14.0.0'
   vitest: '4.1.4'
   vue: '3.2.47'
   vue-router: '4.1.6'
