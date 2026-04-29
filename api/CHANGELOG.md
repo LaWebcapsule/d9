@@ -1,5 +1,12 @@
 # @wbce-d9/api
 
+## 12.4.5
+
+### Patch Changes
+
+- Updated dependencies [b2847d6]
+  - @wbce-d9/app@10.0.5
+
 ## 12.4.4
 
 ### Patch Changes
