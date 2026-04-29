@@ -1,5 +1,11 @@
 # @wbce-d9/app
 
+## 10.0.5
+
+### Patch Changes
+
+- b2847d6: Bump vite
+
 ## 10.0.4
 
 ### Patch Changes
