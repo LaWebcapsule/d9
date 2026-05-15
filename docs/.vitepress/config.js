@@ -632,6 +632,10 @@ function sidebar() {
 					text: 'Docker Guide',
 				},
 				{
+					link: '/self-hosted/projen-directus',
+					text: 'Projen Template',
+				},
+				{
 					link: '/self-hosted/cli',
 					text: 'CLI',
 				},
