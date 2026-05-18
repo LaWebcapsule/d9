@@ -17,7 +17,7 @@ problems. If you can't or don't want to use Docker, we also publish an
 This page covers the simplest way to **run** d9 with Docker. If you're using d9 as
 the backbone of a complete backend (custom extensions, a team that needs a
 consistent dev experience, multiple environments to keep in sync), the
-[projen template for d9](/self-hosted/projen-directus) generates the whole project
+[projen template for d9](/self-hosted/projen-d9) generates the whole project
 (Dockerfile, Compose file, extensions folder, tasks) from a single source of truth.
 :::
 

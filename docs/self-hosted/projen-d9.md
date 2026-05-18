@@ -1,18 +1,18 @@
 ---
-description: Scaffold a d9 project with Docker Compose, extension management, and GitHub PR/issue templates using the @wbce/projen-directus template.
+description: Scaffold a d9 project with Docker Compose, extension management, and GitHub PR/issue templates using the @wbce/projen-d9 template.
 readTime: 4 min read
 ---
 
 # Projen Template
 
-[`@wbce/projen-directus`](https://www.npmjs.com/package/@wbce/projen-directus) is a
+[`@wbce/projen-d9`](https://www.npmjs.com/package/@wbce/projen-d9) is a
 [projen](https://projen.io) template for d9 projects. It scaffolds a local
 development setup with Docker Compose (Postgres + Redis), extension management, and
 GitHub PR and issue templates, and allows you to produce a Docker image you can
 deploy to any environment.
 
 Companion package:
-[`@wbce/projen-directus-extension`](https://www.npmjs.com/package/@wbce/projen-directus-extension)
+[`@wbce/projen-d9-extension`](https://www.npmjs.com/package/@wbce/projen-d9-extension)
 for authoring extensions.
 
 ::: info Just want to run d9?
@@ -24,7 +24,7 @@ If you only need to run d9 (no extensions, no customization), the
 ## Bootstrap a new project
 
 ```sh
-npx projen new --from @wbce/projen-directus
+npx projen new --from @wbce/projen-d9
 ```
 
 This creates a `.projenrc.js` and synthesizes the project.
@@ -49,7 +49,7 @@ diff against your old config:
    control of when to commit.
 
    ```sh
-   npx projen new --from @wbce/projen-directus --no-git
+   npx projen new --from @wbce/projen-d9 --no-git
    ```
 
 4. **Reconcile the diff.** Compare the regenerated files against the previous
@@ -71,10 +71,10 @@ what you need, then commit the whole set together.
 `.projenrc.js`:
 
 ```js
-import { DirectusProject } from '@wbce/projen-directus';
-import { DirectusExtensionType } from '@wbce/projen-directus-extension';
+import { D9Project } from '@wbce/projen-d9';
+import { D9ExtensionType } from '@wbce/projen-d9-extension';
 
-const project = new DirectusProject({
+const project = new D9Project({
   name: 'my-d9',
   defaultReleaseBranch: 'main',
   eslintOptions: {
@@ -87,7 +87,7 @@ const project = new DirectusProject({
 project.addExtension('shared', []);
 
 // A hook extension that depends on the shared package
-const myHook = project.addExtension('my-hook', [DirectusExtensionType.HOOK]);
+const myHook = project.addExtension('my-hook', [D9ExtensionType.HOOK]);
 myHook.addDeps('shared@workspace:');
 
 project.synth();
@@ -113,7 +113,7 @@ re-running `npx projen build-extensions` is enough. No restart, no redeploy.
 
 ### Extension types
 
-`DirectusExtensionType` values: `INTERFACE`, `DISPLAY`, `LAYOUT`, `MODULE`, `PANEL`,
+`D9ExtensionType` values: `INTERFACE`, `DISPLAY`, `LAYOUT`, `MODULE`, `PANEL`,
 `ENDPOINT`, `HOOK`, `OPERATION`. Pass an empty array for a shared (non-extension)
 package.
 
@@ -122,12 +122,12 @@ built by the `build-extensions` task.
 
 ```js
 // Single-type extension: a standalone `directus:extension` package
-project.addExtension('audit-log', [DirectusExtensionType.HOOK]);
+project.addExtension('audit-log', [D9ExtensionType.HOOK]);
 
 // Multiple types: bundled under one `directus:extension` of type 'bundle'
 project.addExtension('reporting-suite', [
-  DirectusExtensionType.ENDPOINT,
-  DirectusExtensionType.MODULE,
+  D9ExtensionType.ENDPOINT,
+  D9ExtensionType.MODULE,
 ]);
 ```
 
@@ -176,7 +176,7 @@ keys) the same way you would any other d9 container. See the
 
 ## Options
 
-The full `DirectusProjectOptions` reference lives in the
+The full `D9ProjectOptions` reference lives in the
 [package's API docs](https://github.com/LaWebcapsule/projen-templates/blob/main/packages/directus/API.md).
 Highlights:
 
@@ -188,6 +188,6 @@ Any option from the projen `TypeScriptProjectOptions` interface is also accepted
 
 ## Source
 
-- npm: [`@wbce/projen-directus`](https://www.npmjs.com/package/@wbce/projen-directus)
+- npm: [`@wbce/projen-d9`](https://www.npmjs.com/package/@wbce/projen-d9)
 - Repository:
   [LaWebcapsule/projen-templates](https://github.com/LaWebcapsule/projen-templates/tree/main/packages/directus)

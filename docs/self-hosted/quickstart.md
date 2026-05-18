@@ -13,7 +13,7 @@ readTime: 5 min read
 ::: tip Building a Backend with Extensions?
 
 If you're using d9 as the backbone of a backend with custom extensions, the
-[Projen Template](/self-hosted/projen-directus) scaffolds a complete project
+[Projen Template](/self-hosted/projen-d9) scaffolds a complete project
 (Dockerfile, Compose stack, extensions folder, tasks) from one command.
 
 :::

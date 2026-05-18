@@ -632,7 +632,7 @@ function sidebar() {
 					text: 'Docker Guide',
 				},
 				{
-					link: '/self-hosted/projen-directus',
+					link: '/self-hosted/projen-d9',
 					text: 'Projen Template',
 				},
 				{
