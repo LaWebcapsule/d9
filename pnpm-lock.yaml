@@ -226,6 +226,7 @@ overrides:
   picomatch@^2: 2.3.2
   picomatch@^4: 4.0.4
   socket.io-parser@>=4.0.0 <4.2.6: 4.2.6
+  yaml@>=1.0.0 <1.10.3: 1.10.3
   yaml@>=2.0.0 <2.8.3: 2.8.3
 
 packageExtensionsChecksum: sha256-jygb7QknrYgYSzZe0hMyvEMitSRad62GWGwr5lKleag=
@@ -12200,8 +12201,8 @@ packages:
     resolution: {integrity: sha512-YgvUTfwqyc7UXVMrB+SImsVYSmTS8X/tSrtdNZMImM+n7+QTriRXyXim0mBrTXNeqzVF0KWGgHPeiyViFFrNDw==}
     engines: {node: '>=18'}
 
-  yaml@1.10.2:
-    resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}
+  yaml@1.10.3:
+    resolution: {integrity: sha512-vIYeF1u3CjlhAFekPPAk2h/Kv4T3mAkMox5OymRiJQB0spDP10LHvt+K7G9Ny6NuuMAb25/6n1qyUjAcGNf/AA==}
     engines: {node: '>= 6'}
 
   yaml@2.8.3:
@@ -19026,7 +19027,7 @@ snapshots:
       import-fresh: 3.3.1
       parse-json: 5.2.0
       path-type: 4.0.0
-      yaml: 1.10.2
+      yaml: 1.10.3
 
   create-jest@29.7.0(@types/node@22.15.29)(ts-node@10.9.2(@types/node@22.15.29)(typescript@5.7.3)):
     dependencies:
@@ -19148,7 +19149,7 @@ snapshots:
       cssnano-preset-default: 5.2.14(postcss@8.5.6)
       lilconfig: 2.1.0
       postcss: 8.5.6
-      yaml: 1.10.2
+      yaml: 1.10.3
 
   csso@5.0.5:
     dependencies:
@@ -26079,7 +26080,7 @@ snapshots:
 
   yallist@5.0.0: {}
 
-  yaml@1.10.2: {}
+  yaml@1.10.3: {}
 
   yaml@2.8.3: {}
 
