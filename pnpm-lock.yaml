@@ -685,7 +685,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
+        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(yaml@2.8.3))
     optionalDependencies:
       '@keyv/redis':
         specifier: 2.5.7
@@ -1243,7 +1243,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
+        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(yaml@2.8.3))
 
   packages/schema:
     dependencies:
@@ -1293,7 +1293,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
+        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(yaml@2.8.3))
 
   packages/storage-driver-azure:
     dependencies:
@@ -1324,7 +1324,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
+        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(yaml@2.8.3))
 
   packages/storage-driver-cloudinary:
     dependencies:
@@ -1358,7 +1358,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
+        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(yaml@2.8.3))
 
   packages/storage-driver-gcs:
     dependencies:
@@ -1389,7 +1389,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
+        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(yaml@2.8.3))
 
   packages/storage-driver-local:
     dependencies:
@@ -1417,7 +1417,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
+        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(yaml@2.8.3))
 
   packages/storage-driver-s3:
     dependencies:
@@ -1454,7 +1454,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
+        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(yaml@2.8.3))
 
   packages/tsconfig: {}
 
@@ -1529,7 +1529,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
+        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(yaml@2.8.3))
 
   packages/utils:
     dependencies:
@@ -1593,7 +1593,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
+        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(yaml@2.8.3))
 
   tests/blackbox:
     devDependencies:
@@ -4788,6 +4788,9 @@ packages:
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
 
+  '@types/estree@1.0.9':
+    resolution: {integrity: sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg==}
+
   '@types/exif-reader@1.0.0':
     resolution: {integrity: sha512-LRdFMxMD8z7vmfVSMwP9U0yENM7J7hbIyXgoNhRqraAAYdUrQuE9CaK8nL1YCIhWedFg4C1gGE75+AbbCO4l8A==}
 
@@ -5175,6 +5178,7 @@ packages:
 
   '@ungap/structured-clone@1.3.0':
     resolution: {integrity: sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==}
+    deprecated: Potential CWE-502 - Update to 1.3.1 or higher
 
   '@unhead/vue@2.1.15':
     resolution: {integrity: sha512-SSByXfEjhzPn8gXdEdgpYqpLMPSkLUH2HVE0GxZfOtNsJ0GgOHQs0g9T67ZZ1z0kTELLKdtOtYrzrbv9+ffF7g==}
@@ -10663,6 +10667,11 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
+  semver@7.8.1:
+    resolution: {integrity: sha512-rkVq3IXh+4FDGch+KwzX3aV9W3kO54GyEgpvBzSyctDA6Xtd7RJQV1xmXbeQp5v7+VzLOfVqiutSE6GICgPFvg==}
+    engines: {node: '>=10'}
+    hasBin: true
+
   send@0.19.2:
     resolution: {integrity: sha512-VMbMxbDeehAxpOtWJXlcUS5E8iXh6QmN+BkRX1GARS3wRaXEEgzCcB10gTQazO42tpNIya8xIyNx8fll1OFPrg==}
     engines: {node: '>= 0.8.0'}
@@ -11718,10 +11727,12 @@ packages:
 
   uuid@8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
+    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
     hasBin: true
 
   uuid@9.0.0:
     resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
+    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
     hasBin: true
 
   uvu@0.5.6:
@@ -17165,6 +17176,8 @@ snapshots:
 
   '@types/estree@1.0.8': {}
 
+  '@types/estree@1.0.9': {}
+
   '@types/exif-reader@1.0.0':
     dependencies:
       '@types/node': 22.15.29
@@ -17647,7 +17660,7 @@ snapshots:
       obug: 2.1.1
       std-env: 4.0.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(yaml@2.8.3))
+      vitest: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
 
   '@vitest/expect@4.1.4':
     dependencies:
@@ -17658,7 +17671,7 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.1.0
 
-  '@vitest/mocker@4.1.4(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))':
+  '@vitest/mocker@4.1.4(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(yaml@2.8.3))':
     dependencies:
       '@vitest/spy': 4.1.4
       estree-walker: 3.0.3
@@ -19688,7 +19701,7 @@ snapshots:
   eslint-scope@9.1.2:
     dependencies:
       '@types/esrecurse': 4.3.1
-      '@types/estree': 1.0.8
+      '@types/estree': 1.0.9
       esrecurse: 4.3.0
       estraverse: 5.3.0
 
@@ -24254,6 +24267,8 @@ snapshots:
 
   semver@7.7.4: {}
 
+  semver@7.8.1: {}
+
   send@0.19.2:
     dependencies:
       debug: 2.6.9
@@ -25660,7 +25675,7 @@ snapshots:
   vitest@4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3)):
     dependencies:
       '@vitest/expect': 4.1.4
-      '@vitest/mocker': 4.1.4(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
+      '@vitest/mocker': 4.1.4(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(yaml@2.8.3))
       '@vitest/pretty-format': 4.1.4
       '@vitest/runner': 4.1.4
       '@vitest/snapshot': 4.1.4
@@ -25690,7 +25705,7 @@ snapshots:
   vitest@4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(yaml@2.8.3)):
     dependencies:
       '@vitest/expect': 4.1.4
-      '@vitest/mocker': 4.1.4(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
+      '@vitest/mocker': 4.1.4(vite@6.4.2(@types/node@22.15.29)(sass@1.62.0)(terser@5.46.0)(yaml@2.8.3))
       '@vitest/pretty-format': 4.1.4
       '@vitest/runner': 4.1.4
       '@vitest/snapshot': 4.1.4
@@ -25785,7 +25800,7 @@ snapshots:
       eslint-visitor-keys: 5.0.1
       espree: 11.2.0
       esquery: 1.7.0
-      semver: 7.7.4
+      semver: 7.8.1
     transitivePeerDependencies:
       - supports-color
 
