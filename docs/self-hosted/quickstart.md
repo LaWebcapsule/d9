@@ -10,6 +10,14 @@ readTime: 5 min read
 > If you're looking for the fastest way to get up-and-running with d9, this guide will walk you through getting
 > things installed, configured, and modeled.
 
+::: tip Building a Backend with Extensions?
+
+If you're using d9 as the backbone of a backend with custom extensions, the
+[Projen Template](/self-hosted/projen-d9) scaffolds a complete project
+(Dockerfile, Compose stack, extensions folder, tasks) from one command.
+
+:::
+
 ## Requirements
 
 - [Docker](https://docs.docker.com/get-docker/)

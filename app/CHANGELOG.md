@@ -1,5 +1,35 @@
 # @wbce-d9/app
 
+## 10.0.5
+
+### Patch Changes
+
+- b2847d6: Bump vite
+
+## 10.0.4
+
+### Patch Changes
+
+- 1b20ba2: Bump deps
+
+## 10.0.3
+
+### Patch Changes
+
+- eeea793: Fix vulnerabilities
+
+## 10.0.2
+
+### Patch Changes
+
+- 839d3c7: Bump happy-dom to 20.8.9 for security fix
+
+## 10.0.1
+
+### Patch Changes
+
+- 205431f: Bump handlebars to 4.7.9 for security fix
+
 ## 10.0.0
 
 ### Major Changes
