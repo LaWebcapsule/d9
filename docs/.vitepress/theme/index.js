@@ -1,5 +1,5 @@
 import DefaultTheme from 'vitepress/theme';
-import { createHead } from '@unhead/vue';
+import { createHead } from '@unhead/vue/client';
 
 import Layout from './DocLayout.vue';
 import Card from '../components/Card.vue';

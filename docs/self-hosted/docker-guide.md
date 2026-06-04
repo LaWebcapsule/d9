@@ -13,6 +13,14 @@ problems. If you can't or don't want to use Docker, we also publish an
 
 :::
 
+::: tip Building a backend with extensions?
+This page covers the simplest way to **run** d9 with Docker. If you're using d9 as
+the backbone of a complete backend (custom extensions, a team that needs a
+consistent dev experience, multiple environments to keep in sync), the
+[projen template for d9](/self-hosted/projen-d9) generates the whole project
+(Dockerfile, Compose file, extensions folder, tasks) from a single source of truth.
+:::
+
 d9 is published to [Docker Hub]({{DOCKER_HUB_URL}}) under `lawebcapsule/d9`. To use the
 latest d9 image from Docker Hub, run:
 
