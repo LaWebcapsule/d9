@@ -102,3 +102,4 @@ This repository is a fork of Directus 9, which was released under GPLv3 by Monos
 ## Asset Disclaimer
 
 This fork contains modified versions of the original Directus documentation assets (screenshots, diagrams, and videos). These assets have been altered to replace Directus branding with d9 branding and to remove any user-identifying information. No original Directus trademarks, logos, or personal data from Directus contributors are used in this project.
+
