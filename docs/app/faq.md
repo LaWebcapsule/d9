@@ -7,7 +7,7 @@
 You can do this with the following command:
 
 ```sh
-npx directus users passwd --email admin@example.com --password newpasswordhere
+npx d9 users passwd --email admin@example.com --password newpasswordhere
 ```
 
 ## Why isn't d9 properly saving Chinese characters or emoji?

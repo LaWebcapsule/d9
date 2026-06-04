@@ -17,7 +17,7 @@ folder of your project) for its configuration. You can change this path and file
 environment variable before starting d9. For example:
 
 ```bash
-CONFIG_PATH="/path/to/config.js" npx directus start
+CONFIG_PATH="/path/to/config.js" npx d9 start
 ```
 
 In case you prefer using a configuration file instead of environment variables, you can also use the `CONFIG_PATH`

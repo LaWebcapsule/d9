@@ -26,6 +26,10 @@ jobs:
   publish-npm:
     name: Publish to NPM
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -35,10 +39,21 @@ jobs:
         with:
           registry: https://registry.npmjs.org
 
+      - name: Switch to Node 24 for Trusted Publishing
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+
+      - name: Switch to pnpm 10
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - name: Publish packages to NPM
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: pnpm --recursive publish --access=public --no-git-checks
+          NPM_CONFIG_PROVENANCE: "true"
+        run: pnpm --recursive publish --access=public --no-git-checks --provenance
 
   build-images:
     name: Build Images

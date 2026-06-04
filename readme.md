@@ -68,7 +68,7 @@ import { ... } from "@wbce-d9/some-package"
 
 ```bash
 npm update
-npx directus start
+npx d9 start
 ```
 
 ## JS SDK
