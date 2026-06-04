@@ -32,7 +32,7 @@
 (F|f)rontend
 (F|f)rontmatter
 (H|h)ardcode
-(H|h)ealthcheck
+(H|h)ealthchecks?
 (H|h)ostname
 (I|i)nit
 (I|i)ntegrations
@@ -47,6 +47,7 @@
 (R|r)epo
 (R|r)ollup
 (S|s)erverless
+(S|s)caffolded?
 (S|s)chemas?
 (S|s)endmail
 (S|s)lugify
@@ -136,7 +137,9 @@ customizable
 customizations
 DateTime
 DDoS
+deps
 destructured
+dev
 devs
 DigitalOcean
 DigitalOcean's
@@ -218,6 +221,7 @@ Knex
 Koyeb
 KPIs
 Kubernetes
+LaWebcapsule
 LDAP
 localhost
 lowercased
@@ -289,6 +293,8 @@ pre-defined
 pre-existing
 pre-formatted
 pre-installed
+(P|p)rojen
+(P|p)rojen-(.*)
 programmatically
 Programmatically
 ProgressEvent
@@ -335,6 +341,7 @@ SSR
 StackOverflow
 stylization
 subdirectory
+subprojects?
 substring
 SuperAdmins?
 superset

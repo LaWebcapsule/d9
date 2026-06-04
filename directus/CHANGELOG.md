@@ -1,5 +1,52 @@
 # directus9
 
+## 12.0.7
+
+### Patch Changes
+
+- @wbce-d9/api@12.4.5
+
+## 12.0.6
+
+### Patch Changes
+
+- @wbce-d9/api@12.4.4
+
+## 12.0.5
+
+### Patch Changes
+
+- Updated dependencies [eeea793]
+  - @wbce-d9/api@12.4.3
+
+## 12.0.4
+
+### Patch Changes
+
+- @wbce-d9/api@12.4.2
+
+## 12.0.3
+
+### Patch Changes
+
+- 205431f: Bump handlebars to 4.7.9 for security fix
+- Updated dependencies [205431f]
+  - @wbce-d9/api@12.4.1
+
+## 12.0.2
+
+### Patch Changes
+
+- Updated dependencies [b0cf593]
+  - @wbce-d9/api@12.4.0
+
+## 12.0.1
+
+### Patch Changes
+
+- ccf0a8a: Update docker url
+- ccf0a8a: add d9 shortcut
+
 ## 12.0.0
 
 ### Major Changes

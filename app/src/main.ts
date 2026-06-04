@@ -19,7 +19,7 @@ async function init() {
 	console.log(D9_LOGO, 'color:#6644ff', '');
 
 	console.info(
-		`Hey! Interested in helping build this open-source data platform?\nJoin us at: https://github.com/LaWebcapsule/directus9`
+		`Hey! Interested in helping build this open-source data platform?\nJoin us at: https://github.com/LaWebcapsule/d9`
 	);
 
 	console.info(`%c☄️ Starting d9...`, 'color:#6644ff');

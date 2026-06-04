@@ -1,5 +1,50 @@
 # @wbce-d9/api
 
+## 12.4.5
+
+### Patch Changes
+
+- Updated dependencies [b2847d6]
+  - @wbce-d9/app@10.0.5
+
+## 12.4.4
+
+### Patch Changes
+
+- Updated dependencies [1b20ba2]
+  - @wbce-d9/app@10.0.4
+
+## 12.4.3
+
+### Patch Changes
+
+- eeea793: Fix vulnerabilities
+- Updated dependencies [eeea793]
+  - @wbce-d9/storage-driver-cloudinary@10.0.2
+  - @wbce-d9/update-check@10.0.2
+  - @wbce-d9/app@10.0.3
+
+## 12.4.2
+
+### Patch Changes
+
+- Updated dependencies [839d3c7]
+  - @wbce-d9/app@10.0.2
+
+## 12.4.1
+
+### Patch Changes
+
+- 205431f: Bump handlebars to 4.7.9 for security fix
+- Updated dependencies [205431f]
+  - @wbce-d9/app@10.0.1
+
+## 12.4.0
+
+### Minor Changes
+
+- b0cf593: Increment openid-client version.
+
 ## 12.3.0
 
 ### Minor Changes

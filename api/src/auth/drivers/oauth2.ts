@@ -3,15 +3,9 @@ import type { Accountability } from '@wbce-d9/types';
 import express, { Router } from 'express';
 import flatten from 'flat';
 import jwt from 'jsonwebtoken';
-import type { BaseClient, Client, TokenSet } from 'openid-client';
-import { Issuer, generators } from 'openid-client';
+import * as oidc from 'openid-client';
 import { getAuthProvider } from '../../auth.js';
-import {
-	ACCESS_COOKIE_OPTIONS,
-	OAUTH2_COOKIE_CLEAR_OPTIONS,
-	OAUTH2_COOKIE_OPTIONS,
-	REFRESH_COOKIE_OPTIONS,
-} from '../../constants.js';
+import { ACCESS_COOKIE_OPTIONS, OAUTH2_COOKIE_OPTIONS, REFRESH_COOKIE_OPTIONS } from '../../constants.js';
 import env from '../../env.js';
 import {
 	InvalidConfigException,
@@ -32,12 +26,12 @@ import { BaseOAuthDriver, type UserPayload } from './baseoauth.js';
 import { isRedirectAllowedOnLogin } from '../../utils/is-redirect-allowed-on-login.js';
 
 export class OAuth2AuthDriver extends BaseOAuthDriver {
-	client: Client;
+	client: oidc.Configuration;
 	redirectUrl: string;
 	usersService: UsersService;
 	config: Record<string, any>;
 
-	getClient(): Promise<BaseClient> {
+	getClient(): Promise<oidc.Configuration> {
 		return Promise.resolve(this.client);
 	}
 
@@ -72,43 +66,44 @@ export class OAuth2AuthDriver extends BaseOAuthDriver {
 		this.usersService = new UsersService({ knex: this.knex, schema: this.schema });
 		this.config = additionalConfig;
 
-		const issuer = new Issuer({
-			authorization_endpoint: authorizeUrl,
-			token_endpoint: accessUrl,
-			userinfo_endpoint: profileUrl,
-			issuer: additionalConfig['provider'],
-		});
-
 		const clientOptionsOverrides = getConfigFromEnv(
 			`AUTH_${config['provider'].toUpperCase()}_CLIENT_`,
 			[`AUTH_${config['provider'].toUpperCase()}_CLIENT_ID`, `AUTH_${config['provider'].toUpperCase()}_CLIENT_SECRET`],
 			'underscore'
 		);
 
-		this.client = new issuer.Client({
-			client_id: clientId,
-			client_secret: clientSecret,
-			redirect_uris: [this.redirectUrl],
-			response_types: ['code'],
-			...clientOptionsOverrides,
-		});
+		this.client = new oidc.Configuration(
+			{
+				authorization_endpoint: authorizeUrl,
+				token_endpoint: accessUrl,
+				userinfo_endpoint: profileUrl,
+				issuer: additionalConfig['provider'],
+			},
+			clientId,
+			{ client_secret: clientSecret, ...clientOptionsOverrides }
+		);
 	}
 
-	generateAuthUrl(codeVerifier: string, prompt = false): string {
+	async generateAuthUrl(codeVerifier: string, prompt = false): Promise<string> {
 		try {
-			const codeChallenge = generators.codeChallenge(codeVerifier);
+			const codeChallenge = await oidc.calculatePKCECodeChallenge(codeVerifier);
 			const paramsConfig = typeof this.config['params'] === 'object' ? this.config['params'] : {};
 
-			return this.client.authorizationUrl({
+			const params: Record<string, string> = {
 				scope: this.config['scope'] ?? 'email',
 				access_type: 'offline',
-				prompt: prompt ? 'consent' : undefined,
 				...paramsConfig,
 				code_challenge: codeChallenge,
 				code_challenge_method: 'S256',
 				// Some providers require state even with PKCE
 				state: codeChallenge,
-			});
+			};
+
+			if (prompt) {
+				params['prompt'] = 'consent';
+			}
+
+			return oidc.buildAuthorizationUrl(this.client, params).href;
 		} catch (e) {
 			throw this.handleError(e);
 		}
@@ -116,18 +111,21 @@ export class OAuth2AuthDriver extends BaseOAuthDriver {
 
 	async getTokenSetAndUserInfo(
 		payload: Record<string, any>
-	): Promise<[TokenSet, Record<string, unknown>, UserPayload]> {
-		let tokenSet;
+	): Promise<[oidc.TokenEndpointResponse & oidc.TokenEndpointResponseHelpers, Record<string, unknown>, UserPayload]> {
+		let tokenSet: oidc.TokenEndpointResponse & oidc.TokenEndpointResponseHelpers;
 		let userInfo;
 
 		try {
-			tokenSet = await this.client.oauthCallback(
-				this.redirectUrl,
-				{ code: payload['code'], state: payload['state'] },
-				{ code_verifier: payload['codeVerifier'], state: generators.codeChallenge(payload['codeVerifier']) }
-			);
+			const codeChallenge = await oidc.calculatePKCECodeChallenge(payload['codeVerifier']);
 
-			userInfo = await this.client.userinfo(tokenSet.access_token!);
+			const callbackUrl = new URL(payload['callbackPath'], this.redirectUrl);
+
+			tokenSet = await oidc.authorizationCodeGrant(this.client, callbackUrl, {
+				pkceCodeVerifier: payload['codeVerifier'],
+				expectedState: codeChallenge,
+			});
+
+			userInfo = await oidc.fetchUserInfo(this.client, tokenSet.access_token!, oidc.skipSubjectCheck);
 		} catch (e) {
 			throw this.handleError(e);
 		}
@@ -165,7 +163,7 @@ export function createOAuth2AuthRouter(providerName: string): Router {
 
 	router.get(
 		'/',
-		(req, res) => {
+		asyncHandler(async (req, res) => {
 			const provider = getAuthProvider(providerName) as OAuth2AuthDriver;
 			const codeVerifier = provider.generateCodeVerifier();
 			const prompt = !!req.query['prompt'];
@@ -176,14 +174,14 @@ export function createOAuth2AuthRouter(providerName: string): Router {
 			}
 
 			const token = jwt.sign({ verifier: codeVerifier, redirect, prompt }, env['SECRET'] as string, {
-				expiresIn: '5m',
+				expiresIn: Math.floor(OAUTH2_COOKIE_OPTIONS.maxAge! / 1000),
 				issuer: 'directus',
 			});
 
 			res.cookie(`oauth2.${providerName}`, token, OAUTH2_COOKIE_OPTIONS);
 
-			return res.redirect(provider.generateAuthUrl(codeVerifier, prompt));
-		},
+			return res.redirect(await provider.generateAuthUrl(codeVerifier, prompt));
+		}),
 		respond
 	);
 
@@ -235,9 +233,8 @@ export function createOAuth2AuthRouter(providerName: string): Router {
 			let authResponse;
 
 			try {
-				res.clearCookie(`oauth2.${providerName}`, OAUTH2_COOKIE_CLEAR_OPTIONS);
-
 				authResponse = await authenticationService.login(providerName, {
+					callbackPath: req.originalUrl,
 					code: req.query['code'],
 					codeVerifier: verifier,
 					state: req.query['state'],
