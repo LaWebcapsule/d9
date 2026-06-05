@@ -48,7 +48,7 @@
 		"lodash-es": "catalog:",
 		"micromustache": "catalog:",
 		"vue": "catalog:",
-		"tmp": "0.2.6"
+		"tmp": "0.2.7"
 	},
 	"devDependencies": {
 		"@wbce-d9/types": "workspace:*",
