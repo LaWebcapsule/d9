@@ -112,8 +112,8 @@ catalogs:
       specifier: 3.1.0
       version: 3.1.0
     liquidjs:
-      specifier: 10.25.7
-      version: 10.25.7
+      specifier: 10.26.0
+      version: 10.26.0
     lodash:
       specifier: 4.18.1
       version: 4.18.1
@@ -450,7 +450,7 @@ importers:
         version: 2.3.3
       liquidjs:
         specifier: 'catalog:'
-        version: 10.25.7
+        version: 10.26.0
       lodash-es:
         specifier: 'catalog:'
         version: 4.18.1
@@ -8732,8 +8732,8 @@ packages:
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
-  liquidjs@10.25.7:
-    resolution: {integrity: sha512-rPCjJLiD4eDhQjvv964AeXFC+HbeYBbZrd7Z82Q6hqv1lX7G+5w4SJcKLn9CAAAwHI4aS3dTdo083UB79K3pDA==}
+  liquidjs@10.26.0:
+    resolution: {integrity: sha512-Ub9FFNOLB9tdH/gB2MKkeU7x9NifoVidxAam6YWU7LUcy7Glumi6q5C3tDpWOEpeNaT8Cdwdb1axEdlvLSoyaQ==}
     engines: {node: '>=16'}
     hasBin: true
 
@@ -21872,7 +21872,7 @@ snapshots:
 
   lines-and-columns@1.2.4: {}
 
-  liquidjs@10.25.7:
+  liquidjs@10.26.0:
     dependencies:
       commander: 10.0.1
 
