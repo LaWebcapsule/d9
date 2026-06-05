@@ -32,8 +32,8 @@
 		"@wbce-d9/storage": "workspace:*",
 		"@wbce-d9/utils": "workspace:*",
 		"@aws-sdk/abort-controller": "3.357.0",
-		"@aws-sdk/client-s3": "3.1004.0",
-		"@aws-sdk/lib-storage": "3.367.0"
+		"@aws-sdk/client-s3": "3.1062.0",
+		"@aws-sdk/lib-storage": "3.1062.0"
 	},
 	"devDependencies": {
 		"@ngneat/falso": "catalog:",
