@@ -35,7 +35,7 @@ catalog:
   fs-extra: '11.1.1'
   geojson: '0.5.0'
   inquirer: '9.1.5'
-  joi: '17.9.1'
+  joi: '18.2.1'
   js-yaml: '4.1.1'
   json-to-graphql-query: '2.2.5'
   json2csv: '5.0.7'
