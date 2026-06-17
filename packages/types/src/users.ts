@@ -26,8 +26,6 @@ export type User = {
 	token: string;
 	last_login: string;
 	last_page: string;
-	date_created: string;
-	date_updated: string;
 	external_id: string;
 	tfa_secret: string;
 	theme: 'auto' | 'dark' | 'light';
