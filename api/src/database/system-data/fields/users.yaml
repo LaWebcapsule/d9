@@ -164,6 +164,26 @@ fields:
     display_options:
       relative: true
 
+  - field: date_created
+    special:
+      - date-created
+      - cast-timestamp
+    width: half
+    display: datetime
+    readonly: true
+    display_options:
+      relative: true
+
+  - field: date_updated
+    special:
+      - date-updated
+      - cast-timestamp
+    width: half
+    display: datetime
+    readonly: true
+    display_options:
+      relative: true
+
   - field: provider
     width: half
     interface: select-dropdown
