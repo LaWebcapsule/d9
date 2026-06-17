@@ -23,6 +23,14 @@
 				<dt>{{ t('last_access') }}</dt>
 				<dd>{{ lastAccessDate }}</dd>
 			</div>
+			<div v-if="user.date_created">
+				<dt>{{ t('created_on') }}</dt>
+				<dd>{{ dateCreatedDate }}</dd>
+			</div>
+			<div v-if="user.date_updated">
+				<dt>{{ t('modified_on') }}</dt>
+				<dd>{{ dateUpdatedDate }}</dd>
+			</div>
 			<div v-if="user.created_on">
 				<dt>{{ t('created_on') }}</dt>
 				<dd>{{ user.created_on }}</dd>
@@ -66,6 +74,8 @@ export default defineComponent({
 		const { isCopySupported, copyToClipboard } = useClipboard();
 
 		const lastAccessDate = ref('');
+		const dateCreatedDate = ref('');
+		const dateUpdatedDate = ref('');
 
 		watch(
 			[() => props.user, () => props.isNew],
@@ -75,11 +85,19 @@ export default defineComponent({
 				if (props.user.last_access) {
 					lastAccessDate.value = localizedFormat(new Date(props.user.last_access), String(t('date-fns_date_short')));
 				}
+
+				if (props.user.date_created) {
+					dateCreatedDate.value = localizedFormat(new Date(props.user.date_created), String(t('date-fns_date_short')));
+				}
+
+				if (props.user.date_updated) {
+					dateUpdatedDate.value = localizedFormat(new Date(props.user.date_updated), String(t('date-fns_date_short')));
+				}
 			},
 			{ immediate: true }
 		);
 
-		return { t, lastAccessDate, isCopySupported, copyToClipboard };
+		return { t, lastAccessDate, dateCreatedDate, dateUpdatedDate, isCopySupported, copyToClipboard };
 	},
 });
 </script>
