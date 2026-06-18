@@ -61,7 +61,3 @@ columns:
   last_page:
     type: string
     length: 255
-  date_created:
-    type: timestamp
-  date_updated:
-    type: timestamp
