@@ -518,9 +518,9 @@ export class GraphQLService {
 						[relation.field]: {
 							type: new GraphQLUnionType({
 								name: `${relation.collection}_${relation.field}_union`,
-								types: relation.meta.one_allowed_collections
-									.filter((collection) => collection in CollectionTypes)
-									.map((collection) => CollectionTypes[collection]!.getType()),
+								types: relation.meta.one_allowed_collections.map((collection) =>
+									CollectionTypes[collection]!.getType()
+								),
 								resolveType(_value, context, info) {
 									let path: (string | number)[] = [];
 									let currentPath = info.path;
@@ -539,7 +539,7 @@ export class GraphQLService {
 									}
 
 									const collection = parent[relation.meta!.one_collection_field!]!;
-									return CollectionTypes[collection]?.getType().name;
+									return CollectionTypes[collection]!.getType().name;
 								},
 							}),
 							resolve: (obj: Record<string, any>, _, __, info) => {
@@ -1126,8 +1126,6 @@ export class GraphQLService {
 					ReadableCollectionFilterTypes[relation.collection]?.removeField('item');
 
 					for (const collection of relation.meta.one_allowed_collections) {
-						if (!(collection in ReadableCollectionFilterTypes)) continue;
-
 						ReadableCollectionFilterTypes[relation.collection]?.addFields({
 							[`item__${collection}`]: ReadableCollectionFilterTypes[collection]!,
 						});
