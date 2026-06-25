@@ -649,7 +649,7 @@ export class CollectionsService {
 					}
 
 					const a2oRelationsThatIncludeThisCollection = this.schema.relations.filter((relation) => {
-						return relation.meta?.one_allowed_collections?.includes(collectionKey);
+						return !relation.meta?.system && relation.meta?.one_allowed_collections?.includes(collectionKey);
 					});
 
 					for (const relation of a2oRelationsThatIncludeThisCollection) {
