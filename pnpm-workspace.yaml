@@ -36,7 +36,7 @@ catalog:
   geojson: '0.5.0'
   inquirer: '9.1.5'
   joi: '18.2.1'
-  js-yaml: '4.1.1'
+  js-yaml: '4.2.0'
   json-to-graphql-query: '2.2.5'
   json2csv: '5.0.7'
   knex: '3.1.0'
