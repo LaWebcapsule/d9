@@ -478,8 +478,8 @@ importers:
         specifier: 1.1.12
         version: 1.1.12
       nodemailer:
-        specifier: 8.0.5
-        version: 8.0.5
+        specifier: 9.0.1
+        version: 9.0.1
       object-hash:
         specifier: 3.0.0
         version: 3.0.0
@@ -9067,8 +9067,8 @@ packages:
   nodemailer-mailgun-transport@2.1.5:
     resolution: {integrity: sha512-hF7POkaxFgMvYEd5aHLaQJI2511ld+aQlQi7JH6bGjhjlZ33cIbTB9PimlIrLu5XC3z76Kde6e65OIwL9lOdTA==}
 
-  nodemailer@8.0.5:
-    resolution: {integrity: sha512-0PF8Yb1yZuQfQbq+5/pZJrtF6WQcjTd5/S4JOHs9PGFxuTqoB/icwuB44pOdURHJbRKX1PPoJZtY7R4VUoCC8w==}
+  nodemailer@9.0.1:
+    resolution: {integrity: sha512-Gwv8SQewT616ZM/URn0H54b8PWo/Wum7md3EW2aWy1lO27+WZCX+Xyak3J+NlmHUjDh5ME+uesJUDRbR3Ye8Bw==}
     engines: {node: '>=6.0.0'}
 
   nodemon@2.0.22:
@@ -21324,7 +21324,7 @@ snapshots:
       - whiskers
     optional: true
 
-  nodemailer@8.0.5: {}
+  nodemailer@9.0.1: {}
 
   nodemon@2.0.22:
     dependencies:
