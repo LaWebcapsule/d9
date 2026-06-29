@@ -26,6 +26,17 @@ data:
     many_field: activity
     one_collection: directus_activity
     one_field: revisions
+  # `item` + `collection` form an any-to-one (A2O) relation: `item` holds the
+  # referenced record's primary key, `collection` names its collection.
+  # `one_allowed_collections` is filled at runtime in RelationsService.stitchRelations.
+  - many_collection: directus_revisions
+    many_field: item
+    one_collection_field: collection
+    one_allowed_collections: []
+  - many_collection: directus_activity
+    many_field: item
+    one_collection_field: collection
+    one_allowed_collections: []
   - many_collection: directus_presets
     many_field: user
     one_collection: directus_users
