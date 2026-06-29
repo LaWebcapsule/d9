@@ -19,6 +19,15 @@ import { ItemsService } from './items.js';
 import { PermissionsService } from './permissions.js';
 
 export class RelationsService {
+	/**
+	 * A2O relations whose `one_allowed_collections` is filled with all collections at read time
+	 * (see stitchRelations). Identified by collection + field rather than a sentinel value.
+	 */
+	static readonly expandAllRelations = [
+		{ collection: 'directus_activity', field: 'item' },
+		{ collection: 'directus_revisions', field: 'item' },
+	];
+
 	knex: Knex;
 	permissionsService: PermissionsService;
 	schemaInspector: SchemaInspector;
@@ -489,6 +498,23 @@ export class RelationsService {
 			});
 
 		results.push(...remainingMetaRows);
+
+		/**
+		 * `directus_activity.item` and `directus_revisions.item` are any-to-one (A2O) relations whose
+		 * `item` can reference any collection. We declare them as system relations (see relations.yaml)
+		 * but their `one_allowed_collections` can't be hardcoded, so we fill it with the current set of
+		 * collections here, in memory, on every read. This powers A2O filtering/permissions and the
+		 * app's per-collection filter drill-down without persisting an ever-stale list.
+		 */
+		for (const relation of results) {
+			const isExpandAll = RelationsService.expandAllRelations.some(
+				(r) => r.collection === relation.collection && r.field === relation.field
+			);
+
+			if (isExpandAll && relation.meta) {
+				relation.meta.one_allowed_collections = Object.keys(this.schema.collections);
+			}
+		}
 
 		return results;
 	}
