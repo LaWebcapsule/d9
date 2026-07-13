@@ -635,6 +635,9 @@ describe('Integration Tests', () => {
 					accountability: { role: 'test', admin: true },
 				});
 
+				// mock an unknown user (no matching row)
+				vi.spyOn(UsersService.prototype as any, 'getUserByEmail').mockResolvedValueOnce(undefined);
+
 				const promise = service.inviteUser('user@example.com', 'invite-role', null);
 
 				await expect(promise).resolves.not.toThrow();
