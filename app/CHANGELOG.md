@@ -1,5 +1,12 @@
 # @wbce-d9/app
 
+## 10.1.0
+
+### Minor Changes
+
+- 41d2185: configure (revisions|activity).item to work as a m2a (alias) field
+- 41d2185: Add date_created and date_updated on directus_users table
+
 ## 10.0.5
 
 ### Patch Changes
