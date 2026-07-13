@@ -357,10 +357,11 @@ export class UsersService extends ItemsService {
 			// Check if user is known
 			let user = await this.getUserByEmail(email);
 			const isEmptyUser = isEmpty(user);
+
 			// Create user first to verify uniqueness if unknown
 			if (isEmptyUser) {
 				await this.createOne({ email, role, status: 'invited' }, opts);
-				user = await this.getUserByEmail(email)
+				user = await this.getUserByEmail(email);
 				// For known users update role if changed
 			} else if (user.status === 'invited' && user.role !== role) {
 				await this.updateOne(user.id, { role }, opts);
