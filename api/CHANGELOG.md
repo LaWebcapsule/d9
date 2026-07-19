@@ -1,5 +1,12 @@
 # @wbce-d9/api
 
+## 12.5.1
+
+### Patch Changes
+
+- c44b95d: qualify the `collection` scope column in many-to-any (a2o/o2a) filter and sort JOINs
+- afab06b: security: fix Dependabot alerts (nodemailer 9.0.3, ws 6.2.5/8.21.1, uuid ≥11.1.1)
+
 ## 12.5.0
 
 ### Minor Changes
