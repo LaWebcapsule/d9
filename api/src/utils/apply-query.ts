@@ -179,7 +179,7 @@ function addJoin({ path, collection, aliasMap, rootQuery, schema, relations, kne
 
 				rootQuery.leftJoin({ [alias]: pathScope }, (joinClause) => {
 					joinClause
-						.onVal(relation.meta!.one_collection_field!, '=', pathScope)
+						.onVal(`${aliasedParentCollection}.${relation.meta!.one_collection_field!}`, '=', pathScope)
 						.andOn(
 							`${aliasedParentCollection}.${relation.field}`,
 							'=',
@@ -194,7 +194,7 @@ function addJoin({ path, collection, aliasMap, rootQuery, schema, relations, kne
 			} else if (relationType === 'o2a') {
 				rootQuery.leftJoin({ [alias]: relation.collection }, (joinClause) => {
 					joinClause
-						.onVal(relation.meta!.one_collection_field!, '=', parentCollection)
+						.onVal(`${alias}.${relation.meta!.one_collection_field!}`, '=', parentCollection)
 						.andOn(
 							`${alias}.${relation.field}`,
 							'=',
