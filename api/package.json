@@ -156,7 +156,7 @@
 		"rate-limiter-flexible": "2.4.1",
 		"samlify": "2.13.0",
 		"sanitize-html": "2.12.1",
-		"sharp": "0.32.6",
+		"sharp": "0.35.3",
 		"snappy": "7.2.2",
 		"stream-json": "1.7.5",
 		"strip-bom-stream": "5.0.0",
