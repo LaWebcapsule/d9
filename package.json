@@ -83,7 +83,8 @@
 			"picomatch@^4": "4.0.4",
 			"socket.io-parser@>=4.0.0 <4.2.6": "4.2.6",
 			"yaml@>=1.0.0 <1.10.3": "1.10.3",
-			"yaml@>=2.0.0 <2.8.3": "2.8.3"
+			"yaml@>=2.0.0 <2.8.3": "2.8.3",
+			"@tootallnate/once@<2.0.1": "^2.0.1"
 		},
 		"packageExtensions": {
 			"@vue/test-utils": {
