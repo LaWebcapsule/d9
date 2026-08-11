@@ -100,8 +100,8 @@ catalogs:
       specifier: 18.2.1
       version: 18.2.1
     js-yaml:
-      specifier: 4.2.0
-      version: 4.2.0
+      specifier: 4.3.1
+      version: 4.3.1
     json-to-graphql-query:
       specifier: 2.2.5
       version: 2.2.5
@@ -433,7 +433,7 @@ importers:
         version: 18.2.1
       js-yaml:
         specifier: 'catalog:'
-        version: 4.2.0
+        version: 4.3.1
       js2xmlparser:
         specifier: 5.0.0
         version: 5.0.0
@@ -1645,7 +1645,7 @@ importers:
         version: 29.5.0
       js-yaml:
         specifier: 'catalog:'
-        version: 4.2.0
+        version: 4.3.1
       json-to-graphql-query:
         specifier: 'catalog:'
         version: 2.2.5
@@ -8161,12 +8161,12 @@ packages:
     resolution: {integrity: sha512-ttBQIIQPDeLjpPOohtUdXuXUVoA2uIB6fEH9HyJ7234s5mBJ5wTx20njxplLZQgLaOfpmPQA7X2t5AX6tIPbog==}
     hasBin: true
 
-  js-yaml@4.2.0:
-    resolution: {integrity: sha512-ePWsvanv0DWuDRsW8dnt+R4jQ31SCRCQ7hhNcPXZPsoBZiemuZNYGf7adZdqX2D86j6rvKp3RpCxVTSb8WQlOw==}
-    hasBin: true
-
   js-yaml@4.3.0:
     resolution: {integrity: sha512-1td788aAnnZ5qs7V2QIRl1owjtYpbKt749Y3xauqQgwIIGF/xXWz1wMTEBx5O3LK3lXLVuqXPdPxj2BoFHaW9Q==}
+    hasBin: true
+
+  js-yaml@4.3.1:
+    resolution: {integrity: sha512-CY6crGq313MX8GkwvB7tzgp99vjQxY1++5y10/BKN/GUfHqWaOGQMNZkBvqSzsZKWk/ijwHlWzzkLulsGHhjWQ==}
     hasBin: true
 
   js2xmlparser@5.0.0:
@@ -12085,7 +12085,7 @@ snapshots:
     dependencies:
       '@apidevtools/swagger-parser': 10.1.1(openapi-types@12.1.0)
       chalk: 4.1.2
-      js-yaml: 3.14.2
+      js-yaml: 3.15.0
       yargs: 15.4.1
     transitivePeerDependencies:
       - openapi-types
@@ -14648,7 +14648,7 @@ snapshots:
   '@rollup/plugin-yaml@4.0.1(rollup@3.30.0)':
     dependencies:
       '@rollup/pluginutils': 5.3.0(rollup@3.30.0)
-      js-yaml: 4.2.0
+      js-yaml: 4.3.0
       tosource: 2.0.0-alpha.3
     optionalDependencies:
       rollup: 3.30.0
@@ -20086,11 +20086,11 @@ snapshots:
       argparse: 1.0.10
       esprima: 4.0.1
 
-  js-yaml@4.2.0:
+  js-yaml@4.3.0:
     dependencies:
       argparse: 2.0.1
 
-  js-yaml@4.3.0:
+  js-yaml@4.3.1:
     dependencies:
       argparse: 2.0.1
 
@@ -20143,7 +20143,7 @@ snapshots:
     dependencies:
       commander: 4.1.1
       graphlib: 2.1.8
-      js-yaml: 3.14.2
+      js-yaml: 3.15.0
       lodash: 4.18.0
       native-promise-only: 0.8.1
       path-loader: 1.0.12
