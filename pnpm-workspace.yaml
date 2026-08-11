@@ -58,7 +58,7 @@ catalog:
   vue-router: '4.1.6'
   wellknown: '0.5.0'
   zod: '3.22.3'
-  liquidjs: '10.26.0'
+  liquidjs: '10.27.1'
   undici: '7.28.0'
   dompurify: '3.4.11'
   diff: '5.2.2'
