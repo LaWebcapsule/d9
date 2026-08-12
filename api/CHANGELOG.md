@@ -1,5 +1,11 @@
 # @wbce-d9/api
 
+## 12.5.2
+
+### Patch Changes
+
+- c3b166a: security: fix Dependabot alerts (sharp 0.35.3 + transitive dependency overrides)
+
 ## 12.5.1
 
 ### Patch Changes
