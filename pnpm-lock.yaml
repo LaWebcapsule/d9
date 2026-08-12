@@ -525,8 +525,8 @@ importers:
         specifier: 2.13.0
         version: 2.13.0
       sanitize-html:
-        specifier: 2.12.1
-        version: 2.12.1
+        specifier: 2.17.5
+        version: 2.17.5
       sharp:
         specifier: 0.35.3
         version: 0.35.3(@types/node@22.15.29)
@@ -692,7 +692,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
+        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
     optionalDependencies:
       '@keyv/redis':
         specifier: 2.5.7
@@ -1064,7 +1064,7 @@ importers:
         version: 6.2.0
       vitepress:
         specifier: 1.6.4
-        version: 1.6.4(@algolia/client-search@5.48.1)(@types/node@25.2.3)(axios@1.18.1)(postcss@8.5.15)(qrcode@1.5.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.83.0)(search-insights@2.17.3)(sortablejs@1.14.0)(terser@5.46.0)(typescript@5.7.3)(yaml@2.8.3)
+        version: 1.6.4(@algolia/client-search@5.48.1)(@types/node@25.2.3)(axios@1.18.1)(postcss@8.5.26)(qrcode@1.5.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.83.0)(search-insights@2.17.3)(sortablejs@1.14.0)(terser@5.46.0)(typescript@5.7.3)(yaml@2.8.3)
       vue:
         specifier: 3.5.27
         version: 3.5.27(typescript@5.7.3)
@@ -1250,7 +1250,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
+        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
 
   packages/schema:
     dependencies:
@@ -1300,7 +1300,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
+        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
 
   packages/storage-driver-azure:
     dependencies:
@@ -1331,7 +1331,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
+        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
 
   packages/storage-driver-cloudinary:
     dependencies:
@@ -1365,7 +1365,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
+        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
 
   packages/storage-driver-gcs:
     dependencies:
@@ -1396,7 +1396,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
+        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
 
   packages/storage-driver-local:
     dependencies:
@@ -1424,7 +1424,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
+        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
 
   packages/storage-driver-s3:
     dependencies:
@@ -1461,7 +1461,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
+        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
 
   packages/tsconfig: {}
 
@@ -1536,7 +1536,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
+        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
 
   packages/utils:
     dependencies:
@@ -1600,7 +1600,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
+        version: 4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
 
   tests/blackbox:
     devDependencies:
@@ -6518,6 +6518,9 @@ packages:
   dateformat@4.6.3:
     resolution: {integrity: sha512-2P0p0pFGzHS5EMnhdxQi7aJN+iMheud0UhG4dlE1DLAlvL8JHjJJTX/CSm4JXwV0Ka5nGk3zC5mcb5bUQUxxMA==}
 
+  dayjs@1.11.21:
+    resolution: {integrity: sha512-98IT+HOahAisibz/yjKbzuOBwYcjJ7BCLPzARyHiyEBmRz4fatF+KPJszEHXsGYjUG234aH/cOjW1wwTbKUZlA==}
+
   debug@2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
     peerDependencies:
@@ -7705,6 +7708,9 @@ packages:
   html-void-elements@3.0.0:
     resolution: {integrity: sha512-bEqo66MRXsUGxWHV5IP0PUiAWwoEjba4VCzg0LjFJBpchPaTfyfCKTG6bc5F8ucKec3q5y6qOdGyYTSBEvhCrg==}
 
+  htmlparser2@10.1.0:
+    resolution: {integrity: sha512-VTZkM9GWRAtEpveh7MSF6SjjrpNVNNVJfFup7xTY3UpFtm67foy9HDVXneLtFVt4pMz5kZtgNcvCniNFb1hlEQ==}
+
   htmlparser2@8.0.2:
     resolution: {integrity: sha512-GYdjWKDkbRLkZ5geuHs5NY1puJ+PXwP7+fHPRz06Eirsb9ugf6d8kkXav6ADhcODhFFPMIXyxkxSuMf3D6NCFA==}
 
@@ -8505,6 +8511,9 @@ packages:
       tedious:
         optional: true
 
+  launder@1.7.1:
+    resolution: {integrity: sha512-mU6WRz5EusL9ZZuiZ5SO4Y6C0P9PAUR9iwdb6bzj4KDihm28DiHFw+/yk9DBH4f+Pv1wuzQ4e2jV3oQ7mkIqvw==}
+
   lazy-universal-dotenv@4.0.0:
     resolution: {integrity: sha512-aXpZJRnTkpK6gQ/z4nk+ZBLd/Qdp118cvPruLSIQzQNRhKwEcdXCOzXuF55VDqIiuAaY3UGZ10DJtvZzDcvsxg==}
     engines: {node: '>=14.0.0'}
@@ -9103,6 +9112,11 @@ packages:
 
   nanoid@3.3.15:
     resolution: {integrity: sha512-y7Wygv/7mEOvxTuEQDB8StXdMRBWf1kR/tlhAzBRUFkB2jfcLOAxO/SHmOO2zgz1pVgK29/kyupn059/bCHdjA==}
+    engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
+    hasBin: true
+
+  nanoid@3.3.18:
+    resolution: {integrity: sha512-DTg4MJbGMWkfi6VZFdNt2/caMbQy4Ou+Op/hJQvGEWcnVfoA1QA+xzRKAzw9jD6+GVOOeYr/mIcuDSdug6F6+w==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
@@ -9921,6 +9935,10 @@ packages:
     resolution: {integrity: sha512-FfR8sjd4em2T6fb3I2MwAJU7HWVMr9zba+enmQeeWFfCbm+UOC/0X4DS8XtpUTMwWMGbjKYP7xjfNekzyGmB3A==}
     engines: {node: ^10 || ^12 || >=14}
 
+  postcss@8.5.26:
+    resolution: {integrity: sha512-u82N74LFzG8ca+dD8puPnplTXoGH4fTPpVGuIbt36G3qvNlkvfD0lEAZSxaly3KX8TS/L1A1gsCEmvKmBcVbkQ==}
+    engines: {node: ^10 || ^12 || >=14}
+
   postgres-array@2.0.0:
     resolution: {integrity: sha512-VpZrUqU5A69eQyW2c5CA1jtLecCsN2U/bD6VilrFDWq5+5UIEVO7nazS3TEcHf1zuPYO/sqGvUvW62g86RXZuA==}
     engines: {node: '>=4'}
@@ -10536,8 +10554,8 @@ packages:
   samlify@2.13.0:
     resolution: {integrity: sha512-9VyXF9FKUn4D1LFt1KnkcltIk/P0w5WOp13oiGjq6NEVBleBSd3iaFFP7vigmvmCEntaAeyFSSdjMhYc41hptA==}
 
-  sanitize-html@2.12.1:
-    resolution: {integrity: sha512-Plh+JAn0UVDpBRP/xEjsk+xDCoOvMBwQUf/K+/cBAVuTbtX8bj2VB7S1sL1dssVpykqp0/KPSesHrqXtokVBpA==}
+  sanitize-html@2.17.5:
+    resolution: {integrity: sha512-ZmU1joGRrvoyctKIiuwUxqR6moLoU2Wk+2bMccN6f7UwhAmwYDvWziqPxRDDN2Qip62NqnIrVrT9akbL6Wretg==}
 
   sass@1.83.0:
     resolution: {integrity: sha512-qsSxlayzoOjdvXMVLkzF84DJFc2HZEL/rFyGIKbbilYtAvlCxyuzUeff9LawTn4btVnLKg75Z8MMr1lxU1lfGw==}
@@ -15860,7 +15878,7 @@ snapshots:
       fetch-retry: 5.0.6
       fs-extra: 11.3.3
       isomorphic-unfetch: 3.1.0(encoding@0.1.13)
-      nanoid: 3.3.11
+      nanoid: 3.3.18
       read-pkg-up: 7.0.1
     transitivePeerDependencies:
       - encoding
@@ -16593,7 +16611,7 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.1.0
 
-  '@vitest/mocker@4.1.4(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))':
+  '@vitest/mocker@4.1.4(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))':
     dependencies:
       '@vitest/spy': 4.1.4
       estree-walker: 3.0.3
@@ -16693,7 +16711,7 @@ snapshots:
       '@vue/shared': 3.5.27
       estree-walker: 2.0.2
       magic-string: 0.30.21
-      postcss: 8.5.15
+      postcss: 8.5.26
       source-map-js: 1.2.1
 
   '@vue/compiler-ssr@3.2.47':
@@ -18076,6 +18094,8 @@ snapshots:
   date-format@4.0.3: {}
 
   dateformat@4.6.3: {}
+
+  dayjs@1.11.21: {}
 
   debug@2.6.9:
     dependencies:
@@ -19478,6 +19498,13 @@ snapshots:
 
   html-void-elements@3.0.0: {}
 
+  htmlparser2@10.1.0:
+    dependencies:
+      domelementtype: 2.3.0
+      domhandler: 5.0.3
+      domutils: 3.2.2
+      entities: 7.0.1
+
   htmlparser2@8.0.2:
     dependencies:
       domelementtype: 2.3.0
@@ -20577,6 +20604,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  launder@1.7.1:
+    dependencies:
+      dayjs: 1.11.21
+
   lazy-universal-dotenv@4.0.0:
     dependencies:
       app-root-dir: 1.0.2
@@ -21384,6 +21415,8 @@ snapshots:
   nanoid@3.3.11: {}
 
   nanoid@3.3.15: {}
+
+  nanoid@3.3.18: {}
 
   nanoid@5.0.9: {}
 
@@ -22333,6 +22366,12 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
+  postcss@8.5.26:
+    dependencies:
+      nanoid: 3.3.18
+      picocolors: 1.1.1
+      source-map-js: 1.2.1
+
   postgres-array@2.0.0:
     optional: true
 
@@ -23145,14 +23184,15 @@ snapshots:
       xml-escape: 1.1.0
       xpath: 0.0.34
 
-  sanitize-html@2.12.1:
+  sanitize-html@2.17.5:
     dependencies:
       deepmerge: 4.3.1
       escape-string-regexp: 4.0.0
-      htmlparser2: 8.0.2
+      htmlparser2: 10.1.0
       is-plain-object: 5.0.0
+      launder: 1.7.1
       parse-srcset: 1.0.2
-      postcss: 8.5.15
+      postcss: 8.5.26
 
   sass@1.83.0:
     dependencies:
@@ -24557,7 +24597,7 @@ snapshots:
       terser: 5.46.0
       yaml: 2.8.3
 
-  vitepress@1.6.4(@algolia/client-search@5.48.1)(@types/node@25.2.3)(axios@1.18.1)(postcss@8.5.15)(qrcode@1.5.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.83.0)(search-insights@2.17.3)(sortablejs@1.14.0)(terser@5.46.0)(typescript@5.7.3)(yaml@2.8.3):
+  vitepress@1.6.4(@algolia/client-search@5.48.1)(@types/node@25.2.3)(axios@1.18.1)(postcss@8.5.26)(qrcode@1.5.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.83.0)(search-insights@2.17.3)(sortablejs@1.14.0)(terser@5.46.0)(typescript@5.7.3)(yaml@2.8.3):
     dependencies:
       '@docsearch/css': 3.8.2
       '@docsearch/js': 3.8.2(@algolia/client-search@5.48.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)
@@ -24578,7 +24618,7 @@ snapshots:
       vite: 7.3.5(@types/node@25.2.3)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3)
       vue: 3.5.27(typescript@5.7.3)
     optionalDependencies:
-      postcss: 8.5.15
+      postcss: 8.5.26
     transitivePeerDependencies:
       - '@algolia/client-search'
       - '@types/node'
@@ -24612,7 +24652,37 @@ snapshots:
   vitest@4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3)):
     dependencies:
       '@vitest/expect': 4.1.4
-      '@vitest/mocker': 4.1.4(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
+      '@vitest/mocker': 4.1.4(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
+      '@vitest/pretty-format': 4.1.4
+      '@vitest/runner': 4.1.4
+      '@vitest/snapshot': 4.1.4
+      '@vitest/spy': 4.1.4
+      '@vitest/utils': 4.1.4
+      es-module-lexer: 2.0.0
+      expect-type: 1.3.0
+      magic-string: 0.30.21
+      obug: 2.1.1
+      pathe: 2.0.3
+      picomatch: 4.0.4
+      std-env: 4.0.0
+      tinybench: 2.9.0
+      tinyexec: 1.0.2
+      tinyglobby: 0.2.15
+      tinyrainbow: 3.1.0
+      vite: 7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3)
+      why-is-node-running: 2.3.0
+    optionalDependencies:
+      '@opentelemetry/api': 1.9.0
+      '@types/node': 22.15.29
+      '@vitest/coverage-v8': 4.1.4(vitest@4.1.4)
+      happy-dom: 20.8.9
+    transitivePeerDependencies:
+      - msw
+
+  vitest@4.1.4(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3)):
+    dependencies:
+      '@vitest/expect': 4.1.4
+      '@vitest/mocker': 4.1.4(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
       '@vitest/pretty-format': 4.1.4
       '@vitest/runner': 4.1.4
       '@vitest/snapshot': 4.1.4
