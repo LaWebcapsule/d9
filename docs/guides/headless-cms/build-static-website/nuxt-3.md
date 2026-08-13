@@ -110,7 +110,7 @@ correlate with the URL for the page. For example `about` will later correlate to
 
 Create a text input field called `title` and a WYSIWYG input field called `content`. In Roles & Permissions, give the
 Public role read access to the new collection. Create 3 items in the new collection -
-[here's some sample data]({{GITHUB_DIRECTUS_URL}}/examples/blob/main/website-nuxt3/demo-data).
+[here's some sample data]({{GITHUB_ORG_URL}}/examples/blob/main/website-nuxt3/demo-data).
 
 Inside of `pages`, create a new file called `[slug].vue`. This is a dynamic route, so a single file can be used for all
 of the top-level pages.
@@ -160,7 +160,7 @@ Create the following fields in your `posts` data model:
 In Roles & Permissions, give the Public role read access to the `authors`, `posts`, and `directus_files` collections.
 
 Create 3 items in the posts collection -
-[here's some sample data]({{GITHUB_DIRECTUS_URL}}/examples/blob/main/website-nuxt3/demo-data).
+[here's some sample data]({{GITHUB_ORG_URL}}/examples/blob/main/website-nuxt3/demo-data).
 
 ### Create Blog Post Listing
 
@@ -272,4 +272,4 @@ If you want to build more complex dynamic pages made out of reusable components,
 [our recipe on doing just this](/guides/headless-cms/reusable-components).
 
 If you want to see the code for this project, you can find it
-[on GitHub]({{GITHUB_DIRECTUS_URL}}/examples/blob/main/website-nuxt3).
+[on GitHub]({{GITHUB_ORG_URL}}/examples/blob/main/website-nuxt3).

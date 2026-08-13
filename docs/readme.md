@@ -4,7 +4,8 @@
 
 ## Introduction
 
-This is the official documentation for the d9 data platform.
+This is the official documentation for the d9 data platform. These docs are also available via
+[a public website](/).
 
 **[Learn more about d9]({{GITHUB_URL}})**
 

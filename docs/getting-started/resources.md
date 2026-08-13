@@ -17,7 +17,6 @@ readTime: 1 min read
 
 - **[GitHub Discussions]({{GITHUB_COMMUNITY_URL}})** — Ask questions, share ideas, and get help from the community.
 - **[GitHub Issues]({{GITHUB_ISSUES_URL}})** — Report bugs or request features.
-- **[Core Team]({{GITHUB_TEAM_URL}})** — The maintainers behind d9.
 
 ## Contact
 

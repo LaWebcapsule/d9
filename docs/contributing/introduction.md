@@ -87,7 +87,7 @@ Feature Request Discussions that are deemed ready to be implemented with the dis
 "Accepted" and converted into an Issue, at which point the feature is ready to be implemented.
 
 New feature ideas reported directly to issues might be converted into a Discussion for further triaging at
-[the core team]({{GITHUB_TEAM_URL}})'s discretion first. This is often due to a lack of detail, or
+the core team's discretion first. This is often due to a lack of detail, or
 lack of proven interest.
 
 Each Pull Request that comes in is required to resolve [an open Issue]({{GITHUB_ISSUES_URL}})

@@ -1,8 +1,7 @@
 export const URLS = {
 	// Links to the docs site itself are plain in-site paths (e.g. `/reference/files`), not constants.
 	GITHUB: 'https://github.com/LaWebcapsule/d9',
-	GITHUB_DIRECTUS: 'https://github.com/LaWebcapsule',
-	GITHUB_TEAM: 'https://github.com/orgs/LaWebcapsule/people',
+	GITHUB_ORG: 'https://github.com/LaWebcapsule',
 	GITHUB_COMMUNITY: 'https://github.com/LaWebcapsule/d9/discussions',
 	GITHUB_ISSUES: 'https://github.com/LaWebcapsule/d9/issues',
 	GITHUB_NEW_ISSUE: 'https://github.com/LaWebcapsule/d9/issues/new/choose',

@@ -5,8 +5,7 @@ import { URLS, EMAILS } from './constants.js';
 function markdownVariablesPlugin() {
 	const replacements = {
 		'{{GITHUB_URL}}': URLS.GITHUB,
-		'{{GITHUB_DIRECTUS_URL}}': URLS.GITHUB_DIRECTUS,
-		'{{GITHUB_TEAM_URL}}': URLS.GITHUB_TEAM,
+		'{{GITHUB_ORG_URL}}': URLS.GITHUB_ORG,
 		'{{GITHUB_COMMUNITY_URL}}': URLS.GITHUB_COMMUNITY,
 		'{{GITHUB_ISSUES_URL}}': URLS.GITHUB_ISSUES,
 		'{{GITHUB_NEW_ISSUE_URL}}': URLS.GITHUB_NEW_ISSUE,

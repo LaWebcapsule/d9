@@ -27,7 +27,7 @@ mission. We need your help in order to make d9 all it can be.**
 
 **Code Pull Requests**\
 Squashing bugs, optimizing the codebase, increasing test coverage, and adding new features, are all extremely valuable.
-[Go make your PR on GitHub!]({{GITHUB_DIRECTUS_URL}})
+[Go make your PR on GitHub!]({{GITHUB_ORG_URL}})
 
 Not quite a software engineer yet? We have plenty of documentation that can always use some extra attention. Learn more
 in our [Contributors Guide](/contributing/introduction).
