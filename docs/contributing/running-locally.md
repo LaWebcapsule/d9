@@ -48,14 +48,14 @@ pnpm build
 ## 5. Create a `.env` file
 
 Create an `.env` file under the `api` folder using vars from the online
-[config help]({{DOCS_URL}}/self-hosted/config-options).
+[config help](/self-hosted/config-options).
 
 ::: tip Config Values
 
-The `KEY`& `SECRET` config options from [Security]({{DOCS_URL}}/self-hosted/config-options.html#security)
+The `KEY`& `SECRET` config options from [Security](/self-hosted/config-options.html#security)
 are mandatory.
 
-Also the [Database Configuration]({{DOCS_URL}}/self-hosted/config-options.html#database) must be specified.
+Also the [Database Configuration](/self-hosted/config-options.html#database) must be specified.
 You might want to use the [docker-compose.yml]({{GITHUB_URL}}/blob/main/docker-compose.yml)
 file to spin up a test database.
 

@@ -141,7 +141,7 @@ services:
       ADMIN_PASSWORD: 'd1r3ctu5'
 
       # Make sure to set this in production
-      # (see {{DOCS_URL}}/self-hosted/config-options#general)
+      # (see /self-hosted/config-options#general)
       # PUBLIC_URL: 'https://directus.example.com'
 
 networks:

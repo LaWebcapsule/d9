@@ -1,10 +1,8 @@
 # Reporting Security Vulnerabilities
 
-**If you believe you have discovered a security issue within a d9 product or service, please open a new private
-security vulnerability report through https://github.com/LaWebcapsule/d9/security/advisories/new. Alternatively,
-reach out to us directly over email: [support@webcapsule.io](mailto:support@webcapsule.io).** We will then open a
-[GitHub Security Advisory](https://github.com/LaWebcapsule/d9/security/advisories) for tracking the fix on your
-behalf.
+**If you believe you have discovered a security issue within a d9 product or service, please open a
+[new private security vulnerability report](https://github.com/LaWebcapsule/d9/security/advisories/new). Do not open a
+public issue for security problems.**
 
 d9 values the members of the independent security research community who find security vulnerabilities and work
 with our team so that proper fixes can be issued to users. Our policy is to credit all researchers in the fix's release

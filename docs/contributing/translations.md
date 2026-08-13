@@ -50,4 +50,4 @@ using the "Comment" section.
 ## Requesting a New Language
 
 To add a new language to the Crowdin service, you can make a request via Crowdin's **Discussions** section, or reach out
-to the Core Team via [email](mailto:{{SUPPORT_EMAIL}}).
+to the Core Team on [GitHub Discussions]({{GITHUB_COMMUNITY_URL}}).

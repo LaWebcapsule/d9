@@ -295,7 +295,8 @@ const page = response.data[0];
 
 ### Structuring Your Front End
 
-We have [integration guides]({{WEBSITE_URL}}guides/) for many popular front-end frameworks. But there are far too
+We have [integration guides](/guides/headless-cms/build-static-website/) for many popular front-end frameworks. But
+there are far too
 many to cover in this recipe.
 
 Here’s some general advice on how to structure your front end to display page blocks / Many-To-Any (M2A) Relationship

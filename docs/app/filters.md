@@ -134,4 +134,5 @@ d9 to fit your needs. Here are some great resources to get started down that tra
 ## More Help
 
 Looking for technical support? Join our growing
-[community on GitHub Discussions]({{GITHUB_COMMUNITY_URL}}) or reach out at [support@webcapsule.io](mailto:{{SUPPORT_EMAIL}}).
+[community on GitHub Discussions]({{GITHUB_COMMUNITY_URL}}), or [open an issue]({{GITHUB_NEW_ISSUE_URL}}) if you think
+you found a bug.
