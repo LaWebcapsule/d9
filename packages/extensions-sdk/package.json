@@ -1,6 +1,6 @@
 {
 	"name": "@wbce-d9/extensions-sdk",
-	"version": "10.0.2",
+	"version": "10.0.3",
 	"description": "A toolkit to develop extensions to extend Directus",
 	"homepage": "https://directus.io",
 	"type": "module",
