@@ -26,6 +26,7 @@ const allowedEnvironmentVars = [
 	'MAX_PAYLOAD_SIZE',
 	'ROOT_REDIRECT',
 	'SERVE_APP',
+	'SERVE_GRAPHQL',
 	'GRAPHQL_INTROSPECTION',
 	'MAX_BATCH_MUTATION',
 	'LOGGER_.+',
@@ -307,6 +308,7 @@ const defaults: Record<string, any> = {
 	IMPORT_IP_DENY_LIST: ['0.0.0.0', '169.254.169.254'],
 
 	SERVE_APP: true,
+	SERVE_GRAPHQL: true,
 
 	RELATIONAL_BATCH_SIZE: 25000,
 
@@ -340,6 +342,8 @@ const typeMap: Record<string, string> = {
 	IMPORT_IP_DENY_LIST: 'array',
 
 	FILE_METADATA_ALLOW_LIST: 'array',
+
+	SERVE_GRAPHQL: 'boolean',
 
 	GRAPHQL_INTROSPECTION: 'boolean',
 
