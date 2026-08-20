@@ -252,7 +252,9 @@ export default async function createApp(): Promise<express.Application> {
 
 	app.use('/auth', authRouter);
 
-	app.use('/graphql', graphqlRouter);
+	if (env['SERVE_GRAPHQL']) {
+		app.use('/graphql', graphqlRouter);
+	}
 
 	app.use('/activity', activityRouter);
 	app.use('/assets', assetsRouter);

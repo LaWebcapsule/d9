@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import { Router } from 'express';
+import env from '../env.js';
 import { RouteNotFoundException } from '../exceptions/index.js';
 import { respond } from '../middleware/respond.js';
 import { ServerService } from '../services/server.js';
@@ -25,6 +26,10 @@ router.get(
 router.get(
 	'/specs/graphql/:scope?',
 	asyncHandler(async (req, res) => {
+		if (env['SERVE_GRAPHQL'] === false) {
+			throw new RouteNotFoundException(req.path);
+		}
+
 		const service = new SpecificationService({
 			accountability: req.accountability,
 			schema: req.schema,
