@@ -13,7 +13,7 @@ star, pull-request, bug report, and feature request.
 > We're here to help!
 >
 > If you have _any_ questions along your contributor journey, please feel free to reach out on
-> [GitHub Discussions]({{GITHUB_COMMUNITY_URL}}) or via [email](mailto:{{SUPPORT_EMAIL}}).
+> [GitHub Discussions]({{GITHUB_COMMUNITY_URL}}) or in [an issue]({{GITHUB_NEW_ISSUE_URL}}).
 
 ## Code of Conduct
 
@@ -45,8 +45,7 @@ Examples of behavior that contributes to creating a positive environment include
 
 ### Reporting Bugs
 
-If you happen to run into a bug, please post an Issue on our main GitHub Issue board:
-{{GITHUB_URL}}/issues
+If you happen to run into a bug, please post an Issue on our main [GitHub Issue board]({{GITHUB_ISSUES_URL}}).
 
 Please be as explicit and detailed as you can in the bug report. The more information available, the easier it is for
 other contributors to help you find the solution or fix. Consider adding a schema snapshot file, or a database dump.
@@ -54,13 +53,13 @@ other contributors to help you find the solution or fix. Consider adding a schem
 ### Leaving Feedback
 
 If you have a great idea for an improvement of the platform, or any other feedback, please make sure to open a new
-Discussion on our GitHub Discussions board: {{GITHUB_URL}}/discussions
+Discussion on our [GitHub Discussions board]({{GITHUB_COMMUNITY_URL}}).
 
 ### Helping Others
 
 The d9 community is growing quickly, which also means there's more and more people that have questions. Helping
 out your fellow developers by answering questions on
-[GitHub Discussions]({{GITHUB_URL}}/discussions/categories/q-a) is a great way to help the
+[GitHub Discussions]({{GITHUB_COMMUNITY_URL}}/categories/q-a) is a great way to help the
 project.
 
 ### Pull Requests
@@ -88,18 +87,18 @@ Feature Request Discussions that are deemed ready to be implemented with the dis
 "Accepted" and converted into an Issue, at which point the feature is ready to be implemented.
 
 New feature ideas reported directly to issues might be converted into a Discussion for further triaging at
-[the core team](https://github.com/orgs/directus/people)'s discretion first. This is often due to a lack of detail, or
+the core team's discretion first. This is often due to a lack of detail, or
 lack of proven interest.
 
-Each Pull Request that comes in is required to resolve [an open Issue]({{GITHUB_URL}}/issues)
+Each Pull Request that comes in is required to resolve [an open Issue]({{GITHUB_ISSUES_URL}})
 that is labeled "Bug", "Improvement", or "New Feature". This ensures that any code change made implements a known
 actionable item, be it a feature or otherwise.
 
 ### Reporting Security Vulnerabilities
 
-If you believe you have discovered a security issue within a d9 product or service, please reach out to us
-directly over email: [{{SECURITY_EMAIL}}](mailto:{{SECURITY_EMAIL}}). We will then open a
-[GitHub Security Advisory]({{GITHUB_URL}}/security/advisories) for tracking the fix.
+If you believe you have discovered a security issue within a d9 product or service, please open a
+[private security vulnerability report]({{GITHUB_SECURITY_URL}}) for tracking the fix. Do not open a public issue for
+security problems.
 
 We value the members of the independent security research community who find security vulnerabilities and work with our
 team so that proper fixes can be issued to users. Our policy is to credit all researchers in the fix's release notes. In

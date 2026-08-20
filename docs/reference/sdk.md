@@ -108,7 +108,7 @@ const directus = new Directus(url, init);
 #### `url` _required_
 
 - **Type** — `String`
-- **Description** — A string that points to your d9 instance. E.g., `{{EXAMPLE_URL}}`
+- **Description** — A string that points to your d9 instance. E.g., `https://d9.example.com`
 - **Default** — N/A
 
 <br />
@@ -912,7 +912,7 @@ In addition to the items common methods, the files property adds the import meth
 directus.files.import(...);
 ```
 
-See [API File Import]({{DOCS_URL}}/reference/files/#import-a-file)
+See [API File Import](/reference/files/#import-a-file)
 
 ### Uploading a file
 

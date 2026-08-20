@@ -5,18 +5,18 @@
 ## Introduction
 
 This is the official documentation for the d9 data platform. These docs are also available via
-[a public website]({{DOCS_URL}}).
+[a public website](/).
 
-**[Learn more about d9]({{WEBSITE_URL}})**
+**[Learn more about d9]({{GITHUB_URL}})**
 
 <br />
 
 ## Community Help
 
-[The d9 Documentation]({{DOCS_URL}}) is a great place to start, or explore these other channels:
+[The d9 Documentation](/) is a great place to start, or explore these other channels:
 
-- [GitHub Issues]({{GITHUB_URL}}/issues) (Report Bugs)
-- [GitHub Discussions]({{GITHUB_URL}}/discussions) (Feature Requests, Questions)
+- [GitHub Issues]({{GITHUB_ISSUES_URL}}) (Report Bugs)
+- [GitHub Discussions]({{GITHUB_COMMUNITY_URL}}) (Feature Requests, Questions)
 
 <br />
 

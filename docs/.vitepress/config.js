@@ -4,14 +4,13 @@ import { URLS, EMAILS } from './constants.js';
 // Vite plugin to replace variables in markdown files before processing
 function markdownVariablesPlugin() {
 	const replacements = {
-		'{{WEBSITE_URL}}': URLS.WEBSITE,
-		'{{DOCS_URL}}': URLS.DOCS,
 		'{{GITHUB_URL}}': URLS.GITHUB,
-		'{{GITHUB_DIRECTUS_URL}}': URLS.GITHUB_DIRECTUS,
+		'{{GITHUB_ORG_URL}}': URLS.GITHUB_ORG,
 		'{{GITHUB_COMMUNITY_URL}}': URLS.GITHUB_COMMUNITY,
+		'{{GITHUB_ISSUES_URL}}': URLS.GITHUB_ISSUES,
+		'{{GITHUB_NEW_ISSUE_URL}}': URLS.GITHUB_NEW_ISSUE,
+		'{{GITHUB_SECURITY_URL}}': URLS.GITHUB_SECURITY,
 		'{{LOCALES_URL}}': URLS.LOCALES,
-		'{{EXAMPLE_URL}}': URLS.EXAMPLE,
-		'{{LDAP_URL}}': URLS.LDAP,
 		'{{NPM_URL}}': URLS.NPM,
 		'{{DOCKER_HUB_URL}}': URLS.DOCKER_HUB,
 		'{{SECURITY_EMAIL}}': EMAILS.SECURITY,

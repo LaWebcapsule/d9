@@ -10,7 +10,7 @@ readTime: 8 min read
 
 ## About d9
 
-**d9** is an open-source fork of Directus 9 (GPLv3), maintained independently by [La Webcapsule](https://github.com/LaWebcapsule). While Directus 10+ moved to a premium licensing model, d9 preserves a fully open-source data platform with a focus on **performance** and **European regulatory compliance**.
+**d9** is an open-source fork of Directus 9 (GPLv3), maintained independently by [La Webcapsule]({{GITHUB_ORG_URL}}). While Directus 10+ moved to a premium licensing model, d9 preserves a fully open-source data platform with a focus on **performance** and **European regulatory compliance**.
 
 d9 is not affiliated with the Directus core team. It is a community-driven project that ensures long-term open-source availability of the Directus 9 codebase.
 

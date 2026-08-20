@@ -1,5 +1,12 @@
 # @wbce-d9/storage-driver-azure
 
+## 10.0.2
+
+### Patch Changes
+
+- Updated dependencies [01c493c]
+  - @wbce-d9/utils@10.0.2
+
 ## 10.0.1
 
 ### Patch Changes

@@ -342,8 +342,8 @@ following drivers:
 ## Title Formatter
 
 Special Casing — If you are trying to update the specific casing (uppercase/lowercase) for a word (e.g., `Dna` to `DNA`)
-you will want to add the edge-case to the [Format Title package]({{GITHUB_DIRECTUS_URL}}/format-title). If you feel
-the case passes our [80/20 rule]({{DOCS_URL}}/contributing/introduction#feature-requests) you should submit
+you will want to add the edge-case to the [Format Title package]({{GITHUB_ORG_URL}}/format-title). If you feel
+the case passes our [80/20 rule](/contributing/introduction#feature-requests) you should submit
 a Pull Request to the codebase, otherwise you can update this in your instance.
 
 ## Translations

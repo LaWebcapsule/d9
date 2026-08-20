@@ -20,15 +20,15 @@ If you're experiencing issues or think you have found a problem in d9, be sure t
 5. Disable any data-caching within your project.
 6. Test any app issues with both browser extensions and caching disabled _(i.e. Incognito Mode)_.
 7. Confirm the issue is not related to your own custom code.
-8. Check for [existing Issues]({{GITHUB_URL}}/issues?q=is%3Aissue) (and
-   [Discussions]({{GITHUB_URL}}/discussions)) that match your problem.
+8. Check for [existing Issues]({{GITHUB_ISSUES_URL}}?q=is%3Aissue) (and
+   [Discussions]({{GITHUB_COMMUNITY_URL}})) that match your problem.
 
 If you're still experiencing a problem after completing the above steps, you can reach out via
 [community support](#community-support) or [report a bug](/contributing/introduction#bug-reporting).
 
 ## Community Support
 
-[GitHub Discussions]({{GITHUB_URL}}/discussions) is a great first place to reach out for
+[GitHub Discussions]({{GITHUB_COMMUNITY_URL}}) is a great first place to reach out for
 help. Our community and core developers often check this platform and answer posts. It has the added benefit of being an
 archival resource for others developers with similar questions.
 
@@ -38,10 +38,6 @@ While the d9 Core Team plays an active and engaged role in community discussions
 time for Community Support.
 
 :::
-
-## Direct Support
-
-For any question or support request, reach out at [support@webcapsule.io](mailto:{{SUPPORT_EMAIL}}).
 
 ## Frequently Asked Questions
 

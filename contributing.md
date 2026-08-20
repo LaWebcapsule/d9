@@ -9,7 +9,8 @@ our way of saying: **Thank you!**
 > We're here to help!
 >
 > If you have _any_ questions along your contributor journey, please feel free to reach out on
-> [GitHub Discussions](https://github.com/LaWebcapsule/d9/discussions) or via [email](mailto:support@webcapsule.io).
+> [GitHub Discussions](https://github.com/LaWebcapsule/d9/discussions) or in
+> [an issue](https://github.com/LaWebcapsule/d9/issues/new/choose).
 
 ## Code of Conduct
 
@@ -104,8 +105,9 @@ actionable item, be it a feature or otherwise.
 
 ### Reporting Security Vulnerabilities
 
-If you believe you have discovered a security issue within a d9 product or service, please reach out to us
-directly over email: [support@webcapsule.io](mailto:support@webcapsule.io). We will then open a
+If you believe you have discovered a security issue within a d9 product or service, please open a
+[private security vulnerability report](https://github.com/LaWebcapsule/d9/security/advisories/new). Do not open a
+public issue for security problems. We will then open a
 [GitHub Security Advisory](https://github.com/LaWebcapsule/d9/security/advisories) for tracking the fix.
 
 We value the members of the independent security research community who find security vulnerabilities and work with our

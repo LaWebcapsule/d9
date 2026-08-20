@@ -9,7 +9,7 @@
 ![Form text input that shows the value is securely hashed.](/images/interface-hash-secure.webp)
 
 Text input that allows users to hash the value on save. Both the API and SDK provide methods to
-[verify the hash]({{DOCS_URL}}/reference/system/utilities.html#verify-a-hash).
+[verify the hash](/reference/system/utilities.html#verify-a-hash).
 
 - **Types**: `Hash`
 - **Placeholder**: Placeholder to display.

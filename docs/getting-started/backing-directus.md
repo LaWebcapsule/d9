@@ -17,8 +17,8 @@ As an open-source project, stars are a primary metric by which we measure our su
 to the [d9 GitHub Repo]({{GITHUB_URL}}) and click the star.
 
 **Testimonials**\
-If you're a fan of d9, we'd love to hear why with a short endorsement. Shoot us an
-[email](mailto:{{INFO_EMAIL}}) with your name, title, and company.
+If you're a fan of d9, we'd love to hear why with a short endorsement. Share it in a
+[GitHub Discussion]({{GITHUB_COMMUNITY_URL}}) with your name, title, and company.
 
 ## Community Engagement
 
@@ -27,14 +27,14 @@ mission. We need your help in order to make d9 all it can be.**
 
 **Code Pull Requests**\
 Squashing bugs, optimizing the codebase, increasing test coverage, and adding new features, are all extremely valuable.
-[Go make your PR on GitHub!]({{GITHUB_DIRECTUS_URL}})
+[Go make your PR on GitHub!]({{GITHUB_ORG_URL}})
 
 Not quite a software engineer yet? We have plenty of documentation that can always use some extra attention. Learn more
 in our [Contributors Guide](/contributing/introduction).
 
 **Bug Reporting**\
 If you find an issue in d9, no matter how small, we'd love to hear about it. Proper bug reporting helps our team improve
-platform stability. [Report a bug on GitHub]({{GITHUB_URL}}/issues/new)
+platform stability. [Report a bug on GitHub]({{GITHUB_NEW_ISSUE_URL}})
 
 **App Translations**\
 Every button, element, or other line of text in the app is [fully translatable](/contributing/translations). These translations
@@ -43,4 +43,5 @@ or creating new ones a breeze.
 
 ## Contact
 
-For any question or support request, reach out at [support@webcapsule.io](mailto:{{SUPPORT_EMAIL}}).
+For any question or support request, open a [GitHub Discussion]({{GITHUB_COMMUNITY_URL}}) or
+[an issue]({{GITHUB_NEW_ISSUE_URL}}).

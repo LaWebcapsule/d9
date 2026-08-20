@@ -1,6 +1,6 @@
 {
 	"name": "@wbce-d9/create-directus-extension",
-	"version": "9.26.15",
+	"version": "9.26.16",
 	"description": "A small util that will scaffold a Directus extension",
 	"keywords": [
 		"directus",
