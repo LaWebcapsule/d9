@@ -342,7 +342,7 @@ const typeMap: Record<string, string> = {
 	IMPORT_IP_DENY_LIST: 'array',
 
 	FILE_METADATA_ALLOW_LIST: 'array',
-	
+
 	SERVE_GRAPHQL: 'boolean',
 
 	GRAPHQL_INTROSPECTION: 'boolean',
