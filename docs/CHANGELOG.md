@@ -1,5 +1,11 @@
 # docs
 
+## 10.1.1
+
+### Patch Changes
+
+- b619954: Add a new env var to disable graphql
+
 ## 10.1.0
 
 ### Minor Changes

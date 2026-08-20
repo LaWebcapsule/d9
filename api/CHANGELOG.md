@@ -1,5 +1,11 @@
 # @wbce-d9/api
 
+## 12.5.4
+
+### Patch Changes
+
+- b619954: Add a new env var to disable graphql
+
 ## 12.5.3
 
 ### Patch Changes
