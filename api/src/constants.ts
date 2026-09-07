@@ -57,6 +57,14 @@ export const COLUMN_TRANSFORMS = ['year', 'month', 'day', 'weekday', 'hour', 'mi
 
 export const GENERATE_SPECIAL = ['uuid', 'date-created', 'role-created', 'user-created'];
 
+export const AUTO_INCREMENT_DEFAULT = 'AUTO_INCREMENT';
+
+/** Generated server-side on create, so a value submitted on update is stripped. */
+export const CREATE_ONLY_SPECIAL = ['date-created', 'role-created', 'user-created'];
+
+/** Generated server-side on update, so a value submitted on create is stripped. */
+export const UPDATE_ONLY_SPECIAL = ['date-updated', 'role-updated', 'user-updated'];
+
 export const UUID_REGEX = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}';
 
 export const REFRESH_COOKIE_OPTIONS: CookieOptions = {
