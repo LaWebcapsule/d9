@@ -707,7 +707,54 @@ with multiple providers for the same user.
 
 The default d9 email/password authentication flow.
 
-No additional configuration required.
+No configuration is required to log in. The variables below only enable public self-service
+registration, which is off unless you turn it on.
+
+| Variable                                      | Description                                                                            | Default Value |
+| --------------------------------------------- | -------------------------------------------------------------------------------------- | ------------- |
+| `AUTH_<PROVIDER>_ALLOW_PUBLIC_REGISTRATION`   | Allow visitors to create their own account.                                            | `false`       |
+| `AUTH_<PROVIDER>_DEFAULT_ROLE_ID`             | A d9 role ID to assign accounts created this way.                                      | --            |
+| `AUTH_<PROVIDER>_REGISTER_URL_ALLOW_LIST`     | List of URLs allowed as `verification_url`, comma-separated.                            | --            |
+
+For the default provider, `<PROVIDER>` is `DEFAULT`:
+
+```
+AUTH_DEFAULT_ALLOW_PUBLIC_REGISTRATION="true"
+AUTH_DEFAULT_DEFAULT_ROLE_ID="82424427-c9d4-4289-8bc5-ed1bf8422c90"
+AUTH_DEFAULT_REGISTER_URL_ALLOW_LIST="https://example.com/verify-email"
+```
+
+With registration enabled the provider exposes two extra routes:
+
+```
+POST /auth/login/register
+{"email","password","first_name"?,"last_name"?,"verification_url"?}
+→ 204 No Content
+
+GET /auth/login/register/verify-email?token=<token>
+→ 302 <PUBLIC_URL>/admin/users/<id>
+```
+
+For a named provider the paths sit under it, e.g. `/auth/login/<provider>/register`. Where
+`ALLOW_PUBLIC_REGISTRATION` is unset the routes are not registered at all, so they answer 404.
+
+`POST /register` always answers 204, including for an address that already has an account, so it
+can't be used to work out which emails are registered. Accounts are created with status `draft` and
+cannot authenticate until the emailed link is redeemed. Calling it again for an account still
+awaiting confirmation re-sends the mail, rate limited to one per minute.
+
+Without `verification_url` the emailed link points at `GET /auth/login/register/verify-email`
+directly. With it, the token is appended to your own page, which is expected to forward it to that
+route. Only URLs on `REGISTER_URL_ALLOW_LIST` are accepted.
+
+::: warning EMAIL configuration
+
+Registration is useless without working `EMAIL_*` settings — the confirmation link is the only way
+to activate an account.
+
+:::
+
+Override the email copy by dropping `user-registration.liquid` into `EXTENSIONS_PATH/templates/`.
 
 ### SSO (`oauth2` and `openid`)
 
