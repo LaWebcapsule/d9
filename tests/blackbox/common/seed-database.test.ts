@@ -10,6 +10,7 @@ import { seedDBStructure as seedChangeFields } from '../routes/fields/change-fie
 import { seedDBStructure as seedCrud } from '../routes/fields/crud.seed.ts';
 import { seedDBStructure as seedConcealFilter } from '../routes/items/conceal-filter.seed.ts';
 import { seedDBStructure as seedHashFilter } from '../routes/items/hash-filter.seed.ts';
+import { seedDBStructure as seedSystemFields } from '../routes/items/system-fields.seed.ts';
 import { seedDBStructure as seedM2A } from '../routes/items/m2a.seed.ts';
 import { seedDBStructure as seedM2M } from '../routes/items/m2m.seed.ts';
 import { seedDBStructure as seedM2O } from '../routes/items/m2o.seed.ts';
@@ -27,6 +28,7 @@ describe('Seed Database Structure', () => {
 		{ path: 'routes/fields/crud.seed.ts', seedFn: seedCrud },
 		{ path: 'routes/items/conceal-filter.seed.ts', seedFn: seedConcealFilter },
 		{ path: 'routes/items/hash-filter.seed.ts', seedFn: seedHashFilter },
+		{ path: 'routes/items/system-fields.seed.ts', seedFn: seedSystemFields },
 		{ path: 'routes/items/m2a.seed.ts', seedFn: seedM2A },
 		{ path: 'routes/items/m2m.seed.ts', seedFn: seedM2M },
 		{ path: 'routes/items/m2o.seed.ts', seedFn: seedM2O },
