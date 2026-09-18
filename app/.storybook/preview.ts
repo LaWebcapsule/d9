@@ -1,6 +1,6 @@
 import '../src/styles/main.scss';
 import './styles.scss';
-import { useArgs } from '@storybook/client-api';
+import { useArgs } from '@storybook/preview-api';
 import { Preview, setup } from '@storybook/vue3';
 import { createRouter, createWebHistory } from 'vue-router';
 import { createI18n } from 'vue-i18n';
@@ -58,7 +58,8 @@ const preview: Preview = {
 				date: /Date$/,
 			},
 		},
-	}
+	},
+	tags: ['autodocs'],
 }
 
 export default preview;
