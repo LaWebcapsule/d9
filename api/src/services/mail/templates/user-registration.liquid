@@ -1,0 +1,23 @@
+{% layout "base" %}
+{% block content %}
+
+<p>
+    Welcome to <i>{{ projectName }}</i>. Please click the button below to confirm this email address and activate your account:
+</p>
+
+<p style="text-align: center; padding: 20px 0;">
+    <a href="{{ url }}">
+        <b>Confirm your email</b>
+    </a>
+</p>
+
+<p>
+    If you didn't create this account, you can safely ignore this email.
+</p>
+
+<p>
+    Thank you,<br>
+    The {{ projectName }} Team
+</p>
+
+{% endblock %}
