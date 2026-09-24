@@ -85,9 +85,9 @@ export class LocalAuthDriver extends AuthDriver {
 
 	private async getAccountByEmail(
 		email: string
-	): Promise<{ id: string; status: string; auth_data: unknown } | undefined> {
+	): Promise<{ id: string; status: string; provider: string; auth_data: unknown } | undefined> {
 		return this.knex
-			.select('id', 'status', 'auth_data')
+			.select('id', 'status', 'provider', 'auth_data')
 			.from('directus_users')
 			.whereRaw('LOWER(??) = ?', ['email', email.toLowerCase()])
 			.first();
@@ -161,8 +161,9 @@ export class LocalAuthDriver extends AuthDriver {
 		const service = this.getUserService();
 		const existing = await this.getAccountByEmail(input.email);
 
-		if (existing && existing.status !== 'draft') {
-			// Already confirmed, or suspended/archived. Send nothing, reveal nothing.
+		if (existing && (existing.status !== 'draft' || existing.provider.toLowerCase() !== provider.toLowerCase())) {
+			// Already confirmed, suspended/archived, or registered against a different provider.
+			// Send nothing, reveal nothing.
 			return;
 		}
 
@@ -179,6 +180,10 @@ export class LocalAuthDriver extends AuthDriver {
 			last_name: input.last_name ?? null,
 			role: this.config['defaultRoleId'] ?? null,
 			status: 'draft',
+			// Login checks the user's provider against the one being logged in with
+			// (`services/authentication.ts:116`), so the column default would lock out anyone
+			// registered against a named local provider.
+			provider,
 		};
 
 		if (!existing) {
@@ -239,7 +244,7 @@ export class LocalAuthDriver extends AuthDriver {
 
 		const account = await this.getAccountByEmail(email);
 
-		if (account?.status !== 'draft') {
+		if (account?.status !== 'draft' || account.provider.toLowerCase() !== provider.toLowerCase()) {
 			throw new InvalidTokenException('Token invalid.');
 		}
 
