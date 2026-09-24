@@ -111,7 +111,7 @@ services:
       - 'host.docker.internal:host-gateway'
 
   minio:
-    image: minio/minio:latest
+    image: quay.io/minio/minio:latest
     command: server /data/minio/ --console-address :9001
     ports:
       - 8881:9000
@@ -121,7 +121,7 @@ services:
       MINIO_ROOT_PASSWORD: miniosecret
 
   minio-mc:
-    image: minio/mc
+    image: quay.io/minio/mc:RELEASE.2025-08-13T08-35-41Z
     depends_on:
       - minio
     entrypoint: >
