@@ -20,7 +20,7 @@ import { respond } from '../../middleware/respond.js';
 import { AuthenticationService } from '../../services/authentication.js';
 import { MailService } from '../../services/mail/index.js';
 import { UsersService } from '../../services/users.js';
-import type { AuthDriverOptions, PrimaryKey, User } from '../../types/index.js';
+import type { PrimaryKey, User } from '../../types/index.js';
 import asyncHandler from '../../utils/async-handler.js';
 import { getConfigFromEnv } from '../../utils/get-config-from-env.js';
 import { getIPFromReq } from '../../utils/get-ip-from-req.js';
@@ -38,13 +38,6 @@ import { AuthDriver } from '../auth.js';
 const REGISTER_MAIL_INTERVAL = 60_000;
 
 export class LocalAuthDriver extends AuthDriver {
-	config: Record<string, any>;
-
-	constructor(options: AuthDriverOptions, config: Record<string, any> = {}) {
-		super(options, config);
-		this.config = config;
-	}
-
 	async getUserID(payload: Record<string, any>): Promise<string> {
 		if (!payload['email']) {
 			throw new InvalidCredentialsException();
@@ -73,7 +66,7 @@ export class LocalAuthDriver extends AuthDriver {
 		await this.verify(user, payload['password']);
 	}
 
-	private getUserService(): UsersService {
+	private getRegistrationService(): UsersService {
 		// Registration is requested by an anonymous visitor, so the permission checks on the write
 		// have nothing to check against.
 		return new UsersService({
@@ -152,13 +145,17 @@ export class LocalAuthDriver extends AuthDriver {
 			verification_url?: string | null;
 		}
 	): Promise<void> {
+		// Read here rather than held on the instance: this class is the base of the SSO drivers,
+		// which declare a `config` of their own.
+		const config = getConfigFromEnv(`AUTH_${provider.toUpperCase()}_`);
+
 		const url = input.verification_url ?? null;
 
-		if (url && isUrlAllowed(url, this.config['registerUrlAllowList']) === false) {
+		if (url && isUrlAllowed(url, config['registerUrlAllowList']) === false) {
 			throw new InvalidPayloadException(`Url "${url}" can't be used to verify registrations.`);
 		}
 
-		const service = this.getUserService();
+		const service = this.getRegistrationService();
 		const existing = await this.getAccountByEmail(input.email);
 
 		if (existing && (existing.status !== 'draft' || existing.provider.toLowerCase() !== provider.toLowerCase())) {
@@ -178,7 +175,7 @@ export class LocalAuthDriver extends AuthDriver {
 			password: input.password,
 			first_name: input.first_name ?? null,
 			last_name: input.last_name ?? null,
-			role: this.config['defaultRoleId'] ?? null,
+			role: config['defaultRoleId'] ?? null,
 			status: 'draft',
 			// Login checks the user's provider against the one being logged in with
 			// (`services/authentication.ts:116`), so the column default would lock out anyone
@@ -248,7 +245,7 @@ export class LocalAuthDriver extends AuthDriver {
 			throw new InvalidTokenException('Token invalid.');
 		}
 
-		await this.getUserService().updateOne(account.id, { status: 'active', auth_data: null });
+		await this.getRegistrationService().updateOne(account.id, { status: 'active', auth_data: null });
 
 		return account.id;
 	}
