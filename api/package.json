@@ -158,7 +158,7 @@
 		"sanitize-html": "2.17.7",
 		"sharp": "0.35.3",
 		"snappy": "7.2.2",
-		"stream-json": "1.7.5",
+		"stream-json": "3.5.0",
 		"strip-bom-stream": "5.0.0",
 		"tmp-promise": "3.0.3",
 		"tsx": "3.12.6",
