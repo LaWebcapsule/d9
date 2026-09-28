@@ -1,5 +1,11 @@
 # @wbce-d9/app
 
+## 10.1.2
+
+### Patch Changes
+
+- 86d6ce4: security: upgrade storybook 7 -> 8.6.18 to drop the vulerable 'extract-zip' dependecy (CVE-2026-56876)
+
 ## 10.1.1
 
 ### Patch Changes
