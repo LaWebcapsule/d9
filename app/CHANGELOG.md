@@ -1,5 +1,11 @@
 # @wbce-d9/app
 
+## 10.1.3
+
+### Patch Changes
+
+- @wbce-d9/composables@10.0.3
+
 ## 10.1.2
 
 ### Patch Changes

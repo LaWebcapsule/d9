@@ -1,5 +1,13 @@
 # @wbce-d9/storage-driver-cloudinary
 
+## 10.0.4
+
+### Patch Changes
+
+- b9776d5: security: fix audit alerts
+- Updated dependencies [b9776d5]
+  - @wbce-d9/utils@10.0.3
+
 ## 10.0.3
 
 ### Patch Changes
