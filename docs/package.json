@@ -10,7 +10,7 @@
 	},
 	"devDependencies": {
 		"@unhead/vue": "^2.0.0",
-		"spellchecker-cli": "6.2.0",
+		"spellchecker-cli": "7.0.4",
 		"vitepress": "1.6.4",
 		"vue": "3.5.27"
 	},
