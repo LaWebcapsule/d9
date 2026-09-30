@@ -1,5 +1,11 @@
 # @wbce-d9/utils
 
+## 10.0.3
+
+### Patch Changes
+
+- b9776d5: security: fix audit alerts
+
 ## 10.0.2
 
 ### Patch Changes
