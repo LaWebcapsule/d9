@@ -2,7 +2,7 @@
 	<div class="layout-map">
 		<map-component
 			ref="map"
-			class="mapboxgl-map"
+			class="maplibregl-map"
 			:class="{ loading, error: error || geojsonError || !geometryOptions }"
 			:data="geojson"
 			:feature-id="featureId"
@@ -61,7 +61,7 @@
 						@update:model-value="toPage"
 					/>
 				</div>
-				<div class="mapboxgl-ctrl-dropdown">
+				<div class="maplibregl-ctrl-dropdown">
 					<span>{{ t('limit') }}</span>
 					<v-select
 						:model-value="limit"
@@ -234,15 +234,15 @@ export default defineComponent({
 	pointer-events: initial;
 }
 
-.layout-map .mapboxgl-map :deep(.mapboxgl-canvas-container) {
+.layout-map .maplibregl-map :deep(.maplibregl-canvas-container) {
 	transition: opacity 0.2s;
 }
 
-.layout-map .mapboxgl-map.loading :deep(.mapboxgl-canvas-container) {
+.layout-map .maplibregl-map.loading :deep(.maplibregl-canvas-container) {
 	opacity: 0.9;
 }
 
-.layout-map .mapboxgl-map.error :deep(.mapboxgl-canvas-container) {
+.layout-map .maplibregl-map.error :deep(.maplibregl-canvas-container) {
 	opacity: 0.4;
 }
 
@@ -287,7 +287,7 @@ export default defineComponent({
 	padding-right: 0;
 }
 
-.mapboxgl-ctrl-dropdown {
+.maplibregl-ctrl-dropdown {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;

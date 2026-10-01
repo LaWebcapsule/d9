@@ -1,5 +1,10 @@
 import { Map, Point } from 'maplibre-gl';
 
+export type MapWithCustomEvents = Map & {
+	on(type: string, listener: (event: any) => void): Map;
+	fire(type: string, properties?: Record<string, any>): Map;
+};
+
 export class ButtonControl {
 	active: boolean;
 	element: HTMLElement;
@@ -26,7 +31,7 @@ export class ButtonControl {
 
 	onAdd(): HTMLElement {
 		this.groupElement = document.createElement('div');
-		this.groupElement.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
+		this.groupElement.className = 'maplibregl-ctrl maplibregl-ctrl-group';
 		this.groupElement.appendChild(this.element);
 		return this.groupElement;
 	}
@@ -50,7 +55,7 @@ export class BoxSelectControl {
 
 	selectButton: ButtonControl;
 
-	map?: Map & { fire: (event: string, data?: any) => void };
+	map?: MapWithCustomEvents;
 	layers: string[];
 
 	selecting = false;
@@ -69,7 +74,7 @@ export class BoxSelectControl {
 		this.boxElement = document.createElement('div');
 		this.boxElement.className = options?.boxElementClass ?? 'selection-box';
 		this.groupElement = document.createElement('div');
-		this.groupElement.className = options?.groupElementClass ?? 'mapboxgl-ctrl mapboxgl-ctrl-group';
+		this.groupElement.className = options?.groupElementClass ?? 'maplibregl-ctrl maplibregl-ctrl-group';
 
 		this.selectButton = new ButtonControl(options?.selectButtonClass ?? 'ctrl-select', () => {
 			this.activate(!this.shiftPressed);

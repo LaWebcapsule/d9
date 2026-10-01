@@ -12,7 +12,7 @@
 		</div>
 		<div
 			v-if="location"
-			class="mapboxgl-user-location-dot mapboxgl-search-location-dot"
+			class="maplibregl-user-location-dot maplibregl-search-location-dot"
 			:style="`transform: translate(${projection.x}px, ${projection.y}px) translate(-50%, -50%) rotateX(0deg) rotateZ(0deg)`"
 		></div>
 		<transition name="fade">
@@ -24,7 +24,7 @@
 				{{ tooltipMessage }}
 			</div>
 		</transition>
-		<div class="mapboxgl-ctrl-group mapboxgl-ctrl mapboxgl-ctrl-dropdown basemap-select">
+		<div class="maplibregl-ctrl-group maplibregl-ctrl maplibregl-ctrl-dropdown basemap-select">
 			<v-icon name="map" />
 			<v-select v-model="basemap" inline :items="basemaps.map((s) => ({ text: s.name, value: s.name }))" />
 		</div>
@@ -64,7 +64,7 @@
 <script lang="ts">
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
-import maplibre, {
+import {
 	AnimationOptions,
 	AttributionControl,
 	CameraOptions,
@@ -72,13 +72,15 @@ import maplibre, {
 	LngLatBoundsLike,
 	LngLatLike,
 	Map,
+	Marker,
 	NavigationControl,
 } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import '@/utils/geometry/map-worker';
 import { computed, defineComponent, onMounted, onUnmounted, PropType, ref, toRefs, watch } from 'vue';
 import { useSettingsStore } from '@/stores/settings';
 import { flatten, getBBox, getGeometryFormatForType, getParser, getSerializer } from '@/utils/geometry';
-import { ButtonControl } from '@/utils/geometry/controls';
+import { ButtonControl, MapWithCustomEvents } from '@/utils/geometry/controls';
 import { Field, GeoJSONParser, GeoJSONSerializer, GeometryType, MultiGeometry, SimpleGeometry } from '@wbce-d9/types';
 // @ts-ignore
 import StaticMode from '@mapbox/mapbox-gl-draw-static-mode';
@@ -100,7 +102,11 @@ const activeLayers = [
 import { useAppStore } from '@/stores/app';
 import { TranslateResult, useI18n } from 'vue-i18n';
 
-import { getBasemapSources, getStyleFromBasemapSource } from '@/utils/geometry/basemap';
+import { getBasemapSources, getMapboxTransformRequest, getStyleFromBasemapSource } from '@/utils/geometry/basemap';
+
+(MapboxDraw as any).constants.classes.CONTROL_BASE = 'maplibregl-ctrl';
+(MapboxDraw as any).constants.classes.CONTROL_PREFIX = 'maplibregl-ctrl-';
+(MapboxDraw as any).constants.classes.CONTROL_GROUP = 'maplibregl-ctrl-group';
 
 export default defineComponent({
 	props: {
@@ -137,7 +143,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const { t } = useI18n();
 		const container = ref<HTMLElement | null>(null);
-		let map: Map;
+		let map: MapWithCustomEvents;
 		let mapLoading = ref(true);
 		let currentGeometry: Geometry | null | undefined;
 
@@ -181,9 +187,9 @@ export default defineComponent({
 		watch(location, updateProjection);
 
 		const controls = {
-			attribution: new AttributionControl(),
+			attribution: new AttributionControl({}),
 			draw: new MapboxDraw(getDrawOptions(geometryType)),
-			fitData: new ButtonControl('mapboxgl-ctrl-fitdata', fitDataBounds),
+			fitData: new ButtonControl('maplibregl-ctrl-fitdata', fitDataBounds),
 			navigation: new NavigationControl({
 				showCompass: false,
 			}),
@@ -199,7 +205,7 @@ export default defineComponent({
 				collapsed: true,
 				flyTo: { speed: 1.4 },
 				marker: false,
-				mapboxgl: maplibre as any,
+				mapboxgl: { Marker } as any,
 				placeholder: t('layouts.map.find_location'),
 			});
 		}
@@ -257,8 +263,8 @@ export default defineComponent({
 				logoPosition: 'bottom-left',
 				attributionControl: false,
 				...props.defaultView,
-				...(mapboxKey ? { accessToken: mapboxKey } : {}),
-			});
+				transformRequest: getMapboxTransformRequest(mapboxKey),
+			}) as MapWithCustomEvents;
 
 			if (controls.geocoder) {
 				map.addControl(controls.geocoder as any, 'top-right');
@@ -552,7 +558,7 @@ export default defineComponent({
 		}
 	}
 
-	.mapboxgl-search-location-dot {
+	.maplibregl-search-location-dot {
 		position: absolute;
 		top: 0;
 		left: 0;
