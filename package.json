@@ -10,7 +10,7 @@
 	},
 	"devDependencies": {
 		"@changesets/changelog-github": "^1.0.1",
-		"@changesets/cli": "^2.31.1",
+		"@changesets/cli": "^3.0.3",
 		"@changesets/get-github-info": "^1.0.1",
 		"@typescript-eslint/eslint-plugin": "7.18.0",
 		"@typescript-eslint/parser": "7.18.0",

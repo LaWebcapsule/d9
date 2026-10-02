@@ -94,7 +94,7 @@ jobs:
 
           # Changelog entries span several lines: join each one, keep the "security:" ones once
           security=$(awk '
-            function flush() { if (entry != "" && tolower(entry) ~ /(^- |! - )security:/ && !seen[entry]++) print entry; entry = "" }
+            function flush() { if (entry != "" && tolower(entry) ~ /(^- |\) - )security:/ && !seen[entry]++) print entry; entry = "" }
             /^- / { flush(); entry = $0; next }
             /^  [^ -]/ && entry != "" { sub(/^ +/, ""); entry = entry " " $0; next }
             { flush() }
