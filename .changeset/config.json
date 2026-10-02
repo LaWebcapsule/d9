@@ -1,11 +1,12 @@
 {
 	"$schema": "https://unpkg.com/@changesets/config@2.3.0/schema.json",
-	"changelog": "@changesets/cli/changelog",
+	"changelog": ["./changelog.mjs", { "repo": "LaWebcapsule/d9", "disableThanks": true }],
 	"commit": false,
 	"fixed": [],
 	"linked": [],
 	"access": "restricted",
 	"baseBranch": "main",
 	"updateInternalDependencies": "patch",
-	"ignore": []
+	"ignore": [],
+	"privatePackages": { "version": true, "tag": false }
 }

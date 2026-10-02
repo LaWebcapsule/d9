@@ -70,9 +70,11 @@ project.
 Issues marked "Community" are ready to be implemented by anybody at any point! If you're looking to implement an issue
 that doesn't have that label, please make sure to ping the maintainers before getting started!
 
-#### Contributor License Agreement
+#### Developer Certificate of Origin
 
-There are no license agreement. This repository is under the GPL license and your work will use the same license.
+There is no license agreement: contributions are under the GPLv3 license. Every commit must be signed off
+(`git commit -s`) to certify the [Developer Certificate of Origin](https://developercertificate.org/), which states that
+you wrote the change or have the right to submit it under the project's license.
 
 #### Bug Fixes
 
