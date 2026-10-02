@@ -8,8 +8,9 @@
 
 <script lang="ts">
 import 'maplibre-gl/dist/maplibre-gl.css';
-import maplibre, {
-	MapboxGeoJSONFeature,
+import '@/utils/geometry/map-worker';
+import {
+	MapGeoJSONFeature,
 	MapLayerMouseEvent,
 	NavigationControl,
 	GeolocateControl,
@@ -17,8 +18,9 @@ import maplibre, {
 	GeoJSONSource,
 	CameraOptions,
 	LngLatLike,
-	AnyLayer,
+	AddLayerObject,
 	Map,
+	Marker,
 	AttributionControl,
 } from 'maplibre-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
@@ -29,8 +31,8 @@ import { useI18n } from 'vue-i18n';
 import { ShowSelect } from '@wbce-d9/types';
 import { useAppStore } from '@/stores/app';
 import { useSettingsStore } from '@/stores/settings';
-import { BoxSelectControl, ButtonControl } from '@/utils/geometry/controls';
-import { getBasemapSources, getStyleFromBasemapSource } from '@/utils/geometry/basemap';
+import { BoxSelectControl, ButtonControl, MapWithCustomEvents } from '@/utils/geometry/controls';
+import { getBasemapSources, getMapboxTransformRequest, getStyleFromBasemapSource } from '@/utils/geometry/basemap';
 
 export default defineComponent({
 	components: {},
@@ -44,7 +46,7 @@ export default defineComponent({
 			required: true,
 		},
 		layers: {
-			type: Array as PropType<AnyLayer[]>,
+			type: Array as PropType<AddLayerObject[]>,
 			default: () => [],
 		},
 		camera: {
@@ -73,8 +75,8 @@ export default defineComponent({
 		const { t } = useI18n();
 		const appStore = useAppStore();
 		const settingsStore = useSettingsStore();
-		let map: Map;
-		const hoveredFeature = ref<MapboxGeoJSONFeature>();
+		let map: MapWithCustomEvents;
+		const hoveredFeature = ref<MapGeoJSONFeature>();
 		const hoveredCluster = ref<boolean>();
 		const selectMode = ref<boolean>();
 		const container = ref<HTMLElement>();
@@ -88,21 +90,21 @@ export default defineComponent({
 			return getStyleFromBasemapSource(source);
 		});
 
-		const attributionControl = new AttributionControl();
+		const attributionControl = new AttributionControl({});
 
 		const navigationControl = new NavigationControl({
 			showCompass: false,
 		});
 
-		const geolocateControl = new GeolocateControl();
+		const geolocateControl = new GeolocateControl({});
 
-		const fitDataControl = new ButtonControl('mapboxgl-ctrl-fitdata', () => {
+		const fitDataControl = new ButtonControl('maplibregl-ctrl-fitdata', () => {
 			emit('fitdata');
 		});
 
 		const boxSelectControl = new BoxSelectControl({
 			boxElementClass: 'map-selection-box',
-			selectButtonClass: 'mapboxgl-ctrl-select',
+			selectButtonClass: 'maplibregl-ctrl-select',
 			layers: ['__directus_polygons', '__directus_points', '__directus_lines'],
 		});
 
@@ -110,14 +112,14 @@ export default defineComponent({
 
 		if (mapboxKey) {
 			const marker = document.createElement('div');
-			marker.className = 'mapboxgl-user-location-dot mapboxgl-search-location-dot';
+			marker.className = 'maplibregl-user-location-dot maplibregl-search-location-dot';
 
 			geocoderControl = new MapboxGeocoder({
 				accessToken: mapboxKey,
 				collapsed: true,
 				marker: { element: marker } as any,
 				flyTo: { speed: 1.4 },
-				mapboxgl: maplibre as any,
+				mapboxgl: { Marker } as any,
 				placeholder: t('layouts.map.find_location'),
 			});
 		}
@@ -139,8 +141,8 @@ export default defineComponent({
 				dragRotate: false,
 				attributionControl: false,
 				...props.camera,
-				...(mapboxKey ? { accessToken: mapboxKey } : {}),
-			});
+				transformRequest: getMapboxTransformRequest(mapboxKey),
+			}) as MapWithCustomEvents;
 
 			if (geocoderControl) {
 				map.addControl(geocoderControl as any, 'top-right');
@@ -170,7 +172,7 @@ export default defineComponent({
 				map.on('select.enable', () => (selectMode.value = true));
 				map.on('select.disable', () => (selectMode.value = false));
 
-				map.on('select.end', (event: MapLayerMouseEvent) => {
+				map.on('select.end', (event: { features?: MapGeoJSONFeature[]; alt?: boolean }) => {
 					const ids = event.features?.map((f) => f.id);
 					emit('featureselect', { ids, replace: !event.alt });
 				});
@@ -258,7 +260,7 @@ export default defineComponent({
 			});
 		}
 
-		function updateLayers(newLayers?: AnyLayer[], previousLayers?: AnyLayer[]) {
+		function updateLayers(newLayers?: AddLayerObject[], previousLayers?: AddLayerObject[]) {
 			const currentMapLayersId = new Set(map.getStyle().layers?.map(({ id }) => id));
 
 			previousLayers?.forEach((layer) => {
@@ -329,14 +331,14 @@ export default defineComponent({
 			}
 		}
 
-		function updatePopupLocation(event: MapLayerMouseEvent) {
-			if (hoveredFeature.value && event.originalEvent) {
+		function updatePopupLocation(event: { originalEvent?: unknown }) {
+			if (hoveredFeature.value && event.originalEvent instanceof MouseEvent) {
 				const { x, y } = event.originalEvent;
 				emit('updateitempopup', { position: { x, y } });
 			}
 		}
 
-		function expandCluster(event: MapLayerMouseEvent) {
+		async function expandCluster(event: MapLayerMouseEvent) {
 			const features = map.queryRenderedFeatures(event.point, {
 				layers: ['__directus_clusters'],
 			});
@@ -344,14 +346,18 @@ export default defineComponent({
 			const clusterId = features[0]?.properties?.cluster_id;
 			const source = map.getSource('__directus') as GeoJSONSource;
 
-			source.getClusterExpansionZoom(clusterId, (err: any, zoom: number) => {
-				if (err) return;
+			let zoom: number;
 
-				map.flyTo({
-					center: (features[0].geometry as GeoJSON.Point).coordinates as LngLatLike,
-					zoom: zoom,
-					speed: 1.3,
-				});
+			try {
+				zoom = await source.getClusterExpansionZoom(clusterId);
+			} catch {
+				return;
+			}
+
+			map.flyTo({
+				center: (features[0].geometry as GeoJSON.Point).coordinates as LngLatLike,
+				zoom: zoom,
+				speed: 1.3,
 			});
 		}
 
@@ -367,11 +373,11 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-#map-container.hover :deep(.mapboxgl-canvas-container) {
+#map-container.hover :deep(.maplibregl-canvas-container) {
 	cursor: pointer !important;
 }
 
-#map-container.select :deep(.mapboxgl-canvas-container) {
+#map-container.select :deep(.maplibregl-canvas-container) {
 	cursor: crosshair !important;
 }
 

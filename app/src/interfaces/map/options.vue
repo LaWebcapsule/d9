@@ -21,8 +21,9 @@ import { useI18n } from 'vue-i18n';
 import { ref, defineComponent, PropType, watch, onMounted, onUnmounted, computed, toRefs } from 'vue';
 import { GEOMETRY_TYPES } from '@wbce-d9/constants';
 import { Field, GeometryType, GeometryOptions } from '@wbce-d9/types';
-import { getBasemapSources, getStyleFromBasemapSource } from '@/utils/geometry/basemap';
+import { getBasemapSources, getMapboxTransformRequest, getStyleFromBasemapSource } from '@/utils/geometry/basemap';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import '@/utils/geometry/map-worker';
 import { Map, CameraOptions } from 'maplibre-gl';
 import { useAppStore } from '@/stores/app';
 import { useSettingsStore } from '@/stores/settings';
@@ -88,8 +89,9 @@ export default defineComponent({
 			map = new Map({
 				container: mapContainer.value!,
 				style: style.value,
+				attributionControl: {},
 				...(defaultView.value || {}),
-				...(mapboxKey ? { accessToken: mapboxKey } : {}),
+				transformRequest: getMapboxTransformRequest(mapboxKey),
 			});
 
 			map.on('moveend', () => {
