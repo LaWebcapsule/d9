@@ -129,7 +129,8 @@ async function openPullRequest(vulnerability) {
 	await api(`/repos/${REPO}/contents/upstream-vulnerabilities/${id}.json`, {
 		method: 'PUT',
 		body: {
-			message: title,
+			// Commits are made by GITHUB_TOKEN's bot, signed off for the DCO check
+			message: `${title}\n\nSigned-off-by: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>`,
 			content: Buffer.from(JSON.stringify(entry, null, '\t') + '\n').toString('base64'),
 			branch,
 		},
