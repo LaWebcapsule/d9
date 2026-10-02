@@ -11,7 +11,7 @@ import type {
 import { validatePayload } from '@wbce-d9/utils';
 import type { Knex } from 'knex';
 import { cloneDeep, flatten, isArray, isNil, merge, reduce, uniq, uniqWith, clone } from 'lodash-es';
-import { GENERATE_SPECIAL } from '../constants.js';
+import { AUTO_INCREMENT_DEFAULT, GENERATE_SPECIAL } from '../constants.js';
 import getDatabase from '../database/index.js';
 import { ForbiddenException, UnprocessableEntityException } from '../exceptions/index.js';
 import type {
@@ -475,6 +475,23 @@ export class AuthorizationService {
 		}
 	}
 
+	/** Rejects a client-supplied id on auto-increment keys: the counter ignores it, then hands it out again. */
+	private validateImmutablePrimaryKey(action: PermissionsAction, collection: string, payload: Partial<Item>): void {
+		if (action !== 'create') return;
+
+		const collectionInfo = this.schema.collections[collection];
+		if (!collectionInfo) return;
+
+		const submittedKey = payload[collectionInfo.primary];
+		if (submittedKey === undefined || submittedKey === null) return;
+
+		const primaryKeyField = collectionInfo.fields[collectionInfo.primary];
+
+		if (primaryKeyField?.defaultValue === AUTO_INCREMENT_DEFAULT) {
+			throw new ForbiddenException();
+		}
+	}
+
 	/**
 	 * Checks if the provided payload matches the configured permissions, and adds the presets to the payload.
 	 */
@@ -485,6 +502,8 @@ export class AuthorizationService {
 		keys?: PrimaryKey[]
 	): Promise<Partial<Item>> {
 		const payload = cloneDeep(data);
+
+		this.validateImmutablePrimaryKey(action, collection, payload);
 
 		let permission: Permission | undefined;
 

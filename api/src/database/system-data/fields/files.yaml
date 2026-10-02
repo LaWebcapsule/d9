@@ -77,6 +77,7 @@ fields:
     hidden: true
     special:
       - cast-json
+      - system-generated
 
   - field: type
     display: mime-type
@@ -85,6 +86,8 @@ fields:
   - field: filesize
     display: filesize
     readonly: true
+    special:
+      - system-generated
 
   - field: modified_by
     interface: select-dropdown-m2o
@@ -107,6 +110,8 @@ fields:
   - field: embed
     width: half
     hidden: true
+    special:
+      - system-generated
 
   - field: uploaded_by
     display: user
@@ -119,6 +124,8 @@ fields:
     display: datetime
     width: half
     hidden: true
+    special:
+      - system-generated
 
   - field: folder
     width: half
@@ -132,15 +139,23 @@ fields:
   - field: width
     width: half
     readonly: true
+    special:
+      - system-generated
 
   - field: height
     width: half
     readonly: true
+    special:
+      - system-generated
 
   - field: charset
     width: half
     readonly: true
+    special:
+      - system-generated
 
   - field: duration
     width: half
     readonly: true
+    special:
+      - system-generated
