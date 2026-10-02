@@ -60,6 +60,6 @@ catalog:
   zod: '3.22.3'
   liquidjs: '10.27.2'
   undici: '7.29.1'
-  dompurify: '3.4.13'
+  dompurify: '3.4.16'
   diff: '5.2.2'
   vite: '7.3.5'
