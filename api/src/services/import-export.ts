@@ -11,7 +11,7 @@ import { set, transform } from 'lodash-es';
 import { createReadStream } from 'node:fs';
 import { appendFile } from 'node:fs/promises';
 import type { Readable } from 'node:stream';
-import StreamArray from 'stream-json/streamers/StreamArray.js';
+import StreamArray from 'stream-json/streamers/stream-array.js';
 import stripBomStream from 'strip-bom-stream';
 import { file as createTmpFile } from 'tmp-promise';
 import getDatabase from '../database/index.js';
@@ -70,7 +70,7 @@ export class ImportService {
 	}
 
 	importJSON(collection: string, stream: Readable): Promise<void> {
-		const extractJSON = StreamArray.withParser();
+		const extractJSON = StreamArray.withParserAsStream();
 		const nestedActionEvents: ActionEventParams[] = [];
 
 		return this.knex.transaction((trx) => {

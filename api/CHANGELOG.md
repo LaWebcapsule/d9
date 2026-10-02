@@ -1,5 +1,21 @@
 # @wbce-d9/api
 
+## 12.5.6
+
+### Patch Changes
+
+- b9776d5: security: fix audit alerts
+- Updated dependencies [b9776d5]
+  - @wbce-d9/storage-driver-cloudinary@10.0.4
+  - @wbce-d9/update-check@10.0.4
+  - @wbce-d9/utils@10.0.3
+  - @wbce-d9/app@10.1.3
+  - @wbce-d9/extensions-sdk@10.0.4
+  - @wbce-d9/storage-driver-azure@10.0.3
+  - @wbce-d9/storage-driver-gcs@10.0.3
+  - @wbce-d9/storage-driver-local@10.0.3
+  - @wbce-d9/storage-driver-s3@10.0.3
+
 ## 12.5.5
 
 ### Patch Changes

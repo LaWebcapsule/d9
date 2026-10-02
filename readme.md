@@ -37,7 +37,7 @@ npm init @wbce-d9/directus-project@latest
 Or with Docker:
 
 ```bash
-docker run -d -p 8055:8055 ghcr.io/lawebcapsule/directus9:latest
+docker run -d -p 8055:8055 lawebcapsule/d9:latest
 ```
 
 ## Migrating from Directus 9

@@ -77,7 +77,7 @@ export class MailService {
 		}
 
 		const info = await this.mailer.sendMail({ ...emailOptions, from, html });
-		return info;
+		return info as T;
 	}
 
 	private async renderTemplate(template: string, variables: Record<string, any>) {
