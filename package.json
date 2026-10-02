@@ -9,9 +9,12 @@
 		"test:blackbox": "pnpm --filter directus9 deploy --prod dist && pnpm --filter tests-blackbox test"
 	},
 	"devDependencies": {
+		"@changesets/changelog-github": "^1.0.1",
 		"@changesets/cli": "^2.31.1",
+		"@changesets/get-github-info": "^1.0.1",
 		"@typescript-eslint/eslint-plugin": "7.18.0",
 		"@typescript-eslint/parser": "7.18.0",
+		"directus": "9.26.0",
 		"eslint": "8.57.0",
 		"eslint-config-prettier": "9.1.0",
 		"eslint-plugin-jest": "29.0.1",

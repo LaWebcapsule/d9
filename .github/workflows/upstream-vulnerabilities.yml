@@ -1,0 +1,32 @@
+name: Upstream Vulnerabilities
+
+# Dependabot alerts can't trigger workflows, so dismissed alerts are polled instead.
+# See upstream-vulnerabilities/sync.mjs.
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: upstream-vulnerabilities
+  cancel-in-progress: false
+
+jobs:
+  upstream-vulnerabilities:
+    name: Sync upstream vulnerabilities
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: .nvmrc
+
+      - name: Sync dismissed alerts
+        env:
+          # Fine-grained token with Dependabot alerts (read), Contents (write) and Pull requests (write).
+          # GITHUB_TOKEN can't read Dependabot alerts, and PRs it opens don't trigger CI.
+          GH_TOKEN: ${{ secrets.UPSTREAM_VULNERABILITIES_TOKEN }}
+        run: node upstream-vulnerabilities/sync.mjs

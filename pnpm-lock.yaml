@@ -245,19 +245,30 @@ overrides:
 
 packageExtensionsChecksum: sha256-jygb7QknrYgYSzZe0hMyvEMitSRad62GWGwr5lKleag=
 
+pnpmfileChecksum: sha256-ykHct+u9RwTTonREdS6CEI2AF90UlS0X54pl0IMecOg=
+
 importers:
 
   .:
     devDependencies:
+      '@changesets/changelog-github':
+        specifier: ^1.0.1
+        version: 1.0.1
       '@changesets/cli':
         specifier: ^2.31.1
         version: 2.31.1(@types/node@25.2.3)
+      '@changesets/get-github-info':
+        specifier: ^1.0.1
+        version: 1.0.1
       '@typescript-eslint/eslint-plugin':
         specifier: 7.18.0
         version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.0)(typescript@5.7.3))(eslint@8.57.0)(typescript@5.7.3)
       '@typescript-eslint/parser':
         specifier: 7.18.0
         version: 7.18.0(eslint@8.57.0)(typescript@5.7.3)
+      directus:
+        specifier: 9.26.0
+        version: 9.26.0
       eslint:
         specifier: 8.57.0
         version: 8.57.0
@@ -693,7 +704,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.11(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.11)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
+        version: 4.1.11(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.11)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
     optionalDependencies:
       '@keyv/redis':
         specifier: 2.5.7
@@ -1242,7 +1253,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.11(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.11)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
+        version: 4.1.11(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.11)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
 
   packages/schema:
     dependencies:
@@ -1292,7 +1303,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.11(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.11)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
+        version: 4.1.11(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.11)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
 
   packages/storage-driver-azure:
     dependencies:
@@ -1323,7 +1334,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.11(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.11)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
+        version: 4.1.11(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.11)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
 
   packages/storage-driver-cloudinary:
     dependencies:
@@ -1357,7 +1368,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.11(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.11)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
+        version: 4.1.11(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.11)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
 
   packages/storage-driver-gcs:
     dependencies:
@@ -1388,7 +1399,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.11(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.11)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
+        version: 4.1.11(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.11)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
 
   packages/storage-driver-local:
     dependencies:
@@ -1416,7 +1427,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.11(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.11)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
+        version: 4.1.11(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.11)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
 
   packages/storage-driver-s3:
     dependencies:
@@ -1453,7 +1464,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.11(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.11)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
+        version: 4.1.11(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.11)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
 
   packages/tsconfig: {}
 
@@ -1528,7 +1539,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.11(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.11)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
+        version: 4.1.11(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.11)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
 
   packages/utils:
     dependencies:
@@ -1592,7 +1603,7 @@ importers:
         version: 5.0.4
       vitest:
         specifier: 'catalog:'
-        version: 4.1.11(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.11)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
+        version: 4.1.11(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.11)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
 
   tests/blackbox:
     devDependencies:
@@ -2619,6 +2630,10 @@ packages:
   '@changesets/changelog-git@0.2.1':
     resolution: {integrity: sha512-x/xEleCFLH28c3bQeQIyeZf8lFXyDFVn1SgcBiR2Tw/r4IAWlk1fzxCEZ6NxQAjF2Nwtczoen3OA2qR+UawQ8Q==}
 
+  '@changesets/changelog-github@1.0.1':
+    resolution: {integrity: sha512-QUcrV7878yHlWPXXPA6gqSxNKwtVHCd1K22L7ZAoJw2yGy8K4QvjwOStD75+1Q9KD9ZSUgGS94HuYdd7HOVtpA==}
+    engines: {node: ^22.11 || ^24 || >=26}
+
   '@changesets/cli@2.31.1':
     resolution: {integrity: sha512-uO05WTcRBwuVOJVSW8Cmpqw6q0WDL53ajGCMyszutvOe5toOnunbpM4jZzf+qxBOz7i0AzopZ8diBuewjmF40w==}
     hasBin: true
@@ -2631,6 +2646,10 @@ packages:
 
   '@changesets/get-dependents-graph@2.1.4':
     resolution: {integrity: sha512-ZsS00x6WvmHq3sQv8oCMwL0f/z3wbXCVuSVTJwCnnmbC/iBdNJGFx1EcbMG4PC6sXRyH69liM4A2WKXzn/kRPg==}
+
+  '@changesets/get-github-info@1.0.1':
+    resolution: {integrity: sha512-ifLQCky/ZtDgZ4xCiUMjnLZSJ8xk52iIzMJbBBPlZWjr2CiTNTaTDddIVWKicrUAdWuLWL7PUw2fNa1yPwLpIg==}
+    engines: {node: ^22.11 || ^24 || >=26}
 
   '@changesets/get-release-plan@4.0.16':
     resolution: {integrity: sha512-2K5Om6CrMPm45rtvckfzWo7e9jOVCKLCnXia5eUPaURH7/LWzri7pK1TycdzAuAtehLkW7VPbWLCSExTHmiI6g==}
@@ -2662,6 +2681,10 @@ packages:
   '@changesets/types@6.1.0':
     resolution: {integrity: sha512-rKQcJ+o1nKNgeoYRHKOS07tAMNd3YSN0uHaJOZYjBAgxfV7TUE7JE+z4BzZdQwb5hKaYbayKN5KrYV7ODb2rAA==}
 
+  '@changesets/types@7.0.0':
+    resolution: {integrity: sha512-c5GoiQyt3pxiXjrWSNoP8/GRf4kG+VnKzovx1OQM8dYYALlSwgedmkPmJ+ZqGxqwg9D3Bkj85Uo4KLd5BN3A0w==}
+    engines: {node: ^22.11 || ^24 || >=26}
+
   '@changesets/write@0.4.0':
     resolution: {integrity: sha512-CdTLvIOPiCNuH71pyDu3rA+Q0n65cmAbXnwWH84rKGiFumFzkmHNT8KHTMEchcxN+Kl8I54xGUhJ7l3E7X396Q==}
 
@@ -2672,6 +2695,64 @@ packages:
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
+
+  '@directus/api@9.26.0':
+    resolution: {integrity: sha512-ylo+VCJkvpbF8ob/O+eD6pkgUafaJW3ZVWI+2kGMXBBF3t1dkrbFaeAQjSjFVFurCyKB5x1Sb37NOy3Poqo1AA==}
+    engines: {node: '>=18.0.0'}
+
+  '@directus/app@9.26.0':
+    resolution: {integrity: sha512-fBw7d1QCKZix3Z87PTasbsF9ukfW2DjVKufSiM2WZUvtn8/QMWqJCsWDOC3sl5xqbOX7CC/KE07iMg2ZK4G6XQ==}
+
+  '@directus/composables@9.26.0':
+    resolution: {integrity: sha512-4MebZzwBPzc3MYr+6PHonDL3fNZuF3aZhhioTZWbWyqPInV3PJZKeEhqqsAen8a0dRyntJBjvjVj+ZyNZrByuQ==}
+
+  '@directus/constants@9.26.0':
+    resolution: {integrity: sha512-1NNLPkf2Zgy2UyIuB7yFcMhDbu0pJDD4l7jdxC5dFVIDJUOUfzPlJ4Eu8c6cfTBG/waE8J86n1nI0eApbRET1w==}
+
+  '@directus/exceptions@9.26.0':
+    resolution: {integrity: sha512-FZi//c1jaOZm3RMkm9akeTcBryf/V8qR0ZQHTAjTA6KYhLOpVV/0d3svzshZzkXypmKELUIIxIOlPipS8uACdQ==}
+
+  '@directus/extensions-sdk@9.26.0':
+    resolution: {integrity: sha512-ZKQYWrEA4zL0EfNJyOgHN3nYYroWdfXjXLsGHjVrxkviZ9jIpoK6lZUG7aMQEaIvftN2uY8AY0GBFt4FT3LuAQ==}
+    engines: {node: '>=12.20.0'}
+    hasBin: true
+
+  '@directus/format-title@10.0.0':
+    resolution: {integrity: sha512-iMXP8yQb0UKAMGRHAY7IkNXEGdUqQDvlu1aAkPARYah4lMhEU8E5KgkXdOCPQaxt6Wy0gXb7DPMjeSlKyBKCxg==}
+    engines: {node: '>=6.0.0'}
+
+  '@directus/schema@9.26.0':
+    resolution: {integrity: sha512-QNndw9HzpJOg5qU2CeyEU7laEtUgJAu2l5Uvb/tPqGA9ZMMmNq5fum3Y1mVnLf4hZH8pOiaERx6OmenGEwnYjA==}
+
+  '@directus/specs@9.26.0':
+    resolution: {integrity: sha512-8M2GHLti7Oaeoua1m9PCTB0viUv/sk/bhfoX57e05ibqdpl1ya1X3R4ZX9GMScp29Qf/Ne1mMucK33+FnPr7gg==}
+
+  '@directus/storage-driver-azure@9.26.0':
+    resolution: {integrity: sha512-pSXfv++HLa1MO85z5+6lji5ObUnUt7mVwVSWzknMjrB8IWmSbDIgcpuBHWNVJaSot5e7UWX/+opkn4gkpHQ1pQ==}
+
+  '@directus/storage-driver-cloudinary@9.26.0':
+    resolution: {integrity: sha512-m1s4UQchWbE4e7TU6Hb2AOh/3+9oeRvTOmIl1dBtS689FWe/QFtan3WbHxeeEKDU2YKu4N1TL1OFmjmVZHp19Q==}
+
+  '@directus/storage-driver-gcs@9.26.0':
+    resolution: {integrity: sha512-kLaucSbuoHSaq9xBK1juyW1rxp1vLxbB4KrLOPEVFHRvVY85IA9Vk8wb7yTGUwdguQbzA2x/EFb5FuZf2b1a1w==}
+
+  '@directus/storage-driver-local@9.26.0':
+    resolution: {integrity: sha512-cVZfg6n7bzcE4e+0oHNndjGunvhEnSqyAl/1mkD4F1x3w3Os0UiT03T2ymqBTSfo5Km+t0NOdoROpjfIhjaHSg==}
+
+  '@directus/storage-driver-s3@9.26.0':
+    resolution: {integrity: sha512-z+9uAcl4NEcGZUa3Bz1ZaJsuAhQ9Vsn0JWqIOI+/DFYB9IW+tnRo9X188nVlW8uu+cw7rOnGAKkijGCENsjTmg==}
+
+  '@directus/storage@9.26.0':
+    resolution: {integrity: sha512-BLjy9NEPd1DfqsAwpC/fKdwFbIfPbEulvU1nVMnRJZ8uipkExQwPMvwFw5gJjF4O9iRyQ1FVAkrZqmLM0m1yqA==}
+
+  '@directus/types@9.26.0':
+    resolution: {integrity: sha512-1+kGL0Sg/KfqEhBfPjlID1fb3i5Tq6KYj4xIfGq6tcdfha56vAmJy1r3bP9ireFqw0N+FiUT5ahFPa/aLH0yzg==}
+
+  '@directus/update-check@9.26.0':
+    resolution: {integrity: sha512-IpOUDQDsdTOcgyglWfMpLAfqnHVJDZEB2/04uHmeLFfv+RuWjrwjHSIN7bwV06OIS5LzMd7KjYN49AMidi8thw==}
+
+  '@directus/utils@9.26.0':
+    resolution: {integrity: sha512-VRQKt4wEm7Xk45r8DNFzXYjbpjbRoN0gEUpfrSeTytM5uPZtq65iIpsuyr8og6+6rx8xdR9n+scy/4Tbl7JhQQ==}
 
   '@docsearch/css@3.8.2':
     resolution: {integrity: sha512-y05ayQFyUmCXze79+56v/4HpycYF3uFqB78pLPrSV5ZKAlDuIAAJNhaRi8tTdRNXh05yxX/TyNnzD6LwSM89vQ==}
@@ -5971,6 +6052,9 @@ packages:
     resolution: {integrity: sha512-BS8PfmtDGnrgYdOonGZQdLZslWIeCGFP9tpan0hi1Co2Zr2NKADsvGYA8XxuG/4UWgJ6Cjtv+YJnB6MM69QGlQ==}
     engines: {node: '>= 0.4'}
 
+  dataloader@2.2.3:
+    resolution: {integrity: sha512-y2krtASINtPFS1rSDjacrFgn1dcUuoREVabwlOGOe4SdxenREqwjwjElAdwvbGM7kgZz9a3KVicWR7vcz8rnzA==}
+
   date-fns@2.29.3:
     resolution: {integrity: sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==}
     engines: {node: '>=0.11'}
@@ -6171,6 +6255,12 @@ packages:
   dir-glob@3.0.1:
     resolution: {integrity: sha512-WkrWp9GR4KXfKGYzOLmTuGVi1UWFfws377n9cc55/tb6DuqyF6pcQ5AbiHEshaDpY9v6oaSr2XCDidGmMwdzIA==}
     engines: {node: '>=8'}
+
+  directus@9.26.0:
+    resolution: {integrity: sha512-1OSjhynYbJcQY7wHhRlY04ngA3t9R/XkAtm9VdGuTQwwooUPowTnfaK4UI4Y4OLa98+lMytACWJhadf93ndyEQ==}
+    engines: {node: '>=18.0.0'}
+    deprecated: Version no longer supported. Upgrade to @latest.
+    hasBin: true
 
   doctrine@3.0.0:
     resolution: {integrity: sha512-yS+Q5i3hBf7GBkd4KG8a7eBNNWNGLTaEwwYWUijIYM7zrlYDM0BFXHjjPWlWZ1Rg7UaddZeIDmi9jF3HmqiQ2w==}
@@ -10922,8 +11012,8 @@ packages:
   vue-component-type-helpers@2.2.12:
     resolution: {integrity: sha512-YbGqHZ5/eW4SnkPNR44mKVc6ZKQoRs/Rux1sxC6rdwXb4qpbOSYfDr9DsTHolOTGmIKgM9j141mZbBeg05R1pw==}
 
-  vue-component-type-helpers@3.3.11:
-    resolution: {integrity: sha512-LwcxzeliO9fkQcpJG0PoX8X5kmAhKmH9wkpDLxNabwzkQ9Zeib2YVHwFV4pcWmMLfXVfjr/dSV+DaJ3cIPgSNA==}
+  vue-component-type-helpers@3.3.12:
+    resolution: {integrity: sha512-HwCqmgTfLFskQc4P5TRnbduCMyPat2Ezu0elLWOGn0dD/6BKHP15B5bxce6aDi+E4kblPtru8amIBQzu0Di3qQ==}
 
   vue-demi@0.14.10:
     resolution: {integrity: sha512-nMZBOwuzabUO0nLgIcc6rycZEebF6eeUfaiQx9+WSk8e29IbLvPU9feI6tqW4kTo3hvoYAJkMh8n8D0fuISphg==}
@@ -12644,6 +12734,11 @@ snapshots:
     dependencies:
       '@changesets/types': 6.1.0
 
+  '@changesets/changelog-github@1.0.1':
+    dependencies:
+      '@changesets/get-github-info': 1.0.1
+      '@changesets/types': 7.0.0
+
   '@changesets/cli@2.31.1(@types/node@25.2.3)':
     dependencies:
       '@changesets/apply-release-plan': 7.1.1
@@ -12696,6 +12791,10 @@ snapshots:
       '@manypkg/get-packages': 1.1.3
       picocolors: 1.1.1
       semver: 7.8.5
+
+  '@changesets/get-github-info@1.0.1':
+    dependencies:
+      dataloader: 2.2.3
 
   '@changesets/get-release-plan@4.0.16':
     dependencies:
@@ -12751,6 +12850,8 @@ snapshots:
 
   '@changesets/types@6.1.0': {}
 
+  '@changesets/types@7.0.0': {}
+
   '@changesets/write@0.4.0':
     dependencies:
       '@changesets/types': 6.1.0
@@ -12764,6 +12865,86 @@ snapshots:
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
+
+  '@directus/api@9.26.0':
+    dependencies:
+      '@directus/app': 9.26.0
+      '@directus/constants': 9.26.0
+      '@directus/exceptions': 9.26.0
+      '@directus/extensions-sdk': 9.26.0
+      '@directus/format-title': 10.0.0
+      '@directus/schema': 9.26.0
+      '@directus/specs': 9.26.0
+      '@directus/storage': 9.26.0
+      '@directus/storage-driver-azure': 9.26.0
+      '@directus/storage-driver-cloudinary': 9.26.0
+      '@directus/storage-driver-gcs': 9.26.0
+      '@directus/storage-driver-local': 9.26.0
+      '@directus/storage-driver-s3': 9.26.0
+      '@directus/update-check': 9.26.0
+      '@directus/utils': 9.26.0
+
+  '@directus/app@9.26.0':
+    dependencies:
+      '@directus/composables': 9.26.0
+
+  '@directus/composables@9.26.0':
+    dependencies:
+      '@directus/constants': 9.26.0
+      '@directus/utils': 9.26.0
+
+  '@directus/constants@9.26.0': {}
+
+  '@directus/exceptions@9.26.0': {}
+
+  '@directus/extensions-sdk@9.26.0':
+    dependencies:
+      '@directus/composables': 9.26.0
+      '@directus/constants': 9.26.0
+      '@directus/types': 9.26.0
+      '@directus/utils': 9.26.0
+
+  '@directus/format-title@10.0.0': {}
+
+  '@directus/schema@9.26.0': {}
+
+  '@directus/specs@9.26.0': {}
+
+  '@directus/storage-driver-azure@9.26.0':
+    dependencies:
+      '@directus/storage': 9.26.0
+      '@directus/utils': 9.26.0
+
+  '@directus/storage-driver-cloudinary@9.26.0':
+    dependencies:
+      '@directus/storage': 9.26.0
+      '@directus/utils': 9.26.0
+
+  '@directus/storage-driver-gcs@9.26.0':
+    dependencies:
+      '@directus/storage': 9.26.0
+      '@directus/utils': 9.26.0
+
+  '@directus/storage-driver-local@9.26.0':
+    dependencies:
+      '@directus/storage': 9.26.0
+      '@directus/utils': 9.26.0
+
+  '@directus/storage-driver-s3@9.26.0':
+    dependencies:
+      '@directus/storage': 9.26.0
+      '@directus/utils': 9.26.0
+
+  '@directus/storage@9.26.0': {}
+
+  '@directus/types@9.26.0': {}
+
+  '@directus/update-check@9.26.0': {}
+
+  '@directus/utils@9.26.0':
+    dependencies:
+      '@directus/constants': 9.26.0
+      '@directus/storage': 9.26.0
 
   '@docsearch/css@3.8.2': {}
 
@@ -14193,7 +14374,7 @@ snapshots:
       ts-dedent: 2.2.0
       type-fest: 2.19.0
       vue: 3.2.47
-      vue-component-type-helpers: 3.3.11
+      vue-component-type-helpers: 3.3.12
 
   '@szmarczak/http-timer@4.0.6':
     dependencies:
@@ -14790,7 +14971,7 @@ snapshots:
       obug: 2.1.1
       std-env: 4.0.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.11(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.11)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
+      vitest: 4.1.11(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.11)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
 
   '@vitest/expect@4.1.11':
     dependencies:
@@ -14801,7 +14982,7 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.1.0
 
-  '@vitest/mocker@4.1.11(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))':
+  '@vitest/mocker@4.1.11(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))':
     dependencies:
       '@vitest/spy': 4.1.11
       estree-walker: 3.0.3
@@ -16220,6 +16401,8 @@ snapshots:
       es-errors: 1.3.0
       is-data-view: 1.0.2
 
+  dataloader@2.2.3: {}
+
   date-fns@2.29.3: {}
 
   dateformat@4.6.3: {}
@@ -16358,6 +16541,10 @@ snapshots:
   dir-glob@3.0.1:
     dependencies:
       path-type: 4.0.0
+
+  directus@9.26.0:
+    dependencies:
+      '@directus/api': 9.26.0
 
   doctrine@3.0.0:
     dependencies:
@@ -22288,7 +22475,7 @@ snapshots:
   vitest@4.1.11(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.11)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3)):
     dependencies:
       '@vitest/expect': 4.1.11
-      '@vitest/mocker': 4.1.11(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
+      '@vitest/mocker': 4.1.11(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
       '@vitest/pretty-format': 4.1.11
       '@vitest/runner': 4.1.11
       '@vitest/snapshot': 4.1.11
@@ -22318,7 +22505,7 @@ snapshots:
   vitest@4.1.11(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.11)(happy-dom@20.8.9)(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3)):
     dependencies:
       '@vitest/expect': 4.1.11
-      '@vitest/mocker': 4.1.11(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
+      '@vitest/mocker': 4.1.11(vite@7.3.5(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
       '@vitest/pretty-format': 4.1.11
       '@vitest/runner': 4.1.11
       '@vitest/snapshot': 4.1.11
@@ -22396,7 +22583,7 @@ snapshots:
 
   vue-component-type-helpers@2.2.12: {}
 
-  vue-component-type-helpers@3.3.11: {}
+  vue-component-type-helpers@3.3.12: {}
 
   vue-demi@0.14.10(vue@3.2.47):
     dependencies:
