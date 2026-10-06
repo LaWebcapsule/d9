@@ -84,20 +84,6 @@ have been triaged, accepted, and are ready to be implemented.
 
 #### Security Fixes
 
-A Pull Request that fixes a vulnerability must have the `security` label and one priority label, set from the severity
-of the vulnerability (the CVSS severity of its advisory):
-
-| Label | Severity |
-| ----- | -------- |
-| `p0`  | Critical |
-| `p1`  | High     |
-| `p2`  | Medium   |
-| `p3`  | Low      |
-| `p4`  | None     |
-
-Mention the CVE or GHSA id of the vulnerability in the Pull Request description: the release notes prefix the change
-with `security:` and list these ids.
-
 A vulnerability that is not public yet must be fixed in the private fork of its
 [security advisory](https://github.com/LaWebcapsule/d9/security/advisories), not in a public Pull Request. See
 [Reporting Security Vulnerabilities](#reporting-security-vulnerabilities).
