@@ -21,7 +21,7 @@ Only the latest minor release of the latest major version receives security fixe
 
 - Acknowledgement within 5 working days.
 - Initial assessment within 10 working days (severity, reproduction confirmed, scope).
-- Fix timeline depends on severity — critical and high issues are fixed within 30 days; lower-severity within 90 days.
+- Fix timeline depends on severity — critical and high issues are fixed within 14 days; lower-severity within 90 days.
 - Coordinated disclosure: we will agree on a public-disclosure date with you. Default embargo is up to 90 days from
   initial report, in line with industry norms ([Google Project Zero](https://googleprojectzero.blogspot.com/p/vulnerability-disclosure-policy.html), [GitHub coordinated disclosure](https://googleprojectzero.blogspot.com/p/vulnerability-disclosure-policy.html)).
 - Credit: contributors who report responsibly are credited in the security advisory.

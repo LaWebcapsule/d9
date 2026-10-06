@@ -82,6 +82,26 @@ We treat Issues on the main repo as actionable items we want to get done. This a
 Issue that has been labeled either "Bug", "Improvement", or "New Feature". Labeled issues are bugs or new features that
 have been triaged, accepted, and are ready to be implemented.
 
+#### Security Fixes
+
+A Pull Request that fixes a vulnerability must have the `security` label and one priority label, set from the severity
+of the vulnerability (the CVSS severity of its advisory):
+
+| Label | Severity |
+| ----- | -------- |
+| `p0`  | Critical |
+| `p1`  | High     |
+| `p2`  | Medium   |
+| `p3`  | Low      |
+| `p4`  | None     |
+
+Mention the CVE or GHSA id of the vulnerability in the Pull Request description: the release notes prefix the change
+with `security:` and list these ids.
+
+A vulnerability that is not public yet must be fixed in the private fork of its
+[security advisory](https://github.com/LaWebcapsule/d9/security/advisories), not in a public Pull Request. See
+[Reporting Security Vulnerabilities](#reporting-security-vulnerabilities).
+
 #### Implementing Features
 
 With the continuous growth of d9, more and more people are relying on d9 for (critical) data workloads in
@@ -109,12 +129,7 @@ actionable item, be it a feature or otherwise.
 
 If you believe you have discovered a security issue within a d9 product or service, please open a
 [private security vulnerability report](https://github.com/LaWebcapsule/d9/security/advisories/new). Do not open a
-public issue for security problems. We will then open a
-[GitHub Security Advisory](https://github.com/LaWebcapsule/d9/security/advisories) for tracking the fix.
+public issue for security problems.
 
-We value the members of the independent security research community who find security vulnerabilities and work with our
-team so that proper fixes can be issued to users. Our policy is to credit all researchers in the fix's release notes. In
-order to receive credit, security researchers must follow responsible disclosure practices, including:
-
-- They do not publish the vulnerability prior to the d9 team releasing a fix for it
-- They do not divulge exact details of the issue, e.g., through exploits or proof-of-concepts
+See our [Security Policy](./security.md) for what to expect after reporting, the disclosure timeline, and how
+researchers are credited.
