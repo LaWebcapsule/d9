@@ -213,7 +213,7 @@ overrides:
   rollup@>=3.0.0 <3.30.0: 3.30.0
   rollup@>=4.0.0 <4.59.0: '>=4.59.0'
   serialize-javascript@<7.0.5: '>=7.0.5'
-  uuid@<11.1.1: '>=11.1.1'
+  uuid@<11.1.1: ^11.1.1
   svgo@>=2.1.0 <2.8.4: 2.8.4
   svgo@>=4.0.0 <4.0.2: '>=4.0.2'
   handlebars@<4.7.8: ^4.7.9
@@ -10760,6 +10760,10 @@ packages:
   uuid-validate@0.0.3:
     resolution: {integrity: sha512-Fykw5U4eZESbq739BeLvEBFRuJODfrlmjx5eJux7W817LjRaq4b7/i4t2zxQmhcX+fAj4nMfRdTzO4tmwLKn0w==}
 
+  uuid@11.1.1:
+    resolution: {integrity: sha512-vIYxrBCC/N/K+Js3qSN88go7kIfNPssr/hHCesKCQNAjmgvYS2oqr69kIufEG+O4+PfezOH4EbIeHCfFov8ZgQ==}
+    hasBin: true
+
   uuid@14.0.0:
     resolution: {integrity: sha512-Qo+uWgilfSmAhXCMav1uYFynlQO7fMFiMVZsQqZRMIXp0O7rR7qjkj+cPvBHLgBqi960QCoo/PH2/6ZtVqKvrg==}
     hasBin: true
@@ -10922,8 +10926,8 @@ packages:
   vue-component-type-helpers@2.2.12:
     resolution: {integrity: sha512-YbGqHZ5/eW4SnkPNR44mKVc6ZKQoRs/Rux1sxC6rdwXb4qpbOSYfDr9DsTHolOTGmIKgM9j141mZbBeg05R1pw==}
 
-  vue-component-type-helpers@3.3.11:
-    resolution: {integrity: sha512-LwcxzeliO9fkQcpJG0PoX8X5kmAhKmH9wkpDLxNabwzkQ9Zeib2YVHwFV4pcWmMLfXVfjr/dSV+DaJ3cIPgSNA==}
+  vue-component-type-helpers@3.3.12:
+    resolution: {integrity: sha512-HwCqmgTfLFskQc4P5TRnbduCMyPat2Ezu0elLWOGn0dD/6BKHP15B5bxce6aDi+E4kblPtru8amIBQzu0Di3qQ==}
 
   vue-demi@0.14.10:
     resolution: {integrity: sha512-nMZBOwuzabUO0nLgIcc6rycZEebF6eeUfaiQx9+WSk8e29IbLvPU9feI6tqW4kTo3hvoYAJkMh8n8D0fuISphg==}
@@ -11712,7 +11716,7 @@ snapshots:
       process: 0.11.10
       tslib: 2.8.1
       tunnel: 0.0.6
-      uuid: 14.0.0
+      uuid: 11.1.1
       xml2js: 0.5.0
     transitivePeerDependencies:
       - encoding
@@ -11831,7 +11835,7 @@ snapshots:
     dependencies:
       '@azure/msal-common': 15.14.2
       jsonwebtoken: 9.0.0
-      uuid: 14.0.0
+      uuid: 11.1.1
     optional: true
 
   '@azure/storage-blob@12.14.0(encoding@0.1.13)':
@@ -12993,7 +12997,7 @@ snapshots:
       p-limit: 3.1.0
       retry-request: 5.0.2
       teeny-request: 8.0.3(encoding@0.1.13)
-      uuid: 14.0.0
+      uuid: 11.1.1
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -13606,7 +13610,7 @@ snapshots:
   '@ngneat/falso@6.4.0':
     dependencies:
       seedrandom: 3.0.5
-      uuid: 14.0.0
+      uuid: 11.1.1
 
   '@noble/hashes@1.8.0': {}
 
@@ -14016,7 +14020,7 @@ snapshots:
       dequal: 2.0.3
       polished: 4.3.1
       storybook: 8.6.18(prettier@2.8.8)
-      uuid: 14.0.0
+      uuid: 11.1.1
 
   '@storybook/addon-backgrounds@8.6.18(storybook@8.6.18(prettier@2.8.8))':
     dependencies:
@@ -14193,7 +14197,7 @@ snapshots:
       ts-dedent: 2.2.0
       type-fest: 2.19.0
       vue: 3.2.47
-      vue-component-type-helpers: 3.3.11
+      vue-component-type-helpers: 3.3.12
 
   '@szmarczak/http-timer@4.0.6':
     dependencies:
@@ -17677,7 +17681,7 @@ snapshots:
   hyperid@3.3.0:
     dependencies:
       buffer: 5.7.1
-      uuid: 14.0.0
+      uuid: 11.1.1
       uuid-parse: 1.1.0
 
   icc@3.0.0: {}
@@ -19375,7 +19379,7 @@ snapshots:
 
   node-cron@3.0.2:
     dependencies:
-      uuid: 14.0.0
+      uuid: 11.1.1
 
   node-domexception@1.0.0: {}
 
@@ -21734,7 +21738,7 @@ snapshots:
       https-proxy-agent: 5.0.1
       node-fetch: 2.7.0(encoding@0.1.13)
       stream-events: 1.0.5
-      uuid: 14.0.0
+      uuid: 11.1.1
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -22133,6 +22137,8 @@ snapshots:
 
   uuid-validate@0.0.3: {}
 
+  uuid@11.1.1: {}
+
   uuid@14.0.0: {}
 
   v8-compile-cache-lib@3.0.1: {}
@@ -22396,7 +22402,7 @@ snapshots:
 
   vue-component-type-helpers@2.2.12: {}
 
-  vue-component-type-helpers@3.3.11: {}
+  vue-component-type-helpers@3.3.12: {}
 
   vue-demi@0.14.10(vue@3.2.47):
     dependencies:
