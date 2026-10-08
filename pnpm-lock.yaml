@@ -64,8 +64,8 @@ catalogs:
       specifier: 2.0.0
       version: 2.0.0
     axios:
-      specifier: ^1.18.0
-      version: 1.18.1
+      specifier: ^1.20.0
+      version: 1.20.0
     chalk:
       specifier: 5.2.0
       version: 5.2.0
@@ -350,7 +350,7 @@ importers:
         version: 3.2.4
       axios:
         specifier: 'catalog:'
-        version: 1.18.1
+        version: 1.20.0
       busboy:
         specifier: 1.6.0
         version: 1.6.0
@@ -896,7 +896,7 @@ importers:
         version: 3.39.0
       axios:
         specifier: 'catalog:'
-        version: 1.18.1
+        version: 1.20.0
       babel-loader:
         specifier: ^9.2.1
         version: 9.2.1(@babel/core@7.29.7)(webpack@5.104.1(esbuild@0.28.1))
@@ -1056,7 +1056,7 @@ importers:
         version: 7.0.4
       vitepress:
         specifier: 1.6.4
-        version: 1.6.4(@algolia/client-search@5.48.1)(@types/node@25.2.3)(axios@1.18.1)(postcss@8.5.26)(qrcode@1.5.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.83.0)(search-insights@2.17.3)(sortablejs@1.14.0)(terser@5.46.0)(typescript@5.7.3)(yaml@2.8.3)
+        version: 1.6.4(@algolia/client-search@5.48.1)(@types/node@25.2.3)(axios@1.20.0)(postcss@8.5.26)(qrcode@1.5.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.83.0)(search-insights@2.17.3)(sortablejs@1.14.0)(terser@5.46.0)(typescript@5.7.3)(yaml@2.8.3)
       vue:
         specifier: 3.5.27
         version: 3.5.27(typescript@5.7.3)
@@ -1096,7 +1096,7 @@ importers:
         version: link:../types
       axios:
         specifier: 'catalog:'
-        version: 1.18.1
+        version: 1.20.0
       typescript:
         specifier: 'catalog:'
         version: 5.0.4
@@ -1628,7 +1628,7 @@ importers:
         version: 7.10.0
       axios:
         specifier: 'catalog:'
-        version: 1.18.1
+        version: 1.20.0
       globby:
         specifier: 12.0.0
         version: 12.0.0
@@ -5151,8 +5151,8 @@ packages:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
     engines: {node: '>= 0.4'}
 
-  axios@1.18.1:
-    resolution: {integrity: sha512-3nTvFlvpn9Zu/RkHUqtc7/+al4UpRW5az71ap5zccp6e8RAYEzhMTecX8Dz1wWDYrPpUoB1HAQEGEAEvUr7S9g==}
+  axios@1.20.0:
+    resolution: {integrity: sha512-r8aOh8j9cGKpgQAqpzrUHnSIc6a59Y3Xf/cv8sy1DrHCkZHzQGEuoq1tARk6qSyDdtQGSDgpb9kFlruzPvrgwg==}
 
   babel-jest@29.7.0:
     resolution: {integrity: sha512-BrvGY3xZSwEcCzKvKsCi2GgHqDqsYkOP4/by5xCgIwGXQxIEh+8ew3gmrE1y7XRR6LHZIj6yLYnUi/mm2KXKBg==}
@@ -15040,13 +15040,13 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  '@vueuse/integrations@12.8.2(axios@1.18.1)(focus-trap@7.8.0)(qrcode@1.5.1)(sortablejs@1.14.0)(typescript@5.7.3)':
+  '@vueuse/integrations@12.8.2(axios@1.20.0)(focus-trap@7.8.0)(qrcode@1.5.1)(sortablejs@1.14.0)(typescript@5.7.3)':
     dependencies:
       '@vueuse/core': 12.8.2(typescript@5.7.3)
       '@vueuse/shared': 12.8.2(typescript@5.7.3)
       vue: 3.5.27(typescript@5.7.3)
     optionalDependencies:
-      axios: 1.18.1
+      axios: 1.20.0
       focus-trap: 7.8.0
       qrcode: 1.5.1
       sortablejs: 1.14.0
@@ -15424,7 +15424,7 @@ snapshots:
     dependencies:
       possible-typed-array-names: 1.1.0
 
-  axios@1.18.1:
+  axios@1.20.0:
     dependencies:
       follow-redirects: 1.16.0
       form-data: 4.0.6
@@ -18795,7 +18795,7 @@ snapshots:
 
   mailgun.js@8.2.2:
     dependencies:
-      axios: 1.18.1
+      axios: 1.20.0
       base-64: 1.0.0
       url-join: 4.0.1
     transitivePeerDependencies:
@@ -22239,7 +22239,7 @@ snapshots:
       terser: 5.46.0
       yaml: 2.8.3
 
-  vitepress@1.6.4(@algolia/client-search@5.48.1)(@types/node@25.2.3)(axios@1.18.1)(postcss@8.5.26)(qrcode@1.5.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.83.0)(search-insights@2.17.3)(sortablejs@1.14.0)(terser@5.46.0)(typescript@5.7.3)(yaml@2.8.3):
+  vitepress@1.6.4(@algolia/client-search@5.48.1)(@types/node@25.2.3)(axios@1.20.0)(postcss@8.5.26)(qrcode@1.5.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.83.0)(search-insights@2.17.3)(sortablejs@1.14.0)(terser@5.46.0)(typescript@5.7.3)(yaml@2.8.3):
     dependencies:
       '@docsearch/css': 3.8.2
       '@docsearch/js': 3.8.2(@algolia/client-search@5.48.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)
@@ -22252,7 +22252,7 @@ snapshots:
       '@vue/devtools-api': 7.7.9
       '@vue/shared': 3.5.28
       '@vueuse/core': 12.8.2(typescript@5.7.3)
-      '@vueuse/integrations': 12.8.2(axios@1.18.1)(focus-trap@7.8.0)(qrcode@1.5.1)(sortablejs@1.14.0)(typescript@5.7.3)
+      '@vueuse/integrations': 12.8.2(axios@1.20.0)(focus-trap@7.8.0)(qrcode@1.5.1)(sortablejs@1.14.0)(typescript@5.7.3)
       focus-trap: 7.8.0
       mark.js: 8.11.1
       minisearch: 7.2.0
