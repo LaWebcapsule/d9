@@ -1,5 +1,13 @@
 # @wbce-d9/api
 
+## 12.5.8
+
+### Patch Changes
+
+- 1136ffc: Keep a file's title, description and tags when the file is replaced
+- 50beac9: Pin the transitive `uuid` security override to `^11.1.1` so CommonJS dependencies (e.g. the MSSQL driver's
+  `@azure/msal-node`) can still load it
+
 ## 12.5.7
 
 ### Patch Changes
