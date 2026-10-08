@@ -106,8 +106,9 @@ formatting styles, or anything else.
 
 ## Environments
 
-Environments (e.g., dev, staging, prod) are tracked as separate Project instances. You can then use schema/content
-migrations to promote data between them.
+Environments (e.g., dev, staging, prod) are tracked as separate Project instances. You can then use
+[schema/content migrations](/guides/migration/index) to promote data between them. The
+[projen template](/guides/migration/projen) also promotes roles, permissions, reference tables and files.
 
 ## Extensions
 

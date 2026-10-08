@@ -29,6 +29,21 @@ docker run -d \
 
 Once running, open `http://localhost:8055` in your browser and log in with the admin credentials you set above.
 
+### With projen (opinionated but more durable way)
+
+The [projen template](/self-hosted/projen-d9) scaffolds a complete d9 project (Docker Compose stack with PostgreSQL and
+Redis, extensions folder, Dockerfile) and keeps your configuration as code: schema, roles, permissions (also as Cedar
+policies), reference tables and shared files are saved in your repository and applied to your other environments. See
+[Migrate Your Project with Projen](/guides/migration/projen).
+
+```bash
+npx projen new --from @wbce/projen-d9
+npx projen first-run
+```
+
+Once running, open `http://localhost:8055` and log in with `admin@example.com` / `totototo`. The template currently
+assumes a PostgreSQL database.
+
 ### With npm
 
 Install d9 as an npm package:

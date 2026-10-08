@@ -87,6 +87,19 @@ To create a new extension:
 npm init @wbce-d9/directus-extension@latest
 ```
 
+## Config and schema as code across environments
+
+We also deliver [`@wbce/projen-d9`](https://www.npmjs.com/package/@wbce/projen-d9), a projen template (Apache 2.0 license) that improves the developer experience around d9. Its `d9-plumbing` CLI saves your d9 configuration into your repository and applies it to your other environments:
+
+- **Roles and permissions** are saved with the schema, unlike `npx d9 schema snapshot`, along with flows, dashboards, settings and the other configuration tables.
+- **Reference tables** can be added to the save.
+- **Permissions are transposed to Cedar** policies, readable and reviewable in pull requests, and editable.
+- **Shared files** (the `common` folder) are transferred between environments.
+
+With this, your d9 configuration is completely migratable from one environment to another. See the [migration guide](https://d9.webcapsule.io/guides/migration/projen.html).
+
+For now, the database commands assume PostgreSQL; support for other databases could be added in the future.
+
 ## Links
 
 - **[Documentation](https://d9.webcapsule.io/getting-started/introduction.html)** — Full reference and guides
