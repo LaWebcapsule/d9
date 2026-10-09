@@ -1,0 +1,13 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    # Disable version updates: this entry only exists to configure security updates.
+    open-pull-requests-limit: 0
+    ignore:
+      # Upstream Directus 9 is a root devDependency kept only to surface its advisories
+      # (see .pnpmfile.cjs); never open PRs to bump it.
+      - dependency-name: directus
+      - dependency-name: '@directus/*'
