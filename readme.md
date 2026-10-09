@@ -94,7 +94,7 @@ We also deliver [`@wbce/projen-d9`](https://www.npmjs.com/package/@wbce/projen-d
 - **Roles and permissions** are saved with the schema, unlike `npx d9 schema snapshot`, along with flows, dashboards, settings and the other configuration tables.
 - **Reference tables** can be added to the save.
 - **Permissions are transposed to Cedar** policies, readable and reviewable in pull requests, and editable.
-- **Shared files** (the `common` folder) are transferred between environments.
+- **Shared files** (the `d9-plumbing-common` folder) are transferred between environments.
 
 With this, your d9 configuration is completely migratable from one environment to another. See the [migration guide](https://d9.webcapsule.io/guides/migration/projen.html).
 

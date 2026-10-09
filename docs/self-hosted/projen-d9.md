@@ -189,7 +189,7 @@ keys) the same way you would any other d9 container. See the
 `d9-plumbing` goes further than `npx d9 schema snapshot`: besides collections, fields
 and relations, it saves **roles and permissions** and the other d9 configuration
 tables (flows, dashboards, settings...), the **reference tables** you list, and the
-files of the shared `common` folder. The full workflow is described in
+files of the shared `d9-plumbing-common` folder. The full workflow is described in
 [Migrate Your Project with Projen](/guides/migration/projen).
 
 ### Save a schema
