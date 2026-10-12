@@ -1,5 +1,18 @@
 # @wbce-d9/api
 
+## 12.5.10
+
+### Patch Changes
+
+- [#398](https://github.com/LaWebcapsule/d9/pull/398)
+  [`7f20016`](https://github.com/LaWebcapsule/d9/commit/7f20016c7de2a65f3153412362bdedec5e26833c) - security: Fixed a
+  security issue where the OpenID login handler forwarded arbitrary request query parameters into the
+  (GHSA-qchf-7rv9-8wmm) authorization request, allowing a caller to override server-set protocol parameters
+  (`redirect_uri`, `state`, `nonce`, `code_challenge`) or inject others (`client_id`, `response_type`, `request_uri`).
+  Reserved protocol parameters are now stripped from forwarded query parameters, and the remaining ones are merged
+  before the server-set parameters so the latter always win. Non-protocol parameters such as Keycloak's `kc_action`
+  continue to work.
+
 ## 12.5.9
 
 ### Patch Changes
