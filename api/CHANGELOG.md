@@ -1,5 +1,15 @@
 # @wbce-d9/api
 
+## 12.5.9
+
+### Patch Changes
+
+- [#396](https://github.com/LaWebcapsule/d9/pull/396)
+  [`0f20df6`](https://github.com/LaWebcapsule/d9/commit/0f20df670e3cb534cf571f11d348340f1cb30d68) - security: include
+  role, admin/app access, share and share scope in the response cache key so cached responses are no
+  (GHSA-2mh4-2jfx-3h7r) longer shared between anonymous, share and role contexts that have no user id
+  (GHSA-2mh4-2jfx-3h7r)
+
 ## 12.5.8
 
 ### Patch Changes
