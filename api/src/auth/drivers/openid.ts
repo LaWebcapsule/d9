@@ -25,6 +25,24 @@ import { Url } from '../../utils/url.js';
 import { isRedirectAllowedOnLogin } from '../../utils/is-redirect-allowed-on-login.js';
 import { BaseOAuthDriver, type UserPayload } from './baseoauth.js';
 
+// Authorization-request parameters the caller must never control
+const RESERVED_AUTH_PARAMS = new Set([
+	'prompt',
+	'redirect',
+	'scope',
+	'access_type',
+	'code_challenge',
+	'code_challenge_method',
+	'state',
+	'nonce',
+	'redirect_uri',
+	'client_id',
+	'response_type',
+	'response_mode',
+	'request',
+	'request_uri',
+]);
+
 export class OpenIDAuthDriver extends BaseOAuthDriver {
 	client: Promise<oidc.Configuration>;
 	redirectUrl: string;
@@ -108,6 +126,7 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 			const paramsConfig = typeof this.config['params'] === 'object' ? this.config['params'] : {};
 
 			const params = {
+				...additionalParams,
 				scope: this.config['scope'] ?? 'openid profile email',
 				access_type: 'offline',
 				...paramsConfig,
@@ -117,7 +136,6 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 				state: codeChallenge,
 				nonce: codeChallenge,
 				redirect_uri: this.redirectUrl,
-				...additionalParams,
 			};
 
 			if (prompt) {
@@ -214,7 +232,7 @@ export function createOpenIDAuthRouter(providerName: string): Router {
 
 			const additionalParams = Object.fromEntries(
 				Object.entries(req.query)
-					.filter(([k, v]) => k !== 'prompt' && k !== 'redirect' && typeof v === 'string')
+					.filter(([k, v]) => RESERVED_AUTH_PARAMS.has(k) === false && typeof v === 'string')
 					.map(([k, v]) => [k, v as string])
 			);
 
