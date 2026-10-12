@@ -22,6 +22,6 @@ jobs:
           registry: https://registry.npmjs.org
 
       - name: create and publish release
-        uses: changesets/action@v1
+        uses: changesets/action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

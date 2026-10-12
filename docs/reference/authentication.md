@@ -283,6 +283,89 @@ mutation {
 
 ---
 
+## Register
+
+Create an account through public self-service registration. The account is created with status `draft` and can't log in
+until the link in the confirmation email is redeemed.
+
+::: tip Enabling registration
+
+These routes only exist when `AUTH_<PROVIDER>_ALLOW_PUBLIC_REGISTRATION` is set on a `local` provider, and answer `404`
+otherwise. See [Configuring auth providers](/self-hosted/config-options#authentication).
+
+:::
+
+### Request Body
+
+`email` **Required**\
+Email address for the new account.
+
+`password` **Required**\
+Password for the new account.
+
+`first_name`\
+First name of the user.
+
+`last_name`\
+Last name of the user.
+
+`verification_url`\
+Provide a custom url which the link in the email will lead to. The token will be passed as the `token` query parameter, and
+the page is expected to forward it to the [Verify Email](#verify-email) endpoint. Without it, the link points at that endpoint
+directly.\
+**Note**: You need to configure the
+[`AUTH_<PROVIDER>_REGISTER_URL_ALLOW_LIST` environment variable](/self-hosted/config-options#authentication) to enable
+this feature.
+
+### Response
+
+Always `204 No Content`, sent before the account is created. The response is the same whether or not the address already
+has an account, so it can't be used to find out which addresses are registered.
+
+Calling it again for an account still awaiting confirmation re-sends the email, at most once a minute.
+
+### REST API
+
+```
+POST /auth/login/register
+POST /auth/login/:provider/register
+```
+
+```json
+{
+	"email": "user@example.com",
+	"password": "d1r3ctu5",
+	"verification_url": "https://example.com/verify-email"
+}
+```
+
+---
+
+## Verify Email
+
+Activate an account created through [Register](#register), using the token from the confirmation email.
+
+### Query Parameters
+
+`token` **Required**\
+Registration token, as provided in the email sent by the register endpoint. Valid for 24 hours, and only once.
+
+### Response
+
+On success, a `302` redirect to `<PUBLIC_URL>/admin/users/<id>`.
+
+On failure, the error's `extensions.code` is `INVALID_TOKEN` (`403`) for a token that is invalid or already used, or
+`TOKEN_EXPIRED` (`401`) for one older than 24 hours.
+
+### REST API
+
+```
+GET /auth/login/register/verify-email?token=eyJh...KmUk
+GET /auth/login/:provider/register/verify-email?token=eyJh...KmUk
+```
+
+---
+
 ## List Auth Providers
 
 List all the configured auth providers.
