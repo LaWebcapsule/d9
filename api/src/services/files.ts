@@ -99,9 +99,11 @@ export class FilesService extends ItemsService {
 
 			payload.height ??= height ?? null;
 			payload.width ??= width ?? null;
-			payload.description ??= description ?? null;
-			payload.title ??= title ?? null;
-			payload.tags ??= tags ?? null;
+			// Only fill these from metadata the file actually carries. Setting them to null would wipe the stored values
+			// when a file is replaced with one that has none, e.g. a screenshot.
+			if (description) payload.description ??= description;
+			if (title) payload.title ??= title;
+			if (tags) payload.tags ??= tags;
 			payload.metadata ??= metadata ?? null;
 		}
 
