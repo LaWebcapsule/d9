@@ -64,6 +64,12 @@ project.
 
 ### Pull Requests
 
+#### Developer Certificate of Origin
+
+Every commit must be signed off (`git commit -s`) to certify the
+[Developer Certificate of Origin](https://developercertificate.org/), which states that you wrote the change or have the
+right to submit it under the project's license.
+
 #### Bug Fixes
 
 We treat Issues on the main repo as actionable items we want to get done. This also means that we welcome PRs for any
