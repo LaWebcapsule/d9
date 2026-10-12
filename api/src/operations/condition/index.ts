@@ -12,7 +12,12 @@ export default defineOperationApi<Options>({
 		const errors = validatePayload(filter, data, { requireAll: true });
 
 		if (errors.length > 0) {
-			throw errors;
+			// Joi errors hold the validated payload (_original, details[].context), which includes $env and
+			// $accountability: only keep the messages, as the rejection data can be returned by webhook flows
+			throw errors.map((error) => ({
+				message: error.message,
+				details: error.details.map(({ message, path, type }) => ({ message, path, type })),
+			}));
 		} else {
 			return null;
 		}

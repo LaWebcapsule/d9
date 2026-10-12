@@ -56,4 +56,33 @@ describe('Operations / Condition', () => {
 			expect(err[0]!.message).toBe(`"status" is required`);
 		}
 	});
+
+	test('does not leak the validated data in the thrown errors', () => {
+		const filter = {
+			status: {
+				_eq: true,
+			},
+		};
+
+		const data = {
+			status: false,
+			$env: { SECRET: 'secret' },
+			$accountability: { user: 'user-id', role: 'role-id' },
+		};
+
+		expect.assertions(2);
+
+		try {
+			config.handler({ filter }, { data } as any);
+		} catch (err: any) {
+			expect(err).toEqual([
+				{
+					message: `"status" must be [true]`,
+					details: [{ message: `"status" must be [true]`, path: ['status'], type: 'any.only' }],
+				},
+			]);
+
+			expect(JSON.stringify(err)).not.toMatch(/secret|user-id|role-id/);
+		}
+	});
 });
