@@ -1,10 +1,15 @@
 import { toArray } from '@wbce-d9/utils';
+import { URL } from 'url';
 import env from '../env.js';
 import isUrlAllowed from './is-url-allowed.js';
 
-function isUrlValid(string: unknown) {
+// Sentinel origin that never resolves (RFC 6761): relative paths keep it,
+// anything pointing elsewhere (`//x`, `/\x`, `https://x`) does not.
+const RELATIVE_BASE = 'https://relative.invalid';
+
+function isUrlValid(url: string, base?: string) {
 	try {
-		new URL(string as string);
+		new URL(url, base);
 		return true;
 	} catch (err) {
 		return false;
@@ -18,32 +23,24 @@ export function isRedirectAllowedOnLogin(redirect: unknown, provider: string): b
 	if (!redirect) return true; // empty redirect
 	if (typeof redirect !== 'string') return false; // invalid type
 
-	const publicUrl = env['PUBLIC_URL'] as string;
-
 	if (!isUrlValid(redirect)) {
-		if (!redirect.startsWith('//')) {
-			// should be a relative path like `/admin/test`
-			return true;
-		}
-
-		// domain without protocol `//example.com/test`
-		return false;
+		// relative path like `/admin/test`, allowed unless it resolves to another origin
+		return isUrlValid(redirect, RELATIVE_BASE) && new URL(redirect, RELATIVE_BASE).origin === RELATIVE_BASE;
 	}
 
-	const { protocol: redirectProtocol, hostname: redirectDomain } = new URL(redirect);
+	const { protocol: redirectProtocol, host: redirectHost } = new URL(redirect);
 
+	const publicUrl = env['PUBLIC_URL'] as string;
 	const envKey = `AUTH_${provider.toUpperCase()}_REDIRECT_ALLOW_LIST`;
 
 	if (envKey in env) {
 		if (isUrlAllowed(redirect, [...toArray(env[envKey] as string), publicUrl])) return true;
 	}
 
-	if (!isUrlValid(publicUrl)) {
-		return false;
-	}
+	if (!isUrlValid(publicUrl)) return false;
 
 	// allow redirects to the defined PUBLIC_URL
-	const { protocol: publicProtocol, hostname: publicDomain } = new URL(publicUrl);
+	const { protocol: publicProtocol, host: publicHost } = new URL(publicUrl);
 
-	return `${redirectProtocol}//${redirectDomain}` === `${publicProtocol}//${publicDomain}`;
+	return redirectProtocol === publicProtocol && redirectHost === publicHost;
 }

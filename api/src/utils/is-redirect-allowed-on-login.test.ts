@@ -56,6 +56,7 @@ test('isRedirectAllowedOnLogin returns true for relative paths', () => {
 	expect(isRedirectAllowedOnLogin('/admin/content', provider)).toBe(true);
 	expect(isRedirectAllowedOnLogin('../admin/content', provider)).toBe(true);
 	expect(isRedirectAllowedOnLogin('./admin/content', provider)).toBe(true);
+	expect(isRedirectAllowedOnLogin('my-protocol//example.com', provider)).toBe(true);
 
 	expect(isRedirectAllowedOnLogin('http://public.example.com/admin/content', provider)).toBe(true);
 });
@@ -65,4 +66,32 @@ test('isRedirectAllowedOnLogin returns false if missing protocol', () => {
 
 	expect(isRedirectAllowedOnLogin('//example.com/admin/content', provider)).toBe(false);
 	expect(isRedirectAllowedOnLogin('//user@password:example.com/', provider)).toBe(false);
+});
+
+test('isRedirectAllowedOnLogin returns false for backslash authority tricks', () => {
+	const provider = 'local';
+
+	expect(isRedirectAllowedOnLogin('/\\example.com', provider)).toBe(false);
+	expect(isRedirectAllowedOnLogin('\\/example.com', provider)).toBe(false);
+	expect(isRedirectAllowedOnLogin('\\\\example.com', provider)).toBe(false);
+	expect(isRedirectAllowedOnLogin('/\\/example.com', provider)).toBe(false);
+	expect(isRedirectAllowedOnLogin('/\t/example.com', provider)).toBe(false);
+	expect(isRedirectAllowedOnLogin(' //example.com', provider)).toBe(false);
+	expect(isRedirectAllowedOnLogin('\t//example.com', provider)).toBe(false);
+});
+
+test('isRedirectAllowedOnLogin returns false for a scheme without authority', () => {
+	const provider = 'local';
+
+	expect(isRedirectAllowedOnLogin('https:example.com', provider)).toBe(false);
+	expect(isRedirectAllowedOnLogin('https:/example.com', provider)).toBe(false);
+	expect(isRedirectAllowedOnLogin('http:example.com', provider)).toBe(false);
+	expect(isRedirectAllowedOnLogin('my-protocol://example.com', provider)).toBe(false);
+});
+
+test('isRedirectAllowedOnLogin returns false for a different port than PUBLIC_URL', () => {
+	const provider = 'local';
+
+	expect(isRedirectAllowedOnLogin('http://public.example.com:8443', provider)).toBe(false);
+	expect(isRedirectAllowedOnLogin('http://public.example.com:8443/admin', provider)).toBe(false);
 });
