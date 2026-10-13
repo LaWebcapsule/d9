@@ -192,6 +192,10 @@ export abstract class BaseOAuthDriver extends LocalAuthDriver {
 			} catch (e: any) {
 				throw this.handleError(e);
 			}
+		} else if (this.getConfig()['requireRefreshToken'] === false) {
+			// Opt-in: the provider issued no refresh token (e.g. Google when consent was already granted),
+			// so the Directus session is the only source of truth for this user
+			logger.debug(`[${this.getClientName()}] No refresh token stored, continuing (REQUIRE_REFRESH_TOKEN=false)`);
 		} else {
 			// If no auth connexion, throw user out
 			logger.error(`No [${this.getClientName()}] Session found`);
