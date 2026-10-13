@@ -1,0 +1,7 @@
+{
+	"id": "GHSA-22rr-f3p8-5gf8",
+	"ghsa": "GHSA-22rr-f3p8-5gf8",
+	"summary": "Directus affected by VM2 sandbox escape vulnerability",
+	"reason": "already fixed in PR #96",
+	"date": "2026-10-12"
+}
