@@ -7,6 +7,7 @@ import type { Knex } from 'knex';
 import { clone, cloneDeep, isNil, isObject, isPlainObject, omit, pick } from 'lodash-es';
 import { v4 as uuid } from 'uuid';
 import { parse as wktToGeoJSON } from 'wellknown';
+import { CREATE_ONLY_SPECIAL, UPDATE_ONLY_SPECIAL } from '../constants.js';
 import type { Helpers } from '../database/helpers/index.js';
 import { getHelpers } from '../database/helpers/index.js';
 import getDatabase from '../database/index.js';
@@ -199,6 +200,7 @@ export class PayloadService {
 			})
 		);
 
+		this.processSystemFields(processedPayload, action, specialFieldsInCollection);
 		this.processGeometries(processedPayload, action);
 		this.processDates(processedPayload, action);
 
@@ -223,6 +225,38 @@ export class PayloadService {
 		}
 
 		return processedPayload[0]!;
+	}
+
+	/**
+	 * Keeps the server in sole control of the fields it derives itself: rejects a write to a
+	 * `system-generated` field, and strips an audit field submitted on the action that doesn't generate it.
+	 */
+	private processSystemFields(
+		payloads: Partial<Item>[],
+		action: Action,
+		specialFields: [string, SchemaOverview['collections'][string]['fields'][string]][]
+	): void {
+		if (action !== 'create' && action !== 'update') return;
+
+		// A transformer only generates on its own action and lets the submitted value through on the other
+		const forgeableSpecials = action === 'create' ? UPDATE_ONLY_SPECIAL : CREATE_ONLY_SPECIAL;
+
+		for (const [name, field] of specialFields) {
+			const isLocked = Boolean(this.accountability) && field.special.includes('system-generated');
+			const isForgeable = field.special.some((special) => forgeableSpecials.includes(special));
+			// stripping the key would leave a NOT NULL column with nothing to fall back on
+			const columnNeedsValue = action === 'create' && !field.nullable && field.defaultValue === null;
+			const shouldStrip = isForgeable && !columnNeedsValue;
+
+			// most specials ('uuid', 'cast-json', 'm2o'...) are neither, so don't walk the records at all
+			if (!isLocked && !shouldStrip) continue;
+
+			for (const payload of payloads) {
+				if (!(name in payload)) continue;
+				if (isLocked) throw new ForbiddenException();
+				if (shouldStrip) delete payload[name];
+			}
+		}
 	}
 
 	processAggregates(payload: Partial<Item>[]) {

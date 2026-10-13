@@ -161,6 +161,8 @@ fields:
     width: half
     display: datetime
     readonly: true
+    special:
+      - system-generated
     display_options:
       relative: true
 
