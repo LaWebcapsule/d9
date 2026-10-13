@@ -2,5 +2,5 @@
 '@wbce-d9/api': patch
 ---
 
-security: strip the validated payload from condition operation errors so webhook flows returning the last operation data
-no longer leak `$env`, `$accountability` and previous operations data (GHSA-fm3h-p9wm-h74h)
+security: condition operation errors now only contain the path and type of each failed rule, so webhook flows returning
+the last operation data no longer leak `$env`, `$accountability` or other flow data (GHSA-fm3h-p9wm-h74h)

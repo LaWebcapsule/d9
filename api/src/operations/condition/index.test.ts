@@ -28,13 +28,12 @@ describe('Operations / Condition', () => {
 			status: false,
 		};
 
-		expect.assertions(2); // ensure catch block is reached
+		expect.assertions(1); // ensure catch block is reached
 
 		try {
 			config.handler({ filter }, { data } as any);
 		} catch (err: any) {
-			expect(err).toHaveLength(1);
-			expect(err[0]!.message).toBe(`"status" must be [true]`);
+			expect(err).toEqual([{ path: ['status'], type: 'any.only' }]);
 		}
 	});
 
@@ -47,17 +46,16 @@ describe('Operations / Condition', () => {
 
 		const data = {};
 
-		expect.assertions(2); // ensure catch block is reached
+		expect.assertions(1); // ensure catch block is reached
 
 		try {
 			config.handler({ filter }, { data } as any);
 		} catch (err: any) {
-			expect(err).toHaveLength(1);
-			expect(err[0]!.message).toBe(`"status" is required`);
+			expect(err).toEqual([{ path: ['status'], type: 'any.required' }]);
 		}
 	});
 
-	test('does not leak the validated data in the thrown errors', () => {
+	test('does not leak the flow data in the thrown errors', () => {
 		const filter = {
 			status: {
 				_eq: true,
@@ -66,23 +64,45 @@ describe('Operations / Condition', () => {
 
 		const data = {
 			status: false,
-			$env: { SECRET: 'secret' },
+			$env: { SECRET: 'env-secret' },
 			$accountability: { user: 'user-id', role: 'role-id' },
+			$trigger: { headers: { authorization: 'Bearer token' } },
 		};
 
-		expect.assertions(2);
+		expect.assertions(1); // ensure catch block is reached
 
 		try {
 			config.handler({ filter }, { data } as any);
 		} catch (err: any) {
-			expect(err).toEqual([
-				{
-					message: `"status" must be [true]`,
-					details: [{ message: `"status" must be [true]`, path: ['status'], type: 'any.only' }],
-				},
-			]);
+			expect(JSON.stringify(err)).not.toMatch(/env-secret|user-id|role-id|token/);
+		}
+	});
 
-			expect(JSON.stringify(err)).not.toMatch(/secret|user-id|role-id/);
+	test.each([
+		['_regex', '^pk_'],
+		['_starts_with', 'pk_'],
+		['_nstarts_with', 'sk_'],
+		['_ends_with', '_pk'],
+		['_nends_with', '_123'],
+	])('does not leak the tested value with %s', (operator, compareValue) => {
+		const filter = {
+			$env: {
+				SECRET: {
+					[operator]: compareValue,
+				},
+			},
+		};
+
+		const data = {
+			$env: { SECRET: 'sk_live_123' },
+		};
+
+		expect.assertions(1); // ensure catch block is reached
+
+		try {
+			config.handler({ filter }, { data } as any);
+		} catch (err: any) {
+			expect(JSON.stringify(err)).not.toContain('sk_live_123');
 		}
 	});
 });
