@@ -306,6 +306,7 @@ All the `DB_POOL__` prefixed options are passed to [`tarn.js`](https://github.co
 | `CONTENT_SECURITY_POLICY_*`      | Custom overrides for the Content-Security-Policy header. See [helmet's documentation on `helmet.contentSecurityPolicy()`](https://helmetjs.github.io) for more information.                          | --                        |
 | `HSTS_ENABLED`                   | Enable the Strict-Transport-Security policy header.                                                                                                                                                  | `false`                   |
 | `HSTS_*`                         | Custom overrides for the Strict-Transport-Security header. See [helmet's documentation](https://helmetjs.github.io) for more information.                                                            | --                        |
+| `CROSS_ORIGIN_OPENER_POLICY`     | Value of the Cross-Origin-Opener-Policy header: `same-origin`, `same-origin-allow-popups` (for extensions opening cross-origin popups) or `unsafe-none`.                                             | `same-origin`             |
 
 ::: tip Cookie Strictness
 

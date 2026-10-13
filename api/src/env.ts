@@ -67,6 +67,7 @@ const allowedEnvironmentVars = [
 	'IMPORT_IP_DENY_LIST',
 	'CONTENT_SECURITY_POLICY_.+',
 	'HSTS_.+',
+	'CROSS_ORIGIN_OPENER_POLICY',
 	// hashing
 	'HASH_.+',
 	'X_POWERED_BY_ENABLED',
@@ -307,6 +308,8 @@ const defaults: Record<string, any> = {
 	IP_CUSTOM_HEADER: false,
 
 	IMPORT_IP_DENY_LIST: ['0.0.0.0', '169.254.169.254'],
+
+	CROSS_ORIGIN_OPENER_POLICY: 'same-origin',
 
 	SERVE_APP: true,
 	SERVE_GRAPHQL: true,
