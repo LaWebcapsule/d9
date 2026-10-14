@@ -162,5 +162,21 @@ describe('/auth/login/saml', () => {
 				});
 			});
 		});
+
+		describe('when a redirect to another origin is provided', () => {
+			describe('rejects it without redirecting off-site', () => {
+				it.each(vendors)('%s', async (vendor) => {
+					// Action
+					const acsResponse = await request(getUrl(vendor)).post('/auth/login/saml/acs').send({
+						SAMLResponse: 'invalid',
+						RelayState: 'https://attacker.example',
+					});
+
+					// Assert
+					expect(acsResponse.statusCode).toBe(400);
+					expect(acsResponse.headers['location']).toBeUndefined();
+				});
+			});
+		});
 	});
 });
