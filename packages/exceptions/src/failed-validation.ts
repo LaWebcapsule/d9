@@ -20,7 +20,7 @@ export class FailedValidationException extends BaseException {
 
 		// eq | in | null | empty
 		if (joiType.endsWith('only')) {
-			if (error.context?.['valids'].length > 1) {
+			if (error.context?.['valids'].length !== 1) {
 				extensions.type = 'in';
 				extensions.valid = error.context?.['valids'];
 			} else {
