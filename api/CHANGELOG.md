@@ -1,5 +1,26 @@
 # @wbce-d9/api
 
+## 12.5.11
+
+### Patch Changes
+
+- [#413](https://github.com/LaWebcapsule/d9/pull/413)
+  [`5b79c1f`](https://github.com/LaWebcapsule/d9/commit/5b79c1f3135c5e1bd18ef1d3a7fcbe4e17e9bb6e) - security: Fixed a
+  security issue (CVE-2026-35408) where responses were sent without a `Cross-Origin-Opener-Policy` header, so a
+  (GHSA-8m32-p958-jg99) cross-origin page that opened the login page could keep a reference to its window and tamper
+  with the SSO flow. The header is now set to `same-origin` by default and can be changed with
+  `CROSS_ORIGIN_OPENER_POLICY` (`same-origin-allow-popups` or `unsafe-none`).
+
+- [#400](https://github.com/LaWebcapsule/d9/pull/400)
+  [`9ba2f5e`](https://github.com/LaWebcapsule/d9/commit/9ba2f5e287bc36e6d94dbf1c916e6f2daa066f03) - security: condition
+  operation errors now only contain the path and type of each failed rule, so webhook flows returning
+  (GHSA-fm3h-p9wm-h74h) the last operation data no longer leak `$env`, `$accountability` or other flow data
+  (GHSA-fm3h-p9wm-h74h)
+
+- [#411](https://github.com/LaWebcapsule/d9/pull/411)
+  [`e0655b1`](https://github.com/LaWebcapsule/d9/commit/e0655b1bf7b332620e22022d116deff1b163977b) - security: Harden the
+  login redirect validator against backslash and port bypasses (GHSA-f42p-ffpq-jh5c)
+
 ## 12.5.10
 
 ### Patch Changes
