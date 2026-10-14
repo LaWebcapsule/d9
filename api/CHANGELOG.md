@@ -1,5 +1,37 @@
 # @wbce-d9/api
 
+## 12.6.0
+
+### Minor Changes
+
+- [#418](https://github.com/LaWebcapsule/d9/pull/418)
+  [`cd9638d`](https://github.com/LaWebcapsule/d9/commit/cd9638dbf8b3f911aca3f1aaf57dca32027cf661) - security: file
+  import from URL now only connects to public IP addresses, checked on every redirect hop through (GHSA-j5h6-vqc3-phqh,
+  GHSA-wv3h-5fx7-966h, GHSA-xhgj-x4mj-6c93, CVE-2026-61835, CVE-2026-35409) request-filtering-agent, and follows at most
+  5 redirects (GHSA-xhgj-x4mj-6c93). Importing files from private IP addresses now fails unless they are listed in the
+  new `IMPORT_FILE_IP_ALLOW_LIST` (IPs or CIDR ranges).
+
+  `IMPORT_IP_DENY_LIST`'s `0.0.0.0` entry now also denies IPv6 local interface addresses (e.g. `::1`), as documented.
+  This applies to webhooks and Flows too: requests to `localhost` resolving to `::1` are now denied.
+
+### Patch Changes
+
+- [#414](https://github.com/LaWebcapsule/d9/pull/414)
+  [`fbaca91`](https://github.com/LaWebcapsule/d9/commit/fbaca91348958934721cb67936c92ac26b97a2dc) - security: Fixed an
+  open redirect in the SAML ACS endpoint: `RelayState` is now validated against the allowed login redirects
+  (GHSA-qmqf-6vxq-c7f4) before redirecting, on both the success and error paths
+- Updated dependencies
+  [[`8a59add`](https://github.com/LaWebcapsule/d9/commit/8a59add5b9b0039cc77f0a00f0f6874a16531100)]:
+  - @wbce-d9/utils@10.0.4
+  - @wbce-d9/exceptions@10.0.1
+  - @wbce-d9/app@11.0.1
+  - @wbce-d9/extensions-sdk@10.0.5
+  - @wbce-d9/storage-driver-azure@10.0.4
+  - @wbce-d9/storage-driver-cloudinary@10.0.5
+  - @wbce-d9/storage-driver-gcs@10.0.4
+  - @wbce-d9/storage-driver-local@10.0.4
+  - @wbce-d9/storage-driver-s3@10.0.4
+
 ## 12.5.11
 
 ### Patch Changes
