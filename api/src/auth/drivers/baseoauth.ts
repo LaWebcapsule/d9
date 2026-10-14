@@ -80,11 +80,17 @@ export abstract class BaseOAuthDriver extends LocalAuthDriver {
 				{ database: getDatabase(), schema: this.schema, accountability: null }
 			);
 
-			// Update user to update refresh_token and other properties that might have changed
-			await this.getUserService().updateOne(userId, {
-				...updatedUserPayload,
-				auth_data: userPayload.auth_data ?? null,
-			});
+			// Update user to update refresh_token and other properties that might have changed.
+			// Keep the stored refresh_token if the provider didn't issue a new one (e.g. Google when consent was
+			// already granted): refresh() still checks it against the provider
+			const updateUserPayload = userPayload.auth_data
+				? { ...updatedUserPayload, auth_data: userPayload.auth_data }
+				: updatedUserPayload;
+
+			// Skip empty updates, they crash (#127)
+			if (Object.keys(updateUserPayload).length > 0) {
+				await this.getUserService().updateOne(userId, updateUserPayload);
+			}
 
 			return userId;
 		}
@@ -197,9 +203,10 @@ export abstract class BaseOAuthDriver extends LocalAuthDriver {
 			// so the Directus session is the only source of truth for this user
 			logger.debug(`[${this.getClientName()}] No refresh token stored, continuing (REQUIRE_REFRESH_TOKEN=false)`);
 		} else {
-			// If no auth connexion, throw user out
+			// If no auth connexion, throw user out. On login, the callback retries once with prompt=consent
+			// so the provider can issue a refresh_token
 			logger.error(`No [${this.getClientName()}] Session found`);
-			throw new InvalidCredentialsException();
+			throw new InvalidTokenException();
 		}
 	}
 

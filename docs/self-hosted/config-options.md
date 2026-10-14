@@ -838,7 +838,8 @@ d9 users "External Identifier".
 
 <sup>[3]</sup> By default a user can only stay logged in through an external provider while d9 holds a refresh token
 for them, which is checked against the provider on every login and session renewal. Some providers only issue a
-refresh token in specific situations (for example Google, only when it shows the consent screen). Set this option to
+refresh token in specific situations (for example Google, only when it shows the consent screen). When none is stored at
+login, d9 sends the user back to the provider once with `prompt=consent` so it can issue one. Set this option to
 `false` to let such users log in without one: the d9 session (`REFRESH_TOKEN_TTL`) is then the only thing that keeps them
 logged in, so disabling or revoking the user at the provider is not noticed until that session expires. If a refresh
 token _is_ stored, it is still checked against the provider and a revoked token still ends the session. Suspend the

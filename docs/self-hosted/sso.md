@@ -75,11 +75,11 @@ AUTH_GOOGLE_DEFAULT_ROLE_ID="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX" # Replace thi
 
 8. Now you can see a nice functional `Login with Google` button on d9 login page.
 
-::: tip Logins rejected with "No [OpenID] Session found"
+::: tip Consent screen and refresh tokens
 
 Google only returns a refresh token when it shows the consent screen. If the Google account already granted access to
-this OAuth client before, d9 receives no refresh token and rejects the login. Either force the consent screen with
-`AUTH_GOOGLE_PARAMS__PROMPT="consent"`, or accept logins without a refresh token with
+this OAuth client before and d9 has no refresh token stored for the user, d9 sends the user back to Google once with the
+consent screen to get one. To skip that screen, accept logins without a refresh token with
 `AUTH_GOOGLE_REQUIRE_REFRESH_TOKEN="false"` (see the trade-off in
 [Configuration Options](/self-hosted/config-options#sso-oauth2-and-openid)).
 

@@ -2,7 +2,7 @@ import * as oidc from 'openid-client';
 import type { Knex } from 'knex';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import type { SchemaOverview } from '@wbce-d9/types';
-import { InvalidCredentialsException, InvalidTokenException } from '../../exceptions/index.js';
+import { InvalidTokenException } from '../../exceptions/index.js';
 import logger from '../../logger.js';
 import type { User } from '../../types/index.js';
 import { OpenIDAuthDriver } from './openid.js';
@@ -23,6 +23,15 @@ vi.mock('../../env', () => {
 });
 
 const { updateOne } = vi.hoisted(() => ({ updateOne: vi.fn() }));
+
+vi.mock('../../database/index.js', () => ({
+	default: vi.fn(),
+}));
+
+// The filter hooks return the payload unchanged
+vi.mock('../../emitter.js', () => ({
+	default: { emitFilter: vi.fn(async (_event: string, payload: any) => payload) },
+}));
 
 vi.mock('../../services/users.js', () => ({
 	UsersService: class {
@@ -92,15 +101,15 @@ describe('BaseOAuthDriver.refresh / login without a stored refresh token', () =>
 	test('rejects by default (option unset)', async () => {
 		const driver = createDriver();
 
-		await expect(driver.refresh(createUser(null))).rejects.toBeInstanceOf(InvalidCredentialsException);
-		await expect(driver.login(createUser(null))).rejects.toBeInstanceOf(InvalidCredentialsException);
+		await expect(driver.refresh(createUser(null))).rejects.toBeInstanceOf(InvalidTokenException);
+		await expect(driver.login(createUser(null))).rejects.toBeInstanceOf(InvalidTokenException);
 		expect(logger.error).toHaveBeenCalledWith('No [OpenID] Session found');
 	});
 
 	test('rejects when requireRefreshToken is true', async () => {
 		const driver = createDriver({ requireRefreshToken: true });
 
-		await expect(driver.refresh(createUser(null))).rejects.toBeInstanceOf(InvalidCredentialsException);
+		await expect(driver.refresh(createUser(null))).rejects.toBeInstanceOf(InvalidTokenException);
 	});
 
 	test('resolves without contacting the provider when requireRefreshToken is false', async () => {
@@ -155,5 +164,61 @@ describe('BaseOAuthDriver.refresh with a stored refresh token (default)', () => 
 
 		expect(oidc.refreshTokenGrant).toHaveBeenCalledWith(expect.anything(), 'stored-refresh-token');
 		expect(updateOne).not.toHaveBeenCalled();
+	});
+});
+
+describe('BaseOAuthDriver.getUserID for an existing user', () => {
+	const CALLBACK_PAYLOAD = { code: 'code', codeVerifier: 'verifier', state: 'state' };
+
+	function mockProviderResponse(driver: OpenIDAuthDriver, authData: string | undefined) {
+		vi.spyOn(driver, 'fetchUserId').mockResolvedValue('user-1');
+
+		vi.spyOn(driver, 'getTokenSetAndUserInfo').mockResolvedValue([
+			{ access_token: 'access-token' } as any,
+			{},
+			{
+				provider: 'myidp',
+				first_name: 'Ada',
+				last_name: 'Lovelace',
+				email: 'ada@example.com',
+				external_identifier: 'ada@example.com',
+				role: 'role-1',
+				auth_data: authData,
+			},
+		]);
+	}
+
+	test('stores the refresh token issued by the provider', async () => {
+		const driver = createDriver();
+		mockProviderResponse(driver, JSON.stringify({ refreshToken: 'new-token' }));
+
+		await expect(driver.getUserID(CALLBACK_PAYLOAD)).resolves.toBe('user-1');
+
+		expect(updateOne).toHaveBeenCalledWith('user-1', {
+			auth_data: JSON.stringify({ refreshToken: 'new-token' }),
+		});
+	});
+
+	test('keeps the stored refresh token when the provider issued none', async () => {
+		const driver = createDriver();
+		mockProviderResponse(driver, undefined);
+
+		await expect(driver.getUserID(CALLBACK_PAYLOAD)).resolves.toBe('user-1');
+
+		// No update at all: auth_data is not overwritten with null, and an empty update would crash (#127)
+		expect(updateOne).not.toHaveBeenCalled();
+	});
+
+	test('keeps the stored refresh token while updating the profile (updateUserOnLogin)', async () => {
+		const driver = createDriver({ updateUserOnLogin: true });
+		mockProviderResponse(driver, undefined);
+
+		await expect(driver.getUserID(CALLBACK_PAYLOAD)).resolves.toBe('user-1');
+
+		expect(updateOne).toHaveBeenCalledWith('user-1', {
+			first_name: 'Ada',
+			last_name: 'Lovelace',
+			email: 'ada@example.com',
+		});
 	});
 });
