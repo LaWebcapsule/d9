@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Filter } from '@wbce-d9/types';
+import { parseFilter } from './parse-filter.js';
 import { validatePayload } from './validate-payload.js';
 
 describe('validatePayload', () => {
@@ -98,5 +99,15 @@ describe('validatePayload', () => {
 
 		expect(errors).toHaveLength(1);
 		expect(errors[0]!.message).toBe(`"field" is required`);
+	});
+
+	it('rejects the payload when _in resolves to an empty list from $CURRENT_USER', () => {
+		const mockFilter = parseFilter(
+			{ role: { _in: '$CURRENT_USER.user_roles.role' } } as Filter,
+			{ user: 'user', role: null },
+			{ $CURRENT_USER: { user_roles: [] } as any }
+		) as Filter;
+
+		expect(validatePayload(mockFilter, { role: 'admin' })).toHaveLength(1);
 	});
 });
