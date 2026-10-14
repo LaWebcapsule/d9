@@ -1,9 +1,9 @@
-import { BlockList } from 'net';
+import { BlockList, isIP } from 'net';
 import os from 'node:os';
 import { getEnv } from '../env.js';
 import logger from '../logger.js';
 
-export const validateIP = async (ip: string, url: string) => {
+export const validateIP = (ip: string, url: string) => {
 	const env = getEnv();
 	const ipDenyList = env['IMPORT_IP_DENY_LIST'] || [];
 
@@ -66,7 +66,7 @@ export const validateIP = async (ip: string, url: string) => {
 							continue;
 						}
 
-						blockList.addSubnet(network, prefixLength);
+						blockList.addSubnet(network, prefixLength, isIP(network) === 6 ? 'ipv6' : 'ipv4');
 					} catch (error) {
 						// Log but don't fail for invalid local interface CIDR
 						logger.warn(
@@ -81,7 +81,7 @@ export const validateIP = async (ip: string, url: string) => {
 	}
 
 	// Check if the IP is blocked
-	if (blockList.check(ip)) {
+	if (blockList.check(ip, isIP(ip) === 6 ? 'ipv6' : 'ipv4')) {
 		throw new Error(`Requested URL "${url}" resolves to a denied IP address`);
 	}
 };
