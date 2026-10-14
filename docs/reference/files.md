@@ -436,7 +436,9 @@ Supports all [global query parameters](/reference/query).
 ### Request Body
 
 `url` **Required**\
-The URL to download the file from.
+The URL to download the file from. Only `http` and `https` URLs pointing to public IP addresses are allowed, including
+after redirects (at most 5). Private, loopback and link-local addresses are denied unless listed in
+[`IMPORT_FILE_IP_ALLOW_LIST`](/self-hosted/config-options#security).
 
 `data`\
 Any of [the file object](#the-file-object)'s properties.

@@ -16,7 +16,7 @@ import emitter from '../emitter.js';
 import env from '../env.js';
 import { ForbiddenException, InvalidPayloadException, ServiceUnavailableException } from '../exceptions/index.js';
 import logger from '../logger.js';
-import { getAxios } from '../request/index.js';
+import { getAxios, importRequestConfig } from '../request/index.js';
 import { getStorage } from '../storage/index.js';
 import type { AbstractServiceOptions, File, Metadata, MutationOptions, PrimaryKey } from '../types/index.js';
 import { parseIptc, parseXmp } from '../utils/parse-image-metadata.js';
@@ -277,6 +277,7 @@ export class FilesService extends ItemsService {
 
 			fileResponse = await axios.get<Readable>(encodeURL(importURL), {
 				responseType: 'stream',
+				...importRequestConfig(),
 			});
 		} catch (err: any) {
 			logger.warn(err, `Couldn't fetch file from URL "${importURL}"`);
