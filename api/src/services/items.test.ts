@@ -1,4 +1,4 @@
-import type { CollectionsOverview, NestedDeepQuery } from '@wbce-d9/types';
+import type { CollectionsOverview, NestedDeepQuery, Permission } from '@wbce-d9/types';
 import type { Knex } from 'knex';
 import knex from 'knex';
 import { MockClient, Tracker, createTracker } from 'knex-mock-client';
@@ -1074,6 +1074,200 @@ describe('Integration Tests', () => {
 				expect(response).toStrictEqual(item.id);
 			}
 		);
+
+		describe('nested o2m item already linked to the item', () => {
+			const otherItemId = '6e7d4a2c-e62f-43b4-a343-9196f4b1783f';
+
+			const childItem = {
+				id: 'd66ec139-2655-48c1-9d9a-4753f98a9ee7',
+				title: 'Old title',
+				uploaded_by: item.id,
+			};
+
+			function permissions(schema: string, childReadFields: string[], childUpdateFields: string[]): Permission[] {
+				return [
+					{
+						id: 1,
+						role: 'admin',
+						collection: schemas[schema].tables[0],
+						action: 'read',
+						permissions: {},
+						validation: {},
+						presets: {},
+						fields: ['*'],
+					},
+					{
+						id: 2,
+						role: 'admin',
+						collection: schemas[schema].tables[0],
+						action: 'update',
+						permissions: {},
+						validation: {},
+						presets: {},
+						fields: ['*'],
+					},
+					{
+						id: 3,
+						role: 'admin',
+						collection: schemas[schema].tables[1],
+						action: 'read',
+						permissions: {},
+						validation: {},
+						presets: {},
+						fields: childReadFields,
+					},
+					{
+						id: 4,
+						role: 'admin',
+						collection: schemas[schema].tables[1],
+						action: 'update',
+						permissions: {},
+						validation: {},
+						presets: {},
+						fields: childUpdateFields,
+					},
+				];
+			}
+
+			function mockStoredChild(childTable: string, uploadedBy: string) {
+				tracker.on.select((query) => query.sql.includes('1 = ?') || query.sql.includes('not in')).response([]);
+
+				tracker.on
+					.select((query) => query.sql.includes(`"${childTable}"."uploaded_by" = ?`))
+					.response((query) => (query.bindings.includes(uploadedBy) ? [{ id: childItem.id }] : []));
+
+				tracker.on.select(childTable).response([{ ...childItem, uploaded_by: uploadedBy }]);
+				tracker.on.update(childTable).response(childItem);
+			}
+
+			it.each(Object.keys(schemas))(
+				'%s updates it without writing the back-reference, even when that field is not updatable',
+				async (schema) => {
+					const childTable = schemas[schema].tables[1];
+
+					mockStoredChild(childTable, item.id);
+
+					const table = schemas[schema].tables[0];
+
+					tracker.on.select(table).response([item]);
+
+					const itemsService = new ItemsService(table, {
+						knex: db,
+						accountability: {
+							role: 'admin',
+							admin: false,
+							permissions: permissions(schema, ['*'], ['id', 'title']),
+						},
+						schema: schemas[schema].schema,
+					});
+
+					await itemsService.updateOne(
+						item.id,
+						{ items: [{ id: childItem.id, title: 'New title' }] },
+						{ emitEvents: false }
+					);
+
+					expect(tracker.history.update).toHaveLength(1);
+					expect(tracker.history.update[0]!.sql).toBe(`update "${childTable}" set "title" = ? where "id" in (?)`);
+					expect(tracker.history.update[0]!.bindings).toStrictEqual(['New title', childItem.id]);
+				}
+			);
+
+			it.each(Object.keys(schemas))('%s writes the back-reference when it belongs to another item', async (schema) => {
+				const childTable = schemas[schema].tables[1];
+
+				mockStoredChild(childTable, otherItemId);
+
+				const table = schemas[schema].tables[0];
+
+				tracker.on.select(table).response([item]);
+
+				const itemsService = new ItemsService(table, {
+					knex: db,
+					accountability: {
+						role: 'admin',
+						admin: false,
+						permissions: permissions(schema, ['*'], ['*']),
+					},
+					schema: schemas[schema].schema,
+				});
+
+				await itemsService.updateOne(
+					item.id,
+					{ items: { create: [], update: [{ id: childItem.id, title: 'New title' }], delete: [] } },
+					{ emitEvents: false }
+				);
+
+				expect(tracker.history.update[0]!.sql).toBe(
+					`update "${childTable}" set "title" = ?, "uploaded_by" = ? where "id" in (?)`
+				);
+
+				expect(tracker.history.update[0]!.bindings).toStrictEqual(['New title', item.id, childItem.id]);
+			});
+
+			it.each(Object.keys(schemas))(
+				'%s refuses to take it from another item when that field is not updatable',
+				async (schema) => {
+					const childTable = schemas[schema].tables[1];
+
+					mockStoredChild(childTable, otherItemId);
+
+					const table = schemas[schema].tables[0];
+
+					tracker.on.select(table).response([item]);
+
+					const itemsService = new ItemsService(table, {
+						knex: db,
+						accountability: {
+							role: 'admin',
+							admin: false,
+							permissions: permissions(schema, ['*'], ['id', 'title']),
+						},
+						schema: schemas[schema].schema,
+					});
+
+					await expect(
+						itemsService.updateOne(
+							item.id,
+							{ items: { create: [], update: [{ id: childItem.id, title: 'New title' }], delete: [] } },
+							{ emitEvents: false }
+						)
+					).rejects.toThrow("You don't have permission to access this.");
+
+					expect(tracker.history.update).toHaveLength(0);
+				}
+			);
+
+			it.each(Object.keys(schemas))('%s writes the back-reference when it is not readable', async (schema) => {
+				const childTable = schemas[schema].tables[1];
+
+				mockStoredChild(childTable, item.id);
+
+				const table = schemas[schema].tables[0];
+
+				tracker.on.select(table).response([item]);
+
+				const itemsService = new ItemsService(table, {
+					knex: db,
+					accountability: {
+						role: 'admin',
+						admin: false,
+						permissions: permissions(schema, ['id', 'title'], ['*']),
+					},
+					schema: schemas[schema].schema,
+				});
+
+				await itemsService.updateOne(
+					item.id,
+					{ items: { create: [], update: [{ id: childItem.id, title: 'New title' }], delete: [] } },
+					{ emitEvents: false }
+				);
+
+				expect(tracker.history.update[0]!.sql).toBe(
+					`update "${childTable}" set "title" = ?, "uploaded_by" = ? where "id" in (?)`
+				);
+			});
+		});
 	});
 
 	describe('updateBatch', () => {
