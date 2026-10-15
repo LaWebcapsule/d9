@@ -284,7 +284,9 @@ class FlowManager {
 	private async checkManualTriggerAccess(
 		flow: Flow,
 		collection: string,
-		data: unknown,
+		data: {
++	body?: { collection?: string; keys?: unknown };
++},
 		context: Record<string, unknown>
 	): Promise<void> {
 		const accountability = context['accountability'] as Accountability | null | undefined;
