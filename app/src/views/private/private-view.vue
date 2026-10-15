@@ -17,13 +17,12 @@
 					<slot name="navigation" />
 				</div>
 
-				<div
+				<panel-resize-handle
 					class="module-nav-resize-handle"
-					:class="{ active: handleHover }"
-					@pointerenter="handleHover = true"
-					@pointerleave="handleHover = false"
-					@pointerdown.self="onResizeHandlePointerDown"
-					@dblclick="resetModuleNavWidth"
+					edge="right"
+					:dragging="dragging"
+					@pointerdown="onResizeHandlePointerDown"
+					@reset="resetModuleNavWidth"
 				/>
 			</div>
 		</aside>
@@ -93,6 +92,7 @@ import NotificationDialogs from './components/notification-dialogs.vue';
 import NotificationsDrawer from './components/notifications-drawer.vue';
 import NotificationsGroup from './components/notifications-group.vue';
 import NotificationsPreview from './components/notifications-preview.vue';
+import PanelResizeHandle from './components/panel-resize-handle.vue';
 import ProjectInfo from './components/project-info.vue';
 import SidebarDetailGroup from './components/sidebar-detail-group.vue';
 
@@ -116,8 +116,7 @@ const { width: sidebarWidth } = useElementSize(sidebarEl);
 
 const moduleNavEl = ref<HTMLElement>();
 
-const { handleHover, onResizeHandlePointerDown, resetModuleNavWidth, onPointerMove, onPointerUp } =
-	useModuleNavResize();
+const { dragging, onResizeHandlePointerDown, resetModuleNavWidth, onPointerMove, onPointerUp } = useModuleNavResize();
 
 useEventListener(window, 'pointermove', onPointerMove);
 useEventListener(window, 'pointerup', onPointerUp);
@@ -158,7 +157,6 @@ router.afterEach(() => {
 useTitle(title);
 
 function useModuleNavResize() {
-	const handleHover = ref<boolean>(false);
 	const dragging = ref<boolean>(false);
 	const dragStartX = ref<number>(0);
 	const dragStartWidth = ref<number>(0);
@@ -199,7 +197,7 @@ function useModuleNavResize() {
 		{ immediate: true }
 	);
 
-	return { handleHover, onResizeHandlePointerDown, resetModuleNavWidth, onPointerMove, onPointerUp };
+	return { dragging, onResizeHandlePointerDown, resetModuleNavWidth, onPointerMove, onPointerUp };
 
 	function onResizeHandlePointerDown(event: PointerEvent) {
 		dragging.value = true;
@@ -305,31 +303,6 @@ function openSidebar(event: PointerEvent) {
 				height: calc(100% - 64px);
 				overflow-x: hidden;
 				overflow-y: auto;
-			}
-		}
-
-		.module-nav-resize-handle {
-			position: absolute;
-			top: 0;
-			right: -2px;
-			bottom: 0;
-			width: 4px;
-			z-index: 3;
-			background-color: var(--primary);
-			cursor: ew-resize;
-			opacity: 0;
-			transition: opacity var(--fast) var(--transition);
-			transition-delay: 0;
-			user-select: none;
-			touch-action: none;
-
-			&:hover,
-			&:active {
-				opacity: 1;
-			}
-
-			&.active {
-				transition-delay: var(--slow);
 			}
 		}
 
