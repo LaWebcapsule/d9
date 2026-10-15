@@ -285,7 +285,11 @@ class FlowManager {
 		flow: Flow,
 		collection: string,
 		data: unknown,
-		context: Record<string, unknown>
+		context: {
+			accountability?: Accountability;
+			database?: Knex;
+			schema?: SchemaOverview;
+		}
 	): Promise<void> {
 		const accountability = context['accountability'] as Accountability | null | undefined;
 
