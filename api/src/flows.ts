@@ -255,12 +255,16 @@ class FlowManager {
 						throw new exceptions.ForbiddenException();
 					}
 
-					if (flow.options['async']) {
-						this.executeFlow(flow, data, context);
-						return undefined;
-					} else {
-						return this.executeFlow(flow, data, context);
-					}
+					const run = () => {
+						if (flow.options['async']) {
+							this.executeFlow(flow, data, context);
+							return undefined;
+						} else {
+							return this.executeFlow(flow, data, context);
+						}
+					};
+
+					return this.checkManualTriggerAccess(flow, targetCollection, data, context).then(run);
 				};
 
 				// Default return to $last for manual
@@ -271,6 +275,47 @@ class FlowManager {
 		}
 
 		this.isLoaded = true;
+	}
+
+	/**
+	 * Manual flows act on behalf of the triggering user: make sure that user can see the flow itself
+	 * and read the collection / items passed in the payload before running it.
+	 */
+	private async checkManualTriggerAccess(
+		flow: Flow,
+		collection: string,
+		data: unknown,
+		context: Record<string, unknown>
+	): Promise<void> {
+		const accountability = context['accountability'] as Accountability | null | undefined;
+
+		if (!accountability) throw new exceptions.ForbiddenException();
+		if (accountability.admin) return;
+
+		const database = (context['database'] as Knex) ?? getDatabase();
+		const schema = (context['schema'] as SchemaOverview) ?? (await getSchema({ database }));
+
+		const flowsService = new FlowsService({ accountability, knex: database, schema });
+		await flowsService.readOne(flow.id, { fields: ['id'] });
+
+		const keys = (data as Record<string, any>)?.['body']?.keys;
+
+		if (keys === null || keys === undefined || (Array.isArray(keys) && keys.length === 0)) {
+			if (flow.options?.['requireSelection'] !== false) throw new exceptions.ForbiddenException();
+
+			const canReadCollection = accountability.permissions?.some(
+				(permission) => permission.collection === collection && permission.action === 'read'
+			);
+
+			if (!canReadCollection) throw new exceptions.ForbiddenException();
+
+			return;
+		}
+
+		if (!Array.isArray(keys)) throw new exceptions.ForbiddenException();
+
+		const authorizationService = new services.AuthorizationService({ accountability, knex: database, schema });
+		await authorizationService.checkAccess('read', collection, keys);
 	}
 
 	private async unload(): Promise<void> {
