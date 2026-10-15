@@ -35,7 +35,7 @@ type RawColumn = {
 	GENERATION_EXPRESSION: string;
 };
 
-export function rawColumnToColumn(rawColumn: RawColumn): Column {
+export function rawColumnToColumn(rawColumn: RawColumn, isIndexed = false): Column {
 	let dataType = rawColumn.COLUMN_TYPE.replace(/\(.*?\)/, '');
 
 	if (rawColumn.COLUMN_TYPE.startsWith('tinyint(1)')) {
@@ -54,6 +54,7 @@ export function rawColumnToColumn(rawColumn: RawColumn): Column {
 		is_generated: !!rawColumn.EXTRA?.endsWith('GENERATED'),
 		is_nullable: rawColumn.IS_NULLABLE === 'YES',
 		is_unique: rawColumn.COLUMN_KEY === 'UNI',
+		is_indexed: isIndexed,
 		is_primary_key: rawColumn.CONSTRAINT_NAME === 'PRIMARY' || rawColumn.COLUMN_KEY === 'PRI',
 		has_auto_increment: rawColumn.EXTRA === 'auto_increment',
 		foreign_key_column: rawColumn.REFERENCED_COLUMN_NAME,
@@ -233,6 +234,27 @@ export default class MySQL implements SchemaInspector {
 	}
 
 	/**
+	 * Columns (as "table.column") that are the only column of a non-unique, non-primary index.
+	 * Composite, unique and fulltext/spatial indexes are ignored.
+	 */
+	private async indexedColumns(table?: string): Promise<Set<string>> {
+		const query = this.knex
+			.select('TABLE_NAME')
+			.max({ COLUMN_NAME: 'COLUMN_NAME' })
+			.from('INFORMATION_SCHEMA.STATISTICS')
+			.where({ TABLE_SCHEMA: this.knex.client.database(), NON_UNIQUE: 1 })
+			.whereIn('INDEX_TYPE', ['BTREE', 'HASH'])
+			.groupBy('TABLE_NAME', 'INDEX_NAME')
+			.havingRaw('COUNT(*) = 1');
+
+		if (table) query.andWhere({ TABLE_NAME: table });
+
+		const records: { TABLE_NAME: string; COLUMN_NAME: string }[] = await query;
+
+		return new Set(records.map(({ TABLE_NAME, COLUMN_NAME }) => `${TABLE_NAME}.${COLUMN_NAME}`));
+	}
+
+	/**
 	 * Get the column info for all columns, columns in a given table, or a specific column.
 	 */
 	columnInfo(): Promise<Column[]>;
@@ -280,16 +302,19 @@ export default class MySQL implements SchemaInspector {
 			query.andWhere({ 'c.TABLE_NAME': table });
 		}
 
+		const indexed = await this.indexedColumns(table);
+		const toColumn = (raw: RawColumn) => rawColumnToColumn(raw, indexed.has(`${raw.TABLE_NAME}.${raw.COLUMN_NAME}`));
+
 		if (column) {
 			const rawColumn: RawColumn = await query.andWhere({ 'c.column_name': column }).first();
 
-			return rawColumnToColumn(rawColumn);
+			return toColumn(rawColumn);
 		}
 
 		const records: RawColumn[] = await query;
 
 		return records
-			.map(rawColumnToColumn)
+			.map(toColumn)
 			.sort((column) => +!column.foreign_key_column)
 			.filter((column, index, records) => {
 				const first = records.findIndex((_column) => {

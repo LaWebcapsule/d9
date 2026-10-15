@@ -718,6 +718,15 @@ export class FieldsService {
 			}
 		}
 
+		// A primary key or unique constraint already provides an index, a separate plain one would be redundant
+		if (field.schema?.is_indexed === true && !field.schema?.is_primary_key && field.schema?.is_unique !== true) {
+			if (!alter || !alter.is_indexed) {
+				column.index();
+			}
+		} else if (alter?.is_indexed === true && (field.schema?.is_indexed === false || field.schema?.is_unique === true)) {
+			table.dropIndex([field.field]);
+		}
+
 		if (alter) {
 			column.alter();
 		}

@@ -28,7 +28,7 @@ type RawColumn = {
 	IDENTITY_COLUMN: 'YES' | 'NO';
 };
 
-export function rawColumnToColumn(rawColumn: RawColumn): Column {
+export function rawColumnToColumn(rawColumn: RawColumn, isIndexed = false): Column {
 	const is_generated = rawColumn.VIRTUAL_COLUMN === 'YES';
 	const default_value = parseDefaultValue(rawColumn.DATA_DEFAULT);
 
@@ -44,6 +44,7 @@ export function rawColumnToColumn(rawColumn: RawColumn): Column {
 		is_generated: rawColumn.VIRTUAL_COLUMN === 'YES',
 		is_nullable: rawColumn.NULLABLE === 'Y',
 		is_unique: rawColumn.CONSTRAINT_TYPE === 'U',
+		is_indexed: isIndexed,
 		is_primary_key: rawColumn.CONSTRAINT_TYPE === 'P',
 		has_auto_increment: rawColumn.IDENTITY_COLUMN === 'YES',
 		foreign_key_column: rawColumn.REFERENCED_COLUMN_NAME,
@@ -244,6 +245,27 @@ export default class oracleDB implements SchemaInspector {
 	}
 
 	/**
+	 * Columns (as "table.column") that are the only column of a non-unique index.
+	 * Composite, unique (this includes primary keys) and special index types are ignored.
+	 */
+	private async indexedColumns(table?: string): Promise<Set<string>> {
+		const records: { TABLE_NAME: string; COLUMN_NAME: string }[] = await this.knex.raw(
+			`
+			SELECT "ic"."TABLE_NAME", MAX("ic"."COLUMN_NAME") "COLUMN_NAME"
+			FROM "USER_IND_COLUMNS" "ic"
+			INNER JOIN "USER_INDEXES" "i" ON "i"."INDEX_NAME" = "ic"."INDEX_NAME"
+			WHERE "i"."UNIQUENESS" = 'NONUNIQUE' AND "i"."INDEX_TYPE" = 'NORMAL'
+			${table ? 'AND "ic"."TABLE_NAME" = ?' : ''}
+			GROUP BY "ic"."TABLE_NAME", "ic"."INDEX_NAME"
+			HAVING COUNT(*) = 1
+			`,
+			table ? [table] : []
+		);
+
+		return new Set(records.map(({ TABLE_NAME, COLUMN_NAME }) => `${TABLE_NAME}.${COLUMN_NAME}`));
+	}
+
+	/**
 	 * Get the column info for all columns, columns in a given table, or a specific column.
 	 */
 	columnInfo(): Promise<Column[]>;
@@ -316,6 +338,9 @@ export default class oracleDB implements SchemaInspector {
 			query.andWhere({ 'c.TABLE_NAME': table });
 		}
 
+		const indexed = await this.indexedColumns(table);
+		const toColumn = (raw: RawColumn) => rawColumnToColumn(raw, indexed.has(`${raw.TABLE_NAME}.${raw.COLUMN_NAME}`));
+
 		if (column) {
 			const rawColumn = await query
 				.andWhere({
@@ -323,7 +348,7 @@ export default class oracleDB implements SchemaInspector {
 				})
 				.first();
 
-			return rawColumnToColumn(rawColumn);
+			return toColumn(rawColumn);
 		}
 
 		/*
@@ -338,7 +363,7 @@ export default class oracleDB implements SchemaInspector {
 
 		const records: RawColumn[] = await query;
 
-		return records.map(rawColumnToColumn);
+		return records.map(toColumn);
 	}
 
 	/**
