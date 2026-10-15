@@ -19,7 +19,9 @@ import type {
 	MutationOptions,
 	PrimaryKey,
 } from '../types/index.js';
+import logger from '../logger.js';
 import { generateHash } from '../utils/generate-hash.js';
+import { validateKeys } from '../utils/validate-keys.js';
 import { ItemsService } from './items.js';
 
 type Action = 'create' | 'read' | 'update';
@@ -618,6 +620,59 @@ export class PayloadService {
 				schema: this.schema,
 			});
 
+			const parentKey = parent || payload[currentPrimaryKeyField];
+
+			// Skip the back-reference of items already linked to this parent
+			const attachToParent = async (records: Partial<Item>[]): Promise<Partial<Item>[]> => {
+				const primaryKeys = records
+					.map((record) => {
+						return record[relatedPrimaryKeyField];
+					})
+					.filter((key) => {
+						return !isNil(key);
+					});
+
+				let linkedKeys: string[] = [];
+
+				if (primaryKeys.length > 0) {
+					validateKeys(this.schema, relation.collection, relatedPrimaryKeyField, primaryKeys);
+
+					try {
+						const linkedItems = await itemsService.readByQuery(
+							{
+								fields: [relatedPrimaryKeyField],
+								filter: {
+									[relatedPrimaryKeyField]: { _in: primaryKeys },
+									[relation.field]: { _eq: parentKey },
+								},
+								limit: -1,
+							},
+							{ emitEvents: false }
+						);
+
+						linkedKeys = linkedItems.map((item) => {
+							return String(item[relatedPrimaryKeyField]);
+						});
+					} catch (err: any) {
+						if (err instanceof ForbiddenException) {
+							logger.warn(
+								`User doesn't have proper permissions to read ${relation.collection}.${relation.field}, the back-reference is written as before.`
+							);
+						} else {
+							throw err;
+						}
+					}
+				}
+
+				return records.map((record) => {
+					if (linkedKeys.includes(String(record[relatedPrimaryKeyField]))) {
+						return record;
+					}
+
+					return { ...record, [relation.field]: parentKey };
+				});
+			};
+
 			const recordsToUpsert: Partial<Item>[] = [];
 			const savedPrimaryKeys: PrimaryKey[] = [];
 
@@ -663,14 +718,13 @@ export class PayloadService {
 						};
 					}
 
-					recordsToUpsert.push({
-						...record,
-						[relation.field]: parent || payload[currentPrimaryKeyField],
-					});
+					recordsToUpsert.push(record);
 				}
 
+				const attachedRecordsToUpsert = await attachToParent(recordsToUpsert);
+
 				savedPrimaryKeys.push(
-					...(await itemsService.upsertMany(recordsToUpsert, {
+					...(await itemsService.upsertMany(attachedRecordsToUpsert, {
 						onRevisionCreate: (pk) => revisions.push(pk),
 						bypassEmitAction: (params) =>
 							opts?.bypassEmitAction ? opts.bypassEmitAction(params) : nestedActionEvents.push(params),
@@ -748,13 +802,13 @@ export class PayloadService {
 
 							return {
 								...record,
-								[relation.field]: parent || payload[currentPrimaryKeyField],
+								[relation.field]: parentKey,
 							};
 						});
 					} else {
 						createPayload = alterations.create.map((item) => ({
 							...item,
-							[relation.field]: parent || payload[currentPrimaryKeyField],
+							[relation.field]: parentKey,
 						}));
 					}
 
@@ -769,22 +823,16 @@ export class PayloadService {
 
 				if (alterations.update) {
 					const primaryKeyField = this.schema.collections[relation.collection]!.primary;
+					const attachedAlterationsUpdate = await attachToParent(alterations.update);
 
-					for (const item of alterations.update) {
-						await itemsService.updateOne(
-							item[primaryKeyField],
-							{
-								...item,
-								[relation.field]: parent || payload[currentPrimaryKeyField],
-							},
-							{
-								onRevisionCreate: (pk) => revisions.push(pk),
-								bypassEmitAction: (params) =>
-									opts?.bypassEmitAction ? opts.bypassEmitAction(params) : nestedActionEvents.push(params),
-								emitEvents: opts?.emitEvents,
-								mutationTracker: opts?.mutationTracker,
-							}
-						);
+					for (const attachedItem of attachedAlterationsUpdate) {
+						await itemsService.updateOne(attachedItem[primaryKeyField], attachedItem, {
+							onRevisionCreate: (pk) => revisions.push(pk),
+							bypassEmitAction: (params) =>
+								opts?.bypassEmitAction ? opts.bypassEmitAction(params) : nestedActionEvents.push(params),
+							emitEvents: opts?.emitEvents,
+							mutationTracker: opts?.mutationTracker,
+						});
 					}
 				}
 
