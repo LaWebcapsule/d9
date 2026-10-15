@@ -49,7 +49,7 @@ describe('Integration Tests', () => {
 						expect(spec.info.version).toBe(version);
 					});
 
-					it('returns a mocked version to non-admins', async () => {
+					it('returns a hidden version to non-admins', async () => {
 						const nonAdminService = new SpecificationService({
 							knex: db,
 							schema: { collections: {}, relations: [] },
