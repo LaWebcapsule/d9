@@ -63,7 +63,7 @@ export default function applyQuery(
 	}
 
 	if (query.aggregate) {
-		applyAggregate(dbQuery, query.aggregate, collection);
+		applyAggregate(schema, dbQuery, query.aggregate, collection);
 	}
 
 	if (query.filter) {
@@ -321,6 +321,10 @@ export function applySort(
 	rootQuery.orderBy(sortRecords);
 
 	return undefined;
+}
+
+function isConcealedField(schema: SchemaOverview, collection: string, field: string) {
+	return schema.collections[collection]?.fields[stripFunction(field)]?.special.includes('conceal') ?? false;
 }
 
 export function applyLimit(knex: Knex, rootQuery: Knex.QueryBuilder, limit: any) {
@@ -761,6 +765,8 @@ export async function applySearch(
 
 	dbQuery.andWhere(function () {
 		fields.forEach(([name, field]) => {
+			if (field.special.includes('conceal')) return;
+
 			if (['text', 'string'].includes(field.type)) {
 				this.orWhereRaw(`LOWER(??) LIKE ?`, [`${collection}.${name}`, `%${searchQuery.toLowerCase()}%`]);
 			} else if (['bigInteger', 'integer', 'decimal', 'float'].includes(field.type)) {
@@ -773,11 +779,22 @@ export async function applySearch(
 	});
 }
 
-export function applyAggregate(dbQuery: Knex.QueryBuilder, aggregate: Aggregate, collection: string): void {
+export function applyAggregate(
+	schema: SchemaOverview,
+	dbQuery: Knex.QueryBuilder,
+	aggregate: Aggregate,
+	collection: string
+): void {
 	for (const [operation, fields] of Object.entries(aggregate)) {
 		if (!fields) continue;
 
 		for (const field of fields) {
+			if (!operation.startsWith('count') && isConcealedField(schema, collection, field)) {
+				throw new InvalidQueryException(
+					`Field with "conceal" special does not allow the "${operation}" aggregate function`
+				);
+			}
+
 			if (operation === 'avg') {
 				dbQuery.avg(`${collection}.${field}`, { as: `avg->${field}` });
 			}
