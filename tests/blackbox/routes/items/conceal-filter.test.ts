@@ -256,8 +256,8 @@ describe.each(PRIMARY_KEY_TYPES)('/items', (pkType) => {
 					const response = await request(getUrl(vendor))
 						.get(`/items/${localCollectionFirst}`)
 						.query({
-							// Seeded values are UUIDs, which all contain a dash
-							search: '-',
+							// Only the concealed field contains this value
+							search: 'concealed',
 						})
 						.set('Authorization', `Bearer ${USER.ADMIN.TOKEN}`);
 
