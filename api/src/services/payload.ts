@@ -63,7 +63,8 @@ export class PayloadService {
 			if (action === 'create' || action === 'update') {
 				return await generateHash(String(value));
 			}
-			//same as conceal
+
+			// Same as conceal
 			if (action === 'read') return '**********';
 
 			return value;
