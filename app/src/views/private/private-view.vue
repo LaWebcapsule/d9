@@ -68,7 +68,7 @@
 					<slot name="sidebar" />
 				</sidebar-detail-group>
 
-				<div class="spacer" />
+				<div class="spacer" @click="closeSidebar" />
 
 				<notifications-preview v-model="notificationsPreviewActive" :sidebar-open="sidebarOpen" />
 			</div>
@@ -186,6 +186,13 @@ router.afterEach(() => {
 });
 
 useTitle(title);
+
+// The empty area below the sections closes the open sidebar
+function closeSidebar(event: MouseEvent) {
+	if (sidebarOpen.value === false) return;
+	event.stopPropagation();
+	sidebarOpen.value = false;
+}
 
 function openSidebar(event: PointerEvent) {
 	if (event.target && (event.target as HTMLElement).classList.contains('close') === false) {
@@ -321,6 +328,12 @@ function openSidebar(event: PointerEvent) {
 
 		&.is-open {
 			transform: translateX(0);
+
+			// Marks where the sections end and the area that closes the sidebar begins
+			.spacer {
+				border-top: 1px solid var(--border-normal);
+				cursor: pointer;
+			}
 		}
 
 		.flex-container {
