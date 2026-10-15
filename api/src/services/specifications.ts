@@ -103,7 +103,8 @@ class OASSpecsService implements SpecificationSubService {
 				title: 'Dynamic API Specification',
 				description:
 					'This is a dynamically generated API specification for all endpoints existing on the current project.',
-				version: version,
+				// Only admins see the real version, as on /server/info
+				version: this.accountability?.admin ? version : '0.0.0-hidden',
 			},
 			servers: [
 				{
