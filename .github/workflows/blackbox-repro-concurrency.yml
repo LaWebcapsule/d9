@@ -1,0 +1,49 @@
+name: Blackbox Repro (assets concurrency)
+
+on:
+  push:
+    branches:
+      - ci/repro-assets-concurrency
+  workflow_dispatch:
+
+env:
+  NODE_OPTIONS: --max_old_space_size=6144
+
+jobs:
+  test:
+    name: ${{ matrix.vendor }} #${{ matrix.attempt }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        vendor:
+          - mysql
+          - mysql5
+          - postgres
+        attempt: [1, 2, 3, 4, 5]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Prepare
+        uses: ./.github/actions/prepare
+
+      - name: Start services
+        run:
+          docker compose -f tests/blackbox/docker-compose.yml up ${{ matrix.vendor }} auth-saml redis minio minio-mc -d
+          --quiet-pull --wait
+
+      - name: Run tests
+        run: TEST_DB=${{ matrix.vendor }} TEST_SAVE_LOGS=warn pnpm run test:blackbox
+
+      - name: Database logs
+        if: always()
+        run: docker compose -f tests/blackbox/docker-compose.yml logs ${{ matrix.vendor }} | tail -200
+
+      - name: Upload server logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-logs-${{ matrix.vendor }}-${{ matrix.attempt }}
+          path: tests/blackbox/server-log-*.txt
+          if-no-files-found: ignore

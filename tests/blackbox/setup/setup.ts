@@ -96,7 +96,7 @@ export default async (): Promise<void> => {
 
 									serverNoCache.on('exit', async (code) => {
 										if (process.env.TEST_SAVE_LOGS) {
-											await fs.writeFile(__dirname + `/../server-log-${vendor}-no-cache.txt`, serverNoCacheOutput);
+											await fs.writeFile(path.join(paths.cwd, `server-log-${vendor}-no-cache.txt`), serverNoCacheOutput);
 										}
 
 										if (code !== null)

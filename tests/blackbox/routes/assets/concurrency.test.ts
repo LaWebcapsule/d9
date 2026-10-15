@@ -38,10 +38,14 @@ describe('/assets', () => {
 
 							const options = ['exec', 'autocannon', '-c', '100', url];
 							const child = spawn('pnpm', options);
+							const startedAt = new Date().toISOString();
+							let output = '';
 
 							isSpawnRunning = true;
 
 							child.stderr.on('data', (data) => {
+								output += String(data);
+
 								if (String(data).includes('errors')) {
 									hasErrors = true;
 								}
@@ -49,6 +53,11 @@ describe('/assets', () => {
 
 							child.on('close', () => {
 								spawnCount++;
+
+								// eslint-disable-next-line no-console
+								console.log(
+									`[repro] storage=${storage} vendor=${vendor} round=${spawnCount} started=${startedAt} hasErrors=${hasErrors}\n${output}`
+								);
 
 								if (spawnCount < spawnCountTarget && !hasErrors) {
 									spawnAutoCannon();
