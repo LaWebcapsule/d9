@@ -25,7 +25,7 @@ export const requestInterceptor = async (config: InternalAxiosRequestConfig) => 
 		ip = hostname;
 	}
 
-	await validateIP(ip, uri);
+	validateIP(ip, uri);
 
 	return config;
 };
