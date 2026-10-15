@@ -49,6 +49,7 @@ catalog:
   ora: '6.3.0'
   p-queue: '7.3.4'
   pino: '8.11.0'
+  request-filtering-agent: '3.2.1'
   rollup: '3.30.0'
   supertest: '6.3.3'
   typescript: '5.0.4'

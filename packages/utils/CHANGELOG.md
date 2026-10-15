@@ -1,5 +1,15 @@
 # @wbce-d9/utils
 
+## 10.0.4
+
+### Patch Changes
+
+- [#416](https://github.com/LaWebcapsule/d9/pull/416)
+  [`8a59add`](https://github.com/LaWebcapsule/d9/commit/8a59add5b9b0039cc77f0a00f0f6874a16531100) - security: `_in`
+  validation rules with an empty list (e.g. `$CURRENT_USER.user_roles.role` for a user without roles) now
+  (GHSA-hxgm-ghmv-xjjm, CVE-2024-39701) reject any value instead of accepting everything (GHSA-hxgm-ghmv-xjjm /
+  CVE-2024-39701)
+
 ## 10.0.3
 
 ### Patch Changes
