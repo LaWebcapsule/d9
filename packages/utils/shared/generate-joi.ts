@@ -198,7 +198,13 @@ export function generateJoi(filter: FieldFilter | null, options?: JoiOptions): A
 		}
 
 		if (operator === '_in') {
-			schema[key] = getAnySchema().equal(...(compareValue as (string | number)[]));
+			const values = compareValue as (string | number)[];
+
+			// An empty list matches nothing: reject any provided value
+			schema[key] =
+				values.length > 0
+					? getAnySchema().equal(...values)
+					: getAnySchema().custom((_value, helpers) => helpers.error('any.only', { valids: [] }));
 		}
 
 		if (operator === '_nin') {

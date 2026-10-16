@@ -806,4 +806,16 @@ describe(`generateJoi`, () => {
 
 		expect(generateJoi(mockFieldFilter).describe()).toStrictEqual(mockSchema);
 	});
+
+	describe(`_in with an empty list`, () => {
+		const filter = { field: { _in: [] } } as unknown as FieldFilter;
+
+		it(`rejects any value`, () => {
+			expect(generateJoi(filter).validate({ field: null }).error).toBeDefined();
+		});
+
+		it(`rejects any value with requireAll`, () => {
+			expect(generateJoi(filter, { requireAll: true }).validate({ field: 'value' }).error).toBeDefined();
+		});
+	});
 });

@@ -1,5 +1,58 @@
 # @wbce-d9/api
 
+## 12.6.0
+
+### Minor Changes
+
+- [#418](https://github.com/LaWebcapsule/d9/pull/418)
+  [`cd9638d`](https://github.com/LaWebcapsule/d9/commit/cd9638dbf8b3f911aca3f1aaf57dca32027cf661) - security: file
+  import from URL now only connects to public IP addresses, checked on every redirect hop through (GHSA-j5h6-vqc3-phqh,
+  GHSA-wv3h-5fx7-966h, GHSA-xhgj-x4mj-6c93, CVE-2026-61835, CVE-2026-35409) request-filtering-agent, and follows at most
+  5 redirects (GHSA-xhgj-x4mj-6c93). Importing files from private IP addresses now fails unless they are listed in the
+  new `IMPORT_FILE_IP_ALLOW_LIST` (IPs or CIDR ranges).
+
+  `IMPORT_IP_DENY_LIST`'s `0.0.0.0` entry now also denies IPv6 local interface addresses (e.g. `::1`), as documented.
+  This applies to webhooks and Flows too: requests to `localhost` resolving to `::1` are now denied.
+
+### Patch Changes
+
+- [#414](https://github.com/LaWebcapsule/d9/pull/414)
+  [`fbaca91`](https://github.com/LaWebcapsule/d9/commit/fbaca91348958934721cb67936c92ac26b97a2dc) - security: Fixed an
+  open redirect in the SAML ACS endpoint: `RelayState` is now validated against the allowed login redirects
+  (GHSA-qmqf-6vxq-c7f4) before redirecting, on both the success and error paths
+- Updated dependencies
+  [[`8a59add`](https://github.com/LaWebcapsule/d9/commit/8a59add5b9b0039cc77f0a00f0f6874a16531100)]:
+  - @wbce-d9/utils@10.0.4
+  - @wbce-d9/exceptions@10.0.1
+  - @wbce-d9/app@11.0.1
+  - @wbce-d9/extensions-sdk@10.0.5
+  - @wbce-d9/storage-driver-azure@10.0.4
+  - @wbce-d9/storage-driver-cloudinary@10.0.5
+  - @wbce-d9/storage-driver-gcs@10.0.4
+  - @wbce-d9/storage-driver-local@10.0.4
+  - @wbce-d9/storage-driver-s3@10.0.4
+
+## 12.5.11
+
+### Patch Changes
+
+- [#413](https://github.com/LaWebcapsule/d9/pull/413)
+  [`5b79c1f`](https://github.com/LaWebcapsule/d9/commit/5b79c1f3135c5e1bd18ef1d3a7fcbe4e17e9bb6e) - security: Fixed a
+  security issue (CVE-2026-35408) where responses were sent without a `Cross-Origin-Opener-Policy` header, so a
+  (GHSA-8m32-p958-jg99) cross-origin page that opened the login page could keep a reference to its window and tamper
+  with the SSO flow. The header is now set to `same-origin` by default and can be changed with
+  `CROSS_ORIGIN_OPENER_POLICY` (`same-origin-allow-popups` or `unsafe-none`).
+
+- [#400](https://github.com/LaWebcapsule/d9/pull/400)
+  [`9ba2f5e`](https://github.com/LaWebcapsule/d9/commit/9ba2f5e287bc36e6d94dbf1c916e6f2daa066f03) - security: condition
+  operation errors now only contain the path and type of each failed rule, so webhook flows returning
+  (GHSA-fm3h-p9wm-h74h) the last operation data no longer leak `$env`, `$accountability` or other flow data
+  (GHSA-fm3h-p9wm-h74h)
+
+- [#411](https://github.com/LaWebcapsule/d9/pull/411)
+  [`e0655b1`](https://github.com/LaWebcapsule/d9/commit/e0655b1bf7b332620e22022d116deff1b163977b) - security: Harden the
+  login redirect validator against backslash and port bypasses (GHSA-f42p-ffpq-jh5c)
+
 ## 12.5.10
 
 ### Patch Changes

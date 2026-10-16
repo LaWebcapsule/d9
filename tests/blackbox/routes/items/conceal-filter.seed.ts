@@ -9,6 +9,7 @@ export const collectionSecond = 'test_items_conceal_filter_second';
 export type First = {
 	id?: number | string;
 	string_field?: string;
+	searchable_field?: string;
 };
 
 export type Second = {
@@ -43,6 +44,13 @@ export const seedDBStructure = () => {
 						meta: {
 							special: ['conceal'],
 						},
+					});
+
+					// Keeps a searchable field, so that a search isn't left without any condition
+					await CreateField(vendor, {
+						collection: localCollectionFirst,
+						field: 'searchable_field',
+						type: 'string',
 					});
 
 					// Create seconds collection
@@ -91,7 +99,8 @@ export const seedDBValues = async () => {
 					collection: localCollectionFirst,
 					item: {
 						id: pkType === 'string' ? uuid() : undefined,
-						string_field: uuid(),
+						string_field: `concealed-${uuid()}`,
+						searchable_field: uuid(),
 						second_ids: [
 							{
 								id: pkType === 'string' ? uuid() : undefined,

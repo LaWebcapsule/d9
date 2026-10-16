@@ -218,6 +218,54 @@ describe.each(PRIMARY_KEY_TYPES)('/items', (pkType) => {
 					expect(response4.statusCode).toEqual(400);
 				});
 			});
+
+			describe('errors with max aggregate', () => {
+				it.each(vendors)('%s', async (vendor) => {
+					// Action
+					const response = await request(getUrl(vendor))
+						.get(`/items/${localCollectionFirst}`)
+						.query({
+							aggregate: { max: 'string_field' },
+						})
+						.set('Authorization', `Bearer ${USER.ADMIN.TOKEN}`);
+
+					// Assert
+					expect(response.statusCode).toEqual(400);
+				});
+			});
+
+			describe('retrieves items with count aggregate', () => {
+				it.each(vendors)('%s', async (vendor) => {
+					// Action
+					const response = await request(getUrl(vendor))
+						.get(`/items/${localCollectionFirst}`)
+						.query({
+							aggregate: { count: 'string_field' },
+						})
+						.set('Authorization', `Bearer ${USER.ADMIN.TOKEN}`);
+
+					// Assert
+					expect(response.statusCode).toEqual(200);
+					expect(response.body.data[0].count.string_field == 1).toBeTruthy();
+				});
+			});
+
+			describe('does not search in concealed fields', () => {
+				it.each(vendors)('%s', async (vendor) => {
+					// Action
+					const response = await request(getUrl(vendor))
+						.get(`/items/${localCollectionFirst}`)
+						.query({
+							// Only the concealed field contains this value
+							search: 'concealed',
+						})
+						.set('Authorization', `Bearer ${USER.ADMIN.TOKEN}`);
+
+					// Assert
+					expect(response.statusCode).toEqual(200);
+					expect(response.body.data.length).toBe(0);
+				});
+			});
 		});
 	});
 });
