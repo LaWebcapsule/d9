@@ -38,6 +38,34 @@ describe('Integration Tests', () => {
 				helpers = getHelpers(db);
 			});
 
+			describe('hash', () => {
+				it('Returns a concealed value on read, like conceal', async () => {
+					const result = await service.transformers['hash']!({
+						value: '$argon2id$v=19$m=65536,t=3,p=4$hash',
+						action: 'read',
+						payload: {},
+						accountability: null,
+						specials: ['hash'],
+						helpers,
+					});
+
+					expect(result).toBe('**********');
+				});
+
+				it('Leaves empty values as is', async () => {
+					const result = await service.transformers['hash']!({
+						value: null,
+						action: 'read',
+						payload: {},
+						accountability: null,
+						specials: ['hash'],
+						helpers,
+					});
+
+					expect(result).toBe(undefined);
+				});
+			});
+
 			describe('csv', () => {
 				it('Returns undefined for illegal values', async () => {
 					const result = await service.transformers['cast-csv']!({
