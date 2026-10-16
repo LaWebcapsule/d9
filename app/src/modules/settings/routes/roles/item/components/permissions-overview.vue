@@ -6,7 +6,7 @@
 		</h2>
 
 		<v-notice v-if="shareRoleWritable" type="warning" class="share-role-warning">
-			{{ t('share_role_writable_warning') }}
+			<div v-md="{ value: t('share_role_writable_warning'), target: '_blank' }" />
 		</v-notice>
 
 		<div class="table">
@@ -115,7 +115,7 @@ export default defineComponent({
 
 		const { resetActive, resetSystemPermissions, resetting, resetError } = useReset();
 
-		// Roles created before GHSA-pmf4-v838-29hg was fixed can choose the role of their shares
+		// Roles created before GHSA-475w-4rwx-54gv was fixed can choose the role of their shares
 		const shareRoleWritable = computed(() =>
 			permissions.value.some(
 				(permission) =>
