@@ -5,6 +5,10 @@
 			<span class="instant-save">{{ t('saves_automatically') }}</span>
 		</h2>
 
+		<v-notice v-if="shareRoleWritable" type="warning" class="share-role-warning">
+			<div v-md="{ value: t('share_role_writable_warning'), target: '_blank' }" />
+		</v-notice>
+
 		<div class="table">
 			<permissions-overview-header />
 
@@ -111,6 +115,16 @@ export default defineComponent({
 
 		const { resetActive, resetSystemPermissions, resetting, resetError } = useReset();
 
+		// Roles created before GHSA-475w-4rwx-54gv was fixed can choose the role of their shares
+		const shareRoleWritable = computed(() =>
+			permissions.value.some(
+				(permission) =>
+					permission.collection === 'directus_shares' &&
+					['create', 'update'].includes(permission.action) &&
+					(permission.fields?.includes('*') || permission.fields?.includes('role'))
+			)
+		);
+
 		fetchPermissions();
 
 		watch(() => props.permission, fetchPermissions, { immediate: true });
@@ -132,6 +146,7 @@ export default defineComponent({
 			resetting,
 			resetError,
 			appMinimalPermissions,
+			shareRoleWritable,
 		};
 
 		function usePermissions() {
@@ -238,6 +253,11 @@ export default defineComponent({
 		margin-left: 4px;
 		color: var(--warning);
 	}
+}
+
+.share-role-warning {
+	max-width: 792px;
+	margin-bottom: 12px;
 }
 
 .table {
