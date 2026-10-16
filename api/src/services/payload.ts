@@ -618,6 +618,26 @@ export class PayloadService {
 				schema: this.schema,
 			});
 
+			const adminItemService = new ItemsService(relation.collection, {
+				knex: this.knex,
+				schema: this.schema,
+			});
+
+			const parentKey = parent || payload[currentPrimaryKeyField];
+
+			// Add the back-reference to the item, unless it is already linked to this parent.
+			const attachToParent = async (item: Partial<Item>): Promise<Partial<Item>> => {
+				const key = item[relatedPrimaryKeyField];
+
+				if (key) {
+					// readMany rather than readOne: not found is not an error.
+					const currentItems = await adminItemService.readMany([key], { fields: [relation.field] });
+					if (currentItems.length > 0 && currentItems[0]![relation.field] == parentKey) return item;
+				}
+
+				return { ...item, [relation.field]: parentKey };
+			};
+
 			const recordsToUpsert: Partial<Item>[] = [];
 			const savedPrimaryKeys: PrimaryKey[] = [];
 
@@ -663,10 +683,8 @@ export class PayloadService {
 						};
 					}
 
-					recordsToUpsert.push({
-						...record,
-						[relation.field]: parent || payload[currentPrimaryKeyField],
-					});
+					const attachedRecord = await attachToParent(record);
+					recordsToUpsert.push(attachedRecord);
 				}
 
 				savedPrimaryKeys.push(
@@ -748,13 +766,13 @@ export class PayloadService {
 
 							return {
 								...record,
-								[relation.field]: parent || payload[currentPrimaryKeyField],
+								[relation.field]: parentKey,
 							};
 						});
 					} else {
 						createPayload = alterations.create.map((item) => ({
 							...item,
-							[relation.field]: parent || payload[currentPrimaryKeyField],
+							[relation.field]: parentKey,
 						}));
 					}
 
@@ -771,20 +789,15 @@ export class PayloadService {
 					const primaryKeyField = this.schema.collections[relation.collection]!.primary;
 
 					for (const item of alterations.update) {
-						await itemsService.updateOne(
-							item[primaryKeyField],
-							{
-								...item,
-								[relation.field]: parent || payload[currentPrimaryKeyField],
-							},
-							{
-								onRevisionCreate: (pk) => revisions.push(pk),
-								bypassEmitAction: (params) =>
-									opts?.bypassEmitAction ? opts.bypassEmitAction(params) : nestedActionEvents.push(params),
-								emitEvents: opts?.emitEvents,
-								mutationTracker: opts?.mutationTracker,
-							}
-						);
+						const attachedItem = await attachToParent(item);
+
+						await itemsService.updateOne(attachedItem[primaryKeyField], attachedItem, {
+							onRevisionCreate: (pk) => revisions.push(pk),
+							bypassEmitAction: (params) =>
+								opts?.bypassEmitAction ? opts.bypassEmitAction(params) : nestedActionEvents.push(params),
+							emitEvents: opts?.emitEvents,
+							mutationTracker: opts?.mutationTracker,
+						});
 					}
 				}
 
