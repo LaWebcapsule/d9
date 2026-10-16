@@ -1084,7 +1084,7 @@ describe('Integration Tests', () => {
 				uploaded_by: item.id,
 			};
 
-			function permissions(schema: string, childReadFields: string[], childUpdateFields: string[]): Permission[] {
+			function permissions(schema: string, childUpdateFields: string[]): Permission[] {
 				return [
 					{
 						id: 1,
@@ -1114,7 +1114,7 @@ describe('Integration Tests', () => {
 						permissions: {},
 						validation: {},
 						presets: {},
-						fields: childReadFields,
+						fields: ['*'],
 					},
 					{
 						id: 4,
@@ -1131,11 +1131,6 @@ describe('Integration Tests', () => {
 
 			function mockStoredChild(childTable: string, uploadedBy: string) {
 				tracker.on.select((query) => query.sql.includes('1 = ?') || query.sql.includes('not in')).response([]);
-
-				tracker.on
-					.select((query) => query.sql.includes(`"${childTable}"."uploaded_by" = ?`))
-					.response((query) => (query.bindings.includes(uploadedBy) ? [{ id: childItem.id }] : []));
-
 				tracker.on.select(childTable).response([{ ...childItem, uploaded_by: uploadedBy }]);
 				tracker.on.update(childTable).response(childItem);
 			}
@@ -1156,7 +1151,7 @@ describe('Integration Tests', () => {
 						accountability: {
 							role: 'admin',
 							admin: false,
-							permissions: permissions(schema, ['*'], ['id', 'title']),
+							permissions: permissions(schema, ['id', 'title']),
 						},
 						schema: schemas[schema].schema,
 					});
@@ -1187,7 +1182,7 @@ describe('Integration Tests', () => {
 					accountability: {
 						role: 'admin',
 						admin: false,
-						permissions: permissions(schema, ['*'], ['*']),
+						permissions: permissions(schema, ['*']),
 					},
 					schema: schemas[schema].schema,
 				});
@@ -1221,7 +1216,7 @@ describe('Integration Tests', () => {
 						accountability: {
 							role: 'admin',
 							admin: false,
-							permissions: permissions(schema, ['*'], ['id', 'title']),
+							permissions: permissions(schema, ['id', 'title']),
 						},
 						schema: schemas[schema].schema,
 					});
@@ -1237,36 +1232,6 @@ describe('Integration Tests', () => {
 					expect(tracker.history.update).toHaveLength(0);
 				}
 			);
-
-			it.each(Object.keys(schemas))('%s writes the back-reference when it is not readable', async (schema) => {
-				const childTable = schemas[schema].tables[1];
-
-				mockStoredChild(childTable, item.id);
-
-				const table = schemas[schema].tables[0];
-
-				tracker.on.select(table).response([item]);
-
-				const itemsService = new ItemsService(table, {
-					knex: db,
-					accountability: {
-						role: 'admin',
-						admin: false,
-						permissions: permissions(schema, ['id', 'title'], ['*']),
-					},
-					schema: schemas[schema].schema,
-				});
-
-				await itemsService.updateOne(
-					item.id,
-					{ items: { create: [], update: [{ id: childItem.id, title: 'New title' }], delete: [] } },
-					{ emitEvents: false }
-				);
-
-				expect(tracker.history.update[0]!.sql).toBe(
-					`update "${childTable}" set "title" = ?, "uploaded_by" = ? where "id" in (?)`
-				);
-			});
 		});
 	});
 

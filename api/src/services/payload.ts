@@ -19,9 +19,7 @@ import type {
 	MutationOptions,
 	PrimaryKey,
 } from '../types/index.js';
-import logger from '../logger.js';
 import { generateHash } from '../utils/generate-hash.js';
-import { validateKeys } from '../utils/validate-keys.js';
 import { ItemsService } from './items.js';
 
 type Action = 'create' | 'read' | 'update';
@@ -620,57 +618,24 @@ export class PayloadService {
 				schema: this.schema,
 			});
 
+			const adminItemService = new ItemsService(relation.collection, {
+				knex: this.knex,
+				schema: this.schema,
+			});
+
 			const parentKey = parent || payload[currentPrimaryKeyField];
 
-			// Skip the back-reference of items already linked to this parent
-			const attachToParent = async (records: Partial<Item>[]): Promise<Partial<Item>[]> => {
-				const primaryKeys = records
-					.map((record) => {
-						return record[relatedPrimaryKeyField];
-					})
-					.filter((key) => {
-						return !isNil(key);
-					});
+			// Add the back-reference to the item, unless it is already linked to this parent.
+			const attachToParent = async (item: Partial<Item>): Promise<Partial<Item>> => {
+				const key = item[relatedPrimaryKeyField];
 
-				let linkedKeys: string[] = [];
-
-				if (primaryKeys.length > 0) {
-					validateKeys(this.schema, relation.collection, relatedPrimaryKeyField, primaryKeys);
-
-					try {
-						const linkedItems = await itemsService.readByQuery(
-							{
-								fields: [relatedPrimaryKeyField],
-								filter: {
-									[relatedPrimaryKeyField]: { _in: primaryKeys },
-									[relation.field]: { _eq: parentKey },
-								},
-								limit: -1,
-							},
-							{ emitEvents: false }
-						);
-
-						linkedKeys = linkedItems.map((item) => {
-							return String(item[relatedPrimaryKeyField]);
-						});
-					} catch (err: any) {
-						if (err instanceof ForbiddenException) {
-							logger.warn(
-								`User doesn't have proper permissions to read ${relation.collection}.${relation.field}, the back-reference is written as before.`
-							);
-						} else {
-							throw err;
-						}
-					}
+				if (key) {
+					// readMany rather than readOne: not found is not an error.
+					const currentItems = await adminItemService.readMany([key], { fields: [relation.field] });
+					if (currentItems.length > 0 && currentItems[0]![relation.field] == parentKey) return item;
 				}
 
-				return records.map((record) => {
-					if (linkedKeys.includes(String(record[relatedPrimaryKeyField]))) {
-						return record;
-					}
-
-					return { ...record, [relation.field]: parentKey };
-				});
+				return { ...item, [relation.field]: parentKey };
 			};
 
 			const recordsToUpsert: Partial<Item>[] = [];
@@ -718,13 +683,12 @@ export class PayloadService {
 						};
 					}
 
-					recordsToUpsert.push(record);
+					const attachedRecord = await attachToParent(record);
+					recordsToUpsert.push(attachedRecord);
 				}
 
-				const attachedRecordsToUpsert = await attachToParent(recordsToUpsert);
-
 				savedPrimaryKeys.push(
-					...(await itemsService.upsertMany(attachedRecordsToUpsert, {
+					...(await itemsService.upsertMany(recordsToUpsert, {
 						onRevisionCreate: (pk) => revisions.push(pk),
 						bypassEmitAction: (params) =>
 							opts?.bypassEmitAction ? opts.bypassEmitAction(params) : nestedActionEvents.push(params),
@@ -823,9 +787,10 @@ export class PayloadService {
 
 				if (alterations.update) {
 					const primaryKeyField = this.schema.collections[relation.collection]!.primary;
-					const attachedAlterationsUpdate = await attachToParent(alterations.update);
 
-					for (const attachedItem of attachedAlterationsUpdate) {
+					for (const item of alterations.update) {
+						const attachedItem = await attachToParent(item);
+
 						await itemsService.updateOne(attachedItem[primaryKeyField], attachedItem, {
 							onRevisionCreate: (pk) => revisions.push(pk),
 							bypassEmitAction: (params) =>
