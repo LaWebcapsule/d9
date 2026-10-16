@@ -42,6 +42,10 @@
 	// Generate color variations
 	@include generate-colors($color-mapping, $dark-theme-shade, $dark-theme-tint);
 
+	// Inputs for the project color override (see utils/project-primary-vars.ts)
+	--primary-mix-pos: #{$dark-theme-shade};
+	--primary-mix-neg: #{$dark-theme-tint};
+
 	--purple-alt: var(--purple-10);
 	--blue-alt: var(--blue-10);
 	--green-alt: var(--green-10);
