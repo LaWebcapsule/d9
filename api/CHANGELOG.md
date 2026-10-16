@@ -1,5 +1,18 @@
 # @wbce-d9/api
 
+## 12.6.2
+
+### Patch Changes
+
+- [#441](https://github.com/LaWebcapsule/d9/pull/441)
+  [`4e86904`](https://github.com/LaWebcapsule/d9/commit/4e869043bb2c092d5aa0d6e893407f79fe5663d0) - security: when
+  `GRAPHQL_INTROSPECTION` is disabled, the GraphQL SDL is no longer served by `/server/specs/graphql` nor
+  (GHSA-wxwm-3fxv-mrvx, CVE-2026-35413) by the `server_specs_graphql` query, as it exposes the same schema information
+  as an introspection query (GHSA-wxwm-3fxv-mrvx / CVE-2026-35413)
+- Updated dependencies [[`aba4181`](https://github.com/LaWebcapsule/d9/commit/aba4181682b087ffc0909cc355e4676572d8fa6c),
+  [`20fc79d`](https://github.com/LaWebcapsule/d9/commit/20fc79d568e80de4177bfaccffbbe23f2790914e)]:
+  - @wbce-d9/app@11.2.0
+
 ## 12.6.1
 
 ### Patch Changes
