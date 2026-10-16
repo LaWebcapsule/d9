@@ -586,6 +586,22 @@ export class FieldsService {
 					await trx('directus_collections').update(collectionMetaUpdates).where({ collection });
 				}
 
+				const permissions = await trx<{ id: number; collection: string; fields: string | null }>('directus_permissions')
+					.select('id', 'fields')
+					.where({ collection });
+
+				for (const permission of permissions) {
+					const permittedFields = permission.fields?.split(',') ?? [];
+
+					if (permittedFields.includes(field) === false) continue;
+
+					const remainingFields = permittedFields.filter((permittedField) => permittedField !== field);
+
+					await trx('directus_permissions')
+						.update({ fields: remainingFields.length > 0 ? remainingFields.join(',') : null })
+						.where({ id: permission.id });
+				}
+
 				// Cleanup directus_fields
 				const metaRow = await trx
 					.select('collection', 'field')

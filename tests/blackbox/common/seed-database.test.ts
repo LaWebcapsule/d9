@@ -8,6 +8,7 @@ import { list } from '../setup/sequentialTests.js';
 import { seedDBStructure as seedCommon } from '../common/common.seed.ts';
 import { seedDBStructure as seedChangeFields } from '../routes/fields/change-fields.seed.ts';
 import { seedDBStructure as seedCrud } from '../routes/fields/crud.seed.ts';
+import { seedDBStructure as seedDeleteFieldPermissions } from '../routes/fields/delete-field-permissions.seed.ts';
 import { seedDBStructure as seedConcealFilter } from '../routes/items/conceal-filter.seed.ts';
 import { seedDBStructure as seedHashFilter } from '../routes/items/hash-filter.seed.ts';
 import { seedDBStructure as seedM2A } from '../routes/items/m2a.seed.ts';
@@ -25,6 +26,7 @@ describe('Seed Database Structure', () => {
 		{ path: 'common/common.seed.ts', seedFn: seedCommon },
 		{ path: 'routes/fields/change-fields.seed.ts', seedFn: seedChangeFields },
 		{ path: 'routes/fields/crud.seed.ts', seedFn: seedCrud },
+		{ path: 'routes/fields/delete-field-permissions.seed.ts', seedFn: seedDeleteFieldPermissions },
 		{ path: 'routes/items/conceal-filter.seed.ts', seedFn: seedConcealFilter },
 		{ path: 'routes/items/hash-filter.seed.ts', seedFn: seedHashFilter },
 		{ path: 'routes/items/m2a.seed.ts', seedFn: seedM2A },

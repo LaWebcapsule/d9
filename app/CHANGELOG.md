@@ -1,5 +1,12 @@
 # @wbce-d9/app
 
+## 11.0.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @wbce-d9/composables@10.0.4
+
 ## 11.0.0
 
 ### Major Changes

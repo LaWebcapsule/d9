@@ -5,6 +5,7 @@ import type { MockedFunction } from 'vitest';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { CollectionsService, FieldsService, RelationsService, SpecificationService } from '../../src/services/index.js';
 import type { Collection } from '../types/index.js';
+import { version } from '../utils/package.js';
 
 class Client_PG extends MockClient {}
 
@@ -32,6 +33,32 @@ describe('Integration Tests', () => {
 						knex: db,
 						schema: { collections: {}, relations: [] },
 						accountability: { role: 'admin', admin: true },
+					});
+				});
+
+				describe('info.version', () => {
+					beforeEach(() => {
+						vi.spyOn(CollectionsService.prototype, 'readByQuery').mockResolvedValue([]);
+						vi.spyOn(FieldsService.prototype, 'readAll').mockResolvedValue([]);
+						vi.spyOn(RelationsService.prototype, 'readAll').mockResolvedValue([]);
+					});
+
+					it('exposes the running version to admins', async () => {
+						const spec = await service.oas.generate();
+
+						expect(spec.info.version).toBe(version);
+					});
+
+					it('returns a hidden version to non-admins', async () => {
+						const nonAdminService = new SpecificationService({
+							knex: db,
+							schema: { collections: {}, relations: [] },
+							accountability: { role: 'editor', admin: false, permissions: [] },
+						});
+
+						const spec = await nonAdminService.oas.generate();
+
+						expect(spec.info.version).toBe('0.0.0-hidden');
 					});
 				});
 

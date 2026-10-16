@@ -174,6 +174,10 @@ export function createSAMLAuthRouter(providerName: string) {
 		asyncHandler(async (req, res, next) => {
 			const relayState: string | undefined = req.body?.RelayState;
 
+			if (isRedirectAllowedOnLogin(relayState, providerName) === false) {
+				throw new InvalidPayloadException(`URL "${relayState}" can't be used to redirect after login`);
+			}
+
 			try {
 				const { sp, idp } = getAuthProvider(providerName) as SAMLAuthDriver;
 

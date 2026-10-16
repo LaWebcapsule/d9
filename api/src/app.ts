@@ -144,6 +144,8 @@ export default async function createApp(): Promise<express.Application> {
 		app.use(helmet.hsts(getConfigFromEnv('HSTS_', ['HSTS_ENABLED'])));
 	}
 
+	app.use(helmet.crossOriginOpenerPolicy({ policy: env['CROSS_ORIGIN_OPENER_POLICY'] }));
+
 	await emitter.emitInit('app.before', { app });
 
 	await emitter.emitInit('middlewares.before', { app });

@@ -66,6 +66,9 @@ export class PayloadService {
 				return await generateHash(String(value));
 			}
 
+			// Same as conceal
+			if (action === 'read') return '**********';
+
 			return value;
 		},
 		async uuid({ action, value }) {
