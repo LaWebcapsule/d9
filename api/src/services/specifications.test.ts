@@ -3,6 +3,8 @@ import knex from 'knex';
 import { createTracker, MockClient, Tracker } from 'knex-mock-client';
 import type { MockedFunction } from 'vitest';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import env from '../env.js';
+import { ForbiddenException } from '../exceptions/index.js';
 import { CollectionsService, FieldsService, RelationsService, SpecificationService } from '../../src/services/index.js';
 import type { Collection } from '../types/index.js';
 import { version } from '../utils/package.js';
@@ -463,6 +465,36 @@ describe('Integration Tests', () => {
 						expect(targetSchema).not.toHaveProperty('type');
 					});
 				});
+			});
+		});
+
+		describe('graphql', () => {
+			describe('generate', () => {
+				let service: SpecificationService;
+				let introspection: unknown;
+
+				beforeEach(() => {
+					introspection = env['GRAPHQL_INTROSPECTION'];
+
+					service = new SpecificationService({
+						knex: db,
+						schema: { collections: {}, relations: [] },
+						accountability: { role: 'admin', admin: true },
+					});
+				});
+
+				afterEach(() => {
+					env['GRAPHQL_INTROSPECTION'] = introspection;
+				});
+
+				it.each(['items', 'system'] as const)(
+					'rejects the %s SDL when introspection is disabled, even for admins',
+					async (scope) => {
+						env['GRAPHQL_INTROSPECTION'] = false;
+
+						await expect(service.graphql.generate(scope)).rejects.toBeInstanceOf(ForbiddenException);
+					}
+				);
 			});
 		});
 	});
