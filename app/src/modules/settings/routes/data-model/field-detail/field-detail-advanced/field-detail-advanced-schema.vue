@@ -128,6 +128,16 @@
 				<div class="label type-label">{{ t('unique') }}</div>
 				<v-checkbox v-model="unique" :disabled="isGenerated" :label="t('value_unique')" block />
 			</div>
+
+			<div v-if="!isAlias && !isPrimaryKey" class="field half-left">
+				<div class="label type-label">{{ t('indexed') }}</div>
+				<v-checkbox
+					v-model="indexedModel"
+					:disabled="isGenerated || unique || isIndexedForeignKey"
+					:label="t('value_indexed')"
+					block
+				/>
+			</div>
 		</div>
 	</div>
 </template>
@@ -255,6 +265,7 @@ export default defineComponent({
 		const numericPrecision = syncFieldDetailStoreProperty('field.schema.numeric_precision');
 		const nullable = syncFieldDetailStoreProperty('field.schema.is_nullable', true);
 		const unique = syncFieldDetailStoreProperty('field.schema.is_unique', false);
+		const indexed = syncFieldDetailStoreProperty('field.schema.is_indexed', false);
 		const numericScale = syncFieldDetailStoreProperty('field.schema.numeric_scale');
 
 		const { t } = useI18n();
@@ -290,6 +301,19 @@ export default defineComponent({
 			return fieldDetailStore.field.schema?.is_generated;
 		});
 
+		// The index of a foreign key can't be dropped from here (MySQL needs it for the constraint)
+		const isIndexedForeignKey = computed(() => {
+			return !!fieldDetailStore.field.schema?.foreign_key_table && indexed.value === true;
+		});
+
+		// A unique constraint is an index too, so it's shown as checked (and locked) while "unique" is on
+		const indexedModel = computed({
+			get: () => indexed.value === true || unique.value === true,
+			set: (value: boolean) => {
+				indexed.value = value;
+			},
+		});
+
 		return {
 			t,
 			typesWithLabels,
@@ -311,6 +335,8 @@ export default defineComponent({
 			special,
 			nullable,
 			unique,
+			indexedModel,
+			isIndexedForeignKey,
 			isPrimaryKey,
 			isExisting,
 			isGenerated,

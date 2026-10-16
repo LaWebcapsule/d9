@@ -9,6 +9,8 @@ export interface Column {
 
 	is_nullable: boolean;
 	is_unique: boolean;
+	/** Only column of a non-unique, non-primary index */
+	is_indexed: boolean;
 	is_primary_key: boolean;
 	is_generated: boolean;
 	generation_expression?: string | null;

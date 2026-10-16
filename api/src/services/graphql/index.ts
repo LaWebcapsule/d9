@@ -2473,6 +2473,7 @@ export class GraphQLService {
 						numeric_scale: GraphQLInt,
 						is_nullable: GraphQLBoolean,
 						is_unique: GraphQLBoolean,
+						is_indexed: GraphQLBoolean,
 						is_primary_key: GraphQLBoolean,
 						has_auto_increment: GraphQLBoolean,
 						foreign_key_column: GraphQLString,

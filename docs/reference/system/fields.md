@@ -99,6 +99,11 @@ Scale for integer/float/decimal type fields.
 `is_nullable` **boolean**\
 Whether or not the column is nullable. This is what is used as the "required" state in d9.
 
+`is_indexed` **boolean**\
+Whether or not the column has its own plain (non-unique) single-column index. Setting it to `true` creates the index,
+setting it to `false` drops it (by its default name `<table>_<column>_index`). Ignored for primary key and unique columns,
+which are already indexed by their constraint.
+
 `is_primary_key` **boolean**\
 Whether or not the field is the primary key of the table.
 
