@@ -25,6 +25,7 @@ import { useSystem } from '@/composables/use-system';
 import { useAppStore } from '@/stores/app';
 import { useServerStore } from '@/stores/server';
 import { useUserStore } from '@/stores/user';
+import { applyProjectPrimary } from '@/utils/project-primary-vars';
 import { setFavicon } from '@/utils/set-favicon';
 import { User } from '@wbce-d9/types';
 import { StyleValue, computed, onMounted, onUnmounted, toRefs, watch } from 'vue';
@@ -56,6 +57,8 @@ watch(
 	},
 	{ immediate: true }
 );
+
+watch(() => serverStore.info?.project?.project_color ?? null, applyProjectPrimary, { immediate: true });
 
 watch(
 	() => (userStore.currentUser as User)?.theme,

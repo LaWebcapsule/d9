@@ -1,5 +1,42 @@
 # @wbce-d9/api
 
+## 12.6.1
+
+### Patch Changes
+
+- [#427](https://github.com/LaWebcapsule/d9/pull/427)
+  [`7956e59`](https://github.com/LaWebcapsule/d9/commit/7956e594eedf194da2565f13971a5c136579ad3c) - security: `hash`
+  fields are now concealed on read, like `conceal` fields, so their value is no longer stored in clear text
+  (GHSA-mvv8-v4jj-g47j, CVE-2026-39943) in revisions when an item is created, and their hash is no longer returned by
+  the API (GHSA-mvv8-v4jj-g47j).
+
+- [#425](https://github.com/LaWebcapsule/d9/pull/425)
+  [`7e04036`](https://github.com/LaWebcapsule/d9/commit/7e0403632d8c11d2d2bcba1b43aec432a6ed185d) - security: fields
+  with the `conceal` special can no longer be used with value-returning aggregate functions (`min`,
+  (GHSA-38hg-ww64-rrwc, CVE-2026-35442, GHSA-8jpw-gpr4-8cmh, CVE-2025-64748) `max`, `sum`, `avg`, …)
+  (GHSA-38hg-ww64-rrwc / CVE-2026-35442) and are excluded from search (GHSA-8jpw-gpr4-8cmh / CVE-2025-64748), to prevent
+  extracting their values
+
+- [#429](https://github.com/LaWebcapsule/d9/pull/429)
+  [`90fb2e7`](https://github.com/LaWebcapsule/d9/commit/90fb2e7bf0bfcc3a51071ca111c1d998cc1b7e65) - security: deleting a
+  field now removes it from the permissions of its collection, so a field later created with the same
+  (GHSA-9x5g-62gj-wqf2, CVE-2025-64746) name no longer inherits the deleted field's access (GHSA-9x5g-62gj-wqf2 /
+  CVE-2025-64746)
+
+- [#426](https://github.com/LaWebcapsule/d9/pull/426)
+  [`3a76a3a`](https://github.com/LaWebcapsule/d9/commit/3a76a3a80f3c4d384d7a99277dca8c2a651e6209) - security: the
+  OpenAPI specification served by `/server/specs/oas` now only exposes the exact running version in
+  (GHSA-rmjh-cf9q-pv7q) `info.version` to admins, like `/server/info`; other users get `0.0.0-hidden`
+  (GHSA-rmjh-cf9q-pv7q)
+
+- [#424](https://github.com/LaWebcapsule/d9/pull/424)
+  [`2c9fefc`](https://github.com/LaWebcapsule/d9/commit/2c9fefcb0e76d8d513cc4a33ec559cb93b9ca59d) - security: manual
+  Flow triggers now require read access to the Flow and to the target collection / items (GHSA-7cvf-pxgp-42fc,
+  CVE-2025-53889) (GHSA-7cvf-pxgp-42fc / CVE-2025-53889)
+- Updated dependencies
+  [[`d4d8aa9`](https://github.com/LaWebcapsule/d9/commit/d4d8aa999c5515b618555b25e6df914a3d2ad703)]:
+  - @wbce-d9/app@11.1.0
+
 ## 12.6.0
 
 ### Minor Changes
