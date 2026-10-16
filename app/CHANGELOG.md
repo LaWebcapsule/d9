@@ -1,5 +1,21 @@
 # @wbce-d9/app
 
+## 11.2.0
+
+### Minor Changes
+
+- [#434](https://github.com/LaWebcapsule/d9/pull/434)
+  [`20fc79d`](https://github.com/LaWebcapsule/d9/commit/20fc79d568e80de4177bfaccffbbe23f2790914e) - The resizable edge
+  of the navigation panel now shows a small grip, so it can be found without hovering. On hover (after the same short
+  delay as before) and while dragging, the grip and a thinner 2px line light up in the primary color.
+
+### Patch Changes
+
+- [#433](https://github.com/LaWebcapsule/d9/pull/433)
+  [`aba4181`](https://github.com/LaWebcapsule/d9/commit/aba4181682b087ffc0909cc355e4676572d8fa6c) - Fixed the sidebar
+  showing every section collapsed after navigating to another page while it was open. The first section (usually
+  "Information") is now shown open right away, without the expand animation.
+
 ## 11.1.0
 
 ### Minor Changes
