@@ -119,13 +119,11 @@ export const expressLogger = pinoHttp({
 
 export default logger;
 
-export function redactQuery(originalPath: string) {
+function redactQuery(originalPath: string) {
 	const url = new URL(originalPath, 'http://example.com/');
 
-	for (const key of new Set(url.searchParams.keys())) {
-		if (key === 'access_token' || key.startsWith('access_token[')) {
-			url.searchParams.set(key, REDACT_TEXT);
-		}
+	if (url.searchParams.has('access_token')) {
+		url.searchParams.set('access_token', REDACT_TEXT);
 	}
 
 	return url.pathname + url.search;

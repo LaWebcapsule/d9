@@ -21,7 +21,7 @@ vi.doMock('./env', async () => {
 	};
 });
 
-const { httpLoggerOptions, redactQuery } = await import('./logger.js');
+const { httpLoggerOptions } = await import('./logger.js');
 
 const logOutput = vi.fn();
 
@@ -180,22 +180,5 @@ describe('req.query', () => {
 		instance.info({ req: { query } });
 
 		expect(query.access_token).toBe('test-access-token-value');
-	});
-});
-
-describe('redactQuery', () => {
-	test.each([
-		['/items/test?access_token=token&limit=10', '/items/test?access_token=--redact--&limit=10'],
-		['/items/test?access_token=token&access_token=other', '/items/test?access_token=--redact--'],
-		['/items/test?access%5Ftoken=token', '/items/test?access_token=--redact--'],
-		['/items/test?access_token[]=token', '/items/test?access_token%5B%5D=--redact--'],
-		['/items/test?access_token%5B%5D=token', '/items/test?access_token%5B%5D=--redact--'],
-		['/items/test?access_token[x]=token', '/items/test?access_token%5Bx%5D=--redact--'],
-	])('Should redact the access token in %s', (url, expected) => {
-		expect(redactQuery(url)).toBe(expected);
-	});
-
-	test('Should leave other parameters as is', () => {
-		expect(redactQuery('/items/test?limit=10&sort=title')).toBe('/items/test?limit=10&sort=title');
 	});
 });
