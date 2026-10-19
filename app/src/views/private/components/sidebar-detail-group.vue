@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, nextTick, ref, watch } from 'vue';
+import { defineComponent, nextTick, onMounted, provide, ref, watch } from 'vue';
 export default defineComponent({
 	props: {
 		sidebarOpen: {
@@ -19,18 +19,25 @@ export default defineComponent({
 
 		const mandatory = ref(false);
 
+		// A page that mounts with the sidebar already open shows its first section open right away, without animation
+		const animate = ref(!props.sidebarOpen);
+		provide('sidebar-detail-animate', animate);
+
+		onMounted(async () => {
+			if (props.sidebarOpen === false) return;
+			await openFirst();
+			// Let the opened section render before the transition is enabled again
+			await nextTick();
+			animate.value = true;
+		});
+
 		watch(
 			() => props.sidebarOpen,
 			async (newOpenState) => {
 				if (newOpenState === false) {
 					openDetail.value = [];
 				} else {
-					// Ensures the first item in the sidebar is automatically opened whenever the sidebar opens.
-					mandatory.value = true;
-					await nextTick();
-
-					// Still allow the user to manually close it afterwards
-					mandatory.value = false;
+					await openFirst();
 				}
 			}
 		);
@@ -39,6 +46,15 @@ export default defineComponent({
 			openDetail,
 			mandatory,
 		};
+
+		// Ensures the first item in the sidebar is automatically opened whenever the sidebar opens.
+		async function openFirst() {
+			mandatory.value = true;
+			await nextTick();
+
+			// Still allow the user to manually close it afterwards
+			mandatory.value = false;
+		}
 	},
 });
 </script>
