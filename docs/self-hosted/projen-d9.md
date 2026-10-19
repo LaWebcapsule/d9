@@ -163,7 +163,11 @@ work across extensions:
 ## What gets generated
 
 - `docker-compose.yml`: d9, Postgres (PostGIS), Redis with healthchecks
-- `Dockerfile`: Node 22 + pnpm, builds extensions
+- `Dockerfile`: multi-stage build on Node 22. A builder stage installs all dependencies,
+  so the projen version locked in `package-lock.json` runs, and builds the extensions
+  with pnpm; the final image only holds the production dependencies and the built
+  extensions
+- `.dockerignore`: keeps `node_modules` and `.git` out of the build context
 - `.env.local`: sample for local environment overrides
 - `d9-plumbing.json`: configuration of the `d9-plumbing` CLI
 - GitHub PR and issue templates via
@@ -184,12 +188,23 @@ Configure the deployed instance via environment variables (database, cache, secr
 keys) the same way you would any other d9 container. See the
 [Config Options](/self-hosted/config-options) page for the full list.
 
+The Dockerfile is exposed as `project.dockerfile` in `.projenrc.js`. Adapt it with
+`editFromEndOfStep()`, `overrideStep()` or `removeStep()`, using the step ids shown
+as comments in the generated file. For instance, to install Chromium for an extension
+using Playwright:
+
+```js
+project.dockerfile
+  .editFromEndOfStep('install-deps')
+  .run('npx playwright install --with-deps chromium && rm -rf /var/lib/apt/lists/*');
+```
+
 ## Sharing schema across environments
 
 `d9-plumbing` goes further than `npx d9 schema snapshot`: besides collections, fields
 and relations, it saves **roles and permissions** and the other d9 configuration
 tables (flows, dashboards, settings...), the **reference tables** you list, and the
-files of the shared `d9-plumbing-common` folder. The full workflow is described in
+files of a shared d9 folder (`d9-plumbing-common` by default). The full workflow is described in
 [Migrate Your Project with Projen](/guides/migration/projen).
 
 ### Save a schema
@@ -243,9 +258,11 @@ Highlights:
 
 Any option from the projen `TypeScriptProjectOptions` interface is also accepted.
 
-The `d9-plumbing` CLI is configured with `project.configurePlumbing({ intermediateStorage, logLevel })`,
-which writes `d9-plumbing.json`. See
-[Configure the Intermediate Storage](/guides/migration/projen#configure-the-intermediate-storage).
+The `d9-plumbing` CLI is configured with
+`project.configurePlumbing({ intermediateStorage, logLevel, commonFolderName })`, which
+writes `d9-plumbing.json`. See
+[Configure the Intermediate Storage](/guides/migration/projen#configure-the-intermediate-storage)
+and [Files](/guides/migration/projen#files) for the common folder.
 
 ## Source
 

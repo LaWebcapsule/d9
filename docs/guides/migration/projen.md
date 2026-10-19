@@ -26,7 +26,8 @@ environment to another:
   alongside the configuration.
 - **Permissions are human-readable and editable.** Each role gets [Cedar](https://www.cedarpolicy.com/) policies,
   which you can review in pull requests, audit, and edit.
-- **Files come along.** Files of the shared `d9-plumbing-common` folder are transferred between environments.
+- **Files come along.** Files of a shared d9 folder (`d9-plumbing-common` by default) are transferred between
+  environments.
 
 Everything is plain files (SQL, CSV, Cedar) committed to Git, so every change to your configuration is reviewed and
 versioned like code.
@@ -50,7 +51,8 @@ npx d9-plumbing --help
 ```
 
 The CLI reads the same environment as d9 (`.env`, `DB_*`, `STORAGE_*` variables). Each database setting can be
-overridden with a flag (`--host`, `--user`, `--password`, `--database`, `--ssl`).
+overridden with a flag (`--host`, `--port`, `--user`, `--password`, `--database`, `--ssl`). The port defaults to
+`DB_PORT`, else `5432`.
 
 ## What Is Saved
 
@@ -97,9 +99,13 @@ See [Edit Permissions with Cedar](#edit-permissions-with-cedar).
 
 ### Files
 
-Only the files of the d9 folder named `d9-plumbing-common` and its subfolders are saved: the save dumps only those rows of
+Only the files of the common d9 folder and its subfolders are saved: the save dumps only those rows of
 `directus_files` and `directus_folders`, so every other file stays local to its environment. Put the files shared by
-all environments (logos, default images...) in `d9-plumbing-common`.
+all environments (logos, default images...) in that folder.
+
+The common folder is named `d9-plumbing-common` by default. Change it with, by increasing priority,
+`configurePlumbing({ commonFolderName })` in `.projenrc.js`, the `COMMON_FOLDER_NAME` environment variable, or the
+`--common-folder <name>` flag.
 
 The files themselves are not committed. They are transferred through an intermediate storage shared by your
 environments, see [Configure the Intermediate Storage](#configure-the-intermediate-storage).
@@ -117,7 +123,7 @@ It:
 1. Dumps the schema into `sql/schema.sql`.
 2. Empties `sql/data` and dumps one CSV per saved table.
 3. Regenerates the Cedar policies in `permissions/` (skip it with `--no-cedar`).
-4. Pushes the files of the `d9-plumbing-common` folder to the intermediate storage.
+4. Pushes the files of the [common folder](#files) to the intermediate storage (skip it with `--no-files`).
 
 Commit `sql/` and `permissions/` and merge them like any other change.
 
