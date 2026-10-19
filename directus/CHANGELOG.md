@@ -1,5 +1,17 @@
 # directus9
 
+## 12.0.22
+
+### Patch Changes
+
+- Updated dependencies [[`4e86904`](https://github.com/LaWebcapsule/d9/commit/4e869043bb2c092d5aa0d6e893407f79fe5663d0),
+  [`a6ec87c`](https://github.com/LaWebcapsule/d9/commit/a6ec87c3b5057b5616a611169020f9ebdb1348d8),
+  [`eb7890d`](https://github.com/LaWebcapsule/d9/commit/eb7890d705ca0ecf3e92d928a39e90265596f5bc),
+  [`7792afb`](https://github.com/LaWebcapsule/d9/commit/7792afba141f9bd9249b132b16a40eba2d00a7b1),
+  [`16aa3cb`](https://github.com/LaWebcapsule/d9/commit/16aa3cb19341edf981582527a2ea13d3ed54b76c),
+  [`d492d37`](https://github.com/LaWebcapsule/d9/commit/d492d37fa9d0ba2c5dcda9b8d4c42a3a82b13d78)]:
+  - @wbce-d9/api@12.7.0
+
 ## 12.0.21
 
 ### Patch Changes

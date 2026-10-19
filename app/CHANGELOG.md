@@ -1,5 +1,49 @@
 # @wbce-d9/app
 
+## 11.2.0
+
+### Minor Changes
+
+- [#447](https://github.com/LaWebcapsule/d9/pull/447)
+  [`490e25e`](https://github.com/LaWebcapsule/d9/commit/490e25e6a1577514c097da123e74ab2f55a8968c) - The default art of
+  the login and other public pages is now an animated "crystal" background tinted with the project color, instead of the
+  static waves. A custom public background set in Settings still replaces it, and the animation stays still for users
+  who prefer reduced motion.
+
+- [#445](https://github.com/LaWebcapsule/d9/pull/445)
+  [`2db4d1d`](https://github.com/LaWebcapsule/d9/commit/2db4d1d6c4fa8339c590340bfe14f7595148b3b5) - Clicking the empty
+  area below the sections of the open sidebar now closes it, as clicking the closed sidebar opens it. A thin line marks
+  where that area starts.
+
+- [#434](https://github.com/LaWebcapsule/d9/pull/434)
+  [`20fc79d`](https://github.com/LaWebcapsule/d9/commit/20fc79d568e80de4177bfaccffbbe23f2790914e) - The resizable edge
+  of the navigation panel now shows a small grip, so it can be found without hovering. On hover (after the same short
+  delay as before) and while dragging, the grip and a thinner 2px line light up in the primary color.
+
+- [#445](https://github.com/LaWebcapsule/d9/pull/445)
+  [`2db4d1d`](https://github.com/LaWebcapsule/d9/commit/2db4d1d6c4fa8339c590340bfe14f7595148b3b5) - The sidebar on the
+  right can now be resized from its left edge, like the navigation panel: drag between 150px and the room left for the
+  page, double-click to reset to 280px; the width is remembered per browser. Dragging it further toward the window edge
+  closes it. Its edge shows the same grip as the navigation panel. The navigation panel can now also be made narrower,
+  down to 150px (its default stays 220px).
+
+### Patch Changes
+
+- [#433](https://github.com/LaWebcapsule/d9/pull/433)
+  [`aba4181`](https://github.com/LaWebcapsule/d9/commit/aba4181682b087ffc0909cc355e4676572d8fa6c) - Fixed the sidebar
+  showing every section collapsed after navigating to another page while it was open. The first section (usually
+  "Information") is now shown open right away, without the expand animation.
+
+- [#446](https://github.com/LaWebcapsule/d9/pull/446)
+  [`0a82510`](https://github.com/LaWebcapsule/d9/commit/0a825102ce18631669bbcd1d21636398f38896d6) - Header action
+  buttons no longer collapse behind an expand button on every window narrower than 960px. They now collapse only when
+  they would take more than half of the header width, which stays reserved for the title.
+
+- [#449](https://github.com/LaWebcapsule/d9/pull/449)
+  [`f95759f`](https://github.com/LaWebcapsule/d9/commit/f95759fb4af879ffb432474b626f549e2c342820) - Fixed the header
+  action buttons collapsing in a band of window widths just above 600px and expanding again below it. Only the buttons
+  are now compared with half of the header width, so they collapse at a single window width.
+
 ## 11.1.0
 
 ### Minor Changes
