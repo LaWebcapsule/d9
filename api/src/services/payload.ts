@@ -632,7 +632,10 @@ export class PayloadService {
 				if (key) {
 					// readMany rather than readOne: not found is not an error.
 					const currentItems = await adminItemService.readMany([key], { fields: [relation.field] });
-					if (currentItems.length > 0 && currentItems[0]![relation.field] == parentKey) return item;
+
+					if (currentItems.length > 0 && currentItems[0]![relation.field] == parentKey) {
+						return omit(item, relation.field);
+					}
 				}
 
 				return { ...item, [relation.field]: parentKey };
