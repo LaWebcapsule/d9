@@ -1,5 +1,142 @@
 # @wbce-d9/api
 
+## 12.6.1
+
+### Patch Changes
+
+- [#427](https://github.com/LaWebcapsule/d9/pull/427)
+  [`7956e59`](https://github.com/LaWebcapsule/d9/commit/7956e594eedf194da2565f13971a5c136579ad3c) - security: `hash`
+  fields are now concealed on read, like `conceal` fields, so their value is no longer stored in clear text
+  (GHSA-mvv8-v4jj-g47j, CVE-2026-39943) in revisions when an item is created, and their hash is no longer returned by
+  the API (GHSA-mvv8-v4jj-g47j).
+
+- [#425](https://github.com/LaWebcapsule/d9/pull/425)
+  [`7e04036`](https://github.com/LaWebcapsule/d9/commit/7e0403632d8c11d2d2bcba1b43aec432a6ed185d) - security: fields
+  with the `conceal` special can no longer be used with value-returning aggregate functions (`min`,
+  (GHSA-38hg-ww64-rrwc, CVE-2026-35442, GHSA-8jpw-gpr4-8cmh, CVE-2025-64748) `max`, `sum`, `avg`, …)
+  (GHSA-38hg-ww64-rrwc / CVE-2026-35442) and are excluded from search (GHSA-8jpw-gpr4-8cmh / CVE-2025-64748), to prevent
+  extracting their values
+
+- [#429](https://github.com/LaWebcapsule/d9/pull/429)
+  [`90fb2e7`](https://github.com/LaWebcapsule/d9/commit/90fb2e7bf0bfcc3a51071ca111c1d998cc1b7e65) - security: deleting a
+  field now removes it from the permissions of its collection, so a field later created with the same
+  (GHSA-9x5g-62gj-wqf2, CVE-2025-64746) name no longer inherits the deleted field's access (GHSA-9x5g-62gj-wqf2 /
+  CVE-2025-64746)
+
+- [#426](https://github.com/LaWebcapsule/d9/pull/426)
+  [`3a76a3a`](https://github.com/LaWebcapsule/d9/commit/3a76a3a80f3c4d384d7a99277dca8c2a651e6209) - security: the
+  OpenAPI specification served by `/server/specs/oas` now only exposes the exact running version in
+  (GHSA-rmjh-cf9q-pv7q) `info.version` to admins, like `/server/info`; other users get `0.0.0-hidden`
+  (GHSA-rmjh-cf9q-pv7q)
+
+- [#424](https://github.com/LaWebcapsule/d9/pull/424)
+  [`2c9fefc`](https://github.com/LaWebcapsule/d9/commit/2c9fefcb0e76d8d513cc4a33ec559cb93b9ca59d) - security: manual
+  Flow triggers now require read access to the Flow and to the target collection / items (GHSA-7cvf-pxgp-42fc,
+  CVE-2025-53889) (GHSA-7cvf-pxgp-42fc / CVE-2025-53889)
+- Updated dependencies
+  [[`d4d8aa9`](https://github.com/LaWebcapsule/d9/commit/d4d8aa999c5515b618555b25e6df914a3d2ad703)]:
+  - @wbce-d9/app@11.1.0
+
+## 12.6.0
+
+### Minor Changes
+
+- [#418](https://github.com/LaWebcapsule/d9/pull/418)
+  [`cd9638d`](https://github.com/LaWebcapsule/d9/commit/cd9638dbf8b3f911aca3f1aaf57dca32027cf661) - security: file
+  import from URL now only connects to public IP addresses, checked on every redirect hop through (GHSA-j5h6-vqc3-phqh,
+  GHSA-wv3h-5fx7-966h, GHSA-xhgj-x4mj-6c93, CVE-2026-61835, CVE-2026-35409) request-filtering-agent, and follows at most
+  5 redirects (GHSA-xhgj-x4mj-6c93). Importing files from private IP addresses now fails unless they are listed in the
+  new `IMPORT_FILE_IP_ALLOW_LIST` (IPs or CIDR ranges).
+
+  `IMPORT_IP_DENY_LIST`'s `0.0.0.0` entry now also denies IPv6 local interface addresses (e.g. `::1`), as documented.
+  This applies to webhooks and Flows too: requests to `localhost` resolving to `::1` are now denied.
+
+### Patch Changes
+
+- [#414](https://github.com/LaWebcapsule/d9/pull/414)
+  [`fbaca91`](https://github.com/LaWebcapsule/d9/commit/fbaca91348958934721cb67936c92ac26b97a2dc) - security: Fixed an
+  open redirect in the SAML ACS endpoint: `RelayState` is now validated against the allowed login redirects
+  (GHSA-qmqf-6vxq-c7f4) before redirecting, on both the success and error paths
+- Updated dependencies
+  [[`8a59add`](https://github.com/LaWebcapsule/d9/commit/8a59add5b9b0039cc77f0a00f0f6874a16531100)]:
+  - @wbce-d9/utils@10.0.4
+  - @wbce-d9/exceptions@10.0.1
+  - @wbce-d9/app@11.0.1
+  - @wbce-d9/extensions-sdk@10.0.5
+  - @wbce-d9/storage-driver-azure@10.0.4
+  - @wbce-d9/storage-driver-cloudinary@10.0.5
+  - @wbce-d9/storage-driver-gcs@10.0.4
+  - @wbce-d9/storage-driver-local@10.0.4
+  - @wbce-d9/storage-driver-s3@10.0.4
+
+## 12.5.11
+
+### Patch Changes
+
+- [#413](https://github.com/LaWebcapsule/d9/pull/413)
+  [`5b79c1f`](https://github.com/LaWebcapsule/d9/commit/5b79c1f3135c5e1bd18ef1d3a7fcbe4e17e9bb6e) - security: Fixed a
+  security issue (CVE-2026-35408) where responses were sent without a `Cross-Origin-Opener-Policy` header, so a
+  (GHSA-8m32-p958-jg99) cross-origin page that opened the login page could keep a reference to its window and tamper
+  with the SSO flow. The header is now set to `same-origin` by default and can be changed with
+  `CROSS_ORIGIN_OPENER_POLICY` (`same-origin-allow-popups` or `unsafe-none`).
+
+- [#400](https://github.com/LaWebcapsule/d9/pull/400)
+  [`9ba2f5e`](https://github.com/LaWebcapsule/d9/commit/9ba2f5e287bc36e6d94dbf1c916e6f2daa066f03) - security: condition
+  operation errors now only contain the path and type of each failed rule, so webhook flows returning
+  (GHSA-fm3h-p9wm-h74h) the last operation data no longer leak `$env`, `$accountability` or other flow data
+  (GHSA-fm3h-p9wm-h74h)
+
+- [#411](https://github.com/LaWebcapsule/d9/pull/411)
+  [`e0655b1`](https://github.com/LaWebcapsule/d9/commit/e0655b1bf7b332620e22022d116deff1b163977b) - security: Harden the
+  login redirect validator against backslash and port bypasses (GHSA-f42p-ffpq-jh5c)
+
+## 12.5.10
+
+### Patch Changes
+
+- [#398](https://github.com/LaWebcapsule/d9/pull/398)
+  [`7f20016`](https://github.com/LaWebcapsule/d9/commit/7f20016c7de2a65f3153412362bdedec5e26833c) - security: Fixed a
+  security issue where the OpenID login handler forwarded arbitrary request query parameters into the
+  (GHSA-qchf-7rv9-8wmm) authorization request, allowing a caller to override server-set protocol parameters
+  (`redirect_uri`, `state`, `nonce`, `code_challenge`) or inject others (`client_id`, `response_type`, `request_uri`).
+  Reserved protocol parameters are now stripped from forwarded query parameters, and the remaining ones are merged
+  before the server-set parameters so the latter always win. Non-protocol parameters such as Keycloak's `kc_action`
+  continue to work.
+
+## 12.5.9
+
+### Patch Changes
+
+- [#396](https://github.com/LaWebcapsule/d9/pull/396)
+  [`0f20df6`](https://github.com/LaWebcapsule/d9/commit/0f20df670e3cb534cf571f11d348340f1cb30d68) - security: include
+  role, admin/app access, share and share scope in the response cache key so cached responses are no
+  (GHSA-2mh4-2jfx-3h7r) longer shared between anonymous, share and role contexts that have no user id
+  (GHSA-2mh4-2jfx-3h7r)
+
+## 12.5.8
+
+### Patch Changes
+
+- [#380](https://github.com/LaWebcapsule/d9/pull/380)
+  [`1136ffc`](https://github.com/LaWebcapsule/d9/commit/1136ffc780684e1c49872993036344ce6f842db6) - Keep a file's title,
+  description and tags when the file is replaced
+
+- [#391](https://github.com/LaWebcapsule/d9/pull/391)
+  [`25f74b2`](https://github.com/LaWebcapsule/d9/commit/25f74b2d4f92f36be688e1d05419994fb0f3a0c4) - security: assets csp
+  hardening
+
+- [#393](https://github.com/LaWebcapsule/d9/pull/393)
+  [`50beac9`](https://github.com/LaWebcapsule/d9/commit/50beac94cafa1db3fe665e1ea982745721ad171e) - Pin the transitive
+  `uuid` security override to `^11.1.1` so CommonJS dependencies (e.g. the MSSQL driver's `@azure/msal-node`) can still
+  load it
+
+## 12.5.7
+
+### Patch Changes
+
+- Updated dependencies [70ea742]
+  - @wbce-d9/app@11.0.0
+
 ## 12.5.6
 
 ### Patch Changes

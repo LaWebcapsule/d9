@@ -12,7 +12,7 @@ import { Action } from '@wbce-d9/constants';
 import { applyOptionsData, isValidJSON, parseJSON, toArray } from '@wbce-d9/utils';
 import fastRedact from 'fast-redact';
 import type { Knex } from 'knex';
-import { omit, pick } from 'lodash-es';
+import { cloneDeep, omit, pick } from 'lodash-es';
 import { get } from 'micromustache';
 import { schedule, validate } from 'node-cron';
 import getDatabase from './database/index.js';
@@ -25,6 +25,7 @@ import { getMessenger } from './messenger.js';
 import { ActivityService } from './services/activity.js';
 import * as services from './services/index.js';
 import { FlowsService } from './services/flows.js';
+import { PayloadService } from './services/payload.js';
 import { RevisionsService } from './services/revisions.js';
 import type { EventHandler } from './types/index.js';
 import { constructFlowTree } from './utils/construct-flow-tree.js';
@@ -255,12 +256,16 @@ class FlowManager {
 						throw new exceptions.ForbiddenException();
 					}
 
-					if (flow.options['async']) {
-						this.executeFlow(flow, data, context);
-						return undefined;
-					} else {
-						return this.executeFlow(flow, data, context);
-					}
+					const run = () => {
+						if (flow.options['async']) {
+							this.executeFlow(flow, data, context);
+							return undefined;
+						} else {
+							return this.executeFlow(flow, data, context);
+						}
+					};
+
+					return this.checkManualTriggerAccess(flow, targetCollection, data, context).then(run);
 				};
 
 				// Default return to $last for manual
@@ -271,6 +276,51 @@ class FlowManager {
 		}
 
 		this.isLoaded = true;
+	}
+
+	/**
+	 * Manual flows act on behalf of the triggering user: make sure that user can see the flow itself
+	 * and read the collection / items passed in the payload before running it.
+	 */
+	private async checkManualTriggerAccess(
+		flow: Flow,
+		collection: string,
+		data: unknown,
+		context: {
+			accountability?: Accountability;
+			database?: Knex;
+			schema?: SchemaOverview;
+		}
+	): Promise<void> {
+		const accountability = context['accountability'] as Accountability | null | undefined;
+
+		if (!accountability) throw new exceptions.ForbiddenException();
+		if (accountability.admin) return;
+
+		const database = (context['database'] as Knex) ?? getDatabase();
+		const schema = (context['schema'] as SchemaOverview) ?? (await getSchema({ database }));
+
+		const flowsService = new FlowsService({ accountability, knex: database, schema });
+		await flowsService.readOne(flow.id, { fields: ['id'] });
+
+		const keys = (data as Record<string, any>)?.['body']?.keys;
+
+		if (keys === null || keys === undefined || (Array.isArray(keys) && keys.length === 0)) {
+			if (flow.options?.['requireSelection'] !== false) throw new exceptions.ForbiddenException();
+
+			const canReadCollection = accountability.permissions?.some(
+				(permission) => permission.collection === collection && permission.action === 'read'
+			);
+
+			if (!canReadCollection) throw new exceptions.ForbiddenException();
+
+			return;
+		}
+
+		if (!Array.isArray(keys)) throw new exceptions.ForbiddenException();
+
+		const authorizationService = new services.AuthorizationService({ accountability, knex: database, schema });
+		await authorizationService.checkAccess('read', collection, keys);
 	}
 
 	private async unload(): Promise<void> {
@@ -308,6 +358,15 @@ class FlowManager {
 			[ENV_KEY]: pick(env, env['FLOWS_ENV_ALLOW_LIST'] ? toArray(env['FLOWS_ENV_ALLOW_LIST']) : []),
 		};
 
+		// Concealed fields of the event payload (e.g. passwords, tokens) must never end up in logs or revisions
+		const concealedData = await this.concealEventPayload(flow, data, database, schema);
+
+		const concealedKeyedData: Record<string, unknown> = {
+			...keyedData,
+			[TRIGGER_KEY]: concealedData,
+			[LAST_KEY]: concealedData,
+		};
+
 		let nextOperation = flow.operation;
 		let lastOperationStatus: 'resolve' | 'reject' | 'unknown' = 'unknown';
 
@@ -319,10 +378,17 @@ class FlowManager {
 		}[] = [];
 
 		while (nextOperation !== null) {
-			const { successor, data, status, options } = await this.executeOperation(nextOperation, keyedData, context);
+			const { successor, data, status, options } = await this.executeOperation(
+				nextOperation,
+				keyedData,
+				concealedKeyedData,
+				context
+			);
 
 			keyedData[nextOperation.key] = data;
 			keyedData[LAST_KEY] = data;
+			concealedKeyedData[nextOperation.key] = data;
+			concealedKeyedData[LAST_KEY] = data;
 			lastOperationStatus = status;
 			steps.push({ operation: nextOperation!.id, key: nextOperation.key, status, options });
 
@@ -359,7 +425,7 @@ class FlowManager {
 					item: flow.id,
 					data: {
 						steps: steps,
-						data: redactLogs(omit(keyedData, '$accountability.permissions')), // Permissions is a ton of data, and is just a copy of what's in the directus_permissions table
+						data: redactLogs(omit(concealedKeyedData, '$accountability.permissions')), // Permissions is a ton of data, and is just a copy of what's in the directus_permissions table
 					},
 				});
 			}
@@ -378,9 +444,33 @@ class FlowManager {
 		return undefined;
 	}
 
+	/**
+	 * Return a copy of the event data whose payload has its concealed fields masked, as they would be on read.
+	 * The data is returned as is when there is nothing to conceal.
+	 */
+	private async concealEventPayload(flow: Flow, data: unknown, knex: Knex, schema: SchemaOverview): Promise<unknown> {
+		if (flow.trigger !== 'event') return data;
+
+		const { collection, payload } = data as { collection: string; payload: Record<string, unknown> };
+
+		if (!schema.collections[collection] || !payload) return data;
+
+		const payloadService = new PayloadService(collection, { knex, schema });
+		const concealedData = cloneDeep(data) as { payload: Record<string, unknown> };
+
+		concealedData.payload = await payloadService.processValues('read', concealedData.payload);
+
+		return concealedData;
+	}
+
+	/**
+	 * Options are resolved against `concealedKeyedData` for the log operation and for the returned options (stored in
+	 * the flow revisions), and against `keyedData` for every other operation.
+	 */
 	private async executeOperation(
 		operation: Operation,
 		keyedData: Record<string, unknown>,
+		concealedKeyedData: Record<string, unknown>,
 		context: Record<string, unknown> = {}
 	): Promise<{
 		successor: Operation | null;
@@ -397,8 +487,10 @@ class FlowManager {
 
 		const options = applyOptionsData(operation.options, keyedData);
 
+		const concealedOptions = applyOptionsData(operation.options, concealedKeyedData);
+
 		try {
-			let result = await handler(options, {
+			let result = await handler(operation.type === 'log' ? concealedOptions : options, {
 				services,
 				exceptions: { ...exceptions, ...sharedExceptions },
 				env,
@@ -419,7 +511,7 @@ class FlowManager {
 				result = mapValuesDeep(result, (_, value) => (value === undefined ? null : value));
 			}
 
-			return { successor: operation.resolve, status: 'resolve', data: result ?? null, options };
+			return { successor: operation.resolve, status: 'resolve', data: result ?? null, options: concealedOptions };
 		} catch (error) {
 			let data;
 
@@ -439,7 +531,7 @@ class FlowManager {
 				successor: operation.reject,
 				status: 'reject',
 				data,
-				options,
+				options: concealedOptions,
 			};
 		}
 	}

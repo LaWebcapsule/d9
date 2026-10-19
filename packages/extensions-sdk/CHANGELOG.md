@@ -1,5 +1,14 @@
 # @wbce-d9/extensions-sdk
 
+## 10.0.5
+
+### Patch Changes
+
+- Updated dependencies
+  [[`8a59add`](https://github.com/LaWebcapsule/d9/commit/8a59add5b9b0039cc77f0a00f0f6874a16531100)]:
+  - @wbce-d9/utils@10.0.4
+  - @wbce-d9/composables@10.0.4
+
 ## 10.0.4
 
 ### Patch Changes

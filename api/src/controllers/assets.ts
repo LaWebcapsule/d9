@@ -2,6 +2,7 @@ import type { Range } from '@wbce-d9/storage';
 import { parseJSON } from '@wbce-d9/utils';
 import contentDisposition from 'content-disposition';
 import { Router } from 'express';
+import helmet from 'helmet';
 import { merge, pick } from 'lodash-es';
 import { ASSET_TRANSFORM_QUERY_KEYS, SYSTEM_ASSET_ALLOW_LIST } from '../constants.js';
 import getDatabase from '../database/index.js';
@@ -117,22 +118,6 @@ router.get(
 		}
 	}),
 
-	asyncHandler(async (req, res, next) => {
-		const helmet = await import('helmet');
-
-		return helmet.contentSecurityPolicy(
-			merge(
-				{
-					useDefaults: false,
-					directives: {
-						defaultSrc: ['none'],
-					},
-				},
-				getConfigFromEnv('ASSETS_CONTENT_SECURITY_POLICY')
-			)
-		)(req, res, next);
-	}),
-
 	// Return file
 	asyncHandler(async (req, res) => {
 		const id = req.params['pk']!.substring(0, 36);
@@ -190,7 +175,27 @@ router.get(
 		const filename = req.params['filename'] ?? file.filename_download;
 		res.attachment(filename);
 		res.setHeader('Content-Type', file.type);
+		res.setHeader('X-Content-Type-Options', 'nosniff');
 		res.setHeader('Accept-Ranges', 'bytes');
+
+		helmet.contentSecurityPolicy(
+			merge(
+				{
+					useDefaults: false,
+					directives: {
+						defaultSrc: ["'none'"],
+						// form-action doesn't fall back to default-src
+						formAction: ["'none'"],
+						// Serve assets from an opaque origin, except PDFs which browsers refuse to render when sandboxed
+						...(file.type !== 'application/pdf' ? { sandbox: [] } : {}),
+					},
+				},
+				getConfigFromEnv('ASSETS_CONTENT_SECURITY_POLICY')
+			)
+		)(req, res, (err?: unknown) => {
+			if (err) throw err;
+		});
+
 		res.setHeader('Cache-Control', getCacheControlHeader(req, getMilliseconds(env['ASSETS_CACHE_TTL']), false, true));
 		res.setHeader('Vary', vary.join(', '));
 

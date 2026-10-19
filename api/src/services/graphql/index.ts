@@ -177,6 +177,10 @@ export class GraphQLService {
 	getSchema(type: 'schema'): GraphQLSchema;
 	getSchema(type: 'sdl'): GraphQLSchema | string;
 	getSchema(type: 'schema' | 'sdl' = 'schema'): GraphQLSchema | string {
+		if (type === 'sdl' && env['GRAPHQL_INTROSPECTION'] === false) {
+			throw new ForbiddenException();
+		}
+
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		const self = this;
 

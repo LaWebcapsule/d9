@@ -8,9 +8,18 @@ export function getCacheKey(req: Request): string {
 	const path = url.parse(req.originalUrl).pathname;
 	const isGraphQl = path?.startsWith('/graphql');
 
+	const accountability = req.accountability;
+
+	// Include every accountability field that affects permission resolution (see get-permissions.ts),
+	// so responses are never shared across roles, shares or share scopes
 	const info = {
 		version,
-		user: req.accountability?.user || null,
+		user: accountability?.user || null,
+		role: accountability?.role || null,
+		admin: accountability?.admin || false,
+		app: accountability?.app || false,
+		share: accountability?.share || null,
+		share_scope: accountability?.share_scope || null,
 		path,
 		query: isGraphQl ? getGraphqlQueryAndVariables(req) : req.sanitizedQuery,
 	};

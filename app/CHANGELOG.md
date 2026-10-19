@@ -1,5 +1,31 @@
 # @wbce-d9/app
 
+## 11.1.0
+
+### Minor Changes
+
+- [#432](https://github.com/LaWebcapsule/d9/pull/432)
+  [`d4d8aa9`](https://github.com/LaWebcapsule/d9/commit/d4d8aa999c5515b618555b25e6df914a3d2ad703) - The Project Color
+  from Settings is now the primary color of the whole admin UI (buttons, links, toggles, focus rings, selections), not
+  only of the logo and favicon. `--primary` and its shades are derived from it with CSS `color-mix()`, using the same
+  mixing rules as the built-in palette, in the light and dark themes. Without a project color, or in browsers without
+  `color-mix()`, the built-in purple palette is used as before.
+
+## 11.0.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @wbce-d9/composables@10.0.4
+
+## 11.0.0
+
+### Major Changes
+
+- 70ea742: security: upgrade maplibre-gl from 1.15.3 to 6.11.2 (GHSA-jrc7-96c5-q579). Maps now require WebGL2 (no longer
+  displayed on Safari 14 and older or legacy Android browsers). mapbox:// basemaps are resolved through transformRequest
+  and map controls are restyled for the maplibregl- class names.
+
 ## 10.1.3
 
 ### Patch Changes

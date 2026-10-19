@@ -16,42 +16,42 @@ const requests = [
 	{
 		name: 'as unauthenticated request',
 		params: { method, originalUrl: restUrl },
-		key: '20ada3d7cc37fb7e742d2a723f6f1d7a64686d2e',
+		key: 'da8873209dfcc5473fe3a936336f509f60e48549',
 	},
 	{
 		name: 'as authenticated request',
 		params: { method, originalUrl: restUrl, accountability },
-		key: '79daba5bf38b6b80cb4bf4e2de95d6a8380f7927',
+		key: 'ef231c52ee2621b894a05a1661bdda0f5b95ad45',
 	},
 	{
 		name: 'a request with a fields query',
 		params: { method, originalUrl: restUrl, sanitizedQuery: { fields: ['id', 'name'] } },
-		key: 'e1839f7379b39188622e797fdbe2e3e6d477cbdc',
+		key: 'a45fd98e95672c52fdbde57ceb14ebadfae4dff7',
 	},
 	{
 		name: 'a request with a filter query',
 		params: { method, originalUrl: restUrl, sanitizedQuery: { filter: { name: { _eq: 'test' } } } },
-		key: '0bcc9af5f628db85043133e59226b2de154d7183',
+		key: '28020b3017e0952bea96828abb0d11461b55f833',
 	},
 	{
 		name: 'a GraphQL GET query request',
 		params: { method, originalUrl: graphQlUrl, query: { query: 'query { test { id } }' } },
-		key: '14bc276cf21e2d22334b84841533e2c8e1bba9bd',
+		key: '66cfc24341701a732000ff3dc9d8940bfeac2aa6',
 	},
 	{
 		name: 'a GraphQL POST query request',
 		params: { method: 'POST', originalUrl: graphQlUrl, body: { query: 'query { test { name } }' } },
-		key: 'c5bf03e138e0f7bbaa50dde9cad554bef47a81d2',
+		key: 'cfbbe707330099cc1626b58cb90aa5c76cbd2e4b',
 	},
 	{
 		name: 'an authenticated GraphQL GET query request',
 		params: { method, originalUrl: graphQlUrl, accountability, query: { query: 'query { test { id } }' } },
-		key: '981f27be4c0cfed0b4eca6ac2514f6629aea6be1',
+		key: 'ac48e12f4780029e20749c8405272d84d0969c1f',
 	},
 	{
 		name: 'an authenticated GraphQL POST query request',
 		params: { method: 'POST', originalUrl: graphQlUrl, accountability, body: { query: 'query { test { name } }' } },
-		key: '358336a2c61f7ea2b41b5c1566bbebe692be601d',
+		key: '8d466caca70f084073face70a5a82978234697be',
 	},
 ];
 
@@ -108,5 +108,54 @@ describe('get cache key', () => {
 		expect(getCacheKey(postReq1)).not.toEqual(getCacheKey(postReq2));
 		expect(getCacheKey(req1)).toEqual(getCacheKey(postReq1));
 		expect(getCacheKey(req2)).toEqual(getCacheKey(postReq2));
+	});
+
+	describe('should isolate keys across accountability contexts', () => {
+		const roleA = '00000000-0000-0000-0000-00000000000a';
+		const roleB = '00000000-0000-0000-0000-00000000000b';
+		const share = '00000000-0000-0000-0000-0000000000a1';
+
+		const contexts: [string, Record<string, unknown> | undefined][] = [
+			['anonymous', undefined],
+			['public role', { user: null, role: null, admin: false, app: false }],
+			['role A without user', { user: null, role: roleA, admin: false, app: false }],
+			['role B without user', { user: null, role: roleB, admin: false, app: false }],
+			['role A with app access', { user: null, role: roleA, admin: false, app: true }],
+			['role A with admin access', { user: null, role: roleA, admin: true, app: true }],
+			[
+				'share on item 1',
+				{ user: null, role: roleA, admin: false, app: false, share, share_scope: { collection: 'example', item: '1' } },
+			],
+			[
+				'share on item 2',
+				{ user: null, role: roleA, admin: false, app: false, share, share_scope: { collection: 'example', item: '2' } },
+			],
+			[
+				'other share on item 1',
+				{
+					user: null,
+					role: roleA,
+					admin: false,
+					app: false,
+					share: '00000000-0000-0000-0000-0000000000a2',
+					share_scope: { collection: 'example', item: '1' },
+				},
+			],
+		];
+
+		test('anonymous and public-role requests share a key', () => {
+			const anonymous = getCacheKey({ method, originalUrl: restUrl } as Request);
+			const publicRole = getCacheKey({ method, originalUrl: restUrl, accountability: contexts[1]![1] } as any);
+
+			expect(anonymous).toEqual(publicRole);
+		});
+
+		test('every other context gets a distinct key', () => {
+			const keys = contexts
+				.slice(1)
+				.map(([, accountability]) => getCacheKey({ method, originalUrl: restUrl, accountability } as any));
+
+			expect(new Set(keys).size).toBe(keys.length);
+		});
 	});
 });

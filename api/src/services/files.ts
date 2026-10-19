@@ -16,7 +16,7 @@ import emitter from '../emitter.js';
 import env from '../env.js';
 import { ForbiddenException, InvalidPayloadException, ServiceUnavailableException } from '../exceptions/index.js';
 import logger from '../logger.js';
-import { getAxios } from '../request/index.js';
+import { getAxios, importRequestConfig } from '../request/index.js';
 import { getStorage } from '../storage/index.js';
 import type { AbstractServiceOptions, File, Metadata, MutationOptions, PrimaryKey } from '../types/index.js';
 import { parseIptc, parseXmp } from '../utils/parse-image-metadata.js';
@@ -99,9 +99,11 @@ export class FilesService extends ItemsService {
 
 			payload.height ??= height ?? null;
 			payload.width ??= width ?? null;
-			payload.description ??= description ?? null;
-			payload.title ??= title ?? null;
-			payload.tags ??= tags ?? null;
+			// Only fill these from metadata the file actually carries. Setting them to null would wipe the stored values
+			// when a file is replaced with one that has none, e.g. a screenshot.
+			if (description) payload.description ??= description;
+			if (title) payload.title ??= title;
+			if (tags) payload.tags ??= tags;
 			payload.metadata ??= metadata ?? null;
 		}
 
@@ -275,6 +277,7 @@ export class FilesService extends ItemsService {
 
 			fileResponse = await axios.get<Readable>(encodeURL(importURL), {
 				responseType: 'stream',
+				...importRequestConfig(),
 			});
 		} catch (err: any) {
 			logger.warn(err, `Couldn't fetch file from URL "${importURL}"`);
