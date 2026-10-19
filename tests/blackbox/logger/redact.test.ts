@@ -266,4 +266,26 @@ describe('Logger Redact Tests', () => {
 			});
 		});
 	});
+
+	describe('GET /users/me', () => {
+		describe('redacts the access token passed as a query parameter', () => {
+			TEST_USERS.forEach((userKey) => {
+				describe(USER[userKey].NAME, () => {
+					it.each(vendors)('%s', async (vendor) => {
+						// Action
+						const logger = new TestLogger(directusInstances[vendor], '/users/me', true);
+
+						await request(getUrl(vendor, env)).get('/users/me').query({ access_token: USER[userKey].TOKEN });
+
+						const logs = await logger.getLogs();
+
+						// Assert
+						expect(logs).not.toContain(USER[userKey].TOKEN);
+						expect(logs).toContain('access_token=--redact--');
+						expect(logs).toContain('"access_token":"--redact--"');
+					});
+				});
+			});
+		});
+	});
 });
