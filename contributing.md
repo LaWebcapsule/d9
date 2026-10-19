@@ -70,15 +70,23 @@ project.
 Issues marked "Community" are ready to be implemented by anybody at any point! If you're looking to implement an issue
 that doesn't have that label, please make sure to ping the maintainers before getting started!
 
-#### Contributor License Agreement
+#### Developer Certificate of Origin
 
-There are no license agreement. This repository is under the GPL license and your work will use the same license.
+There is no license agreement: contributions are under the GPLv3 license. Every commit must be signed off
+(`git commit -s`) to certify the [Developer Certificate of Origin](https://developercertificate.org/), which states that
+you wrote the change or have the right to submit it under the project's license.
 
 #### Bug Fixes
 
 We treat Issues on the main repo as actionable items we want to get done. This also means that we welcome PRs for any
 Issue that has been labeled either "Bug", "Improvement", or "New Feature". Labeled issues are bugs or new features that
 have been triaged, accepted, and are ready to be implemented.
+
+#### Security Fixes
+
+A vulnerability that is not public yet must be fixed in the private fork of its
+[security advisory](https://github.com/LaWebcapsule/d9/security/advisories), not in a public Pull Request. See
+[Reporting Security Vulnerabilities](#reporting-security-vulnerabilities).
 
 #### Implementing Features
 
@@ -107,12 +115,7 @@ actionable item, be it a feature or otherwise.
 
 If you believe you have discovered a security issue within a d9 product or service, please open a
 [private security vulnerability report](https://github.com/LaWebcapsule/d9/security/advisories/new). Do not open a
-public issue for security problems. We will then open a
-[GitHub Security Advisory](https://github.com/LaWebcapsule/d9/security/advisories) for tracking the fix.
+public issue for security problems.
 
-We value the members of the independent security research community who find security vulnerabilities and work with our
-team so that proper fixes can be issued to users. Our policy is to credit all researchers in the fix's release notes. In
-order to receive credit, security researchers must follow responsible disclosure practices, including:
-
-- They do not publish the vulnerability prior to the d9 team releasing a fix for it
-- They do not divulge exact details of the issue, e.g., through exploits or proof-of-concepts
+See our [Security Policy](./security.md) for what to expect after reporting, the disclosure timeline, and how
+researchers are credited.

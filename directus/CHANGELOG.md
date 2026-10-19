@@ -1,5 +1,58 @@
 # directus9
 
+## 12.0.21
+
+### Patch Changes
+
+- Updated dependencies [[`7956e59`](https://github.com/LaWebcapsule/d9/commit/7956e594eedf194da2565f13971a5c136579ad3c),
+  [`7e04036`](https://github.com/LaWebcapsule/d9/commit/7e0403632d8c11d2d2bcba1b43aec432a6ed185d),
+  [`90fb2e7`](https://github.com/LaWebcapsule/d9/commit/90fb2e7bf0bfcc3a51071ca111c1d998cc1b7e65),
+  [`3a76a3a`](https://github.com/LaWebcapsule/d9/commit/3a76a3a80f3c4d384d7a99277dca8c2a651e6209),
+  [`2c9fefc`](https://github.com/LaWebcapsule/d9/commit/2c9fefcb0e76d8d513cc4a33ec559cb93b9ca59d)]:
+  - @wbce-d9/api@12.6.1
+
+## 12.0.20
+
+### Patch Changes
+
+- Updated dependencies [[`fbaca91`](https://github.com/LaWebcapsule/d9/commit/fbaca91348958934721cb67936c92ac26b97a2dc),
+  [`cd9638d`](https://github.com/LaWebcapsule/d9/commit/cd9638dbf8b3f911aca3f1aaf57dca32027cf661)]:
+  - @wbce-d9/api@12.6.0
+
+## 12.0.19
+
+### Patch Changes
+
+- Updated dependencies [[`5b79c1f`](https://github.com/LaWebcapsule/d9/commit/5b79c1f3135c5e1bd18ef1d3a7fcbe4e17e9bb6e),
+  [`9ba2f5e`](https://github.com/LaWebcapsule/d9/commit/9ba2f5e287bc36e6d94dbf1c916e6f2daa066f03),
+  [`e0655b1`](https://github.com/LaWebcapsule/d9/commit/e0655b1bf7b332620e22022d116deff1b163977b)]:
+  - @wbce-d9/api@12.5.11
+
+## 12.0.18
+
+### Patch Changes
+
+- Updated dependencies
+  [[`7f20016`](https://github.com/LaWebcapsule/d9/commit/7f20016c7de2a65f3153412362bdedec5e26833c)]:
+  - @wbce-d9/api@12.5.10
+
+## 12.0.17
+
+### Patch Changes
+
+- Updated dependencies
+  [[`0f20df6`](https://github.com/LaWebcapsule/d9/commit/0f20df670e3cb534cf571f11d348340f1cb30d68)]:
+  - @wbce-d9/api@12.5.9
+
+## 12.0.16
+
+### Patch Changes
+
+- Updated dependencies [[`1136ffc`](https://github.com/LaWebcapsule/d9/commit/1136ffc780684e1c49872993036344ce6f842db6),
+  [`25f74b2`](https://github.com/LaWebcapsule/d9/commit/25f74b2d4f92f36be688e1d05419994fb0f3a0c4),
+  [`50beac9`](https://github.com/LaWebcapsule/d9/commit/50beac94cafa1db3fe665e1ea982745721ad171e)]:
+  - @wbce-d9/api@12.5.8
+
 ## 12.0.15
 
 ### Patch Changes

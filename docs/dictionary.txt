@@ -105,6 +105,7 @@ Capterra
 Cardgroup
 cardinality
 CDNs?
+CIDR
 CLI
 CloudFront
 Cloudinary's
@@ -203,6 +204,7 @@ iisnode
 incongruent
 intwined
 IoT
+IPs
 irectus
 ISO8601
 iss
@@ -225,6 +227,7 @@ Kubernetes
 LaWebcapsule
 LDAP
 localhost
+loopback
 lowercased
 LTS
 M1

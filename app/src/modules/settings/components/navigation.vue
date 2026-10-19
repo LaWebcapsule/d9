@@ -19,7 +19,7 @@
 		<v-list-item href="https://github.com/LaWebcapsule/d9/releases" class="version">
 			<v-list-item-icon><v-icon name="directus" /></v-list-item-icon>
 			<v-list-item-content>
-				<v-text-overflow class="version" :text="`Directus ${version}`" />
+				<v-text-overflow class="version" :text="`d9 ${version}`" />
 			</v-list-item-content>
 		</v-list-item>
 	</v-list>

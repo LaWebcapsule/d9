@@ -65,8 +65,10 @@ const allowedEnvironmentVars = [
 	'IP_CUSTOM_HEADER',
 	'ASSETS_CONTENT_SECURITY_POLICY',
 	'IMPORT_IP_DENY_LIST',
+	'IMPORT_FILE_IP_ALLOW_LIST',
 	'CONTENT_SECURITY_POLICY_.+',
 	'HSTS_.+',
+	'CROSS_ORIGIN_OPENER_POLICY',
 	// hashing
 	'HASH_.+',
 	'X_POWERED_BY_ENABLED',
@@ -143,6 +145,7 @@ const allowedEnvironmentVars = [
 	'AUTH_.+_FIRST_NAME_KEY',
 	'AUTH_.+_LAST_NAME_KEY',
 	'AUTH_.+_ALLOW_PUBLIC_REGISTRATION',
+	'AUTH_.+_REQUIRE_REFRESH_TOKEN',
 	'AUTH_.+_DEFAULT_ROLE_ID',
 	'AUTH_.+_REGISTER_URL_ALLOW_LIST',
 	'AUTH_.+_ICON',
@@ -307,6 +310,9 @@ const defaults: Record<string, any> = {
 	IP_CUSTOM_HEADER: false,
 
 	IMPORT_IP_DENY_LIST: ['0.0.0.0', '169.254.169.254'],
+	IMPORT_FILE_IP_ALLOW_LIST: [],
+
+	CROSS_ORIGIN_OPENER_POLICY: 'same-origin',
 
 	SERVE_APP: true,
 	SERVE_GRAPHQL: true,
@@ -341,6 +347,7 @@ const typeMap: Record<string, string> = {
 	CACHE_SKIP_ALLOWED: 'boolean',
 
 	IMPORT_IP_DENY_LIST: 'array',
+	IMPORT_FILE_IP_ALLOW_LIST: 'array',
 
 	FILE_METADATA_ALLOW_LIST: 'array',
 
