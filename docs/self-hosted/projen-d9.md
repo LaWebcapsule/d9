@@ -234,7 +234,7 @@ npx d9-plumbing apply-schema --last-save <commit of the last save of this enviro
 The command refuses to run if the target has changes that were never saved. Purge
 the d9 cache afterwards. See [Apply](/guides/migration/projen#apply).
 
-## Better auditability with Cedar
+## Readable permissions with Cedar
 
 On every save, the permissions of each role are transposed into readable
 [Cedar](https://www.cedarpolicy.com/) policies in `permissions/<Role>/`

@@ -99,7 +99,7 @@ See [Edit Permissions with Cedar](#edit-permissions-with-cedar).
 
 ### Files
 
-Only the files of the common d9 folder and its subfolders are saved: the save dumps only those rows of
+Only the files of the common d9 folder and the folders it contains are saved: the save dumps only those rows of
 `directus_files` and `directus_folders`, so every other file stays local to its environment. Put the files shared by
 all environments (logos, default images...) in that folder.
 
