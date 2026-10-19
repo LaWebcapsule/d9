@@ -16,7 +16,7 @@
 		<div v-if="close" v-show="sidebarOpen" class="close" @click="sidebarOpen = false">
 			<v-icon name="close" />
 		</div>
-		<transition-expand class="scroll-container">
+		<transition-expand class="scroll-container" :disabled="!animate">
 			<div v-show="active">
 				<div class="content">
 					<slot />
@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs } from 'vue';
+import { defineComponent, inject, ref, toRefs } from 'vue';
 import { useAppStore } from '@/stores/app';
 import { useGroupable } from '@wbce-d9/composables';
 
@@ -58,7 +58,11 @@ export default defineComponent({
 
 		const appStore = useAppStore();
 		const { sidebarOpen } = toRefs(appStore);
-		return { active, toggle, sidebarOpen };
+
+		// False while the group opens the first section on page load, so it is shown open without the expand animation
+		const animate = inject('sidebar-detail-animate', ref(true));
+
+		return { active, toggle, sidebarOpen, animate };
 	},
 });
 </script>
