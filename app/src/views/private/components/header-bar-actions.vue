@@ -62,7 +62,7 @@ export default defineComponent({
 		return { actionsEl, buttonsEl, active, collapsed };
 
 		/**
-		 * Collapse the buttons only when they do not fit in their half of the header; the other half is for the title.
+		 * Collapse the buttons only when they take more than half of the header; the other half is for the title.
 		 */
 		function updateCollapsed() {
 			const actions = actionsEl.value;
@@ -75,25 +75,10 @@ export default defineComponent({
 			const buttonsWidth = buttons.offsetWidth;
 			actions.classList.remove('measuring');
 
-			const headerStyle = getComputedStyle(header);
-
-			const headerWidth =
-				header.clientWidth - parseFloat(headerStyle.paddingLeft) - parseFloat(headerStyle.paddingRight);
-
-			// Other elements next to the actions (e.g. the item count of a layout) share the same half
-			let othersWidth = 0;
-			let afterSpacer = false;
-
-			for (const child of Array.from(header.children) as HTMLElement[]) {
-				if (child.classList.contains('spacer')) {
-					afterSpacer = true;
-				} else if (afterSpacer && child !== actions) {
-					const style = getComputedStyle(child);
-					othersWidth += child.offsetWidth + parseFloat(style.marginLeft) + parseFloat(style.marginRight);
-				}
-			}
-
-			collapsed.value = buttonsWidth + othersWidth > headerWidth / 2;
+			// Only the buttons count, and against the full header width: both grow continuously with the window. Sibling
+			// elements (e.g. the item count, hidden below 600px) and the header padding (larger from 600px) change in steps,
+			// which made the actions collapse in a band of widths and expand again below it.
+			collapsed.value = buttonsWidth > header.clientWidth / 2;
 			if (!collapsed.value) active.value = false;
 		}
 	},
