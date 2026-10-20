@@ -1,0 +1,9 @@
+---
+'@wbce-d9/app': patch
+---
+
+security: bump axios to 1.20.0 and dompurify to 3.4.17 (GHSA-3pq3-5fj3-cg6v / CVE-2026-101898, GHSA-44g4-m2mj-wpvx /
+CVE-2026-101899, GHSA-4hqw-qxg8-jxx2 / CVE-2026-101900, GHSA-542g-h47m-68v8 / CVE-2026-101901, GHSA-9fr6-4gfg-395g /
+CVE-2026-101902, GHSA-c29m-xwm3-cm6r / CVE-2026-101903, GHSA-j8rh-479h-cp32 / CVE-2026-101904, GHSA-m8m8-qj5v-23w3 /
+CVE-2026-101905, GHSA-mghh-pgcx-3jjj / CVE-2026-101906, GHSA-r4gj-5m52-g5wh / CVE-2026-101907, GHSA-vh66-26gq-q6x8 /
+CVE-2026-101908, GHSA-x97p-jq2g-jp4f / CVE-2026-101909, GHSA-6688-9rhm-gjv2, GHSA-p98j-92pf-mc4p)
