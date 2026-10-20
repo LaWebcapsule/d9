@@ -138,6 +138,10 @@ the_following_are_minimum_permissions:
   The following minimum permissions are automatically applied when "App Access" is enabled. You can grant additional permissions if needed, but you cannot reduce permissions below this level.
 app_access_minimum: App Access Minimum
 recommended_defaults: Recommended Defaults
+share_role_writable_warning:
+  This role can choose the role of its shares, and can therefore share items with the permissions of another role (see
+  the "Details" section of [GHSA-475w-4rwx-54gv](https://github.com/LaWebcapsule/d9/security/advisories/GHSA-475w-4rwx-54gv)). Remove the "role" field from the Create and Update permissions of Shares, or reset the system
+  permissions to the recommended defaults.
 unarchive: Unarchive
 unarchive_confirm: Are you sure you want to unarchive this item?
 nested_files_folders_will_be_moved: Nested files and folders will be moved one level up.
