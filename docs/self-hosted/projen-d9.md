@@ -32,7 +32,7 @@ depend on it. Support for other databases may be added in the future.
 ## Bootstrap a new project
 
 ```sh
-npx projen new --from @wbce/projen-d9
+npx projen new --from @wbce/projen-d9 --projen-version 0.99.24
 ```
 
 This creates a `.projenrc.js` and synthesizes the project.
@@ -57,7 +57,7 @@ diff against your old config:
    control of when to commit.
 
    ```sh
-   npx projen new --from @wbce/projen-d9 --no-git
+   npx projen new --from @wbce/projen-d9 --projen-version 0.99.24 --no-git
    ```
 
 4. **Reconcile the diff.** Compare the regenerated files against the previous

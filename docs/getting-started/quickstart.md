@@ -37,7 +37,7 @@ policies), reference tables and shared files are saved in your repository and ap
 [Migrate Your Project with Projen](/guides/migration/projen).
 
 ```bash
-npx projen new --from @wbce/projen-d9
+npx projen new --from @wbce/projen-d9 --projen-version 0.99.24
 npx projen first-run
 ```
 
