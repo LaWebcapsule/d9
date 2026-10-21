@@ -32,7 +32,7 @@ export type ComputedQuery = {
 	sort: Ref<Query['sort']> | ComputedRef<Query['sort']> | WritableComputedRef<Query['sort']>;
 	search: Ref<Query['search']> | ComputedRef<Query['search']> | WritableComputedRef<Query['search']>;
 	filter: Ref<Query['filter']> | ComputedRef<Query['filter']> | WritableComputedRef<Query['filter']>;
-	page: Ref<Query['page']> | WritableComputedRef<Query['page']>;
+	page: Ref<Query['page']>;
 };
 
 // ** bypass_collections_calls: [issues-33] we allow directus_collections to be read as items for m2m collection visualization
