@@ -800,6 +800,7 @@ These flows rely on the `PUBLIC_URL` variable for redirecting. Ensure the variab
 | `AUTH_<PROVIDER>_FIRST_NAME_KEY`            | User profile first name key.                                                                             | --               |
 | `AUTH_<PROVIDER>_LAST_NAME_KEY`             | User profile last name key.                                                                              | --               |
 | `AUTH_<PROVIDER>_ALLOW_PUBLIC_REGISTRATION` | Automatically create accounts for authenticating users.                                                  | `false`          |
+| `AUTH_<PROVIDER>_REQUIRE_REFRESH_TOKEN`     | Reject logins and session renewals when the provider did not issue a refresh token <sup>[3]</sup>.        | `true`           |
 | `AUTH_<PROVIDER>_DEFAULT_ROLE_ID`           | A d9 role ID to assign created users.                                                              | --               |
 | `AUTH_<PROVIDER>_ICON`                      | SVG icon to display with the login link. [See options here](/getting-started/glossary#icons).            | `account_circle` |
 | `AUTH_<PROVIDER>_LABEL`                     | Text to be presented on SSO button within App.                                                           | `<PROVIDER>`     |
@@ -822,6 +823,7 @@ OpenID is an authentication protocol built on OAuth 2.0, and should be preferred
 | `AUTH_<PROVIDER>_IDENTIFIER_KEY`            | User profile identifier key <sup>[1]</sup>.                                                              | `sub`<sup>[2]</sup>    |
 | `AUTH_<PROVIDER>_ALLOW_PUBLIC_REGISTRATION` | Automatically create accounts for authenticating users.                                                  | `false`                |
 | `AUTH_<PROVIDER>_REQUIRE_VERIFIED_EMAIL`    | Require created users to have a verified email address.                                                  | `false`                |
+| `AUTH_<PROVIDER>_REQUIRE_REFRESH_TOKEN`     | Reject logins and session renewals when the provider did not issue a refresh token <sup>[3]</sup>.        | `true`                 |
 | `AUTH_<PROVIDER>_DEFAULT_ROLE_ID`           | A d9 role ID to assign created users.                                                              | --                     |
 | `AUTH_<PROVIDER>_ICON`                      | SVG icon to display with the login link. [See options here](/getting-started/glossary#icons).            | `account_circle`       |
 | `AUTH_<PROVIDER>_LABEL`                     | Text to be presented on SSO button within App.                                                           | `<PROVIDER>`           |
@@ -833,6 +835,15 @@ d9 users "External Identifier".
 
 <sup>[2]</sup> `sub` represents a unique user identifier defined by the OpenID provider. For users not relying on
 `PUBLIC_REGISTRATION` it is recommended to use a human-readable identifier, such as `email`.
+
+<sup>[3]</sup> By default a user can only stay logged in through an external provider while d9 holds a refresh token
+for them, which is checked against the provider on every login and session renewal. Some providers only issue a
+refresh token in specific situations (for example Google, only when it shows the consent screen). When none is stored at
+login, d9 sends the user back to the provider once with `prompt=consent` so it can issue one. Set this option to
+`false` to let such users log in without one: the d9 session (`REFRESH_TOKEN_TTL`) is then the only thing that keeps them
+logged in, so disabling or revoking the user at the provider is not noticed until that session expires. If a refresh
+token _is_ stored, it is still checked against the provider and a revoked token still ends the session. Suspend the
+user in d9 and/or lower `REFRESH_TOKEN_TTL` if you need faster revocation.
 
 ### LDAP (`ldap`)
 

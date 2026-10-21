@@ -5,7 +5,7 @@ import flat from 'flat';
 import Joi from 'joi';
 import type { Knex } from 'knex';
 import { clone, cloneDeep, isNil, isObject, isPlainObject, omit, pick } from 'lodash-es';
-import { v4 as uuid } from 'uuid';
+import { v4 as uuid, validate as validateUUID } from 'uuid';
 import { parse as wktToGeoJSON } from 'wellknown';
 import type { Helpers } from '../database/helpers/index.js';
 import { getHelpers } from '../database/helpers/index.js';
@@ -74,7 +74,11 @@ export class PayloadService {
 				return uuid();
 			}
 
-			return value;
+			if (action === 'create' && !validateUUID(String(value))) {
+				throw new InvalidPayloadException(`Invalid UUID "${value}"`);
+			}
+
+			return action === 'create' ? String(value).toLowerCase() : value;
 		},
 		async 'cast-boolean'({ action, value }) {
 			if (action === 'read') {

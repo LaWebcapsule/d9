@@ -1,5 +1,57 @@
 # @wbce-d9/api
 
+## 12.7.0
+
+### Minor Changes
+
+- [#430](https://github.com/LaWebcapsule/d9/pull/430)
+  [`eb7890d`](https://github.com/LaWebcapsule/d9/commit/eb7890d705ca0ecf3e92d928a39e90265596f5bc) - Added the
+  `AUTH_<PROVIDER>_REQUIRE_REFRESH_TOKEN` option for the OpenID and OAuth2 drivers (default `true`, which keeps the
+  current behavior). Setting it to `false` lets users log in and renew their session when the identity provider issued
+  no refresh token (for example Google when the account has already granted consent), instead of rejecting them with
+  `INVALID_CREDENTIALS` / "No [OpenID] Session found". A stored refresh token is still checked against the provider.
+
+  With the default, a login without a refresh token now redirects once to the provider with `prompt=consent` (as already
+  done for a revoked token) instead of failing right away, and a stored refresh token is no longer overwritten with
+  `null` when the provider does not issue a new one on login.
+
+### Patch Changes
+
+- [#441](https://github.com/LaWebcapsule/d9/pull/441)
+  [`4e86904`](https://github.com/LaWebcapsule/d9/commit/4e869043bb2c092d5aa0d6e893407f79fe5663d0) - security: when
+  `GRAPHQL_INTROSPECTION` is disabled, the GraphQL SDL is no longer served by `/server/specs/graphql` nor
+  (GHSA-wxwm-3fxv-mrvx, CVE-2026-35413) by the `server_specs_graphql` query, as it exposes the same schema information
+  as an introspection query (GHSA-wxwm-3fxv-mrvx / CVE-2026-35413)
+
+- [#437](https://github.com/LaWebcapsule/d9/pull/437)
+  [`a6ec87c`](https://github.com/LaWebcapsule/d9/commit/a6ec87c3b5057b5616a611169020f9ebdb1348d8) - security: password
+  reset requests now always take at least the same minimum time, whatever the outcome (invalid (GHSA-jr94-gj3h-c8rf,
+  CVE-2026-26185) `reset_url`, unknown or inactive user, mail error), so response timing no longer reveals whether an
+  account exists (GHSA-jr94-gj3h-c8rf).
+
+- [#451](https://github.com/LaWebcapsule/d9/pull/451)
+  [`7792afb`](https://github.com/LaWebcapsule/d9/commit/7792afba141f9bd9249b132b16a40eba2d00a7b1) - security: Validate
+  client-supplied values for `uuid` fields on create and store them lowercased (GHSA-9v9p-pxh4-qxj9)
+
+- [#438](https://github.com/LaWebcapsule/d9/pull/438)
+  [`16aa3cb`](https://github.com/LaWebcapsule/d9/commit/16aa3cb19341edf981582527a2ea13d3ed54b76c) - security: concealed
+  fields (such as user passwords and tokens) of the payload received by an event-triggered flow are
+  (GHSA-x3vm-88hf-gpxp, CVE-2025-53885) now masked in the "Log to Console" operation output and in the flow run
+  revisions (GHSA-x3vm-88hf-gpxp)
+
+- [#444](https://github.com/LaWebcapsule/d9/pull/444)
+  [`d492d37`](https://github.com/LaWebcapsule/d9/commit/d492d37fa9d0ba2c5dcda9b8d4c42a3a82b13d78) - security: an access
+  token passed in the query string is no longer written to the logs (GHSA-vw58-ph65-6rxp / (CVE-2024-47822)
+  CVE-2024-47822)
+- Updated dependencies [[`490e25e`](https://github.com/LaWebcapsule/d9/commit/490e25e6a1577514c097da123e74ab2f55a8968c),
+  [`2db4d1d`](https://github.com/LaWebcapsule/d9/commit/2db4d1d6c4fa8339c590340bfe14f7595148b3b5),
+  [`aba4181`](https://github.com/LaWebcapsule/d9/commit/aba4181682b087ffc0909cc355e4676572d8fa6c),
+  [`0a82510`](https://github.com/LaWebcapsule/d9/commit/0a825102ce18631669bbcd1d21636398f38896d6),
+  [`f95759f`](https://github.com/LaWebcapsule/d9/commit/f95759fb4af879ffb432474b626f549e2c342820),
+  [`20fc79d`](https://github.com/LaWebcapsule/d9/commit/20fc79d568e80de4177bfaccffbbe23f2790914e),
+  [`2db4d1d`](https://github.com/LaWebcapsule/d9/commit/2db4d1d6c4fa8339c590340bfe14f7595148b3b5)]:
+  - @wbce-d9/app@11.2.0
+
 ## 12.6.1
 
 ### Patch Changes

@@ -94,6 +94,7 @@ Argon2(d|i)?
 auth
 Auth
 Auth0
+[Aa]uditable
 authenticator
 autoscaling
 AWS

@@ -133,6 +133,10 @@ reset_system_permissions_to: 'Réinitialiser les autorisations système:'
 reset_system_permissions_copy: Cette action écrasera toutes les autorisations personnalisées que vous avez peut-être appliquées aux collections du système. Êtes-vous sûr ?
 app_access_minimum: Autorisation minimale requise pour accéder à l'application
 recommended_defaults: Valeurs par défaut recommandées
+share_role_writable_warning:
+  Ce rôle peut choisir le rôle de ses partages, et donc partager des éléments avec les permissions d'un autre rôle (voir
+  la section « Details » de [GHSA-475w-4rwx-54gv](https://github.com/LaWebcapsule/d9/security/advisories/GHSA-475w-4rwx-54gv)). Retirez le champ « role » des permissions de création et de modification des partages, ou
+  réinitialisez les permissions système aux valeurs recommandées.
 unarchive: Restaurer
 unarchive_confirm: Êtes-vous sûr de vouloir restaurer cet élément ?
 nested_files_folders_will_be_moved: Le contenu du dossier sera déplacé vers le dossier parent.
