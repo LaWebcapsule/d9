@@ -26,6 +26,12 @@ const global: GlobalMountOptions = {
 	},
 };
 
+// Vue keeps the listeners it attached to an element under a private `_vei` symbol
+function getListeners(element: Element): Record<string, unknown> | undefined {
+	const key = Object.getOwnPropertySymbols(element).find((symbol) => symbol.description === '_vei');
+	return key && Reflect.get(element, key);
+}
+
 test('Mount component', () => {
 	expect(VMenu).toBeTruthy();
 
@@ -44,7 +50,7 @@ test('should not have click event listener when trigger is not "click"', () => {
 		global,
 	});
 
-	const vMenuListeners = (wrapper.find('.v-menu').element as any)._vei;
+	const vMenuListeners = getListeners(wrapper.find('.v-menu').element);
 	expect(vMenuListeners).toBeUndefined();
 });
 
@@ -56,7 +62,7 @@ test('should have click event listener when trigger is "click"', () => {
 		global,
 	});
 
-	const vMenuListeners = (wrapper.find('.v-menu').element as any)._vei;
+	const vMenuListeners = getListeners(wrapper.find('.v-menu').element);
 	expect(vMenuListeners).toHaveProperty('onClick');
 });
 
@@ -69,7 +75,7 @@ test('should not have click event listener when closeOnContentClick prop is fals
 		global,
 	});
 
-	const vMenuContentListeners = (wrapper.getComponent(TransitionBounce).find('.v-menu-content').element as any)._vei;
+	const vMenuContentListeners = getListeners(wrapper.getComponent(TransitionBounce).find('.v-menu-content').element);
 	expect(vMenuContentListeners).toBeUndefined();
 });
 
@@ -82,7 +88,7 @@ test('should have click event listener when closeOnContentClick prop is true', (
 		global,
 	});
 
-	const vMenuContentListeners = (wrapper.getComponent(TransitionBounce).find('.v-menu-content').element as any)._vei;
+	const vMenuContentListeners = getListeners(wrapper.getComponent(TransitionBounce).find('.v-menu-content').element);
 	expect(vMenuContentListeners).toHaveProperty('onClick');
 });
 
@@ -94,12 +100,12 @@ test('should not have pointerenter and pointerleave event listener when trigger 
 		global,
 	});
 
-	const activatorListeners = (wrapper.find({ ref: 'activator' }).element as any)._vei;
+	const activatorListeners = getListeners(wrapper.find({ ref: 'activator' }).element);
 	expect(activatorListeners).toBeUndefined();
 	expect(activatorListeners).toBeUndefined();
 
 	// we need to use getComponent because it's teleported
-	const vMenuContentListeners = (wrapper.getComponent(TransitionBounce).find('.v-menu-content').element as any)._vei;
+	const vMenuContentListeners = getListeners(wrapper.getComponent(TransitionBounce).find('.v-menu-content').element);
 	expect(vMenuContentListeners).not.toHaveProperty('onPointerenter');
 	expect(vMenuContentListeners).not.toHaveProperty('onPointerleave');
 });
@@ -113,12 +119,12 @@ test('should have pointerenter and pointerleave event listener when trigger is "
 		global,
 	});
 
-	const activatorListeners = (wrapper.find({ ref: 'activator' }).element as any)._vei;
+	const activatorListeners = getListeners(wrapper.find({ ref: 'activator' }).element);
 	expect(activatorListeners).toHaveProperty('onPointerenter');
 	expect(activatorListeners).toHaveProperty('onPointerleave');
 
 	// we need to use getComponent because it's teleported
-	const vMenuContentListeners = (wrapper.getComponent(TransitionBounce).find('.v-menu-content').element as any)._vei;
+	const vMenuContentListeners = getListeners(wrapper.getComponent(TransitionBounce).find('.v-menu-content').element);
 	expect(vMenuContentListeners).toHaveProperty('onPointerenter');
 	expect(vMenuContentListeners).toHaveProperty('onPointerleave');
 });
