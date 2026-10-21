@@ -1,5 +1,5 @@
 ---
-description: Scaffold a d9 project with Docker Compose, extension management, and GitHub PR/issue templates using the @wbce/projen-d9 template.
+description: Scaffold a d9 project with Docker Compose, extension management, and GitHub PR/issue templates, and promote its schema, roles and permissions across environments, using the @wbce/projen-d9 template.
 readTime: 4 min read
 ---
 
@@ -9,7 +9,9 @@ readTime: 4 min read
 [projen](https://projen.io) template for d9 projects. It scaffolds a local
 development setup with Docker Compose (Postgres + Redis), extension management, and
 GitHub PR and issue templates, and allows you to produce a Docker image you can
-deploy to any environment.
+deploy to any environment. Its `d9-plumbing` CLI saves your schema, roles,
+permissions, reference tables and shared files into the repository and applies them
+to your other environments.
 
 Companion package:
 [`@wbce/projen-d9-extension`](https://www.npmjs.com/package/@wbce/projen-d9-extension)
@@ -21,10 +23,16 @@ If you only need to run d9 (no extensions, no customization), the
 `docker run` command, no project scaffolding.
 :::
 
+::: warning PostgreSQL only
+The generated stack (Docker Compose, first run) and `d9-plumbing` assume PostgreSQL
+as the d9 database. Extensions, the Dockerfile and the GitHub templates do not
+depend on it. Support for other databases may be added in the future.
+:::
+
 ## Bootstrap a new project
 
 ```sh
-npx projen new --from @wbce/projen-d9
+npx projen@0.99.24 new --from @wbce/projen-d9 --projen-version 0.99.24
 ```
 
 This creates a `.projenrc.js` and synthesizes the project.
@@ -49,7 +57,7 @@ diff against your old config:
    control of when to commit.
 
    ```sh
-   npx projen new --from @wbce/projen-d9 --no-git
+   npx projen@0.99.24 new --from @wbce/projen-d9 --projen-version 0.99.24 --no-git
    ```
 
 4. **Reconcile the diff.** Compare the regenerated files against the previous
@@ -146,16 +154,22 @@ work across extensions:
 
 | Task | Description |
 | --- | --- |
-| `first-run` | Boot the stack, create admin, start d9 |
-| `run` | Start d9 (`docker compose up directus`) |
-| `build-extensions` | Install and build all extensions |
+| `first-run` | Boot the stack, import the `sql/` snapshot (or bootstrap an empty database), create admin, start d9 |
+| `run` | Start d9 (`docker compose up d9`) |
+| `build-extensions [name]` | Install and build all extensions (or only `name`) |
 | `create-an-admin` | Create the default admin user |
+| `d9-plumbing <command>` | Run the `d9-plumbing` CLI, see [Sharing schema across environments](#sharing-schema-across-environments) |
 
 ## What gets generated
 
 - `docker-compose.yml`: d9, Postgres (PostGIS), Redis with healthchecks
-- `Dockerfile`: Node 22 + pnpm, builds extensions
+- `Dockerfile`: multi-stage build on Node 22. A builder stage installs all dependencies,
+  so the projen version locked in `package-lock.json` runs, and builds the extensions
+  with pnpm; the final image only holds the production dependencies and the built
+  extensions
+- `.dockerignore`: keeps `node_modules` and `.git` out of the build context
 - `.env.local`: sample for local environment overrides
+- `d9-plumbing.json`: configuration of the `d9-plumbing` CLI
 - GitHub PR and issue templates via
   [`@wbce/projen-shared`](https://www.npmjs.com/package/@wbce/projen-shared) (set
   `githubConfig: false` to disable)
@@ -174,6 +188,62 @@ Configure the deployed instance via environment variables (database, cache, secr
 keys) the same way you would any other d9 container. See the
 [Config Options](/self-hosted/config-options) page for the full list.
 
+The Dockerfile is exposed as `project.dockerfile` in `.projenrc.js`. Adapt it with
+`editFromEndOfStep()`, `overrideStep()` or `removeStep()`, using the step ids shown
+as comments in the generated file. For instance, to install Chromium for an extension
+using Playwright:
+
+```js
+project.dockerfile
+  .editFromEndOfStep('install-deps')
+  .run('npx playwright install --with-deps chromium && rm -rf /var/lib/apt/lists/*');
+```
+
+## Sharing schema across environments
+
+`d9-plumbing` goes further than `npx d9 schema snapshot`: besides collections, fields
+and relations, it saves **roles and permissions** and the other d9 configuration
+tables (flows, dashboards, settings...), the **reference tables** you list, and the
+files of a shared d9 folder (`d9-plumbing-common` by default). The full workflow is described in
+[Migrate Your Project with Projen](/guides/migration/projen).
+
+### Save a schema
+
+On the source environment (usually local):
+
+```sh
+npx d9-plumbing save
+```
+
+This writes the schema to `sql/schema.sql`, the configuration tables to
+`sql/data/*.csv`, the permissions as Cedar policies to `permissions/`, and pushes the
+shared files to the intermediate storage. Add your reference tables to
+`sql/tables_to_dump.txt`, one per line. Commit `sql/` and `permissions/`.
+
+`sql/schema.sql` can also be edited by hand, for instance to add indexes the d9 app
+cannot create. See [Edit the Schema with SQL](/guides/migration/projen#edit-the-schema-with-sql).
+
+### Apply a schema
+
+On the target environment, from the merged commit:
+
+```sh
+npx d9-plumbing apply-schema --last-save <commit of the last save of this environment>
+```
+
+The command refuses to run if the target has changes that were never saved. Purge
+the d9 cache afterwards. See [Apply](/guides/migration/projen#apply).
+
+## Auditable permissions with Cedar
+
+On every save, the permissions of each role are transposed into readable
+[Cedar](https://www.cedarpolicy.com/) policies in `permissions/<Role>/`
+(`authorize.cedar`, `check-fields.cedar`, `validate.cedar`). Access changes show up
+as Cedar diffs in your pull requests. You can also edit the policies and write them
+back with `npx d9-plumbing cedar-to-d9`, see
+[Edit Permissions with Cedar](/guides/migration/projen#edit-permissions-with-cedar).
+
+
 ## Options
 
 The full `D9ProjectOptions` reference lives in the
@@ -181,10 +251,18 @@ The full `D9ProjectOptions` reference lives in the
 Highlights:
 
 - `extensionsFolderName`: folder for extension packages (default: `plugins`)
-- `packageVersions.d9`: version of `@wbce-d9/directus9` (default: `12.0.1`)
+- `packageVersions.d9`: version of `@wbce-d9/directus9` (default: `12.0.15`)
+- `packageVersions.atlas`: version of the [Atlas](https://atlasgo.io/) Community
+  Edition binary used by `d9-plumbing` (default: `1.3.3`)
 - `githubConfig`: `GitHubConfigOptions` or `false` to disable
 
 Any option from the projen `TypeScriptProjectOptions` interface is also accepted.
+
+The `d9-plumbing` CLI is configured with
+`project.configurePlumbing({ intermediateStorage, logLevel, commonFolderName })`, which
+writes `d9-plumbing.json`. See
+[Configure the Intermediate Storage](/guides/migration/projen#configure-the-intermediate-storage)
+and [Files](/guides/migration/projen#files) for the common folder.
 
 ## Source
 

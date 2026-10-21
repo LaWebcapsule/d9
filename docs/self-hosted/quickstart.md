@@ -14,7 +14,8 @@ readTime: 5 min read
 
 If you're using d9 as the backbone of a backend with custom extensions, the
 [Projen Template](/self-hosted/projen-d9) scaffolds a complete project
-(Dockerfile, Compose stack, extensions folder, tasks) from one command.
+(Dockerfile, Compose stack, extensions folder, tasks) from one command, and keeps schema, roles and permissions in
+sync across environments.
 
 :::
 

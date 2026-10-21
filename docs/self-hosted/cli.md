@@ -84,6 +84,15 @@ Migrate the database up/down to match the versions of d9. Once you update d9 its
 This allows you to do things like migrate a schema from development to production. To move your configured data model
 between d9 instances, you can use the schema "snapshot" and "apply" commands.
 
+::: tip Roles, permissions and files
+
+A schema snapshot covers collections, fields and relations only: roles and permissions are not included. The
+`d9-plumbing` CLI of the [projen template](/self-hosted/projen-d9) also saves roles, permissions (as CSV and Cedar
+policies), the other configuration tables, your reference tables and shared files. See
+[Migrate Your Project with Projen](/guides/migration/projen).
+
+:::
+
 #### Snapshot the Data Model
 
 d9 can automatically generate a snapshot of your current data model in YAML or JSON format. This includes all
