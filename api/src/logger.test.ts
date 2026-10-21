@@ -149,3 +149,36 @@ describe('res.headers', () => {
 		});
 	});
 });
+
+describe('req.query', () => {
+	test('Should redact access token passed as a query parameter', () => {
+		const instance = pino(httpLoggerOptions, stream);
+
+		instance.info({
+			req: {
+				query: {
+					access_token: 'test-access-token-value',
+					limit: '10',
+				},
+			},
+		});
+
+		expect(logOutput.mock.calls[0]![0]).toMatchObject({
+			req: {
+				query: {
+					access_token: REDACT_TEXT,
+					limit: '10',
+				},
+			},
+		});
+	});
+
+	test('Should leave the logged request query unchanged', () => {
+		const instance = pino(httpLoggerOptions, stream);
+		const query = { access_token: 'test-access-token-value' };
+
+		instance.info({ req: { query } });
+
+		expect(query.access_token).toBe('test-access-token-value');
+	});
+});

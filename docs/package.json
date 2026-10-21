@@ -12,7 +12,7 @@
 		"@unhead/vue": "^2.0.0",
 		"spellchecker-cli": "7.0.4",
 		"vitepress": "1.6.4",
-		"vue": "3.5.27"
+		"vue": "3.5.44"
 	},
 	"dependencies": {
 		"node-fetch": "3.3.2"
