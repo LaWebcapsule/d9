@@ -1,11 +1,11 @@
-import type { Item, Query, SchemaOverview } from '@wbce-d9/types';
+import type { Item, SchemaOverview } from '@wbce-d9/types';
 import { toArray } from '@wbce-d9/utils';
 import type { Knex } from 'knex';
 import { clone, cloneDeep, isNil, merge, pick, uniq } from 'lodash-es';
 import { getHelpers } from '../database/helpers/index.js';
 import env from '../env.js';
 import { PayloadService } from '../services/payload.js';
-import type { AST, FieldNode, FunctionFieldNode, M2ONode, NestedCollectionNode } from '../types/ast.js';
+import type { AST, ASTQuery, FieldNode, FunctionFieldNode, M2ONode, NestedCollectionNode } from '../types/ast.js';
 import { applyFunctionToColumnName } from '../utils/apply-function-to-column-name.js';
 import type { ColumnSortRecord } from '../utils/apply-query.js';
 import applyQuery, { applyLimit, applySort, generateAlias } from '../utils/apply-query.js';
@@ -64,7 +64,7 @@ export default async function runAST(
 	async function run(
 		collection: string,
 		children: (NestedCollectionNode | FieldNode | FunctionFieldNode)[],
-		query: Query
+		query: ASTQuery
 	) {
 		// Retrieve the database columns to select in the current AST
 		const { fieldNodes, primaryKeyField, nestedCollectionNodes } = await parseCurrentLevel(
@@ -149,7 +149,7 @@ async function parseCurrentLevel(
 	schema: SchemaOverview,
 	collection: string,
 	children: (NestedCollectionNode | FieldNode | FunctionFieldNode)[],
-	query: Query
+	query: ASTQuery
 ) {
 	const primaryKeyField = schema.collections[collection]!.primary;
 	const columnsInCollection = Object.keys(schema.collections[collection]!.fields);
@@ -244,7 +244,7 @@ async function getDBQuery(
 	knex: Knex,
 	table: string,
 	fieldNodes: (FieldNode | FunctionFieldNode)[],
-	query: Query
+	query: ASTQuery
 ): Promise<Knex.QueryBuilder> {
 	const preProcess = getColumnPreprocessor(knex, schema, table);
 	const queryCopy = clone(query);

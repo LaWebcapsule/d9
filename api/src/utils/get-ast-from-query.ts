@@ -6,7 +6,7 @@ import { REGEX_BETWEEN_PARENS } from '@wbce-d9/constants';
 import type { Accountability, PermissionsAction, Query, SchemaOverview } from '@wbce-d9/types';
 import type { Knex } from 'knex';
 import { cloneDeep, isEmpty, mapKeys, omitBy, uniq } from 'lodash-es';
-import type { AST, FieldNode, FunctionFieldNode, NestedCollectionNode } from '../types/index.js';
+import type { AST, ASTQuery, FieldNode, FunctionFieldNode, NestedCollectionNode } from '../types/index.js';
 import { getRelationType } from '../utils/get-relation-type.js';
 
 type GetASTOptions = {
@@ -36,13 +36,6 @@ export default async function getASTFromQuery(
 					return permission.action === action;
 			  }) ?? []
 			: null;
-
-	const ast: AST = {
-		type: 'root',
-		name: collection,
-		query: query,
-		children: [],
-	};
 
 	let fields = ['*'];
 
@@ -97,7 +90,14 @@ export default async function getASTFromQuery(
 		delete query.sort;
 	}
 
-	ast.children = await parseFields(collection, fields, deep);
+	const children = await parseFields(collection, fields, deep);
+
+	const ast: AST = {
+		type: 'root',
+		name: collection,
+		query: formatSearch(collection, query),
+		children,
+	};
 
 	return ast;
 
@@ -239,7 +239,10 @@ export default async function getASTFromQuery(
 						deep?.[`${fieldKey}:${relatedCollection}`]
 					);
 
-					child.query[relatedCollection] = getDeepQuery(deep?.[`${fieldKey}:${relatedCollection}`] || {});
+					child.query[relatedCollection] = formatSearch(
+						relatedCollection,
+						getDeepQuery(deep?.[`${fieldKey}:${relatedCollection}`] || {})
+					);
 
 					child.relatedKey[relatedCollection] = schema.collections[relatedCollection]!.primary;
 				}
@@ -259,7 +262,7 @@ export default async function getASTFromQuery(
 					parentKey: schema.collections[parentCollection]!.primary,
 					relatedKey: schema.collections[relatedCollection]!.primary,
 					relation: relation,
-					query: getDeepQuery(deep?.[fieldKey] || {}),
+					query: formatSearch(relatedCollection, getDeepQuery(deep?.[fieldKey] || {})),
 					children: await parseFields(relatedCollection, nestedFields as string[], deep?.[fieldKey] || {}),
 				};
 
@@ -369,6 +372,21 @@ export default async function getASTFromQuery(
 		}
 
 		return fields;
+	}
+
+	/**
+	 * For admins and internal calls, the search of the AST matches all the fields of the collection. For other users, it
+	 * matches no field until the AuthorizationService sets the ones the role is allowed to read
+	 */
+	function formatSearch(collection: string, query: Query): ASTQuery {
+		const { search, ...rest } = query;
+
+		if (!search) return rest;
+
+		const fields =
+			!accountability || accountability.admin === true ? Object.keys(schema.collections[collection]!.fields) : [];
+
+		return { ...rest, search: { fields, value: search } };
 	}
 
 	function getRelation(collection: string, field: string) {

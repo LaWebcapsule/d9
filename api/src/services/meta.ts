@@ -1,9 +1,10 @@
 import type { Accountability, Query, SchemaOverview } from '@wbce-d9/types';
 import type { Knex } from 'knex';
 import getDatabase from '../database/index.js';
-import { ForbiddenException } from '../exceptions/index.js';
-import type { AbstractServiceOptions } from '../types/index.js';
+import type { AbstractServiceOptions, ASTQuery } from '../types/index.js';
 import { applyFilter, applySearch } from '../utils/apply-query.js';
+import getASTFromQuery from '../utils/get-ast-from-query.js';
+import { AuthorizationService } from './authorization.js';
 
 export class MetaService {
 	knex: Knex;
@@ -39,16 +40,11 @@ export class MetaService {
 	async totalCount(collection: string): Promise<number> {
 		const dbQuery = this.knex(collection).count('*', { as: 'count' }).first();
 
-		if (this.accountability?.admin !== true) {
-			const permissionsRecord = this.accountability?.permissions?.find((permission) => {
-				return permission.action === 'read' && permission.collection === collection;
-			});
+		// Only the permissions apply to the total count, not the filter and search of the query
+		const { filter } = await this.getAuthorizedQuery(collection, { fields: [] });
 
-			if (!permissionsRecord) throw new ForbiddenException();
-
-			const permissions = permissionsRecord.permissions ?? {};
-
-			applyFilter(this.knex, this.schema, dbQuery, permissions, collection, {});
+		if (filter && Object.keys(filter).length > 0) {
+			applyFilter(this.knex, this.schema, dbQuery, filter, collection, {});
 		}
 
 		const result = await dbQuery;
@@ -59,34 +55,40 @@ export class MetaService {
 	async filterCount(collection: string, query: Query): Promise<number> {
 		const dbQuery = this.knex(collection).count('*', { as: 'count' });
 
-		let filter = query.filter || {};
+		const { filter, search } = await this.getAuthorizedQuery(collection, query);
 
-		if (this.accountability?.admin !== true) {
-			const permissionsRecord = this.accountability?.permissions?.find((permission) => {
-				return permission.action === 'read' && permission.collection === collection;
-			});
-
-			if (!permissionsRecord) throw new ForbiddenException();
-
-			const permissions = permissionsRecord.permissions ?? {};
-
-			if (Object.keys(filter).length > 0) {
-				filter = { _and: [permissions, filter] };
-			} else {
-				filter = permissions;
-			}
-		}
-
-		if (Object.keys(filter).length > 0) {
+		if (filter && Object.keys(filter).length > 0) {
 			applyFilter(this.knex, this.schema, dbQuery, filter, collection, {});
 		}
 
-		if (query.search) {
-			applySearch(this.schema, dbQuery, query.search, collection);
+		if (search) {
+			applySearch(this.schema, dbQuery, search, collection);
 		}
 
 		const records = await dbQuery;
 
 		return Number(records[0]!.count);
+	}
+
+	/**
+	 * Go through the same authorization as the read of the items, so that the counts match the returned data
+	 */
+	private async getAuthorizedQuery(collection: string, query: Query): Promise<ASTQuery> {
+		let ast = await getASTFromQuery(collection, query, this.schema, {
+			accountability: this.accountability,
+			knex: this.knex,
+		});
+
+		if (this.accountability?.admin !== true) {
+			const authorizationService = new AuthorizationService({
+				accountability: this.accountability,
+				knex: this.knex,
+				schema: this.schema,
+			});
+
+			ast = await authorizationService.processAST(ast);
+		}
+
+		return ast.query;
 	}
 }

@@ -16,6 +16,7 @@ import { seedDBStructure as seedM2M } from '../routes/items/m2m.seed.ts';
 import { seedDBStructure as seedM2O } from '../routes/items/m2o.seed.ts';
 import { seedDBStructure as seedNoRelation } from '../routes/items/no-relation.seed.ts';
 import { seedDBStructure as seedO2M } from '../routes/items/o2m.seed.ts';
+import { seedDBStructure as seedSearchPermissions } from '../routes/items/search-permissions.seed.ts';
 import { seedDBStructure as seedSingleton } from '../routes/items/singleton.seed.ts';
 import { seedDBStructure as seedSchema } from '../routes/schema/schema.seed.ts';
 
@@ -34,6 +35,7 @@ describe('Seed Database Structure', () => {
 		{ path: 'routes/items/m2o.seed.ts', seedFn: seedM2O },
 		{ path: 'routes/items/no-relation.seed.ts', seedFn: seedNoRelation },
 		{ path: 'routes/items/o2m.seed.ts', seedFn: seedO2M },
+		{ path: 'routes/items/search-permissions.seed.ts', seedFn: seedSearchPermissions },
 		{ path: 'routes/items/singleton.seed.ts', seedFn: seedSingleton },
 		{ path: 'routes/schema/schema.seed.ts', seedFn: seedSchema },
 	];

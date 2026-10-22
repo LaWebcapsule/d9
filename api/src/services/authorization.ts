@@ -17,6 +17,7 @@ import { ForbiddenException, UnprocessableEntityException } from '../exceptions/
 import type {
 	AbstractServiceOptions,
 	AST,
+	ASTQuery,
 	FieldNode,
 	FunctionFieldNode,
 	Item,
@@ -69,6 +70,7 @@ export class AuthorizationService {
 		validateFields(ast);
 		validateFilterPermissions(ast, this.schema, action, this.accountability);
 		applyFilters(ast, this.accountability);
+		applySearch(ast, this.schema, this.accountability);
 
 		return ast;
 
@@ -456,7 +458,7 @@ export class AuthorizationService {
 
 			return ast;
 
-			function updateFilterQuery(collection: string, query: Query) {
+			function updateFilterQuery(collection: string, query: Pick<ASTQuery, 'filter'>) {
 				// We check the availability of the permissions in the step before this is run
 				const permissions = permissionsForCollections.find((permission) => permission.collection === collection)!;
 
@@ -471,6 +473,50 @@ export class AuthorizationService {
 				}
 
 				if (query.filter._and.length === 0) delete query.filter;
+			}
+		}
+
+		/**
+		 * Sets the fields matched by the search query to the ones the role is allowed to read, so that the search can't
+		 * be used to enumerate the values of the other fields
+		 */
+		function applySearch(
+			ast: AST | NestedCollectionNode | FieldNode | FunctionFieldNode,
+			schema: SchemaOverview,
+			accountability: Accountability | null
+		) {
+			if (ast.type === 'field' || ast.type === 'functionField') return;
+
+			if (ast.type === 'a2o') {
+				for (const [collection, children] of Object.entries(ast.children)) {
+					setSearchFields(collection, ast.query[collection]!);
+
+					for (const child of children) applySearch(child, schema, accountability);
+				}
+			} else {
+				setSearchFields(ast.name, ast.query);
+
+				for (const child of ast.children) applySearch(child, schema, accountability);
+			}
+
+			function setSearchFields(collection: string, query: ASTQuery) {
+				if (!query.search) return;
+
+				// Searching reads the values, so the read permission applies whatever the action the AST is processed for
+				const permission = accountability?.permissions?.find(
+					(permission) => permission.collection === collection && permission.action === 'read'
+				);
+
+				let readableFields: string[] = [];
+
+				if (permission?.fields?.includes('*')) {
+					readableFields = Object.keys(schema.collections[collection]!.fields);
+				} else if (permission?.fields) {
+					// Legacy permissions with an empty fields array only give access to the primary key
+					readableFields = permission.fields.length > 0 ? permission.fields : [schema.collections[collection]!.primary];
+				}
+
+				query.search.fields = readableFields;
 			}
 		}
 	}

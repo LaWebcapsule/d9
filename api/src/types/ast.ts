@@ -1,10 +1,23 @@
 import type { Query, Relation } from '@wbce-d9/types';
 
+/**
+ * Search query, along with the fields it is allowed to match. For non-admin users, the fields are empty until the
+ * AuthorizationService sets the readable ones
+ */
+export type ASTSearch = {
+	fields: string[];
+	value: string;
+};
+
+export type ASTQuery = Omit<Query, 'search'> & {
+	search?: ASTSearch | null;
+};
+
 export type M2ONode = {
 	type: 'm2o';
 	name: string;
 	children: (NestedCollectionNode | FieldNode | FunctionFieldNode)[];
-	query: Query;
+	query: ASTQuery;
 	fieldKey: string;
 	relation: Relation;
 	parentKey: string;
@@ -18,7 +31,7 @@ export type A2MNode = {
 		[collection: string]: (NestedCollectionNode | FieldNode | FunctionFieldNode)[];
 	};
 	query: {
-		[collection: string]: Query;
+		[collection: string]: ASTQuery;
 	};
 	relatedKey: {
 		[collection: string]: string;
@@ -32,7 +45,7 @@ export type O2MNode = {
 	type: 'o2m';
 	name: string;
 	children: (NestedCollectionNode | FieldNode | FunctionFieldNode)[];
-	query: Query;
+	query: ASTQuery;
 	fieldKey: string;
 	relation: Relation;
 	parentKey: string;
@@ -59,5 +72,5 @@ export type AST = {
 	type: 'root';
 	name: string;
 	children: (NestedCollectionNode | FieldNode | FunctionFieldNode)[];
-	query: Query;
+	query: ASTQuery;
 };
