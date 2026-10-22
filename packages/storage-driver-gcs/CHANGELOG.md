@@ -1,5 +1,13 @@
 # @wbce-d9/storage-driver-gcs
 
+## 10.0.5
+
+### Patch Changes
+
+- Updated dependencies
+  [[`b7af94f`](https://github.com/LaWebcapsule/d9/commit/b7af94f7d1efcc7d8c7cd796a949eddf509a2c90)]:
+  - @wbce-d9/utils@10.0.5
+
 ## 10.0.4
 
 ### Patch Changes

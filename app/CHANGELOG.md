@@ -1,5 +1,49 @@
 # @wbce-d9/app
 
+## 11.3.0
+
+### Minor Changes
+
+- [#456](https://github.com/LaWebcapsule/d9/pull/456)
+  [`b7af94f`](https://github.com/LaWebcapsule/d9/commit/b7af94f7d1efcc7d8c7cd796a949eddf509a2c90) - security: Upgrade
+  Vue from 3.2 to 3.5. App extensions can now use the Vue 3.3 to 3.5 APIs (such as `defineModel` or `useTemplateRef`);
+  an extension that uses them needs this version of the app.
+
+### Patch Changes
+
+- [#452](https://github.com/LaWebcapsule/d9/pull/452)
+  [`36afd9d`](https://github.com/LaWebcapsule/d9/commit/36afd9dba10a3ccc895d49829191d8bbce710eca) - security: bump axios
+  to 1.20.0 and dompurify to 3.4.17 (GHSA-3pq3-5fj3-cg6v / CVE-2026-101898, GHSA-44g4-m2mj-wpvx / CVE-2026-101899,
+  GHSA-4hqw-qxg8-jxx2 / CVE-2026-101900, GHSA-542g-h47m-68v8 / CVE-2026-101901, GHSA-9fr6-4gfg-395g / CVE-2026-101902,
+  GHSA-c29m-xwm3-cm6r / CVE-2026-101903, GHSA-j8rh-479h-cp32 / CVE-2026-101904, GHSA-m8m8-qj5v-23w3 / CVE-2026-101905,
+  GHSA-mghh-pgcx-3jjj / CVE-2026-101906, GHSA-r4gj-5m52-g5wh / CVE-2026-101907, GHSA-vh66-26gq-q6x8 / CVE-2026-101908,
+  GHSA-x97p-jq2g-jp4f / CVE-2026-101909, GHSA-6688-9rhm-gjv2, GHSA-p98j-92pf-mc4p)
+
+- [#443](https://github.com/LaWebcapsule/d9/pull/443)
+  [`d0e4fc0`](https://github.com/LaWebcapsule/d9/commit/d0e4fc0dfb66ccaa8238ed609576dc24bbd788d7) - security: the
+  recommended app permissions no longer let a role choose the role of its shares, which now defaults to the
+  (GHSA-pmf4-v838-29hg, CVE-2025-24353) creator's role (GHSA-pmf4-v838-29hg / CVE-2025-24353)
+
+  **Fixing existing roles**: upgrading doesn't change the permissions of existing roles. The role page in the app shows
+  a warning when a role can still choose the role of its shares; if the warning doesn't show on any role, there is
+  nothing to fix. Otherwise, for each role showing it, in Settings > Roles & Permissions > _role_ > System Collections >
+  Shares:
+
+  1. Create: in Field Permissions, uncheck `role`. In Field Presets, set `{ "role": "$CURRENT_ROLE" }`, so that a share
+     is accessed with the role of its creator
+  2. Update: in Field Permissions, uncheck `role`
+
+  Alternatively, for roles with app access, "Reset System Permissions to: Recommended Defaults" applies the fixed
+  permissions, but overwrites any custom permission on system collections of that role.
+
+  Then, as an admin, check the existing shares
+  (`GET /shares?fields=id,collection,item,role,user_created.email,user_created.role&limit=-1`) and delete those whose
+  role differs from the role of their creator, or set it to the creator's role.
+
+- Updated dependencies
+  [[`b7af94f`](https://github.com/LaWebcapsule/d9/commit/b7af94f7d1efcc7d8c7cd796a949eddf509a2c90)]:
+  - @wbce-d9/composables@10.0.5
+
 ## 11.2.0
 
 ### Minor Changes
