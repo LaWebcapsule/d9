@@ -328,7 +328,7 @@ export default class CockroachDB implements SchemaInspector {
 
 		const schemaIn = this.explodedSchema.map((schemaName) => `${this.knex.raw('?', [schemaName])}::regnamespace`);
 
-		const [columns, constraints] = await Promise.all([
+		const [columns, constraints, indexes] = await Promise.all([
 			knex.raw<{ rows: RawColumn[] }>(
 				`
          SELECT *, CASE WHEN res.is_generated THEN (
@@ -416,6 +416,26 @@ export default class CockroachDB implements SchemaInspector {
          `,
 				bindings
 			),
+			// Columns that are the only column of a plain (non-unique, non-primary, non-partial) index
+			knex.raw<{ rows: { table: string; column: string }[] }>(
+				`
+         SELECT
+           rel.relname AS table,
+           att.attname AS column
+         FROM
+           pg_index idx
+           JOIN pg_class rel ON idx.indrelid = rel.oid
+           JOIN pg_attribute att ON att.attrelid = idx.indrelid AND att.attnum = idx.indkey[0]
+         WHERE rel.relnamespace IN (${schemaIn})
+           AND idx.indnatts = 1
+           AND NOT idx.indisunique
+           AND NOT idx.indisprimary
+           AND idx.indpred IS NULL
+           ${table ? 'AND rel.relname = ?' : ''}
+           ${column ? 'AND att.attname = ?' : ''}
+         `,
+				bindings
+			),
 		]);
 
 		const parsedColumns: Column[] = columns.rows.map((col): Column => {
@@ -428,6 +448,7 @@ export default class CockroachDB implements SchemaInspector {
 			return {
 				...col,
 				is_unique: constraintsForColumn.some((constraint) => ['u', 'p'].includes(constraint.type)),
+				is_indexed: indexes.rows.some((index) => index.table === col.table && index.column === col.name),
 				is_primary_key: constraintsForColumn.some((constraint) => constraint.type === 'p'),
 				has_auto_increment:
 					['integer', 'bigint'].includes(col.data_type) && (col.default_value?.startsWith('nextval(') ?? false),
