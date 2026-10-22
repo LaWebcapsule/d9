@@ -120,6 +120,33 @@ router.get(
 
 	// Return file
 	asyncHandler(async (req, res) => {
+		// [repro] temporary timing instrumentation for the flaky assets concurrency test
+		const t0: number = res.locals['reproT0'] ?? performance.now();
+		const marks: Record<string, number> = { handler: performance.now() - t0 };
+		let bytes = 0;
+		let maxBuffered = 0;
+
+		const reproLog = (event: string) => {
+			const total = performance.now() - t0;
+			if (event === 'end' && total < 3000) return;
+
+			const rounded = Object.fromEntries(Object.entries(marks).map(([k, v]) => [k, Math.round(v)]));
+
+			logger.warn(
+				`[repro] ${event} ${req.path} total=${Math.round(total)}ms marks=${JSON.stringify(rounded)} ` +
+					`bytes=${bytes} maxBuffered=${maxBuffered} socketDestroyed=${req.socket.destroyed}`
+			);
+		};
+
+		res.on('finish', () => {
+			marks['finish'] = performance.now() - t0;
+			reproLog('end');
+		});
+
+		res.on('close', () => {
+			if (!res.writableFinished) reproLog('aborted');
+		});
+
 		const id = req.params['pk']!.substring(0, 36);
 
 		const service = new AssetsService({
@@ -171,6 +198,7 @@ router.get(
 		}
 
 		const { stream, file, stat } = await service.getAsset(id, transformation, range);
+		marks['getAsset'] = performance.now() - t0;
 
 		const filename = req.params['filename'] ?? file.filename_download;
 		res.attachment(filename);
@@ -229,11 +257,15 @@ router.get(
 		let isDataSent = false;
 
 		stream.on('data', (chunk) => {
+			if (!isDataSent) marks['firstChunk'] = performance.now() - t0;
 			isDataSent = true;
+			bytes += chunk.length;
 			res.write(chunk);
+			maxBuffered = Math.max(maxBuffered, res.writableLength);
 		});
 
 		stream.on('end', () => {
+			marks['streamEnd'] = performance.now() - t0;
 			res.end();
 		});
 

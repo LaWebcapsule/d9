@@ -101,6 +101,12 @@ export default async function createApp(): Promise<express.Application> {
 
 	const app = express();
 
+	// [repro] temporary timing instrumentation for the flaky assets concurrency test
+	app.use((_req, res, next) => {
+		res.locals['reproT0'] = performance.now();
+		next();
+	});
+
 	app.disable('x-powered-by');
 	app.set('trust proxy', env['IP_TRUST_PROXY']);
 
