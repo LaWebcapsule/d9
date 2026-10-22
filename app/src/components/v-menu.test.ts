@@ -27,7 +27,7 @@ const global: GlobalMountOptions = {
 };
 
 // Vue keeps the listeners it attached to an element under a private `_vei` symbol
-function getListeners(element: Element): Record<string, unknown> | undefined {
+function getListeners(element: Node): Record<string, unknown> | undefined {
 	const key = Object.getOwnPropertySymbols(element).find((symbol) => symbol.description === '_vei');
 	return key && Reflect.get(element, key);
 }
