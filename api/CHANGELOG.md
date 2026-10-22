@@ -1,5 +1,35 @@
 # @wbce-d9/api
 
+## 12.7.1
+
+### Patch Changes
+
+- [#452](https://github.com/LaWebcapsule/d9/pull/452)
+  [`36afd9d`](https://github.com/LaWebcapsule/d9/commit/36afd9dba10a3ccc895d49829191d8bbce710eca) - security: bump axios
+  to 1.20.0 (GHSA-3pq3-5fj3-cg6v / CVE-2026-101898, GHSA-44g4-m2mj-wpvx / CVE-2026-101899, GHSA-4hqw-qxg8-jxx2 /
+  CVE-2026-101900, GHSA-542g-h47m-68v8 / CVE-2026-101901, GHSA-9fr6-4gfg-395g / CVE-2026-101902, GHSA-c29m-xwm3-cm6r /
+  CVE-2026-101903, GHSA-j8rh-479h-cp32 / CVE-2026-101904, GHSA-m8m8-qj5v-23w3 / CVE-2026-101905, GHSA-mghh-pgcx-3jjj /
+  CVE-2026-101906, GHSA-r4gj-5m52-g5wh / CVE-2026-101907, GHSA-vh66-26gq-q6x8 / CVE-2026-101908, GHSA-x97p-jq2g-jp4f /
+  CVE-2026-101909)
+
+- [#440](https://github.com/LaWebcapsule/d9/pull/440)
+  [`5f66176`](https://github.com/LaWebcapsule/d9/commit/5f66176697589d5363a6f6302e4fb90ad11d3359) - fix: a nested
+  one-to-many update no longer writes the back-reference of a child already linked to its parent, so updating such a
+  child no longer requires the update permission on that field, like a direct update of the child. Children linked to
+  another parent still get it written as before ([#439](https://github.com/LaWebcapsule/d9/issues/439))
+- Updated dependencies [[`36afd9d`](https://github.com/LaWebcapsule/d9/commit/36afd9dba10a3ccc895d49829191d8bbce710eca),
+  [`d0e4fc0`](https://github.com/LaWebcapsule/d9/commit/d0e4fc0dfb66ccaa8238ed609576dc24bbd788d7),
+  [`b7af94f`](https://github.com/LaWebcapsule/d9/commit/b7af94f7d1efcc7d8c7cd796a949eddf509a2c90),
+  [`b7af94f`](https://github.com/LaWebcapsule/d9/commit/b7af94f7d1efcc7d8c7cd796a949eddf509a2c90)]:
+  - @wbce-d9/app@11.3.0
+  - @wbce-d9/extensions-sdk@10.1.0
+  - @wbce-d9/utils@10.0.5
+  - @wbce-d9/storage-driver-azure@10.0.5
+  - @wbce-d9/storage-driver-cloudinary@10.0.6
+  - @wbce-d9/storage-driver-gcs@10.0.5
+  - @wbce-d9/storage-driver-local@10.0.5
+  - @wbce-d9/storage-driver-s3@10.0.5
+
 ## 12.7.0
 
 ### Minor Changes

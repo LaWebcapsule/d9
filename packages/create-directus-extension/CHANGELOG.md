@@ -1,5 +1,13 @@
 # @wbce-d9/create-directus-extension
 
+## 9.26.19
+
+### Patch Changes
+
+- Updated dependencies
+  [[`b7af94f`](https://github.com/LaWebcapsule/d9/commit/b7af94f7d1efcc7d8c7cd796a949eddf509a2c90)]:
+  - @wbce-d9/extensions-sdk@10.1.0
+
 ## 9.26.18
 
 ### Patch Changes

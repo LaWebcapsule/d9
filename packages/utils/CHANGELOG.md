@@ -1,5 +1,13 @@
 # @wbce-d9/utils
 
+## 10.0.5
+
+### Patch Changes
+
+- [#456](https://github.com/LaWebcapsule/d9/pull/456)
+  [`b7af94f`](https://github.com/LaWebcapsule/d9/commit/b7af94f7d1efcc7d8c7cd796a949eddf509a2c90) - security: upgrade
+  Vue to 3.5.44 (GHSA-g2v6-rqmx-r4w6)
+
 ## 10.0.4
 
 ### Patch Changes

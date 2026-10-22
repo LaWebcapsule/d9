@@ -1,5 +1,21 @@
 # @wbce-d9/extensions-sdk
 
+## 10.1.0
+
+### Minor Changes
+
+- [#456](https://github.com/LaWebcapsule/d9/pull/456)
+  [`b7af94f`](https://github.com/LaWebcapsule/d9/commit/b7af94f7d1efcc7d8c7cd796a949eddf509a2c90) - security: Upgrade
+  Vue from 3.2 to 3.5. App extensions can now use the Vue 3.3 to 3.5 APIs (such as `defineModel` or `useTemplateRef`);
+  an extension that uses them needs this version of the app.
+
+### Patch Changes
+
+- Updated dependencies
+  [[`b7af94f`](https://github.com/LaWebcapsule/d9/commit/b7af94f7d1efcc7d8c7cd796a949eddf509a2c90)]:
+  - @wbce-d9/utils@10.0.5
+  - @wbce-d9/composables@10.0.5
+
 ## 10.0.5
 
 ### Patch Changes
