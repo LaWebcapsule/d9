@@ -253,11 +253,15 @@ overrides:
 
 packageExtensionsChecksum: sha256-jygb7QknrYgYSzZe0hMyvEMitSRad62GWGwr5lKleag=
 
-pnpmfileChecksum: sha256-ykHct+u9RwTTonREdS6CEI2AF90UlS0X54pl0IMecOg=
+pnpmfileChecksum: sha256-PqA+MD+wk6I4rCnyGmkG360jL0WiSd9rtL3K2rWcxlo=
 
 importers:
 
   .:
+    dependencies:
+      directus:
+        specifier: 9.26.0
+        version: 9.26.0
     devDependencies:
       '@changesets/changelog-github':
         specifier: ^1.0.1
@@ -274,9 +278,6 @@ importers:
       '@typescript-eslint/parser':
         specifier: 7.18.0
         version: 7.18.0(eslint@8.57.0)(typescript@5.7.3)
-      directus:
-        specifier: 9.26.0
-        version: 9.26.0
       eslint:
         specifier: 8.57.0
         version: 8.57.0
