@@ -63,4 +63,4 @@ catalog:
   undici: '7.29.1'
   dompurify: '3.4.17'
   diff: '5.2.2'
-  vite: '7.3.5'
+  vite: '7.3.7'
