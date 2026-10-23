@@ -1,5 +1,15 @@
 # @wbce-d9/api
 
+## 12.7.2
+
+### Patch Changes
+
+- [#460](https://github.com/LaWebcapsule/d9/pull/460)
+  [`e1fe7c5`](https://github.com/LaWebcapsule/d9/commit/e1fe7c589d915c88db1599f76d4e2bc9015ee494) - security: the
+  `search` query parameter, including `_search` in `deep` and the `filter_count` metadata, only matches the
+  (GHSA-7wq3-jr35-275c) fields the role is allowed to read, to prevent enumerating the values of the other fields
+  (GHSA-7wq3-jr35-275c)
+
 ## 12.7.1
 
 ### Patch Changes
