@@ -4,7 +4,6 @@ import type {
 	FieldFunction,
 	FieldOverview,
 	Filter,
-	Query,
 	Relation,
 	SchemaOverview,
 	Type,
@@ -15,6 +14,7 @@ import { clone, isPlainObject } from 'lodash-es';
 import validate from 'uuid-validate';
 import { getHelpers } from '../database/helpers/index.js';
 import { InvalidQueryException } from '../exceptions/invalid-query.js';
+import type { ASTQuery, ASTSearch } from '../types/index.js';
 import type { AliasMap } from './get-column-path.js';
 import { getColumnPath } from './get-column-path.js';
 import { getColumn } from './get-column.js';
@@ -33,7 +33,7 @@ export default function applyQuery(
 	knex: Knex,
 	collection: string,
 	dbQuery: Knex.QueryBuilder,
-	query: Query,
+	query: ASTQuery,
 	schema: SchemaOverview,
 	options?: { aliasMap?: AliasMap; isInnerQuery?: boolean; hasMultiRelationalSort?: boolean | undefined }
 ) {
@@ -758,24 +758,37 @@ export function addWhereClauses(
 export async function applySearch(
 	schema: SchemaOverview,
 	dbQuery: Knex.QueryBuilder,
-	searchQuery: string,
+	search: ASTSearch,
 	collection: string
 ): Promise<void> {
-	const fields = Object.entries(schema.collections[collection]!.fields);
+	const { fields, value: searchQuery } = search;
 
 	dbQuery.andWhere(function () {
-		fields.forEach(([name, field]) => {
-			if (field.special.includes('conceal')) return;
+		let hasCondition = false;
+
+		fields.forEach((name) => {
+			const field = schema.collections[collection]!.fields[name];
+
+			if (!field || field.special.includes('conceal')) return;
 
 			if (['text', 'string'].includes(field.type)) {
 				this.orWhereRaw(`LOWER(??) LIKE ?`, [`${collection}.${name}`, `%${searchQuery.toLowerCase()}%`]);
+				hasCondition = true;
 			} else if (['bigInteger', 'integer', 'decimal', 'float'].includes(field.type)) {
 				const number = Number(searchQuery);
-				if (!isNaN(number)) this.orWhere({ [`${collection}.${name}`]: number });
+
+				if (!isNaN(number)) {
+					this.orWhere({ [`${collection}.${name}`]: number });
+					hasCondition = true;
+				}
 			} else if (field.type === 'uuid' && validate(searchQuery)) {
 				this.orWhere({ [`${collection}.${name}`]: searchQuery });
+				hasCondition = true;
 			}
 		});
+
+		// No field can match the search, so no item should be returned
+		if (!hasCondition) this.whereRaw('1 = 0');
 	});
 }
 
