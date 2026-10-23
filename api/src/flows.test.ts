@@ -31,6 +31,10 @@ const schema = {
 
 const payload = { email: 'user@example.com', password: 'p4ssw0rd', token: 'static-token' };
 
+const flowManager = getFlowManager();
+const operation = vi.fn<OperationHandler>();
+flowManager.addOperation('log', operation);
+
 function eventFlow(message: string): Flow {
 	return {
 		id: 'flow',
@@ -49,10 +53,6 @@ function eventFlow(message: string): Flow {
 }
 
 describe('concealed fields in event-triggered flows', () => {
-	const flowManager = getFlowManager();
-	const operation = vi.fn<OperationHandler>();
-	flowManager.addOperation('log', operation);
-
 	afterEach(() => {
 		vi.clearAllMocks();
 	});
@@ -87,5 +87,45 @@ describe('concealed fields in event-triggered flows', () => {
 		const [, context] = await run('{{ $trigger.payload.email }}');
 
 		expect((context.data['$trigger'] as any).payload).toEqual(payload);
+	});
+});
+
+describe('request credentials in webhook-triggered flows', () => {
+	const request = {
+		path: '/trigger/flow',
+		query: { access_token: 'query-token', page: '1' },
+		body: {},
+		method: 'GET',
+		headers: { authorization: 'Bearer header-token', cookie: 'directus_refresh_token=refresh-token', accept: '*/*' },
+	};
+
+	afterEach(() => {
+		vi.clearAllMocks();
+	});
+
+	async function run(message: string) {
+		await (flowManager as any).executeFlow(
+			{ ...eventFlow(message), trigger: 'webhook', options: { method: 'GET' } },
+			structuredClone(request),
+			{ database: knex.default({ client: MockClient }), schema }
+		);
+
+		return operation.mock.calls[0]!;
+	}
+
+	test('are redacted in the message of the log operation', async () => {
+		const [options] = await run('{{ $trigger }}');
+
+		expect(options['message']).toEqual({
+			...request,
+			query: { access_token: '--redacted--', page: '1' },
+			headers: { authorization: '--redacted--', cookie: '--redacted--', accept: '*/*' },
+		});
+	});
+
+	test('are left untouched in the data given to the operation', async () => {
+		const [, context] = await run('{{ $trigger.path }}');
+
+		expect(context.data['$trigger']).toEqual(request);
 	});
 });
