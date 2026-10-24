@@ -21,24 +21,28 @@ interface Props {
 const props = defineProps<Props>();
 
 const CRYSTAL_COUNT = 100;
+const MIN_CRYSTAL_COUNT = 40;
 const MIN_WIDTH = 2;
 const MAX_WIDTH = 15;
 const MIN_SPEED = 6;
 const MAX_SPEED = 35;
 const HUE_SPREAD = 40;
 const GLOW = 10;
+const SPRITE_PADDING = GLOW * 2;
+const FRAME_INTERVAL = 1000 / 60;
+const FRAME_SCHEDULING_MARGIN = 2;
 
 interface Crystal {
 	x: number;
 	y: number;
-	w: number;
-	h: number;
-	hue: number;
 	speed: number;
+	sprite: HTMLCanvasElement;
 }
 
 const container = ref<HTMLDivElement>();
 const canvas = ref<HTMLCanvasElement>();
+
+let context: CanvasRenderingContext2D | null = null;
 
 const tint = computed(() => {
 	let hsl: { h: number; s: number; l: number };
@@ -66,58 +70,119 @@ let crystals: Crystal[] = [];
 let width = 0;
 let height = 0;
 let frame: number | null = null;
+let frameTimer: number | null = null;
+let resizeFrame: number | null = null;
 let lastTime = 0;
 let observer: ResizeObserver | null = null;
-
-const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+let reducedMotion = false;
+let motionQuery: MediaQueryList | null = null;
 
 onMounted(() => {
 	if (!container.value) return;
 
-	observer = new ResizeObserver(resize);
+	motionQuery = window.matchMedia?.('(prefers-reduced-motion: reduce)') ?? null;
+	reducedMotion = motionQuery?.matches ?? false;
+	motionQuery?.addEventListener?.('change', handleMotionPreference);
+	document.addEventListener('visibilitychange', syncAnimation);
+
+	observer = new ResizeObserver(scheduleResize);
 	observer.observe(container.value);
 	resize();
-
-	if (reducedMotion) draw();
-	else frame = requestAnimationFrame(tick);
 });
 
 onBeforeUnmount(() => {
-	if (frame !== null) cancelAnimationFrame(frame);
+	stopAnimation();
+	if (resizeFrame !== null) cancelAnimationFrame(resizeFrame);
 	observer?.disconnect();
+	motionQuery?.removeEventListener?.('change', handleMotionPreference);
+	document.removeEventListener('visibilitychange', syncAnimation);
 });
 
 watch(tint, () => {
 	seed();
-	if (reducedMotion) draw();
+	draw();
 });
+
+function scheduleResize() {
+	if (resizeFrame !== null) return;
+
+	resizeFrame = requestAnimationFrame(() => {
+		resizeFrame = null;
+		resize();
+	});
+}
 
 function resize() {
 	if (!container.value || !canvas.value) return;
 
-	width = canvas.value.width = container.value.clientWidth;
-	height = canvas.value.height = container.value.clientHeight;
+	const nextWidth = container.value.clientWidth;
+	const nextHeight = container.value.clientHeight;
+	if (nextWidth === width && nextHeight === height) return;
+
+	width = canvas.value.width = nextWidth;
+	height = canvas.value.height = nextHeight;
+	context = canvas.value.getContext('2d');
+
+	if (context) context.globalCompositeOperation = 'lighter';
 
 	seed();
-	if (reducedMotion) draw();
+	draw();
+	syncAnimation();
 }
 
 function seed() {
+	if (width === 0 || height === 0) {
+		crystals = [];
+		return;
+	}
+
 	const maxHeight = height * 0.9;
 	const minHeight = height * 0.5;
+	const count = Math.min(CRYSTAL_COUNT, Math.max(MIN_CRYSTAL_COUNT, Math.round(width / 16)));
 
-	crystals = Array.from({ length: CRYSTAL_COUNT }, () => ({
-		x: Math.random() * width,
-		y: (Math.random() * height) / 2,
-		w: Math.random() * (MAX_WIDTH - MIN_WIDTH) + MIN_WIDTH,
-		h: Math.random() * (maxHeight - minHeight) + minHeight,
-		hue: tint.value.hue + (Math.random() * 2 - 1) * HUE_SPREAD,
-		speed: Math.random() * (MAX_SPEED - MIN_SPEED) + MIN_SPEED,
-	}));
+	crystals = Array.from({ length: count }, () => {
+		const w = Math.random() * (MAX_WIDTH - MIN_WIDTH) + MIN_WIDTH;
+		const h = Math.random() * (maxHeight - minHeight) + minHeight;
+		const hue = tint.value.hue + (Math.random() * 2 - 1) * HUE_SPREAD;
+
+		return {
+			x: Math.random() * width,
+			y: (Math.random() * height) / 2,
+			speed: Math.random() * (MAX_SPEED - MIN_SPEED) + MIN_SPEED,
+			sprite: createCrystalSprite(w, h, hue),
+		};
+	});
+}
+
+function createCrystalSprite(w: number, h: number, hue: number) {
+	const sprite = document.createElement('canvas');
+	sprite.width = Math.ceil(w + SPRITE_PADDING * 2);
+	sprite.height = Math.ceil(h + SPRITE_PADDING * 2);
+
+	const ctx = sprite.getContext('2d');
+	if (!ctx) return sprite;
+
+	const saturation = tint.value.saturation;
+	const gradient = ctx.createLinearGradient(SPRITE_PADDING, SPRITE_PADDING, SPRITE_PADDING + w, SPRITE_PADDING + h);
+	gradient.addColorStop(0, `hsl(${hue} ${saturation}% 50% / 0)`);
+	gradient.addColorStop(0.2, `hsl(${hue} ${saturation}% 50% / 0.5)`);
+	gradient.addColorStop(0.5, `hsl(${hue} ${Math.min(saturation + 20, 100)}% 60% / 0.8)`);
+	gradient.addColorStop(0.8, `hsl(${hue} ${saturation}% 50% / 0.5)`);
+	gradient.addColorStop(1, `hsl(${hue} ${saturation}% 50% / 0)`);
+
+	ctx.shadowBlur = GLOW;
+	ctx.shadowColor = `hsl(${hue} ${saturation}% 50%)`;
+	ctx.fillStyle = gradient;
+	ctx.fillRect(SPRITE_PADDING, SPRITE_PADDING, w, h);
+
+	return sprite;
 }
 
 function tick(time: number) {
-	const delta = lastTime ? Math.min(time - lastTime, 100) : 16;
+	frame = null;
+	if (!shouldAnimate()) return;
+
+	const delta = lastTime ? Math.min(time - lastTime, 100) : FRAME_INTERVAL;
 	lastTime = time;
 
 	// Original pen moved `speed / 100` px per frame at 60fps
@@ -127,31 +192,53 @@ function tick(time: number) {
 	}
 
 	draw();
-	frame = requestAnimationFrame(tick);
+	scheduleAnimationFrame();
 }
 
 function draw() {
-	const ctx = canvas.value?.getContext('2d');
-	if (!ctx) return;
+	if (!context) return;
 
-	const saturation = tint.value.saturation;
+	context.clearRect(0, 0, width, height);
 
-	ctx.clearRect(0, 0, width, height);
-	ctx.globalCompositeOperation = 'lighter';
-	ctx.shadowBlur = GLOW;
-
-	for (const { x, y, w, h, hue } of crystals) {
-		const gradient = ctx.createLinearGradient(x, y, x + w, y + h);
-		gradient.addColorStop(0, `hsl(${hue} ${saturation}% 50% / 0)`);
-		gradient.addColorStop(0.2, `hsl(${hue} ${saturation}% 50% / 0.5)`);
-		gradient.addColorStop(0.5, `hsl(${hue} ${Math.min(saturation + 20, 100)}% 60% / 0.8)`);
-		gradient.addColorStop(0.8, `hsl(${hue} ${saturation}% 50% / 0.5)`);
-		gradient.addColorStop(1, `hsl(${hue} ${saturation}% 50% / 0)`);
-
-		ctx.shadowColor = `hsl(${hue} ${saturation}% 50%)`;
-		ctx.fillStyle = gradient;
-		ctx.fillRect(x, y, w, h);
+	for (const { x, y, sprite } of crystals) {
+		context.drawImage(sprite, x - SPRITE_PADDING, y - SPRITE_PADDING);
 	}
+}
+
+function shouldAnimate() {
+	return !reducedMotion && width > 0 && height > 0 && document.visibilityState !== 'hidden';
+}
+
+function syncAnimation() {
+	if (shouldAnimate()) startAnimation();
+	else stopAnimation();
+}
+
+function startAnimation() {
+	if (frame !== null || frameTimer !== null) return;
+	scheduleAnimationFrame();
+}
+
+function scheduleAnimationFrame() {
+	frameTimer = window.setTimeout(() => {
+		frameTimer = null;
+		if (!shouldAnimate()) return;
+		frame = requestAnimationFrame(tick);
+	}, FRAME_INTERVAL - FRAME_SCHEDULING_MARGIN);
+}
+
+function stopAnimation() {
+	if (frame !== null) cancelAnimationFrame(frame);
+	if (frameTimer !== null) window.clearTimeout(frameTimer);
+	frame = null;
+	frameTimer = null;
+	lastTime = 0;
+}
+
+function handleMotionPreference(event: MediaQueryListEvent) {
+	reducedMotion = event.matches;
+	draw();
+	syncAnimation();
 }
 </script>
 
