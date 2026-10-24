@@ -30,7 +30,8 @@ const HUE_SPREAD = 40;
 const GLOW = 10;
 const SPRITE_PADDING = GLOW * 2;
 const FRAME_INTERVAL = 1000 / 60;
-const FRAME_SCHEDULING_MARGIN = 2;
+// Account for sub-millisecond requestAnimationFrame timestamp variance around the 60 FPS boundary.
+const FRAME_TOLERANCE = 1;
 
 interface Crystal {
 	x: number;
@@ -70,9 +71,9 @@ let crystals: Crystal[] = [];
 let width = 0;
 let height = 0;
 let frame: number | null = null;
-let frameTimer: number | null = null;
 let resizeFrame: number | null = null;
 let lastTime = 0;
+let elapsedTime = 0;
 let observer: ResizeObserver | null = null;
 let reducedMotion = false;
 let motionQuery: MediaQueryList | null = null;
@@ -184,15 +185,23 @@ function tick(time: number) {
 
 	const delta = lastTime ? Math.min(time - lastTime, 100) : FRAME_INTERVAL;
 	lastTime = time;
+	elapsedTime += delta;
 
-	// Original pen moved `speed / 100` px per frame at 60fps
-	for (const crystal of crystals) {
-		crystal.x += (crystal.speed / 100) * 0.06 * delta;
-		if (crystal.x > width + MAX_WIDTH) crystal.x = -MAX_WIDTH;
+	if (elapsedTime >= FRAME_INTERVAL - FRAME_TOLERANCE) {
+		const elapsedFrames = Math.max(1, Math.floor((elapsedTime + FRAME_TOLERANCE) / FRAME_INTERVAL));
+		const movementDelta = elapsedFrames * FRAME_INTERVAL;
+		elapsedTime = Math.max(0, elapsedTime - movementDelta);
+
+		// Original pen moved `speed / 100` px per frame at 60fps
+		for (const crystal of crystals) {
+			crystal.x += (crystal.speed / 100) * 0.06 * movementDelta;
+			if (crystal.x > width + MAX_WIDTH) crystal.x = -MAX_WIDTH;
+		}
+
+		draw();
 	}
 
-	draw();
-	scheduleAnimationFrame();
+	frame = requestAnimationFrame(tick);
 }
 
 function draw() {
@@ -215,24 +224,15 @@ function syncAnimation() {
 }
 
 function startAnimation() {
-	if (frame !== null || frameTimer !== null) return;
-	scheduleAnimationFrame();
-}
-
-function scheduleAnimationFrame() {
-	frameTimer = window.setTimeout(() => {
-		frameTimer = null;
-		if (!shouldAnimate()) return;
-		frame = requestAnimationFrame(tick);
-	}, FRAME_INTERVAL - FRAME_SCHEDULING_MARGIN);
+	if (frame !== null) return;
+	frame = requestAnimationFrame(tick);
 }
 
 function stopAnimation() {
 	if (frame !== null) cancelAnimationFrame(frame);
-	if (frameTimer !== null) window.clearTimeout(frameTimer);
 	frame = null;
-	frameTimer = null;
 	lastTime = 0;
+	elapsedTime = 0;
 }
 
 function handleMotionPreference(event: MediaQueryListEvent) {
