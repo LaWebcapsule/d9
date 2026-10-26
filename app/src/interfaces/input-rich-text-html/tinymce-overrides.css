@@ -6,6 +6,7 @@
 	height: 36px;
 	margin: 0;
 	color: var(--foreground-normal);
+	background: transparent;
 }
 
 .tox .tox-listbox__select-chevron svg,
