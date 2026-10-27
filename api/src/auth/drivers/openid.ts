@@ -287,9 +287,9 @@ export function createOpenIDAuthRouter(providerName: string): Router {
 			} catch (e: any) {
 				logger.warn(e, `[OpenID] Couldn't verify OpenID cookie ${state ? `for state ${state}` : ''}`);
 
-				const url = new URL(new Url(env['PUBLIC_URL']).addPath('admin', 'login').toString());
+				const loginUrl = new Url(env['PUBLIC_URL']).addPath('admin', 'login').toString();
 
-				const redirectTo = validRedirectUrl || url.toString();
+				const redirectTo = validRedirectUrl || loginUrl;
 				return res.redirect(`${redirectTo}?reason=INVALID_CREDENTIALS`);
 			}
 
