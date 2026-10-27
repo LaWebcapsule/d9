@@ -93,6 +93,7 @@ import { GraphQLHash } from './types/hash.js';
 import { GraphQLStringOrFloat } from './types/string-or-float.js';
 import { GraphQLVoid } from './types/void.js';
 import { addPathToValidationError } from './utils/add-path-to-validation-error.js';
+import { dedupeQueryResolvers } from './utils/dedupe-query-resolvers.js';
 import processError from './utils/process-error.js';
 
 const validationRules = Array.from(specifiedRules);
@@ -345,7 +346,11 @@ export class GraphQLService {
 			return schemaComposer.toSDL();
 		}
 
-		return schemaComposer.buildSchema();
+		const builtSchema = schemaComposer.buildSchema();
+
+		dedupeQueryResolvers(builtSchema);
+
+		return builtSchema;
 
 		/**
 		 * Construct an object of types for every collection, using the permitted fields per action type
