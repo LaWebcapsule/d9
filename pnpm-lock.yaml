@@ -154,8 +154,8 @@ catalogs:
       specifier: 5.0.4
       version: 5.0.4
     undici:
-      specifier: 7.29.1
-      version: 7.29.1
+      specifier: 7.30.1
+      version: 7.30.1
     uuid:
       specifier: 14.0.0
       version: 14.0.0
@@ -1363,7 +1363,7 @@ importers:
         version: 7.3.4
       undici:
         specifier: 'catalog:'
-        version: 7.29.1
+        version: 7.30.1
     devDependencies:
       '@ngneat/falso':
         specifier: 'catalog:'
@@ -1531,7 +1531,7 @@ importers:
         version: 7.5.2
       undici:
         specifier: 'catalog:'
-        version: 7.29.1
+        version: 7.30.1
     devDependencies:
       '@ngneat/falso':
         specifier: 'catalog:'
@@ -10667,8 +10667,8 @@ packages:
   undici-types@7.16.0:
     resolution: {integrity: sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==}
 
-  undici@7.29.1:
-    resolution: {integrity: sha512-RYONW2MeafgYlkVOKYKkA/Ag7BmXqgIWCa8t1m0JcxrQg9pI9lEqRhAOruOBCbAohOa/gkCF+iPi9hrgvTzu6Q==}
+  undici@7.30.1:
+    resolution: {integrity: sha512-03KrMbjIFDWQR5RNPrSw3bd1r12JpyFQl9/yxjUbJtqkjmllqC5lFjZh6ujeuJCKr8EOQvRW872Oy/az+nLYxg==}
     engines: {node: '>=20.18.1'}
 
   unhead@2.1.15:
@@ -21921,7 +21921,7 @@ snapshots:
 
   undici-types@7.16.0: {}
 
-  undici@7.29.1: {}
+  undici@7.30.1: {}
 
   unhead@2.1.15:
     dependencies:
