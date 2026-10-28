@@ -1,3 +1,4 @@
+import { expect } from 'vitest';
 import { CreateField, CreateItem, ReadItem } from '@common/functions.ts';
 import { SeedFunctions } from '@common/seed-functions.ts';
 import type { PrimaryKeyType } from '@common/types.ts';

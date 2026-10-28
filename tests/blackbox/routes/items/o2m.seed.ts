@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import vendors from '../../common/get-dbs-to-test.ts';
 import { CreateCollection, CreateField, CreateFieldO2M, CreateItem, DeleteCollection } from '../../common/functions.ts';
 import type { CachedTestsSchema, TestsSchema, TestsSchemaVendorValues } from '../../query/filter/index.ts';

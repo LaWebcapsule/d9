@@ -21,27 +21,3 @@ export const list = {
 		// { testFilePath: '/common/common.test.ts' },
 	],
 };
-
-export function getReversedTestIndex(testFilePath) {
-	if (this.list.only.length > 0) {
-		for (let index = 0; index < this.list.only.length; index++) {
-			if (testFilePath.includes(this.list.only[index].testFilePath)) {
-				return index;
-			}
-		}
-	}
-
-	for (let index = 0; index < this.list.before.length; index++) {
-		if (testFilePath.includes(this.list.before[index].testFilePath)) {
-			return index;
-		}
-	}
-
-	for (let index = 0; index < this.list.after.length; index++) {
-		if (testFilePath.includes(this.list.after[index].testFilePath)) {
-			return 0 - this.list.after.length + index;
-		}
-	}
-
-	return this.list.before.length;
-}

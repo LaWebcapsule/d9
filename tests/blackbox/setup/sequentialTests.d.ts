@@ -7,4 +7,3 @@ export const list: {
 	after: SequentialTestEntry[];
 	only: SequentialTestEntry[];
 };
-export function getReversedTestIndex(testFilePath: string): number;

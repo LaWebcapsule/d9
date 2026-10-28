@@ -1,3 +1,4 @@
+import { expect } from 'vitest';
 import request from 'supertest';
 import { getUrl } from '@common/config.ts';
 import { CreateItem } from '@common/functions.ts';
