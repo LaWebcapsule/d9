@@ -158,12 +158,8 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 			const client = await this.client;
 			const codeChallenge = await oidc.calculatePKCECodeChallenge(payload['codeVerifier']);
 
-			// A reverse proxy that strips the PUBLIC_URL path prefix means req.originalUrl doesn't carry it.
-			//e.g.: https://example.com/my-cms/auth... results in req.originalUrl to be /auth
-			// Only its query string matters: the code exchange has to reuse the exact redirect_uri sent in
-			// the authorization request (RFC 6749 §4.1.3), so rebuild the URL from the configured one.
 			const callbackUrl = new URL(this.redirectUrl);
-			callbackUrl.search = new URL(payload['callbackPath'], this.redirectUrl).search;
+			callbackUrl.search = payload['callbackSearch'] ?? '';
 
 			tokenSet = await oidc.authorizationCodeGrant(client, callbackUrl, {
 				pkceCodeVerifier: payload['codeVerifier'],
@@ -320,7 +316,7 @@ export function createOpenIDAuthRouter(providerName: string): Router {
 					state: req.query['state'],
 					iss: req.query['iss'],
 					redirect: validRedirectUrl,
-					callbackPath: req.originalUrl,
+					callbackSearch: new URL(req.originalUrl, 'https://relative.invalid').search,
 				});
 			} catch (error: any) {
 				// Prompt user for a new refresh_token if invalidated

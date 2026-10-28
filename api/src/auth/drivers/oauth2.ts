@@ -118,11 +118,8 @@ export class OAuth2AuthDriver extends BaseOAuthDriver {
 		try {
 			const codeChallenge = await oidc.calculatePKCECodeChallenge(payload['codeVerifier']);
 
-			// A reverse proxy that strips the PUBLIC_URL path prefix means req.originalUrl doesn't carry it.
-			// Only its query string matters: the code exchange has to reuse the exact redirect_uri sent in
-			// the authorization request (RFC 6749 §4.1.3), so rebuild the URL from the configured one.
 			const callbackUrl = new URL(this.redirectUrl);
-			callbackUrl.search = new URL(payload['callbackPath'], this.redirectUrl).search;
+			callbackUrl.search = payload['callbackSearch'] ?? '';
 
 			tokenSet = await oidc.authorizationCodeGrant(this.client, callbackUrl, {
 				pkceCodeVerifier: payload['codeVerifier'],
@@ -238,7 +235,7 @@ export function createOAuth2AuthRouter(providerName: string): Router {
 
 			try {
 				authResponse = await authenticationService.login(providerName, {
-					callbackPath: req.originalUrl,
+					callbackSearch: new URL(req.originalUrl, 'https://relative.invalid').search,
 					code: req.query['code'],
 					codeVerifier: verifier,
 					state: req.query['state'],

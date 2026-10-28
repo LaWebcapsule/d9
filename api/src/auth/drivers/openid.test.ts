@@ -124,14 +124,14 @@ describe('OpenIDAuthDriver.getTokenSetAndUserInfo', () => {
 	});
 
 	test('exchanges the code with the same redirect_uri as the authorization request, path prefix included', async () => {
-		// Reverse proxy strips /cms, so req.originalUrl has no prefix but PUBLIC_URL does
+		// PUBLIC_URL carries the prefix; the callback only contributes the query string
 		env['PUBLIC_URL'] = 'https://app.example/cms/';
 		vi.mocked(oidc.authorizationCodeGrant).mockClear();
 
 		const driver = createDriver();
 
 		await driver.getTokenSetAndUserInfo({
-			callbackPath: '/auth/login/myidp/callback?code=the-code&state=STATE',
+			callbackSearch: '?code=the-code&state=STATE',
 			codeVerifier: 'code-verifier',
 		});
 
@@ -147,7 +147,7 @@ describe('OpenIDAuthDriver.getTokenSetAndUserInfo', () => {
 		const driver = createDriver();
 
 		await driver.getTokenSetAndUserInfo({
-			callbackPath: '/auth/login/myidp/callback',
+			callbackSearch: '',
 			codeVerifier: 'code-verifier',
 		});
 
@@ -163,7 +163,7 @@ describe('OpenIDAuthDriver.getTokenSetAndUserInfo', () => {
 		const driver = createDriver();
 
 		await driver.getTokenSetAndUserInfo({
-			callbackPath: '/auth/login/myidp/callback?code=the-code&state=STATE',
+			callbackSearch: '?code=the-code&state=STATE',
 			codeVerifier: 'code-verifier',
 		});
 
