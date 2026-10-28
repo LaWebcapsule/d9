@@ -1,4 +1,4 @@
-import type { Range, Stat } from '@wbce-d9/storage';
+import type { Range, Stat, StorageManager } from '@wbce-d9/storage';
 import type { Accountability } from '@wbce-d9/types';
 import type { Knex } from 'knex';
 import { clamp } from 'lodash-es';
@@ -39,7 +39,32 @@ export class AssetsService {
 		range?: Range
 	): Promise<{ stream: Readable; file: any; stat: Stat }> {
 		const storage = await getStorage();
+		const { file, filename, stat } = await this.resolveAsset(storage, id, transformation, range);
 
+		return {
+			stream: await storage.location(file.storage).read(filename, range),
+			file,
+			stat,
+		};
+	}
+
+	async getAssetInfo(
+		id: string,
+		transformation: TransformationParams,
+		range?: Range
+	): Promise<{ file: any; stat: Stat; stream?: never }> {
+		const storage = await getStorage();
+		const { file, stat } = await this.resolveAsset(storage, id, transformation, range);
+
+		return { file, stat };
+	}
+
+	private async resolveAsset(
+		storage: StorageManager,
+		id: string,
+		transformation: TransformationParams,
+		range?: Range
+	): Promise<{ file: any; filename: string; stat: Stat }> {
 		const publicSettings = await this.knex
 			.select('project_logo', 'public_background', 'public_foreground')
 			.from('directus_settings')
@@ -125,7 +150,7 @@ export class AssetsService {
 
 			if (exists) {
 				return {
-					stream: await storage.location(file.storage).read(assetFilename, range),
+					filename: assetFilename,
 					file,
 					stat: await storage.location(file.storage).stat(assetFilename),
 				};
@@ -155,8 +180,6 @@ export class AssetsService {
 				});
 			}
 
-			const readStream = await storage.location(file.storage).read(file.filename_disk, range);
-
 			const transformer = sharp({
 				limitInputPixels: Math.pow(env['ASSETS_TRANSFORM_IMAGE_MAX_DIMENSION'], 2),
 				sequentialRead: true,
@@ -171,22 +194,31 @@ export class AssetsService {
 
 			transforms.forEach(([method, ...args]) => (transformer[method] as any).apply(transformer, args));
 
+			// Sharp validates synchronously: only open the stream once the request is known to be valid
+			const readStream = await storage.location(file.storage).read(file.filename_disk, range);
+
 			readStream.on('error', (e: Error) => {
 				logger.error(e, `Couldn't transform file ${file.id}`);
 				readStream.unpipe(transformer);
 			});
 
-			await storage.location(file.storage).write(assetFilename, readStream.pipe(transformer), type);
+			try {
+				await storage.location(file.storage).write(assetFilename, readStream.pipe(transformer), type);
+			} catch (error) {
+				readStream.destroy();
+
+				throw error;
+			}
 
 			return {
-				stream: await storage.location(file.storage).read(assetFilename, range),
+				filename: assetFilename,
 				stat: await storage.location(file.storage).stat(assetFilename),
 				file,
 			};
 		} else {
-			const readStream = await storage.location(file.storage).read(file.filename_disk, range);
 			const stat = await storage.location(file.storage).stat(file.filename_disk);
-			return { stream: readStream, file, stat };
+
+			return { filename: file.filename_disk, file, stat };
 		}
 	}
 }

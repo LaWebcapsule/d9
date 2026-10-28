@@ -369,6 +369,10 @@ will set a default maximum of 50 requests per second, tracked in memory. Once yo
 running under a load balancer, or your user base grows so much that memory is no longer a viable place to store the rate
 limiter information, you can use an external `memcache` or `redis` instance to store the rate limiter data.
 
+A GraphQL request consumes one point per root field of the executed operation, instead of a single point per request:
+a document selecting 10 root fields costs 10 points out of the client IP's budget. Make sure `RATE_LIMITER_POINTS` is
+high enough for the largest documents your clients send.
+
 | Variable                                    | Description                                                                      | Default Value |
 | ------------------------------------------- | -------------------------------------------------------------------------------- | ------------- |
 | `RATE_LIMITER_ENABLED`                      | Whether or not to enable rate limiting per IP on the API.                        | `false`       |

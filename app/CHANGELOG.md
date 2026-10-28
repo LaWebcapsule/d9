@@ -1,5 +1,14 @@
 # @wbce-d9/app
 
+## 11.3.1
+
+### Patch Changes
+
+- [#473](https://github.com/LaWebcapsule/d9/pull/473)
+  [`be77810`](https://github.com/LaWebcapsule/d9/commit/be7781069ea8af02a7d77b7fa6bd089f7254a107) - Optimize the
+  animated crystal background on public pages by caching rendered crystals, capping rendering at 60 FPS, coalescing
+  resize updates and pausing the animation while it is not visible.
+
 ## 11.3.0
 
 ### Minor Changes

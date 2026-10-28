@@ -108,7 +108,7 @@ export class DriverS3 implements Driver {
 			throw new Error(`No stream returned for file "${filepath}"`);
 		}
 
-		stream.on('finished', () => client.destroy());
+		stream.once('close', () => client.destroy());
 
 		return stream as Readable;
 	}
