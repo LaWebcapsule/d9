@@ -52,6 +52,8 @@ fields:
   - field: times_used
     width: half
     readonly: true
+    special:
+      - system-generated
 
   - field: date_created
     special:
