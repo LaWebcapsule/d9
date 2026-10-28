@@ -14,3 +14,7 @@ fields:
   - field: origin
     width: half
   - field: share
+  - field: fallback_token
+    hidden: true
+  - field: session_id
+    hidden: true
