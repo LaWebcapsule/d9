@@ -753,6 +753,7 @@ indexes: Index
 create_index: Créer un index
 no_indexes_copy: Cette collection n'a pas encore d'index.
 indexes_not_supported: Les index ne sont pas supportés par la base de données de cette instance.
+indexes_read_error: Impossible de lire les index de cette collection. Réessayez plus tard.
 index_name: Nom
 index_name_note: Optionnel. Laisser vide pour que l'API génère un nom à partir des champs.
 index_fields: Champs

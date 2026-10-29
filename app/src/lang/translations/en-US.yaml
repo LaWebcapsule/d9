@@ -764,6 +764,7 @@ indexes: Indexes
 create_index: Create Index
 no_indexes_copy: This collection has no indexes yet.
 indexes_not_supported: Indexes are not supported by the database used by this instance.
+indexes_read_error: Unable to read the indexes of this collection. Please try again later.
 index_name: Name
 index_name_note: Optional. Leave empty and the API will generate a name from the fields.
 index_fields: Fields

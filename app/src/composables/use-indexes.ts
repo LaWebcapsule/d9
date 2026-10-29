@@ -35,8 +35,12 @@ export function useIndexes(collection: CollectionSource) {
 	}
 
 	async function create(payload: IndexPayload) {
-		await api.post(`/indexes/${collectionName()}`, payload);
-		await refresh();
+		try {
+			await api.post(`/indexes/${collectionName()}`, payload);
+		} finally {
+			// The index may exist even if the request failed (e.g. reading it back errored)
+			await refresh();
+		}
 	}
 
 	async function remove(name: string) {

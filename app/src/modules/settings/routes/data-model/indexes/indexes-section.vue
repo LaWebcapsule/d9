@@ -7,7 +7,11 @@
 		</v-notice>
 
 		<template v-else>
-			<v-notice v-if="!loading && indexes.length === 0" type="info">
+			<v-notice v-if="error" type="warning">
+				{{ t('indexes_read_error') }}
+			</v-notice>
+
+			<v-notice v-else-if="!loading && indexes.length === 0" type="info">
 				{{ t('no_indexes_copy') }}
 			</v-notice>
 
@@ -79,7 +83,7 @@ const props = defineProps<{
 
 const { t } = useI18n();
 
-const { indexes, capabilities, loading, refresh, create, remove } = useIndexes(() => props.collection);
+const { indexes, capabilities, loading, error, refresh, create, remove } = useIndexes(() => props.collection);
 
 const createActive = ref(false);
 const deleteActive = ref(false);
