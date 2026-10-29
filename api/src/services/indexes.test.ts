@@ -4,6 +4,7 @@ import type { Knex } from 'knex';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { getIndexCapabilities } from '../database/helpers/schema/capabilities.js';
 import { ForbiddenException, InvalidPayloadException } from '../exceptions/index.js';
+import logger from '../logger.js';
 import { IndexesService } from './indexes.js';
 
 vi.mock('../database/helpers/schema/capabilities.js', async (importOriginal) => {
@@ -43,11 +44,54 @@ const schema: SchemaOverview = {
 				status: field('status', 'string'),
 			},
 		},
+		directus_activity: {
+			collection: 'directus_activity',
+			primary: 'id',
+			singleton: false,
+			sortField: null,
+			note: null,
+			accountability: null,
+			fields: {
+				id: field('id', 'integer'),
+				action: field('action', 'string'),
+				user: field('user', 'uuid'),
+				timestamp: field('timestamp', 'dateTime'),
+				ip: field('ip', 'string'),
+				user_agent: field('user_agent', 'string'),
+				collection: field('collection', 'string'),
+				item: field('item', 'string'),
+				comment: field('comment', 'string'),
+				origin: field('origin', 'string'),
+				session_id: field('session_id', 'string'),
+			},
+		},
+		directus_users: {
+			collection: 'directus_users',
+			primary: 'id',
+			singleton: false,
+			sortField: null,
+			note: null,
+			accountability: null,
+			fields: {
+				id: field('id', 'uuid'),
+				first_name: field('first_name', 'string'),
+				last_name: field('last_name', 'string'),
+				email: field('email', 'string'),
+			},
+		},
 	},
 	relations: [],
 };
 
-const admin = { admin: true } as any;
+const admin = {
+	admin: true,
+	user: '00000000-0000-4000-8000-000000000000',
+	role: '00000000-0000-4000-8000-000000000001',
+	ip: '127.0.0.1',
+	userAgent: 'vitest',
+	origin: 'http://localhost',
+	session_id: 'test-session',
+} as any;
 
 describe('Services / Indexes (SQLite)', () => {
 	let db: Knex;
@@ -66,8 +110,38 @@ describe('Services / Indexes (SQLite)', () => {
 	});
 
 	beforeEach(async () => {
+		await db.schema.dropTableIfExists('directus_activity');
+		await db.schema.dropTableIfExists('directus_users');
 		await db.schema.dropTableIfExists('articles');
 		await db.schema.dropTableIfExists('other');
+
+		await db.schema.createTable('directus_users', (table) => {
+			table.string('id').primary();
+			table.string('first_name');
+			table.string('last_name');
+			table.string('email');
+		});
+
+		await db('directus_users').insert({
+			id: admin.user,
+			first_name: 'Admin',
+			last_name: 'User',
+			email: 'admin@example.com',
+		});
+
+		await db.schema.createTable('directus_activity', (table) => {
+			table.increments('id');
+			table.string('action').notNullable();
+			table.string('user');
+			table.datetime('timestamp').notNullable().defaultTo(db.fn.now());
+			table.string('ip');
+			table.string('user_agent');
+			table.string('collection').notNullable();
+			table.string('item').notNullable();
+			table.text('comment');
+			table.string('origin');
+			table.string('session_id');
+		});
 
 		await db.schema.createTable('articles', (table) => {
 			table.increments('id');
@@ -80,6 +154,7 @@ describe('Services / Indexes (SQLite)', () => {
 
 	afterEach(() => {
 		vi.mocked(getIndexCapabilities).mockClear();
+		vi.restoreAllMocks();
 	});
 
 	it('forbids non-admin users', async () => {
@@ -220,5 +295,120 @@ describe('Services / Indexes (SQLite)', () => {
 
 		await service.createOne('articles', { columns: ['title'] });
 		await expect(service.createOne('articles', { columns: ['title'] })).rejects.toThrow(/already exists/);
+	});
+
+	it('writes an audit activity when an index is created', async () => {
+		const info = vi.spyOn(logger, 'info').mockImplementation(() => {});
+
+		await service.createOne('articles', { columns: ['title'] });
+
+		const activity = await db('directus_activity').first();
+
+		expect(activity).toMatchObject({
+			action: 'comment',
+			collection: 'directus_collections',
+			item: 'articles',
+			user: admin.user,
+		});
+
+		expect(activity.comment).toMatch(/^index\.created /);
+
+		const payload = JSON.parse(activity.comment.slice('index.created '.length));
+
+		expect(payload).toEqual({
+			name: 'articles_title_index',
+			collection: 'articles',
+			columns: ['title'],
+			where: null,
+			predicate: null,
+			kind: 'index',
+			unique: false,
+			partial: false,
+		});
+
+		expect(info).toHaveBeenCalledWith(
+			expect.stringContaining('index.created: "articles_title_index" on "articles" (title)')
+		);
+	});
+
+	it('writes an audit activity when an index is deleted', async () => {
+		await service.createOne('articles', { columns: ['title'] });
+		await db('directus_activity').del();
+
+		const info = vi.spyOn(logger, 'info').mockImplementation(() => {});
+
+		await service.deleteOne('articles', 'articles_title_index');
+
+		const activity = await db('directus_activity').first();
+
+		expect(activity).toMatchObject({
+			action: 'comment',
+			collection: 'directus_collections',
+			item: 'articles',
+			user: admin.user,
+		});
+
+		expect(activity.comment).toMatch(/^index\.deleted /);
+
+		const payload = JSON.parse(activity.comment.slice('index.deleted '.length));
+
+		expect(payload).toMatchObject({
+			name: 'articles_title_index',
+			collection: 'articles',
+			columns: ['title'],
+			where: null,
+			kind: 'index',
+			unique: false,
+			partial: false,
+		});
+
+		expect(info).toHaveBeenCalledWith(
+			expect.stringContaining('index.deleted: "articles_title_index" on "articles" (title)')
+		);
+	});
+
+	it('keeps the partial predicate in the audit payload', async () => {
+		const where = { _and: [{ status: { _eq: 'published' } }] };
+
+		await service.createOne('articles', { columns: ['title'], where });
+
+		const activity = await db('directus_activity').first();
+		const payload = JSON.parse(activity.comment.slice('index.created '.length));
+
+		expect(payload.where).toEqual(where);
+		expect(payload.predicate).toContain('published');
+		expect(payload.partial).toBe(true);
+	});
+
+	it('keeps the index when the audit activity cannot be written', async () => {
+		await db.schema.dropTable('directus_activity');
+
+		const error = vi.spyOn(logger, 'error').mockImplementation(() => {});
+
+		await service.createOne('articles', { columns: ['title'] });
+
+		expect(await service.readAll('articles')).toHaveLength(1);
+		expect(error).toHaveBeenCalledWith(expect.anything(), expect.stringContaining("Couldn't write"));
+	});
+
+	it('logs a creation error from the database', async () => {
+		await service.createOne('articles', { columns: ['title'] });
+
+		const error = vi.spyOn(logger, 'error').mockImplementation(() => {});
+
+		await expect(service.createOne('articles', { columns: ['title'] })).rejects.toThrow(/already exists/);
+		expect(error).toHaveBeenCalledWith(expect.anything(), expect.stringContaining("Couldn't create index"));
+	});
+
+	it('logs a deletion error from the database', async () => {
+		await service.createOne('articles', { columns: ['title'] });
+
+		const drop = vi.spyOn(service.helpers.schema, 'dropIndex').mockRejectedValue(new Error('drop failed'));
+		const error = vi.spyOn(logger, 'error').mockImplementation(() => {});
+
+		await expect(service.deleteOne('articles', 'articles_title_index')).rejects.toThrow('drop failed');
+		expect(error).toHaveBeenCalledWith(expect.anything(), expect.stringContaining("Couldn't delete index"));
+
+		drop.mockRestore();
 	});
 });

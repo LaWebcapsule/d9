@@ -1,5 +1,6 @@
 import type { Index, SchemaInspector } from '@wbce-d9/schema';
 import { createInspector } from '@wbce-d9/schema';
+import { Action } from '@wbce-d9/constants';
 import type {
 	Accountability,
 	CollectionIndex,
@@ -16,9 +17,11 @@ import type { Helpers } from '../database/helpers/index.js';
 import { getHelpers } from '../database/helpers/index.js';
 import getDatabase, { getDatabaseClient, getSchemaInspector } from '../database/index.js';
 import { ForbiddenException, InvalidPayloadException } from '../exceptions/index.js';
+import logger from '../logger.js';
 import type { AbstractServiceOptions, DatabaseClient } from '../types/index.js';
 import { renderFilterAsSql } from '../utils/check-constraints.js';
 import { getDefaultIndexName } from '../utils/get-default-index-name.js';
+import { ActivityService } from './activity.js';
 
 const NAME_PATTERN = /^[a-z][a-z0-9_]*$/;
 const MAX_NAME_LENGTH = 60;
@@ -99,8 +102,19 @@ export class IndexesService {
 		try {
 			await this.helpers.schema.createIndex(collection, name, columns, predicate);
 		} catch (err: any) {
+			logger.error(err, `[indexes] Couldn't create index "${name}" on "${collection}"`);
 			throw this.translateIndexError(err, name);
 		}
+
+		await this.writeAuditActivity('index.created', collection, {
+			name,
+			columns,
+			where: where ?? null,
+			predicate: predicate ?? null,
+			kind: 'index',
+			unique: false,
+			partial: Boolean(where),
+		});
 
 		return name;
 	}
@@ -117,7 +131,22 @@ export class IndexesService {
 
 		this.assertDeletable(existing);
 
-		await this.helpers.schema.dropIndex(collection, name);
+		try {
+			await this.helpers.schema.dropIndex(collection, name);
+		} catch (err: any) {
+			logger.error(err, `[indexes] Couldn't delete index "${name}" on "${collection}"`);
+			throw err;
+		}
+
+		await this.writeAuditActivity('index.deleted', collection, {
+			name: existing.name,
+			columns: existing.columns,
+			where: null,
+			predicate: existing.predicate,
+			kind: existing.kind,
+			unique: existing.unique,
+			partial: existing.partial,
+		});
 	}
 
 	// Helpers
@@ -227,6 +256,67 @@ export class IndexesService {
 
 	private compileFilter(collection: string, where: Filter): string {
 		return renderFilterAsSql(this.knex, this.schema, collection, where);
+	}
+
+	/**
+	 * Write an audit activity for an index change. Indexes have no item of their own, so the
+	 * activity is attached to the collection meta item and the index definition is carried by
+	 * the comment field.
+	 */
+	private async writeAuditActivity(
+		event: 'index.created' | 'index.deleted',
+		collection: string,
+		index: {
+			name: string;
+			columns: string[];
+			where?: Filter | null;
+			predicate?: string | null;
+			kind?: IndexKind;
+			unique?: boolean;
+			partial?: boolean;
+		}
+	): Promise<void> {
+		const payload = {
+			name: index.name,
+			collection,
+			columns: index.columns,
+			where: index.where ?? null,
+			predicate: index.predicate ?? null,
+			kind: index.kind ?? 'index',
+			unique: index.unique ?? false,
+			partial: index.partial ?? Boolean(index.predicate),
+		};
+
+		const comment = `${event} ${JSON.stringify(payload)}`;
+
+		try {
+			logger.info(
+				`[indexes] ${event}: "${index.name}" on "${collection}" (${index.columns.join(', ')})${
+					payload.partial ? ' partial' : ''
+				}`
+			);
+
+			await new ActivityService({
+				knex: this.knex,
+				schema: this.schema,
+				accountability: this.accountability,
+			}).createOne(
+				{
+					action: Action.COMMENT,
+					collection: 'directus_collections',
+					item: collection,
+					user: this.accountability?.user ?? null,
+					ip: this.accountability?.ip ?? null,
+					user_agent: this.accountability?.userAgent ?? null,
+					origin: this.accountability?.origin ?? null,
+					session_id: this.accountability?.session_id ?? null,
+					comment,
+				},
+				{ emitEvents: false }
+			);
+		} catch (err) {
+			logger.error(err, `[indexes] Couldn't write the ${event} activity for "${collection}"`);
+		}
 	}
 
 	private translateIndexError(err: any, name: string): Error {
