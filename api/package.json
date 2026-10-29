@@ -153,7 +153,7 @@
 		"pino-http": "8.3.3",
 		"pino-http-print": "3.1.0",
 		"pino-pretty": "10.0.0",
-		"qs": "6.16.0",
+		"qs": "6.16.1",
 		"rate-limiter-flexible": "2.4.1",
 		"samlify": "2.13.1",
 		"sanitize-html": "2.18.1",
