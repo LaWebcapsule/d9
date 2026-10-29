@@ -1,8 +1,16 @@
 import type { SchemaOverview } from '@wbce-d9/types';
 import knex from 'knex';
 import type { Knex } from 'knex';
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { getIndexCapabilities } from '../database/helpers/schema/capabilities.js';
+import { ForbiddenException, InvalidPayloadException } from '../exceptions/index.js';
 import { IndexesService } from './indexes.js';
+
+vi.mock('../database/helpers/schema/capabilities.js', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('../database/helpers/schema/capabilities.js')>();
+
+	return { ...actual, getIndexCapabilities: vi.fn(actual.getIndexCapabilities) };
+});
 
 const field = (name: string, type: string) =>
 	({
@@ -70,10 +78,43 @@ describe('Services / Indexes (SQLite)', () => {
 		service = new IndexesService({ knex: db, schema, accountability: admin });
 	});
 
+	afterEach(() => {
+		vi.mocked(getIndexCapabilities).mockClear();
+	});
+
+	it('forbids non-admin users', async () => {
+		const user = new IndexesService({ knex: db, schema, accountability: { admin: false } as any });
+
+		await expect(user.readAll('articles')).rejects.toThrow(ForbiddenException);
+		await expect(user.createOne('articles', { columns: ['title'] })).rejects.toThrow(ForbiddenException);
+		await expect(user.deleteOne('articles', 'articles_title_index')).rejects.toThrow(ForbiddenException);
+	});
+
+	it('rejects a partial index when the database does not support it', async () => {
+		const actual = await vi.importActual<typeof import('../database/helpers/schema/capabilities.js')>(
+			'../database/helpers/schema/capabilities.js'
+		);
+
+		vi.mocked(getIndexCapabilities).mockReturnValue({ supported: true, where: false });
+
+		try {
+			await expect(
+				service.createOne('articles', { columns: ['title'], where: { status: { _eq: 'published' } } })
+			).rejects.toThrow(InvalidPayloadException);
+		} finally {
+			vi.mocked(getIndexCapabilities).mockImplementation(actual.getIndexCapabilities);
+		}
+	});
+
+	it('forbids deleting an index that does not exist', async () => {
+		await expect(service.deleteOne('articles', 'articles_missing_index')).rejects.toThrow(ForbiddenException);
+	});
+
 	it('creates and lists a plain index', async () => {
 		expect(await service.readAll('articles')).toEqual([]);
 
-		const created = await service.createOne('articles', { columns: ['title'] });
+		const name = await service.createOne('articles', { columns: ['title'] });
+		const created = await service.readOne('articles', name);
 
 		expect(created).toMatchObject({
 			name: 'articles_title_index',
@@ -86,7 +127,8 @@ describe('Services / Indexes (SQLite)', () => {
 	});
 
 	it('keeps composite columns in order', async () => {
-		const created = await service.createOne('articles', { columns: ['title', 'status'] });
+		const name = await service.createOne('articles', { columns: ['title', 'status'] });
+		const created = await service.readOne('articles', name);
 
 		expect(created.columns).toEqual(['title', 'status']);
 	});
@@ -94,7 +136,8 @@ describe('Services / Indexes (SQLite)', () => {
 	it('creates a partial index and reports its predicate', async () => {
 		const where = { _and: [{ status: { _eq: 'published' } }] };
 
-		const created = await service.createOne('articles', { columns: ['title'], where });
+		const name = await service.createOne('articles', { columns: ['title'], where });
+		const created = await service.readOne('articles', name);
 
 		expect(created.partial).toBe(true);
 		expect(created.predicate).toContain('published');
@@ -109,7 +152,8 @@ describe('Services / Indexes (SQLite)', () => {
 	});
 
 	it('deletes an index', async () => {
-		const created = await service.createOne('articles', { columns: ['title'] });
+		const name = await service.createOne('articles', { columns: ['title'] });
+		const created = await service.readOne('articles', name);
 		await service.deleteOne('articles', created.name);
 
 		expect(await service.readAll('articles')).toEqual([]);
@@ -152,7 +196,8 @@ describe('Services / Indexes (SQLite)', () => {
 			await expect(service.createOne('articles', { name, columns: ['title'] })).rejects.toThrow();
 		}
 
-		const created = await service.createOne('articles', { name: 'articles_custom_index', columns: ['title'] });
+		const name = await service.createOne('articles', { name: 'articles_custom_index', columns: ['title'] });
+		const created = await service.readOne('articles', name);
 
 		expect(created.name).toBe('articles_custom_index');
 	});

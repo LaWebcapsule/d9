@@ -33,7 +33,8 @@ router.post(
 			schema: req.schema,
 		});
 
-		const data = await service.createOne(req.params['collection']!, req.body as IndexPayload);
+		const name = await service.createOne(req.params['collection']!, req.body as IndexPayload);
+		const data = await service.readOne(req.params['collection']!, name);
 
 		res.locals['payload'] = { data };
 		return next();

@@ -16,6 +16,7 @@
 					<div class="index-info">
 						<span class="name monospace">{{ item.name }}</span>
 						<small class="columns">{{ item.columns.join(', ') }}</small>
+						<small class="kind">{{ t(`index_kind_${item.kind}`) }}</small>
 					</div>
 
 					<div class="spacer" />
@@ -49,7 +50,7 @@
 			</div>
 		</template>
 
-		<index-detail v-model="createActive" :collection="collection" :capabilities="capabilities" @saved="refresh" />
+		<index-detail v-model="createActive" :collection="collection" :capabilities="capabilities" :create="create" />
 
 		<v-dialog v-model="deleteActive" @esc="deleteActive = false">
 			<v-card>
@@ -66,10 +67,9 @@
 
 <script lang="ts" setup>
 import { useIndexes } from '@/composables/use-indexes';
-import { useFieldsStore } from '@/stores/fields';
 import { unexpectedError } from '@/utils/unexpected-error';
 import type { CollectionIndex } from '@wbce-d9/types';
-import { onMounted, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import IndexDetail from './index-detail.vue';
 
@@ -78,18 +78,13 @@ const props = defineProps<{
 }>();
 
 const { t } = useI18n();
-const fieldsStore = useFieldsStore();
 
-const { indexes, capabilities, loading, refresh, remove } = useIndexes(() => props.collection);
+const { indexes, capabilities, loading, refresh, create, remove } = useIndexes(() => props.collection);
 
 const createActive = ref(false);
 const deleteActive = ref(false);
 const deleteTarget = ref<CollectionIndex | null>(null);
 const deleting = ref(false);
-
-onMounted(async () => {
-	await fieldsStore.hydrate();
-});
 
 watch(
 	() => props.collection,
@@ -144,6 +139,10 @@ async function removeIndex() {
 .columns {
 	color: var(--foreground-subdued);
 	font-family: var(--family-monospace);
+}
+
+.kind {
+	color: var(--foreground-subdued);
 }
 
 .badge {

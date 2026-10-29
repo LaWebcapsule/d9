@@ -68,10 +68,19 @@ export class IndexesService {
 		return indexes.map((index) => this.toCollectionIndex(index)).sort((a, b) => a.name.localeCompare(b.name));
 	}
 
+	async readOne(collection: string, name: string): Promise<CollectionIndex> {
+		const indexes = await this.readAll(collection);
+		const index = indexes.find((item) => item.name === name);
+
+		if (!index) throw new ForbiddenException();
+
+		return index;
+	}
+
 	// Create
 	// ===============================================================================================
 
-	async createOne(collection: string, payload: IndexPayload): Promise<CollectionIndex> {
+	async createOne(collection: string, payload: IndexPayload): Promise<string> {
 		this.requireAdmin();
 		this.assertSupported();
 		this.assertCollection(collection);
@@ -79,7 +88,7 @@ export class IndexesService {
 
 		const columns = payload.columns;
 		const where = payload.where;
-		
+
 		const customName = payload.name;
 		const name = customName || getDefaultIndexName('index', collection, columns);
 
@@ -93,7 +102,7 @@ export class IndexesService {
 			throw this.translateIndexError(err, name);
 		}
 
-		return this.readIndex(collection, name);
+		return name;
 	}
 
 	// Delete
@@ -104,7 +113,8 @@ export class IndexesService {
 		this.assertSupported();
 		this.assertCollection(collection);
 
-		const existing = await this.readIndex(collection, name);
+		const existing = await this.readOne(collection, name);
+
 		this.assertDeletable(existing);
 
 		await this.helpers.schema.dropIndex(collection, name);
@@ -112,15 +122,6 @@ export class IndexesService {
 
 	// Helpers
 	// ===============================================================================================
-
-	private async readIndex(collection: string, name: string): Promise<CollectionIndex> {
-		const indexes = await this.readAll(collection);
-		const index = indexes.find((item) => item.name === name);
-
-		if (!index) throw new InvalidPayloadException(`Index "${name}" doesn't exist`);
-
-		return index;
-	}
 
 	private toCollectionIndex(index: Index): CollectionIndex {
 		const kind = this.getKind(index);

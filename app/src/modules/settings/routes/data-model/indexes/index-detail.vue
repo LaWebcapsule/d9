@@ -11,6 +11,8 @@
 		</template>
 
 		<div class="drawer-item-content">
+			<v-notice type="warning" class="lock-notice">{{ t('index_create_lock_notice') }}</v-notice>
+
 			<v-form
 				v-model="edits"
 				:fields="formFields"
@@ -41,7 +43,6 @@
 </template>
 
 <script lang="ts" setup>
-import api from '@/api';
 import { useCollectionsStore } from '@/stores/collections';
 import { useFieldsStore } from '@/stores/fields';
 import { unexpectedError } from '@/utils/unexpected-error';
@@ -64,11 +65,11 @@ const props = defineProps<{
 	modelValue: boolean;
 	collection: string;
 	capabilities: IndexCapabilities | null;
+	create: (payload: IndexPayload) => Promise<void>;
 }>();
 
 const emit = defineEmits<{
 	(e: 'update:modelValue', value: boolean): void;
-	(e: 'saved'): void;
 }>();
 
 const { t } = useI18n();
@@ -123,8 +124,8 @@ const formFields = computed<Field[]>(() => {
 });
 
 watch(
-	() => [props.modelValue] as const,
-	([open]) => {
+	() => props.modelValue,
+	(open) => {
 		if (!open) return;
 
 		edits.value = emptyForm();
@@ -168,9 +169,8 @@ async function save() {
 
 		if (middle) payload.name = `${namePrefix.value}${middle}${nameSuffix}`;
 
-		await api.post(`/indexes/${props.collection}`, payload);
+		await props.create(payload);
 
-		emit('saved');
 		emit('update:modelValue', false);
 	} catch (err: any) {
 		unexpectedError(err);
@@ -184,5 +184,9 @@ async function save() {
 .drawer-item-content {
 	padding: var(--content-padding);
 	padding-bottom: var(--content-padding-bottom);
+}
+
+.lock-notice {
+	margin-bottom: 36px;
 }
 </style>

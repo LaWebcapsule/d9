@@ -1,18 +1,14 @@
+import type { IndexCapabilities } from '@wbce-d9/types';
 import type { DatabaseClient } from '../../../types/index.js';
 
-export type IndexCapabilities = {
-	/** Whether the index panel can list and manage indexes on this client */
-	supported: boolean;
-	/** Whether partial indexes (`WHERE …`) are supported by the DDL helper */
-	where: boolean;
-};
+type ClientIndexCapabilities = Omit<IndexCapabilities, 'vendor'>;
 
 /**
  * Capabilities are the single source of truth shared by the API validation and the app form.
  * Keep them aligned with `SchemaHelper.createIndex` and with the dialect implementations of
  * `SchemaInspector.indexes`.
  */
-const INDEX_CAPABILITIES: Record<DatabaseClient, IndexCapabilities> = {
+const INDEX_CAPABILITIES: Record<DatabaseClient, ClientIndexCapabilities> = {
 	mysql: { supported: true, where: false },
 	postgres: { supported: true, where: true },
 	// CockroachDB introspection goes through pg_catalog and isn't verified yet
@@ -24,6 +20,6 @@ const INDEX_CAPABILITIES: Record<DatabaseClient, IndexCapabilities> = {
 	redshift: { supported: false, where: false },
 };
 
-export function getIndexCapabilities(client: DatabaseClient): IndexCapabilities {
+export function getIndexCapabilities(client: DatabaseClient): ClientIndexCapabilities {
 	return INDEX_CAPABILITIES[client] ?? { supported: false, where: false };
 }

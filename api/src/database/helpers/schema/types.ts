@@ -110,7 +110,7 @@ export abstract class SchemaHelper extends DatabaseHelper {
 	 * Create a plain (non-unique) index. The predicate, when given, is already a compiled SQL
 	 * fragment (see `renderFilterAsSql`), so it is appended as-is.
 	 */
-	async createIndex(table: string,  name: string, columns: string[], where?: string): Promise<void> {
+	async createIndex(table: string, name: string, columns: string[], where?: string): Promise<void> {
 		if (where) {
 			const wrap = (value: string | string[]) => this.knex.raw('??', [value]).toQuery();
 

@@ -762,24 +762,19 @@ value_unique: Value has to be unique
 
 indexes: Indexes
 create_index: Create Index
-manage_indexes: Manage indexes
-no_indexes: No indexes
 no_indexes_copy: This collection has no indexes yet.
 indexes_not_supported: Indexes are not supported by the database used by this instance.
-indexes_sidebar_copy: >-
-  Indexes speed up filtering and sorting on a collection. Only plain indexes are managed here;
-  unique, primary and foreign key constraints are shown read-only.
 index_name: Name
 index_name_note: Optional. Leave empty and the API will generate a name from the fields.
 index_fields: Fields
 index_fields_note: The order matters for composite indexes.
-index_no_fields: Select at least one field.
+index_create_lock_notice: >-
+  On a large table, creating an index can take a while and, depending on the database, block writes on the
+  table until it is done.
 index_add_field: Add a field...
-index_composite: Composite
 index_unique: Unique
 index_partial: Partial
 index_partial_note: Only rows matching this condition are indexed.
-index_partial_not_supported: Partial indexes are not supported by this database.
 index_kind_index: Index
 index_kind_primary: Primary key
 index_kind_unique_constraint: Unique constraint
