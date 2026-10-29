@@ -158,7 +158,8 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 			const client = await this.client;
 			const codeChallenge = await oidc.calculatePKCECodeChallenge(payload['codeVerifier']);
 
-			const callbackUrl = new URL(payload['callbackPath'], this.redirectUrl);
+			const callbackUrl = new URL(this.redirectUrl);
+			callbackUrl.search = payload['callbackSearch'] ?? '';
 
 			tokenSet = await oidc.authorizationCodeGrant(client, callbackUrl, {
 				pkceCodeVerifier: payload['codeVerifier'],
@@ -282,11 +283,9 @@ export function createOpenIDAuthRouter(providerName: string): Router {
 			} catch (e: any) {
 				logger.warn(e, `[OpenID] Couldn't verify OpenID cookie ${state ? `for state ${state}` : ''}`);
 
-				const baseUrl = env['PUBLIC_URL'];
-				const loginPath = '/admin/login';
-				const url = new URL(loginPath, baseUrl);
+				const loginUrl = new Url(env['PUBLIC_URL']).addPath('admin', 'login').toString();
 
-				const redirectTo = validRedirectUrl || url.toString();
+				const redirectTo = validRedirectUrl || loginUrl;
 				return res.redirect(`${redirectTo}?reason=INVALID_CREDENTIALS`);
 			}
 
@@ -317,7 +316,7 @@ export function createOpenIDAuthRouter(providerName: string): Router {
 					state: req.query['state'],
 					iss: req.query['iss'],
 					redirect: validRedirectUrl,
-					callbackPath: req.originalUrl,
+					callbackSearch: new URL(req.originalUrl, 'https://relative.invalid').search,
 				});
 			} catch (error: any) {
 				// Prompt user for a new refresh_token if invalidated
