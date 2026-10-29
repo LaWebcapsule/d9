@@ -1,5 +1,13 @@
 # @wbce-d9/api
 
+## 12.7.4
+
+### Patch Changes
+
+- [#474](https://github.com/LaWebcapsule/d9/pull/474)
+  [`6c59127`](https://github.com/LaWebcapsule/d9/commit/6c59127a964524cddf757f7bafd2f21861a76f39) - Fix OpenID/OAuth2
+  login and cookie paths when `PUBLIC_URL` contains a path prefix (redirect_uri mismatch and hard-coded cookie scopes)
+
 ## 12.7.3
 
 ### Patch Changes
