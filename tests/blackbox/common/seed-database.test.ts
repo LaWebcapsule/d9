@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest';
 /* eslint-disable no-console */
 
 import { globbySync } from 'globby';

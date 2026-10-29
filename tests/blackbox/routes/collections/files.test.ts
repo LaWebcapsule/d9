@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { getUrl } from '@common/config.ts';
 import vendors from '@common/get-dbs-to-test.ts';
 import { USER } from '@common/variables.ts';
