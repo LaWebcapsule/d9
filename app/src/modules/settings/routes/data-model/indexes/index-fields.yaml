@@ -1,0 +1,49 @@
+# Structure du formulaire d'un index, rendu par `v-form` (le même formulaire que l'édition d'un item).
+# Le champ caché `collection` alimente `collectionField` pour le filtre (`system-filter`).
+- field: collection
+  type: string
+  meta:
+    hidden: true
+
+- field: name
+  type: string
+  name: $t:index_name
+  meta:
+    interface: input
+    width: full
+    note: $t:index_name_note
+    options:
+      dbSafe: true
+
+- field: columns
+  type: json
+  name: $t:index_fields
+  meta:
+    interface: list
+    width: full
+    note: $t:index_fields_note
+    options:
+      template: '{{ field }}'
+      addLabel: $t:index_add_field
+      fields:
+        - field: field
+          type: string
+          name: $t:field
+          meta:
+            interface: select-dropdown
+            width: full
+            options:
+              choices: []
+
+- field: where
+  type: json
+  name: $t:index_partial
+  meta:
+    interface: system-filter
+    width: full
+    note: $t:index_partial_note
+    options:
+      collectionField: collection
+      collectionRequired: true
+      includeRelations: false
+      relationalFieldSelectable: false

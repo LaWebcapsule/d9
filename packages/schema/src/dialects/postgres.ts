@@ -3,7 +3,40 @@ import type { SchemaOverview } from '../types/overview.js';
 import type { SchemaInspector } from '../types/schema-inspector.js';
 import type { Table } from '../types/table.js';
 import type { Column } from '../types/column.js';
+import type { Index } from '../types/index.js';
 import { stripQuotes } from '../utils/strip-quotes.js';
+
+type RawIndex = {
+	table: string;
+	name: string;
+	unique: boolean;
+	primary: boolean;
+	valid: boolean;
+	method: string | null;
+	predicate: string | null;
+	partial: boolean;
+	constraint_type: 'p' | 'u' | null;
+	columns: string[];
+	included: string[] | null;
+	expression: boolean;
+};
+
+function rawIndexToIndex(raw: RawIndex): Index {
+	return {
+		name: raw.name,
+		table: raw.table,
+		columns: raw.columns.filter((column) => column !== ''),
+		unique: raw.unique,
+		primary: raw.primary,
+		constraint: raw.constraint_type === 'u' ? 'unique' : null,
+		method: raw.method ? raw.method.toLowerCase() : null,
+		partial: raw.partial,
+		predicate: raw.predicate,
+		included: raw.included ?? [],
+		expression: raw.expression || raw.columns.includes(''),
+		valid: raw.valid,
+	};
+}
 
 type RawColumn = {
 	name: string;
@@ -572,6 +605,89 @@ export default class Postgres implements SchemaInspector {
 		);
 
 		return result.rows?.[0]?.column ?? null;
+	}
+
+	// Indexes
+	// ===============================================================================================
+
+	private indexIncludesSupport: boolean | null = null;
+
+	private async supportsIndexIncludes(): Promise<boolean> {
+		if (this.indexIncludesSupport !== null) return this.indexIncludesSupport;
+
+		try {
+			const result = await this.knex.raw<{ rows: { version: string }[] }>(
+				`SELECT current_setting('server_version_num') AS version`
+			);
+
+			this.indexIncludesSupport = Number(result.rows?.[0]?.version ?? 0) >= 110000;
+		} catch {
+			this.indexIncludesSupport = false;
+		}
+
+		return this.indexIncludesSupport;
+	}
+
+	async indexes(table?: string): Promise<Index[]> {
+		const bindings: any[] = [];
+		const schemaIn = this.explodedSchema.map((schemaName) => `${this.knex.raw('?', [schemaName])}::regnamespace`);
+		const supportsIncludes = await this.supportsIndexIncludes();
+
+		const keyColumns = supportsIncludes ? 'ix.indnkeyatts' : 'ix.indnatts';
+
+		if (table) bindings.push(table);
+
+		const result = await this.knex.raw<{ rows: RawIndex[] }>(
+			`
+			SELECT
+			  tc.relname AS "table",
+			  ic.relname AS "name",
+			  ix.indisunique AS "unique",
+			  ix.indisprimary AS "primary",
+			  ix.indisvalid AS "valid",
+			  am.amname AS "method",
+			  pg_get_expr(ix.indpred, ix.indrelid) AS "predicate",
+			  (ix.indpred IS NOT NULL) AS "partial",
+			  con.contype AS "constraint_type",
+			  ARRAY(
+			    SELECT COALESCE(a.attname::text, '')
+			    FROM generate_subscripts(ix.indkey, 1) AS s
+			    LEFT JOIN pg_attribute a ON a.attrelid = ix.indrelid AND a.attnum = ix.indkey[s] AND ix.indkey[s] <> 0
+			    WHERE s <= ${keyColumns}
+			    ORDER BY s
+			  ) AS "columns",
+			  ${
+					supportsIncludes
+						? `ARRAY(
+			    SELECT a.attname::text
+			    FROM generate_subscripts(ix.indkey, 1) AS s
+			    JOIN pg_attribute a ON a.attrelid = ix.indrelid AND a.attnum = ix.indkey[s]
+			    WHERE s > ix.indnkeyatts
+			    ORDER BY s
+			  )`
+						: `ARRAY[]::text[]`
+				} AS "included",
+			  (
+			    SELECT count(*)
+			    FROM generate_subscripts(ix.indkey, 1) AS s
+			    WHERE ix.indkey[s] = 0 AND s <= ${keyColumns}
+			  ) > 0 AS "expression"
+			FROM
+			  pg_index ix
+			  JOIN pg_class ic ON ic.oid = ix.indexrelid
+			  JOIN pg_class tc ON tc.oid = ix.indrelid
+			  JOIN pg_am am ON am.oid = ic.relam
+			  LEFT JOIN pg_constraint con ON con.conindid = ix.indexrelid AND con.contype IN ('p', 'u')
+			WHERE
+			  tc.relnamespace IN (${schemaIn})
+			  AND tc.relkind = 'r'
+			  ${table ? 'AND tc.relname = ?' : ''}
+			ORDER BY tc.relname, ic.relname;
+			`,
+			bindings
+		);
+
+		return result.rows.map(rawIndexToIndex);
 	}
 
 	// Foreign Keys

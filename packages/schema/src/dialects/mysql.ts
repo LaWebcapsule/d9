@@ -1,6 +1,7 @@
 import type { Knex } from 'knex';
 import type { Column } from '../types/column.js';
 import type { ForeignKey } from '../types/foreign-key.js';
+import type { Index } from '../types/index.js';
 import type { SchemaOverview } from '../types/overview.js';
 import type { SchemaInspector } from '../types/schema-inspector.js';
 import type { Table } from '../types/table.js';
@@ -33,6 +34,16 @@ type RawColumn = {
 	EXTRA: 'auto_increment' | 'STORED GENERATED' | 'VIRTUAL GENERATED' | null;
 	CONSTRAINT_NAME: 'PRIMARY' | null;
 	GENERATION_EXPRESSION: string;
+};
+
+type RawIndex = {
+	table: string;
+	name: string;
+	non_unique: number | string;
+	sequence: number;
+	column: string | null;
+	method: string | null;
+	constraint_type: 'PRIMARY KEY' | 'UNIQUE' | 'FOREIGN KEY' | null;
 };
 
 export function rawColumnToColumn(rawColumn: RawColumn): Column {
@@ -328,6 +339,77 @@ export default class MySQL implements SchemaInspector {
 		}
 
 		return null;
+	}
+
+	// Indexes
+	// ===============================================================================================
+
+	async indexes(table?: string): Promise<Index[]> {
+		const query = this.knex
+			.select({
+				table: 's.TABLE_NAME',
+				name: 's.INDEX_NAME',
+				non_unique: 's.NON_UNIQUE',
+				sequence: 's.SEQ_IN_INDEX',
+				column: 's.COLUMN_NAME',
+				method: 's.INDEX_TYPE',
+				constraint_type: 'tc.CONSTRAINT_TYPE',
+			})
+			.from({ s: 'INFORMATION_SCHEMA.STATISTICS' })
+			.leftJoin({ tc: 'INFORMATION_SCHEMA.TABLE_CONSTRAINTS' }, function () {
+				this.on('tc.TABLE_SCHEMA', '=', 's.TABLE_SCHEMA')
+					.andOn('tc.TABLE_NAME', '=', 's.TABLE_NAME')
+					.andOn('tc.CONSTRAINT_NAME', '=', 's.INDEX_NAME');
+			})
+			.where('s.TABLE_SCHEMA', this.knex.client.database())
+			.orderBy([
+				{ column: 's.TABLE_NAME', order: 'asc' },
+				{ column: 's.INDEX_NAME', order: 'asc' },
+				{ column: 's.SEQ_IN_INDEX', order: 'asc' },
+			]);
+
+		if (table) query.andWhere('s.TABLE_NAME', table);
+
+		const records: RawIndex[] = await query;
+		const grouped = new Map<string, Index>();
+
+		for (const record of records) {
+			const key = `${record.table}\u0000${record.name}`;
+			let index = grouped.get(key);
+
+			if (!index) {
+				index = {
+					name: record.name,
+					table: record.table,
+					columns: [],
+					unique: Number(record.non_unique) === 0,
+					primary: record.name === 'PRIMARY',
+					constraint:
+						record.constraint_type === 'UNIQUE'
+							? 'unique'
+							: record.constraint_type === 'FOREIGN KEY'
+								? 'foreign_key'
+								: null,
+					method: record.method ? record.method.toLowerCase() : null,
+					partial: false,
+					predicate: null,
+					included: [],
+					expression: false,
+					valid: true,
+				};
+
+				grouped.set(key, index);
+			}
+
+			// COLUMN_NAME is null for functional indexes
+			if (record.column) {
+				index.columns.push(record.column);
+			} else {
+				index.expression = true;
+			}
+		}
+
+		return [...grouped.values()];
 	}
 
 	// Foreign Keys

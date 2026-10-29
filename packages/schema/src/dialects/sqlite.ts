@@ -1,6 +1,7 @@
 import type { Knex } from 'knex';
 import type { Column } from '../types/column.js';
 import type { ForeignKey } from '../types/foreign-key.js';
+import type { Index } from '../types/index.js';
 import type { SchemaOverview } from '../types/overview.js';
 import type { SchemaInspector } from '../types/schema-inspector.js';
 import type { Table } from '../types/table.js';
@@ -247,6 +248,57 @@ export default class SQLite implements SchemaInspector {
 		return pkColumn?.name || null;
 	}
 
+	// Indexes
+	// ===============================================================================================
+
+	async indexes(table?: string): Promise<Index[]> {
+		const tables = table ? [table] : await this.tables();
+		const result: Index[] = [];
+
+		for (const currentTable of tables) {
+			const indexList = await this.knex.raw<RawIndexList[]>(`PRAGMA index_list(??)`, currentTable);
+
+			const details = await Promise.all(
+				indexList.map(async (index) => {
+					const info = await this.knex.raw<{ seqno: number; cid: number; name: string | null }[]>(
+						`PRAGMA index_info(??)`,
+						index.name
+					);
+
+					const definition: { sql: string | null } | undefined = await this.knex
+						.select('sql')
+						.from('sqlite_master')
+						.where({ type: 'index', name: index.name })
+						.first();
+
+					return { index, info, definition };
+				})
+			);
+
+			for (const { index, info, definition } of details) {
+				const sql = definition?.sql ?? null;
+				const whereMatch = sql ? sql.match(/\bWHERE\b([\s\S]*)$/i) : null;
+
+				result.push({
+					name: index.name,
+					table: currentTable,
+					columns: info.map((column) => column.name).filter((name): name is string => !!name),
+					unique: !!index.unique,
+					primary: index.origin === 'pk',
+					constraint: index.origin === 'u' ? 'unique' : null,
+					method: null,
+					partial: !!index.partial,
+					predicate: whereMatch?.[1]?.trim() ?? null,
+					included: [],
+					expression: info.some((column) => !column.name),
+					valid: true,
+				});
+			}
+		}
+
+		return result;
+	}
+
 	// Foreign Keys
 	// ===============================================================================================
 
@@ -283,4 +335,12 @@ type RawColumn = {
 	hidden: 0 | 1 | 2;
 	dflt_value: any;
 	pk: 0 | 1;
+};
+
+type RawIndexList = {
+	seq: number;
+	name: string;
+	unique: 0 | 1;
+	origin: 'c' | 'u' | 'pk';
+	partial: 0 | 1;
 };

@@ -748,6 +748,40 @@ columns: Colonnes
 collection_setup: Configuration de la collection
 optional_system_fields: Champs système optionnels
 value_unique: La valeur doit être unique
+
+indexes: Index
+create_index: Créer un index
+manage_indexes: Gérer les index
+no_indexes: Aucun index
+no_indexes_copy: Cette collection n'a pas encore d'index.
+indexes_not_supported: Les index ne sont pas supportés par la base de données de cette instance.
+indexes_sidebar_copy: >-
+  Les index accélèrent le filtrage et le tri d'une collection. Seuls les index simples sont gérés
+  ici ; les contraintes unique, primaire et clé étrangère sont affichées en lecture seule.
+index_name: Nom
+index_name_note: Optionnel. Laisser vide pour que l'API génère un nom à partir des champs.
+index_fields: Champs
+index_fields_note: L'ordre est important pour un index composite.
+index_no_fields: Sélectionnez au moins un champ.
+index_add_field: Ajouter un champ...
+index_composite: Composite
+index_unique: Unique
+index_partial: Partiel
+index_partial_note: Seules les lignes correspondant à cette condition sont indexées.
+index_partial_not_supported: Les index partiels ne sont pas supportés par cette base de données.
+index_kind_index: Index
+index_kind_primary: Clé primaire
+index_kind_unique_constraint: Contrainte unique
+index_kind_unique_index: Index unique
+index_kind_foreign_key_index: Index de clé étrangère
+index_kind_expression: Index d'expression
+index_undeletable_primary_key: Cet index appartient à la clé primaire et ne peut pas être supprimé ici.
+index_undeletable_unique: Les index uniques ne sont pas encore gérés.
+index_undeletable_foreign_key: Cet index est requis par une contrainte de clé étrangère.
+delete_index: Supprimer l'index
+delete_index_are_you_sure: "Supprimer l'index « {index} » ?"
+delete_index_copy: "L'index sera définitivement supprimé de la base de données."
+
 all_activity: Toutes les activités
 create_item: Créer un élément
 display_template: Modèle d'affichage

@@ -9,6 +9,7 @@ export * from './filter.js';
 export * from './flows.js';
 export * from './geometry.js';
 export * from './hooks.js';
+export * from './indexes.js';
 export * from './interfaces.js';
 export * from './items.js';
 export * from './layouts.js';

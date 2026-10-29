@@ -106,6 +106,34 @@ export abstract class SchemaHelper extends DatabaseHelper {
 		return existingName;
 	}
 
+	/**
+	 * Create a plain (non-unique) index. The predicate, when given, is already a compiled SQL
+	 * fragment (see `renderFilterAsSql`), so it is appended as-is.
+	 */
+	async createIndex(table: string,  name: string, columns: string[], where?: string): Promise<void> {
+		if (where) {
+			const wrap = (value: string | string[]) => this.knex.raw('??', [value]).toQuery();
+
+			await this.knex.raw(`CREATE INDEX ${wrap(name)} ON ${wrap(table)} (${wrap(columns)}) WHERE ${where}`);
+
+			return;
+		}
+
+		await this.knex.schema.alterTable(table, (builder) => {
+			builder.index(columns, name);
+		});
+	}
+
+	/**
+	 * Drop an index by its real name. Knex generates the right statement per dialect
+	 * (`DROP INDEX`, `ALTER TABLE … DROP INDEX`, `DROP INDEX … ON …`).
+	 */
+	async dropIndex(table: string, name: string): Promise<void> {
+		await this.knex.schema.alterTable(table, (builder) => {
+			builder.dropIndex([], name);
+		});
+	}
+
 	applyLimit(rootQuery: Knex.QueryBuilder, limit: number): void {
 		if (limit !== -1) {
 			rootQuery.limit(limit);

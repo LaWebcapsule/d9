@@ -69,7 +69,20 @@
 
 			<v-form
 				v-model="edits.meta"
-				collection="directus_collections"
+				:fields="metaFieldsBeforeConstraints"
+				:loading="loading"
+				:initial-values="item && item.meta"
+				:batch-mode="isBatch"
+				:primary-key="collection"
+				:disabled="item && item.collection.startsWith('directus_')"
+			/>
+
+			<indexes-section :collection="collection" />
+
+			<v-form
+				v-if="metaFieldsFromConstraints.length > 0"
+				v-model="edits.meta"
+				:fields="metaFieldsFromConstraints"
 				:loading="loading"
 				:initial-values="item && item.meta"
 				:batch-mode="isBatch"
@@ -112,9 +125,10 @@ import { useCollectionsStore } from '@/stores/collections';
 import { useFieldsStore } from '@/stores/fields';
 import { useShortcut } from '@/composables/use-shortcut';
 import { useEditsGuard } from '@/composables/use-edits-guard';
+import IndexesSection from '../indexes/indexes-section.vue';
 
 export default defineComponent({
-	components: { SettingsNavigation, FieldsManagement },
+	components: { SettingsNavigation, FieldsManagement, IndexesSection },
 	props: {
 		collection: {
 			type: String,
@@ -151,6 +165,26 @@ export default defineComponent({
 			return Object.keys(edits.value.meta).length > 0;
 		});
 
+		/**
+		 * The collection settings form is rendered in two parts so the indexes section can sit
+		 * right before the check constraints block.
+		 */
+		const metaFields = computed(() => fieldsStore.getFieldsForCollection('directus_collections'));
+
+		const constraintsStart = computed(() =>
+			metaFields.value.findIndex((field) => field.field === 'check_filter_divider')
+		);
+
+		const metaFieldsBeforeConstraints = computed(() => {
+			const start = constraintsStart.value;
+			return start === -1 ? metaFields.value : metaFields.value.slice(0, start);
+		});
+
+		const metaFieldsFromConstraints = computed(() => {
+			const start = constraintsStart.value;
+			return start === -1 ? [] : metaFields.value.slice(start);
+		});
+
 		useShortcut('meta+s', () => {
 			if (hasEdits.value) saveAndStay();
 		});
@@ -175,6 +209,8 @@ export default defineComponent({
 			deleting,
 			saveAsCopy,
 			isBatch,
+			metaFieldsBeforeConstraints,
+			metaFieldsFromConstraints,
 			deleteAndQuit,
 			saveAndQuit,
 			hasEdits,

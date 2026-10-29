@@ -5,6 +5,7 @@ import type { SchemaInspector } from '../types/schema-inspector.js';
 import type { Table } from '../types/table.js';
 import { stripQuotes } from '../utils/strip-quotes.js';
 import type { Column } from '../types/column.js';
+import type { Index } from '../types/index.js';
 
 /**
  * NOTE: Use previous optimizer for better data dictionary performance.
@@ -26,6 +27,18 @@ type RawColumn = {
 	CONSTRAINT_TYPE: 'P' | 'U' | 'R' | null;
 	VIRTUAL_COLUMN: 'YES' | 'NO';
 	IDENTITY_COLUMN: 'YES' | 'NO';
+};
+
+type RawIndex = {
+	table: string;
+	name: string;
+	uniqueness: 'UNIQUE' | 'NONUNIQUE';
+	index_type: string;
+	status: 'VALID' | 'UNUSABLE';
+	column: string | null;
+	position: number;
+	expression: string | null;
+	constraint_type: 'P' | 'U' | null;
 };
 
 export function rawColumnToColumn(rawColumn: RawColumn): Column {
@@ -390,6 +403,73 @@ export default class oracleDB implements SchemaInspector {
 			.first();
 
 		return result?.COLUMN_NAME ?? null;
+	}
+
+	// Indexes
+	// ===============================================================================================
+
+	async indexes(table?: string): Promise<Index[]> {
+		const query = this.knex
+			.select({
+				table: 'i.TABLE_NAME',
+				name: 'i.INDEX_NAME',
+				uniqueness: 'i.UNIQUENESS',
+				index_type: 'i.INDEX_TYPE',
+				status: 'i.STATUS',
+				column: 'c.COLUMN_NAME',
+				position: 'c.COLUMN_POSITION',
+				expression: 'e.COLUMN_EXPRESSION',
+				constraint_type: 'con.CONSTRAINT_TYPE',
+			})
+			.from({ i: 'USER_INDEXES' })
+			.join({ c: 'USER_IND_COLUMNS' }, 'c.INDEX_NAME', 'i.INDEX_NAME')
+			.leftJoin({ e: 'USER_IND_EXPRESSIONS' }, function () {
+				this.on('e.INDEX_NAME', '=', 'i.INDEX_NAME').andOn('e.COLUMN_POSITION', '=', 'c.COLUMN_POSITION');
+			})
+			.leftJoin({ con: 'USER_CONSTRAINTS' }, function () {
+				this.on('con.INDEX_NAME', '=', 'i.INDEX_NAME');
+				this.andOnIn('con.CONSTRAINT_TYPE', ['P', 'U']);
+			})
+			.orderBy([
+				{ column: 'i.TABLE_NAME', order: 'asc' },
+				{ column: 'i.INDEX_NAME', order: 'asc' },
+				{ column: 'c.COLUMN_POSITION', order: 'asc' },
+			]);
+
+		if (table) query.where('i.TABLE_NAME', table);
+
+		const records: RawIndex[] = await query;
+		const grouped = new Map<string, Index>();
+
+		for (const record of records) {
+			const key = `${record.table}\u0000${record.name}`;
+			let index = grouped.get(key);
+
+			const isFunctionBased = String(record.index_type).startsWith('FUNCTION-BASED');
+
+			if (!index) {
+				index = {
+					name: record.name,
+					table: record.table,
+					columns: [],
+					unique: record.uniqueness === 'UNIQUE',
+					primary: record.constraint_type === 'P',
+					constraint: record.constraint_type === 'U' ? 'unique' : null,
+					method: isFunctionBased || record.index_type === 'NORMAL' ? 'btree' : String(record.index_type).toLowerCase(),
+					partial: false,
+					predicate: null,
+					included: [],
+					expression: isFunctionBased,
+					valid: record.status !== 'UNUSABLE',
+				};
+
+				grouped.set(key, index);
+			}
+
+			if (record.column) index.columns.push(record.column);
+		}
+
+		return [...grouped.values()];
 	}
 
 	// Foreign Keys

@@ -3,8 +3,20 @@ import type { SchemaInspector } from '../types/schema-inspector.js';
 import type { Table } from '../types/table.js';
 import type { Column } from '../types/column.js';
 import type { ForeignKey } from '../types/foreign-key.js';
+import type { Index } from '../types/index.js';
 import { stripQuotes } from '../utils/strip-quotes.js';
 import type { SchemaOverview } from '../types/overview.js';
+
+type RawIndex = {
+	table: string;
+	name: string;
+	unique: boolean;
+	primary: boolean;
+	partial: boolean;
+	constraint_type: 'p' | 'u' | null;
+	columns: string[];
+	expression: boolean;
+};
 
 type RawTable = {
 	table_name: string;
@@ -536,6 +548,72 @@ export default class CockroachDB implements SchemaInspector {
 			.first();
 
 		return result ? result.column_name : null;
+	}
+
+	// Indexes
+	// ===============================================================================================
+
+	async indexes(table?: string): Promise<Index[]> {
+		const bindings: any[] = [];
+		const schemaIn = this.explodedSchema.map((schemaName) => `${this.knex.raw('?', [schemaName])}::regnamespace`);
+
+		if (table) bindings.push(table);
+
+		try {
+			const result = await this.knex.raw<{ rows: RawIndex[] }>(
+				`
+				SELECT
+				  rel.relname AS "table",
+				  ic.relname AS "name",
+				  ix.indisunique AS "unique",
+				  ix.indisprimary AS "primary",
+				  (ix.indpred IS NOT NULL) AS "partial",
+				  con.contype AS "constraint_type",
+				  ARRAY(
+				    SELECT a.attname::text
+				    FROM generate_subscripts(ix.indkey, 1) AS s
+				    JOIN pg_attribute a ON a.attrelid = ix.indrelid AND a.attnum = ix.indkey[s]
+				    WHERE s <= ix.indnatts
+				    ORDER BY s
+				  ) AS "columns",
+				  (
+				    SELECT count(*)
+				    FROM generate_subscripts(ix.indkey, 1) AS s
+				    WHERE ix.indkey[s] = 0
+				  ) > 0 AS "expression"
+				FROM
+				  pg_index ix
+				  JOIN pg_class ic ON ic.oid = ix.indexrelid
+				  JOIN pg_class rel ON rel.oid = ix.indrelid
+				  LEFT JOIN pg_constraint con ON con.conindid = ix.indexrelid AND con.contype IN ('p', 'u')
+				WHERE
+				  rel.relnamespace IN (${schemaIn})
+				  AND rel.relkind = 'r'
+				  ${table ? 'AND rel.relname = ?' : ''}
+				ORDER BY rel.relname, ic.relname;
+				`,
+				bindings
+			);
+
+			return result.rows.map((raw) => ({
+				name: raw.name,
+				table: raw.table,
+				columns: raw.columns.filter((column) => !!column),
+				unique: raw.unique,
+				primary: raw.primary,
+				constraint: raw.constraint_type === 'u' ? 'unique' : null,
+				method: null,
+				partial: raw.partial,
+				// CockroachDB doesn't expose the predicate as SQL, so partial indexes stay non-editable
+				predicate: null,
+				included: [],
+				expression: raw.expression,
+				valid: true,
+			}));
+		} catch {
+			// Best effort: the CockroachDB catalog doesn't fully mirror PostgreSQL's
+			return [];
+		}
 	}
 
 	// Foreign Keys
