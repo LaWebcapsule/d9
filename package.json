@@ -138,7 +138,17 @@
 				"GHSA-q83v-hq3j-4pq3",
 				"GHSA-3fff-gqw3-vj86",
 				"GHSA-68g8-c275-xf2m",
-				"GHSA-632p-p495-25m5"
+				"GHSA-632p-p495-25m5",
+				"GHSA-22rr-f3p8-5gf8",
+				"GHSA-9qrm-48qf-r2rw",
+				"GHSA-vv2v-pw69-8crf",
+				"GHSA-cph6-524f-3hgr",
+				"GHSA-wv3h-5fx7-966h",
+				"GHSA-q75c-4gmv-mg9x",
+				"GHSA-qqmv-5p3g-px89",
+				"GHSA-393c-p46r-7c95",
+				"GHSA-j5h6-vqc3-phqh",
+				"GHSA-c6w9-5g5j-jh2p"
 			],
 			"ignoreCves": [
 				"CVE-2024-27296",

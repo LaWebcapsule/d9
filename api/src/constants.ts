@@ -2,6 +2,11 @@ import type { CookieOptions } from 'express';
 import env from './env.js';
 import type { TransformationParams } from './types/index.js';
 import { getMilliseconds } from './utils/get-milliseconds.js';
+import { Url } from './utils/url.js';
+
+// Follow PUBLIC_URL so a path prefix (e.g. /cms/) is kept in cookie scopes
+const authCookiePath = new Url(env['PUBLIC_URL']).addPath('auth').toString({ rootRelative: true });
+const assetsCookiePath = new Url(env['PUBLIC_URL']).addPath('assets').toString({ rootRelative: true });
 
 export const SYSTEM_ASSET_ALLOW_LIST: TransformationParams[] = [
 	{
@@ -65,7 +70,7 @@ export const REFRESH_COOKIE_OPTIONS: CookieOptions = {
 	maxAge: getMilliseconds(env['REFRESH_TOKEN_TTL']),
 	secure: env['REFRESH_TOKEN_COOKIE_SECURE'] ?? false,
 	sameSite: (env['REFRESH_TOKEN_COOKIE_SAME_SITE'] as 'lax' | 'strict' | 'none') || 'strict',
-	path: '/auth',
+	path: authCookiePath,
 };
 
 export const REFRESH_COOKIE_CLEAR_OPTIONS: CookieOptions = (() => {
@@ -83,7 +88,7 @@ export const GET_SET_HEADER = (cookieValue: string) => {
 		env['REFRESH_TOKEN_TTL']
 	)}; Secure=${env['REFRESH_TOKEN_COOKIE_SECURE'] ?? false}; SameSite=${
 		(env['REFRESH_TOKEN_COOKIE_SAME_SITE'] as 'lax' | 'strict' | 'none') || 'strict'
-	}; Path=/auth;${domainHeader}${partitionedHeader}`;
+	}; Path=${authCookiePath};${domainHeader}${partitionedHeader}`;
 
 	return cookieHeaderValue;
 };
@@ -94,7 +99,7 @@ export const ACCESS_COOKIE_OPTIONS: CookieOptions = {
 	maxAge: getMilliseconds(env['ACCESS_TOKEN_TTL']),
 	secure: env['ACCESS_TOKEN_COOKIE_SECURE'] ?? false,
 	sameSite: (env['ACCESS_TOKEN_COOKIE_SAME_SITE'] as 'lax' | 'strict' | 'none') || 'strict',
-	path: '/assets',
+	path: assetsCookiePath,
 };
 
 export const ACCESS_COOKIE_CLEAR_OPTIONS: CookieOptions = (() => {
@@ -110,7 +115,7 @@ export const OAUTH2_COOKIE_OPTIONS: CookieOptions = {
 	maxAge: getMilliseconds(env['OAUTH2_TOKEN_TTL']),
 	secure: (env['OAUTH2_TOKEN_COOKIE_SECURE'] || env['ACCESS_TOKEN_COOKIE_SECURE']) ?? false,
 	sameSite: (env['OAUTH2_TOKEN_COOKIE_SAME_SITE'] as 'lax' | 'strict' | 'none') || 'lax',
-	path: '/auth',
+	path: authCookiePath,
 };
 
 export const OAUTH2_COOKIE_CLEAR_OPTIONS: CookieOptions = (() => {
