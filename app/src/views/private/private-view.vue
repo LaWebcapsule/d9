@@ -7,7 +7,7 @@
 		</template>
 	</v-info>
 
-	<div v-else class="private-view" :class="{ theme, 'full-screen': fullScreen, resizing }">
+	<div v-else class="private-view" :class="{ theme, 'full-screen': fullScreen, resizing, 'split-view': splitView }">
 		<aside id="navigation" role="navigation" aria-label="Module Navigation" :class="{ 'is-open': navOpen }">
 			<module-bar />
 			<div class="module-nav alt-colors" :style="{ width: `${moduleNavWidth}px` }">
@@ -28,7 +28,7 @@
 		</aside>
 		<div id="main-content" ref="contentEl" class="content">
 			<header-bar
-				:small="smallHeader"
+				:small="smallHeader || splitView"
 				:shadow="headerShadow"
 				show-sidebar-toggle
 				:title="title"
@@ -40,9 +40,30 @@
 				</template>
 			</header-bar>
 
-			<main>
-				<slot />
-			</main>
+			<div class="content-wrapper">
+				<div
+					v-show="showMain"
+					class="main-pane"
+					:style="splitView ? { width: `${mainResize.width.value}px` } : undefined"
+				>
+					<main>
+						<slot />
+					</main>
+
+					<panel-resize-handle
+						v-if="splitView"
+						class="main-resize-handle"
+						edge="right"
+						:dragging="mainResize.dragging.value"
+						@pointerdown="mainResize.onPointerDown"
+						@reset="mainResize.reset"
+					/>
+				</div>
+
+				<div v-if="splitView" id="split-content">
+					<slot name="splitView" />
+				</div>
+			</div>
 		</div>
 		<aside
 			id="sidebar"
@@ -108,9 +129,19 @@ interface Props {
 	title?: string | null;
 	smallHeader?: boolean;
 	headerShadow?: boolean;
+	/** Shows the `splitView` slot next to the page content */
+	splitView?: boolean;
+	/** The page content is hidden while the window leaves less than this width to the split view */
+	splitViewMinWidth?: number;
 }
 
-const props = withDefaults(defineProps<Props>(), { title: null, smallHeader: false, headerShadow: true });
+const props = withDefaults(defineProps<Props>(), {
+	title: null,
+	smallHeader: false,
+	headerShadow: true,
+	splitView: false,
+	splitViewMinWidth: 0,
+});
 
 const { t } = useI18n();
 
@@ -135,16 +166,41 @@ const notificationsPreviewActive = ref(false);
 
 const { sidebarOpen, fullScreen } = storeToRefs(appStore);
 
-// 60 = module bar width, 590 = minimum content width
+const MIN_CONTENT_WIDTH = 590;
+const MIN_MODULE_NAV_WIDTH = 150;
+
+// In the split view, the page content is shown only when the window leaves room for both, with the narrowest navigation
+const showMain = computed(() => {
+	if (!props.splitView) return true;
+
+	let remainingWidth;
+
+	if (windowWidth.value > 1260) {
+		remainingWidth = windowWidth.value - (60 + MIN_MODULE_NAV_WIDTH + MIN_CONTENT_WIDTH + sidebarWidth.value);
+	} else if (windowWidth.value > 960) {
+		remainingWidth = windowWidth.value - (60 + MIN_MODULE_NAV_WIDTH + MIN_CONTENT_WIDTH + 60);
+	} else {
+		remainingWidth = windowWidth.value - MIN_CONTENT_WIDTH;
+	}
+
+	return remainingWidth >= props.splitViewMinWidth;
+});
+
+// Width the page needs between the navigation and the sidebar
+const minContentWidth = computed(() =>
+	props.splitView && showMain.value ? MIN_CONTENT_WIDTH + props.splitViewMinWidth : MIN_CONTENT_WIDTH
+);
+
+// 60 = module bar width
 const moduleNavResize = usePanelResize({
 	edge: 'right',
 	defaultWidth: 220,
-	minWidth: 150,
+	minWidth: MIN_MODULE_NAV_WIDTH,
 	maxWidth: computed(() => {
 		// Sidebar is part of the layout here, and its width changes
-		if (windowWidth.value > 1260) return windowWidth.value - (590 + 60 + sidebarWidth.value);
+		if (windowWidth.value > 1260) return windowWidth.value - (minContentWidth.value + 60 + sidebarWidth.value);
 		// 60 = closed sidebar width
-		if (windowWidth.value > 960) return windowWidth.value - (590 + 60 + 60);
+		if (windowWidth.value > 960) return windowWidth.value - (minContentWidth.value + 60 + 60);
 		// Overlay: keep 60px of the page visible
 		return windowWidth.value - (60 + 60);
 	}),
@@ -159,7 +215,7 @@ const sidebarResize = usePanelResize({
 	defaultWidth: 280,
 	minWidth: 150,
 	maxWidth: computed(() => {
-		if (windowWidth.value > 1260) return windowWidth.value - (590 + 60 + moduleNavWidth.value);
+		if (windowWidth.value > 1260) return windowWidth.value - (minContentWidth.value + 60 + moduleNavWidth.value);
 		// Overlay over the content: keep 60px of it visible
 		if (windowWidth.value > 960) return windowWidth.value - (60 + moduleNavWidth.value + 60);
 		return windowWidth.value - 60;
@@ -172,7 +228,27 @@ const sidebarResize = usePanelResize({
 	},
 });
 
-const resizing = computed(() => moduleNavResize.dragging.value || sidebarResize.dragging.value);
+// Page content next to the split view, which takes the remaining width
+const mainResize = usePanelResize({
+	edge: 'right',
+	defaultWidth: MIN_CONTENT_WIDTH,
+	minWidth: MIN_CONTENT_WIDTH,
+	maxWidth: computed(() => {
+		let contentWidth;
+
+		if (windowWidth.value > 1260) contentWidth = windowWidth.value - (60 + moduleNavWidth.value + sidebarWidth.value);
+		else if (windowWidth.value > 960) contentWidth = windowWidth.value - (60 + moduleNavWidth.value + 60);
+		else contentWidth = windowWidth.value;
+
+		return contentWidth - props.splitViewMinWidth;
+	}),
+	storageKey: 'split-view-main-width',
+	snap: 10,
+});
+
+const resizing = computed(
+	() => moduleNavResize.dragging.value || sidebarResize.dragging.value || mainResize.dragging.value
+);
 
 const theme = computed(() => {
 	return userStore.currentUser?.theme || 'auto';
@@ -296,6 +372,8 @@ function openSidebar(event: PointerEvent) {
 		font-size: 15px;
 		line-height: 24px;
 
+		.content-wrapper,
+		.main-pane,
 		main {
 			display: contents;
 		}
@@ -364,12 +442,56 @@ function openSidebar(event: PointerEvent) {
 		--content-padding-bottom: 132px;
 	}
 
+	// The page content and the split view scroll on their own, under the header
+	&.split-view #main-content {
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+
+		// Never collapses here, since the header does not scroll: separate it from the panes below
+		.header-bar {
+			flex-shrink: 0;
+			box-shadow: 0 4px 7px -4px rgb(0 0 0 / 0.2);
+		}
+
+		.content-wrapper {
+			display: flex;
+			flex-grow: 1;
+			min-height: 0;
+		}
+
+		.main-pane {
+			position: relative;
+			display: block;
+			flex-shrink: 0;
+			height: 100%;
+		}
+
+		main {
+			display: block;
+			height: 100%;
+			overflow: auto;
+		}
+
+		#split-content {
+			flex-grow: 1;
+			min-width: 0;
+			height: 100%;
+			overflow: auto;
+		}
+	}
+
 	&.resizing {
 		cursor: ew-resize;
 		user-select: none;
 
 		#sidebar {
 			transition: none;
+		}
+
+		// An iframe in the split view would take the pointer events of the drag
+		#split-content {
+			pointer-events: none;
 		}
 	}
 

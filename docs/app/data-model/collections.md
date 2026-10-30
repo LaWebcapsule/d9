@@ -166,9 +166,10 @@ To configure a collection, follow these steps.
 
 1. Navigate to **Settings > Data Model** and click the desired collection.\
    The collection's configuration page will open.
-2. Make configurations as desired. Configuration options are broken into six categories.
+2. Make configurations as desired. Configuration options are broken into seven categories.
    - [Fields and Layout](#fields-layout)
    - [Collection Setup](#collection-setup)
+   - [Preview](#preview)
    - [Archive](#archive)
    - [Sort](#sort-field)
    - [Accountability](#accountability)
@@ -213,6 +214,22 @@ human readable names, but you can also use translations to explicitly rename mor
 :::tip What's a Singleton?
 
 A collection that only contains one single item. For example, a website's **About Us** page.
+
+:::
+
+### Preview
+
+- **Preview URL** — The URL of the page that shows an item on your website, used for the
+  [Live Preview](/app/content/items#live-preview). Insert field values with the same syntax as a
+  [Display Template](/app/display-templates), for example `https://example.com/blog/{{slug}}?preview=true`. Only
+  `http` and `https` URLs are previewed.
+
+:::warning Content Security Policy
+
+The preview is loaded in an iframe, which d9's default Content Security Policy only allows for the d9 domain. To preview
+pages of another domain, allow it with the `CONTENT_SECURITY_POLICY_DIRECTIVES__FRAME_SRC` environment variable, for
+example `CONTENT_SECURITY_POLICY_DIRECTIVES__FRAME_SRC="'self',https://example.com"`. Your website must also allow being
+framed by d9 (`frame-ancestors` / `X-Frame-Options`).
 
 :::
 

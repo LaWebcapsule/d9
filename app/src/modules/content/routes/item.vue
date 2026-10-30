@@ -3,7 +3,7 @@
 		v-if="error || !collectionInfo || (collectionInfo?.meta?.singleton === true && primaryKey !== null)"
 	/>
 
-	<private-view v-else :title="title">
+	<private-view v-else :split-view="splitView" :split-view-min-width="310" :title="title">
 		<template v-if="collectionInfo.meta && collectionInfo.meta.singleton === true" #title>
 			<h1 class="type-title">
 				{{ collectionInfo.name }}
@@ -57,6 +57,17 @@
 		</template>
 
 		<template #actions>
+			<v-button
+				v-if="previewURL"
+				v-tooltip.bottom="t(livePreviewMode === null ? 'live_preview.enable' : 'live_preview.disable')"
+				rounded
+				icon
+				:secondary="livePreviewMode === null"
+				@click="toggleLivePreview"
+			>
+				<v-icon name="visibility" outline />
+			</v-button>
+
 			<v-dialog v-if="!isNew" v-model="confirmDelete" :disabled="deleteAllowed === false" @esc="confirmDelete = false">
 				<template #activator="{ on }">
 					<v-button
@@ -161,6 +172,10 @@
 			:validation-errors="validationErrors"
 		/>
 
+		<template #splitView>
+			<live-preview v-if="previewURL" :url="previewURL" @new-window="livePreviewMode = 'popup'" />
+		</template>
+
 		<v-dialog v-model="confirmLeave" @esc="confirmLeave = false">
 			<v-card>
 				<v-card-title>{{ t('unsaved_changes') }}</v-card-title>
@@ -216,11 +231,12 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, unref, toRefs } from 'vue';
+import { computed, onBeforeUnmount, ref, unref, toRefs, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { useEditsGuard } from '@/composables/use-edits-guard';
 import { useItem } from '@/composables/use-item';
+import { useLocalStorage } from '@/composables/use-local-storage';
 import { usePermissions } from '@/composables/use-permissions';
 import { useShortcut } from '@/composables/use-shortcut';
 import { useTemplateData } from '@/composables/use-template-data';
@@ -234,6 +250,8 @@ import SharesSidebarDetail from '@/views/private/components/shares-sidebar-detai
 import { useCollection } from '@wbce-d9/composables';
 import { useRouter } from 'vue-router';
 import ContentNavigation from '../components/navigation.vue';
+import LivePreview from '../components/live-preview.vue';
+import { usePreviewUrl } from '../composables/use-preview-url';
 import ContentNotFound from './not-found.vue';
 
 interface Props {
@@ -364,6 +382,88 @@ const disabledOptions = computed(() => {
 	if (isNew.value) return ['save-as-copy'];
 	return [];
 });
+
+const { previewURL, fetchTemplateValues: fetchPreviewValues } = usePreviewUrl(collectionInfo, primaryKey);
+const { livePreviewMode, splitView, toggleLivePreview } = useLivePreview();
+
+function useLivePreview() {
+	const { data } = useLocalStorage('live-preview-mode', null);
+
+	const livePreviewMode = computed<'split' | 'popup' | null>({
+		get() {
+			return data.value === 'split' || data.value === 'popup' ? data.value : null;
+		},
+		set(value) {
+			data.value = value;
+		},
+	});
+
+	const splitView = computed(() => !!previewURL.value && livePreviewMode.value === 'split');
+
+	let popupWindow: Window | null = null;
+	let popupClosedTimer: ReturnType<typeof setInterval> | undefined;
+
+	watch(
+		[livePreviewMode, previewURL],
+		([mode, url]) => {
+			if (mode !== 'popup' || !url) {
+				closePopup();
+				return;
+			}
+
+			const popupURL = router.resolve({
+				name: 'content-item-preview',
+				params: { collection: props.collection, primaryKey: internalPrimaryKey.value },
+			}).href;
+
+			popupWindow = window.open(
+				popupURL,
+				'live-preview',
+				'width=900,height=800,menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes'
+			);
+
+			// Back to the split view once the popup is closed
+			clearInterval(popupClosedTimer);
+
+			popupClosedTimer = setInterval(() => {
+				if (popupWindow && !popupWindow.closed) return;
+
+				clearInterval(popupClosedTimer);
+				popupWindow = null;
+
+				if (livePreviewMode.value === 'popup') livePreviewMode.value = 'split';
+			}, 1000);
+		},
+		{ immediate: true }
+	);
+
+	// The preview shows the saved item
+	watch(saving, async (newVal, oldVal) => {
+		if (newVal === true || oldVal === false) return;
+
+		try {
+			await fetchPreviewValues();
+			window.refreshLivePreview?.(previewURL.value);
+			popupWindow?.refreshLivePreview?.(previewURL.value);
+		} catch {
+			// The preview keeps showing the previous state
+		}
+	});
+
+	onBeforeUnmount(closePopup);
+
+	return { livePreviewMode, splitView, toggleLivePreview };
+
+	function toggleLivePreview() {
+		livePreviewMode.value = livePreviewMode.value === null ? 'split' : null;
+	}
+
+	function closePopup() {
+		clearInterval(popupClosedTimer);
+		popupWindow?.close();
+		popupWindow = null;
+	}
+}
 
 function navigateBack() {
 	const backState = router.options.history.state.back;
