@@ -1,10 +1,46 @@
 import type { Knex } from 'knex';
 import type { Column } from '../types/column.js';
 import type { ForeignKey } from '../types/foreign-key.js';
+import type { Index } from '../types/index.js';
 import type { SchemaOverview } from '../types/overview.js';
 import type { SchemaInspector } from '../types/schema-inspector.js';
 import type { Table } from '../types/table.js';
 import { stripQuotes } from '../utils/strip-quotes.js';
+
+type RawIndex = {
+	table: string;
+	name: string;
+	is_unique: boolean;
+	is_primary_key: boolean;
+	is_unique_constraint: boolean;
+	type: number;
+	has_filter: boolean;
+	predicate: string | null;
+	is_disabled: boolean;
+	ordinal: number | null;
+	is_included: boolean | null;
+	column: string | null;
+};
+
+function mssqlIndexMethod(type: number): string | null {
+	switch (type) {
+		case 1:
+			return 'clustered';
+		case 2:
+			return 'btree';
+		case 3:
+			return 'xml';
+		case 4:
+			return 'spatial';
+		case 5:
+		case 6:
+			return 'columnstore';
+		case 7:
+			return 'hash';
+		default:
+			return null;
+	}
+}
 
 type RawTable = {
 	TABLE_NAME: string;
@@ -392,6 +428,83 @@ export default class MSSQL implements SchemaInspector {
 
 		const columnName = results.length > 0 ? results[0]['Column_Name'] : null;
 		return columnName as string;
+	}
+
+	// Indexes
+	// ===============================================================================================
+
+	async indexes(table?: string): Promise<Index[]> {
+		const bindings: any[] = [this.schema];
+		if (table) bindings.push(table);
+
+		const records: RawIndex[] = await this.knex.raw(
+			`
+			SELECT
+			  [t].[name] AS [table],
+			  [i].[name] AS [name],
+			  [i].[is_unique] AS [is_unique],
+			  [i].[is_primary_key] AS [is_primary_key],
+			  [i].[is_unique_constraint] AS [is_unique_constraint],
+			  [i].[type] AS [type],
+			  [i].[has_filter] AS [has_filter],
+			  [i].[filter_definition] AS [predicate],
+			  [i].[is_disabled] AS [is_disabled],
+			  [ic].[key_ordinal] AS [ordinal],
+			  [ic].[is_included_column] AS [is_included],
+			  [c].[name] AS [column]
+			FROM
+			  [sys].[indexes] [i]
+			  JOIN [sys].[tables] [t] ON [t].[object_id] = [i].[object_id]
+			  JOIN [sys].[schemas] [s] ON [s].[schema_id] = [t].[schema_id]
+			  LEFT JOIN [sys].[index_columns] [ic] ON [ic].[object_id] = [i].[object_id] AND [ic].[index_id] = [i].[index_id]
+			  LEFT JOIN [sys].[columns] [c] ON [c].[object_id] = [ic].[object_id] AND [c].[column_id] = [ic].[column_id]
+			WHERE
+			  [s].[name] = ?
+			  AND [i].[type] > 0
+			  AND [i].[is_hypothetical] = 0
+			  ${table ? 'AND [t].[name] = ?' : ''}
+			ORDER BY [t].[name], [i].[name], [ic].[key_ordinal]
+			`,
+			bindings
+		);
+
+		const grouped = new Map<string, Index>();
+
+		for (const record of records) {
+			const key = `${record.table}\u0000${record.name}`;
+			let index = grouped.get(key);
+
+			if (!index) {
+				index = {
+					name: record.name,
+					table: record.table,
+					columns: [],
+					unique: !!record.is_unique,
+					primary: !!record.is_primary_key,
+					constraint: record.is_primary_key ? null : record.is_unique_constraint ? 'unique' : null,
+					method: mssqlIndexMethod(record.type),
+					partial: !!record.has_filter,
+					predicate: record.predicate ?? null,
+					included: [],
+					expression: false,
+					valid: !record.is_disabled,
+				};
+
+				grouped.set(key, index);
+			}
+
+			if (record.column) {
+				if (record.is_included) {
+					index.included.push(record.column);
+				} else {
+					index.columns.push(record.column);
+				}
+			} else {
+				index.expression = true;
+			}
+		}
+
+		return [...grouped.values()];
 	}
 
 	// Foreign Keys
