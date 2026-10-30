@@ -1,5 +1,5 @@
 import deepDiff from 'deep-diff';
-import { orderBy } from 'lodash-es';
+import { orderBy, unset } from 'lodash-es';
 import type { Snapshot, SnapshotDiff } from '../types/index.js';
 import { DiffKind } from '../types/index.js';
 import { sanitizeCollection, sanitizeField, sanitizeRelation } from './sanitize-schema.js';
@@ -43,13 +43,18 @@ export function getSnapshotDiff(current: Snapshot, after: Snapshot): SnapshotDif
 					const isAutoIncrementPrimaryKey =
 						!!currentField.schema?.is_primary_key && !!currentField.schema?.has_auto_increment;
 
+					const sanitizedCurrentField = sanitizeField(currentField, isAutoIncrementPrimaryKey);
+					const sanitizedAfterField = sanitizeField(afterField, isAutoIncrementPrimaryKey);
+
+					// Snapshots taken before `is_indexed` existed must not report every column as changed
+					if (sanitizedAfterField?.schema && sanitizedAfterField.schema.is_indexed === undefined) {
+						unset(sanitizedCurrentField, 'schema.is_indexed');
+					}
+
 					return {
 						collection: currentField.collection,
 						field: currentField.field,
-						diff: deepDiff.diff(
-							sanitizeField(currentField, isAutoIncrementPrimaryKey),
-							sanitizeField(afterField, isAutoIncrementPrimaryKey)
-						),
+						diff: deepDiff.diff(sanitizedCurrentField, sanitizedAfterField),
 					};
 				}),
 				...after.fields
