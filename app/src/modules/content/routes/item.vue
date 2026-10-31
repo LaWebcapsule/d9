@@ -234,6 +234,7 @@
 import { computed, onBeforeUnmount, ref, unref, toRefs, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import { useEditingLanguage } from '@/composables/use-editing-language';
 import { useEditsGuard } from '@/composables/use-edits-guard';
 import { useItem } from '@/composables/use-item';
 import { useLocalStorage } from '@/composables/use-local-storage';
@@ -383,7 +384,14 @@ const disabledOptions = computed(() => {
 	return [];
 });
 
-const { previewURL, fetchTemplateValues: fetchPreviewValues } = usePreviewUrl(collectionInfo, primaryKey);
+const editingLanguage = useEditingLanguage(collection, internalPrimaryKey);
+
+const { previewURL, fetchTemplateValues: fetchPreviewValues } = usePreviewUrl(
+	collectionInfo,
+	primaryKey,
+	editingLanguage
+);
+
 const { livePreviewMode, splitView, toggleLivePreview } = useLivePreview();
 
 function useLivePreview() {
@@ -414,6 +422,7 @@ function useLivePreview() {
 			const popupURL = router.resolve({
 				name: 'content-item-preview',
 				params: { collection: props.collection, primaryKey: internalPrimaryKey.value },
+				query: editingLanguage.value ? { lang: editingLanguage.value } : {},
 			}).href;
 
 			popupWindow = window.open(

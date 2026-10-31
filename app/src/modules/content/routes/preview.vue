@@ -4,7 +4,8 @@
 
 <script setup lang="ts">
 import { useCollection } from '@wbce-d9/composables';
-import { toRefs } from 'vue';
+import { computed, toRefs } from 'vue';
+import { useRoute } from 'vue-router';
 import LivePreview from '../components/live-preview.vue';
 import { usePreviewUrl } from '../composables/use-preview-url';
 
@@ -19,7 +20,11 @@ const { collection, primaryKey } = toRefs(props);
 
 const { info: collectionInfo } = useCollection(collection);
 
-const { previewURL } = usePreviewUrl(collectionInfo, primaryKey);
+// The content language being edited in the item page that opened this window
+const route = useRoute();
+const language = computed(() => (typeof route.query.lang === 'string' ? route.query.lang : null));
+
+const { previewURL } = usePreviewUrl(collectionInfo, primaryKey, language);
 
 function closePopup() {
 	window.close();

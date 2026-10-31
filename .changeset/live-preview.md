@@ -7,4 +7,5 @@
 
 Added Live Preview, ported from Directus 10.2 (GPLv3): set a Preview URL template in a collection's settings to show the
 item's page of your website next to the item form, or in a separate window. The preview reloads on save, and only
-`http(s)` URLs are previewed.
+`http(s)` URLs are previewed. `{{$lang}}` in the Preview URL inserts the language being edited in the item's
+translations field.

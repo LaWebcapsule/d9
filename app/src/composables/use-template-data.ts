@@ -28,7 +28,10 @@ export function useTemplateData(
 
 		if (!_template || !collection.value) return null;
 
-		return adjustFieldsForDisplays(getFieldsFromTemplate(_template), collection.value.collection);
+		// `$`-prefixed variables, like `$lang` of the preview URL, aren't fields of the item
+		const templateFields = getFieldsFromTemplate(_template).filter((field) => !field.startsWith('$'));
+
+		return adjustFieldsForDisplays(templateFields, collection.value.collection);
 	});
 
 	const isSingleton = computed(() => !!collection.value?.meta?.singleton);

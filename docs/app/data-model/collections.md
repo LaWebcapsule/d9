@@ -222,7 +222,12 @@ A collection that only contains one single item. For example, a website's **Abou
 - **Preview URL** — The URL of the page that shows an item on your website, used for the
   [Live Preview](/app/content/items#live-preview). Insert field values with the same syntax as a
   [Display Template](/app/display-templates), for example `https://example.com/blog/{{slug}}?preview=true`. Only
-  `http` and `https` URLs are previewed.
+  `http` and `https` URLs are previewed.\
+  For multilingual websites, pick **Editing Language** in the field list to insert `{{$lang}}`, the language being edited
+  in the item's [Translations](/app/data-model/relationships#translations-o2m) field, for example
+  `https://example.com/{{$lang}}/{{slug}}`.
+  With two languages side by side, it is the language of the side last focused or edited. Items without a Translations
+  field show no preview with such a URL.
 
 :::warning Content Security Policy
 

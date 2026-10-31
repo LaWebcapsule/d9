@@ -114,6 +114,8 @@ fields:
     interface: system-display-template
     options:
       collectionField: collection
+      injectLanguageField: true
+    note: $t:field_options.directus_collections.preview_url_note
     width: full
 
   - field: archive_divider
