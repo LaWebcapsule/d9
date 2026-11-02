@@ -24,7 +24,7 @@
 
 					<div class="spacer" />
 
-					<v-icon v-if="item.unique" v-tooltip="t('index_unique')" name="check" class="badge" />
+					<v-icon v-if="item.unique" v-tooltip="t('index_unique')" name="fingerprint" class="badge" />
 					<v-icon
 						v-if="item.partial"
 						v-tooltip="item.predicate ?? t('index_partial')"

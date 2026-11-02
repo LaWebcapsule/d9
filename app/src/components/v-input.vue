@@ -376,7 +376,6 @@ function stepDown() {
 
 		.prefix,
 		.suffix {
-			flex-shrink: 0;
 			color: var(--foreground-subdued);
 		}
 
