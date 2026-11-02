@@ -8,7 +8,8 @@ then applies them to your other environments. It is the most complete way to rep
 but it is currently PostgreSQL only.
 
 d9' schema migration endpoints allow users to retrieve a project's data model and apply changes to another
-project. The data model covers collections, fields and relations, but not roles and permissions.
+project. The data model covers collections, fields and relations, but not indexes, roles and permissions. Recreate the
+indexes on the target, or use the projen workflow, whose `save` captures the full schema, indexes included.
 
 This is useful if you make changes to a data model in a development project and need to apply them to a production
 project, or to move from a self-hosted project to d9 Cloud.

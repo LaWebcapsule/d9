@@ -388,8 +388,8 @@ export default class MySQL implements SchemaInspector {
 						record.constraint_type === 'UNIQUE'
 							? 'unique'
 							: record.constraint_type === 'FOREIGN KEY'
-								? 'foreign_key'
-								: null,
+							? 'foreign_key'
+							: null,
 					method: record.method ? record.method.toLowerCase() : null,
 					partial: false,
 					predicate: null,
