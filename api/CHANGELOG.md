@@ -1,5 +1,15 @@
 # @wbce-d9/api
 
+## 12.7.5
+
+### Patch Changes
+
+- [#490](https://github.com/LaWebcapsule/d9/pull/490)
+  [`f5d3826`](https://github.com/LaWebcapsule/d9/commit/f5d3826df336e20461cac11b1306d9e006369ec9) - Register
+  `directus_sessions.session_id`, `directus_sessions.fallback_token` and `directus_activity.session_id` as system fields
+  so schema snapshots no longer export them and schema apply can no longer drop them, and ignore system fields listed in
+  snapshots from older versions so those snapshots still apply ([#478](https://github.com/LaWebcapsule/d9/issues/478))
+
 ## 12.7.4
 
 ### Patch Changes
