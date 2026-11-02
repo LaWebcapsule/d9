@@ -20,7 +20,6 @@
 					<div class="index-info">
 						<span class="name monospace">{{ item.name }}</span>
 						<small class="columns">{{ item.columns.join(', ') }}</small>
-						<small class="kind">{{ t(`index_kind_${item.kind}`) }}</small>
 					</div>
 
 					<div class="spacer" />
@@ -133,7 +132,15 @@ async function removeIndex() {
 .index-info {
 	display: flex;
 	flex-direction: column;
-	gap: 2px;
+	min-width: 0;
+	line-height: 1.2;
+}
+
+.name,
+.columns {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
 .name {
@@ -143,10 +150,6 @@ async function removeIndex() {
 .columns {
 	color: var(--foreground-subdued);
 	font-family: var(--family-monospace);
-}
-
-.kind {
-	color: var(--foreground-subdued);
 }
 
 .badge {
