@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { DeleteCollection } from './functions.ts';
 import vendors from './get-dbs-to-test.ts';
 

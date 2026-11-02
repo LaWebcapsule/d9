@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { CreateCollection, CreateField, CreateFieldM2O, CreateItem, DeleteCollection } from '../../common/functions.ts';
 import vendors from '../../common/get-dbs-to-test.ts';
 import { SeedFunctions } from '../../common/seed-functions.ts';

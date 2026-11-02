@@ -1,3 +1,4 @@
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import config, { getUrl, paths } from '@common/config.ts';
 import vendors from '@common/get-dbs-to-test.ts';
 import { awaitDirectusConnection } from '@utils/await-connection.ts';

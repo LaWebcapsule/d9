@@ -3,12 +3,9 @@
 import { Listr } from 'listr2';
 import vendors from '../common/get-dbs-to-test.ts';
 import config from '../common/config.ts';
-import { JestConfigWithTsJest } from 'ts-jest/dist/types.ts';
 import global from './global.ts';
 
-export default async function teardown(jestConfig?: JestConfigWithTsJest, _isAfterWatch = false): Promise<void> {
-	if (jestConfig?.watch || jestConfig?.watchAll) return;
-
+export async function teardown(): Promise<void> {
 	if (!process.env.TEST_LOCAL) {
 		await new Listr([
 			{
