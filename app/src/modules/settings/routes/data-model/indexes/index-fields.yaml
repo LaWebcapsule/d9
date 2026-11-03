@@ -21,6 +21,7 @@
   meta:
     interface: list
     width: full
+    required: true
     note: $t:index_fields_note
     options:
       template: '{{ field }}'
@@ -32,6 +33,7 @@
           meta:
             interface: select-dropdown
             width: full
+            required: true
             options:
               choices: []
 

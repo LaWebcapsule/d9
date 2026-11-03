@@ -17,6 +17,7 @@
 				v-model="edits"
 				:fields="formFields"
 				:initial-values="initialValues"
+				:validation-errors="validationErrors"
 				:show-no-visible-fields="false"
 				autofocus
 				primary-key="+"
@@ -35,7 +36,7 @@
 		</v-dialog>
 
 		<template #actions>
-			<v-button v-tooltip.bottom="t('save')" icon rounded :disabled="!canSave" :loading="saving" @click="save">
+			<v-button v-tooltip.bottom="t('save')" icon rounded :loading="saving" @click="save">
 				<v-icon name="check" />
 			</v-button>
 		</template>
@@ -46,6 +47,7 @@
 import { useCollectionsStore } from '@/stores/collections';
 import { useFieldsStore } from '@/stores/fields';
 import { unexpectedError } from '@/utils/unexpected-error';
+import { validateItemConditions } from '@/utils/validate-item-conditions';
 import type { Field, Filter, IndexCapabilities, IndexPayload } from '@wbce-d9/types';
 import { cloneDeep, isEqual } from 'lodash';
 import { computed, ref, watch } from 'vue';
@@ -57,7 +59,7 @@ type ColumnItem = { field: string };
 type IndexForm = {
 	collection: string;
 	name: string;
-	columns: ColumnItem[];
+	columns: ColumnItem[] | null;
 	where: Filter | null;
 };
 
@@ -80,12 +82,12 @@ const edits = ref<IndexForm>(emptyForm());
 const initialValues = ref<IndexForm>(emptyForm());
 const saving = ref(false);
 const confirmLeave = ref(false);
+const validationErrors = ref<any[]>([]);
 
 const collectionName = computed(() => collectionsStore.getCollection(props.collection)?.name ?? props.collection);
 const collectionKey = computed(() => props.collection.replace(/\.|-/g, '_').toLowerCase());
 const namePrefix = computed(() => `${collectionKey.value}_`);
 const nameSuffix = '_index';
-const canSave = computed(() => edits.value.columns.some((column) => !!column.field));
 const hasEdits = computed(() => !isEqual(edits.value, initialValues.value));
 
 /**
@@ -131,12 +133,13 @@ watch(
 		edits.value = emptyForm();
 		initialValues.value = emptyForm();
 		confirmLeave.value = false;
+		validationErrors.value = [];
 	},
 	{ immediate: true }
 );
 
 function emptyForm(): IndexForm {
-	return { collection: props.collection, name: '', columns: [], where: null };
+	return { collection: props.collection, name: '', columns: null, where: null };
 }
 
 function cancel() {
@@ -154,11 +157,17 @@ function discardAndLeave() {
 }
 
 async function save() {
+	const errors = validateItemConditions(edits.value, formFields.value, true);
+
+	validationErrors.value = errors;
+
+	if (errors.length > 0) return;
+
 	saving.value = true;
 
 	try {
 		const payload: IndexPayload = {
-			columns: edits.value.columns.map((column) => column.field).filter((field): field is string => !!field),
+			columns: edits.value.columns!.map((column) => column.field),
 		};
 
 		if (props.capabilities?.where && edits.value.where) {
