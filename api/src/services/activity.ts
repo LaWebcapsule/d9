@@ -20,8 +20,8 @@ export class ActivityService extends ItemsService {
 
 	constructor(options: AbstractServiceOptions) {
 		super('directus_activity', options);
-		this.notificationsService = new NotificationsService({ schema: this.schema });
-		this.usersService = new UsersService({ schema: this.schema });
+		this.notificationsService = new NotificationsService({ knex: this.knex, schema: this.schema });
+		this.usersService = new UsersService({ knex: this.knex, schema: this.schema });
 	}
 
 	override async createOne(data: Partial<Item>, opts?: MutationOptions): Promise<PrimaryKey> {

@@ -3,18 +3,24 @@ import type { Knex } from 'knex';
 import { addWhereClauses } from './apply-query.js';
 import { cloneDeep } from 'lodash-es';
 
-export async function formulateCheckClause(knex: Knex, collection: string, filter: Filter, schema: SchemaOverview) {
-	/**
-	 * Strategy :
-	 * With filter, we are able to formulate a where statement but not a check statement.
-	 * So we formulate the where statement that we will then place in a check statement.
-	 * Also, with filter, right assignment of operator are always values (simple ?) in the final query
-	 * With the comparaison syntax of check constraint, we want to be able to have right assignent of field
-	 * e.g. : filter = {date_end : {_gt : "$FIELD(date_start)" }} should transform into "?? > ??"
-	 * To ensure this :
-	 *      - we formulate the where clause
-	 *      - we change every simple ? to a double ?? when the "?" is for a binding of form $FIELD(...)
-	 */
+/**
+ * Compile a Directus filter into a SQL predicate usable in a CHECK constraint or in a partial
+ * index (`CREATE INDEX … WHERE <predicate>`).
+ *
+ * Strategy :
+ * With filter, we are able to formulate a where statement but not a check statement.
+ * So we formulate the where statement that we will then place in a check statement.
+ * Also, with filter, right assignment of operator are always values (simple ?) in the final query
+ * With the comparaison syntax of check constraint, we want to be able to have right assignent of field
+ * e.g. : filter = {date_end : {_gt : "$FIELD(date_start)" }} should transform into "?? > ??"
+ * To ensure this :
+ *      - we formulate the where clause
+ *      - we change every simple ? to a double ?? when the "?" is for a binding of form $FIELD(...)
+ *
+ * The result is escaped for knex (`\?`), so it must be interpolated into a `knex.raw` template
+ * instead of being executed on its own.
+ */
+export function renderFilterAsSql(knex: Knex, schema: SchemaOverview, collection: string, filter: Filter): string {
 	const cloneFilter = cloneDeep(filter);
 	const queryBuilder = knex.queryBuilder();
 	addWhereClauses(knex, schema, queryBuilder, cloneFilter, collection, Object.create(null));
@@ -40,8 +46,13 @@ export async function formulateCheckClause(knex: Knex, collection: string, filte
 	});
 
 	const whereString = knex.raw(whereClause, checkBindings).toQuery();
-	let checkClause = whereString.match(/where\s+(.+)/i)![1]!;
-	checkClause = checkClause.replaceAll('?', '\\?');
+	const clause = whereString.match(/where\s+(.+)/i)![1]!;
+
+	return clause.replaceAll('?', '\\?');
+}
+
+export async function formulateCheckClause(knex: Knex, collection: string, filter: Filter, schema: SchemaOverview) {
+	const checkClause = renderFilterAsSql(knex, schema, collection, filter);
 
 	await knex.schema.table(collection, (table) => {
 		table.check(checkClause, undefined, 'directus_constraint');

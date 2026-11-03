@@ -10,6 +10,7 @@ import MSSQLSchemaInspector from './dialects/mssql.js';
 
 export * from './types/column.js';
 export * from './types/foreign-key.js';
+export * from './types/index.js';
 export * from './types/table.js';
 export * from './types/overview.js';
 export * from './types/schema-inspector.js';

@@ -24,8 +24,8 @@ Configuration > Overview
 
 Remember, you will have full access to manage your database using SQL. d9 will mirror any changes. You can also
 configure your data model programmatically via the API. To learn more, see our API documentation on
-[Collections](/reference/system/collections), [Fields](/reference/system/fields), and
-[Relations](/reference/system/relations).
+[Collections](/reference/system/collections), [Fields](/reference/system/fields),
+[Relations](/reference/system/relations), and [Indexes](/reference/system/indexes).
 
 :::
 

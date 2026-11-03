@@ -14,8 +14,14 @@ export class NotificationsService extends ItemsService {
 
 	constructor(options: AbstractServiceOptions) {
 		super('directus_notifications', options);
-		this.usersService = new UsersService({ schema: this.schema });
-		this.mailService = new MailService({ schema: this.schema, accountability: this.accountability });
+
+		this.usersService = new UsersService({ knex: this.knex, schema: this.schema });
+
+		this.mailService = new MailService({
+			knex: this.knex,
+			schema: this.schema,
+			accountability: this.accountability,
+		});
 	}
 
 	override async createOne(data: Partial<Notification>, opts?: MutationOptions): Promise<PrimaryKey> {
