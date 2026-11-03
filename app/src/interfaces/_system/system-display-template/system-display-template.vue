@@ -39,7 +39,7 @@ export default defineComponent({
 			type: String,
 			default: null,
 		},
-		// Offers `{{$lang}}`, the content language being edited in a translations field, e.g. for the preview URL
+		/** Offers `{{$lang}}`, the content language being edited in a translations field, e.g. for the preview URL */
 		injectLanguageField: {
 			type: Boolean,
 			default: false,

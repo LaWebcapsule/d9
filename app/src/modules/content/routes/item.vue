@@ -411,6 +411,7 @@ function useLivePreview() {
 	let popupWindow: Window | null = null;
 	let popupClosedTimer: ReturnType<typeof setInterval> | undefined;
 
+	// Reopening the named popup when the URL changes loads the new URL there, e.g. for another language
 	watch(
 		[livePreviewMode, previewURL],
 		([mode, url]) => {
@@ -446,12 +447,18 @@ function useLivePreview() {
 		{ immediate: true }
 	);
 
-	// The preview shows the saved item
 	watch(saving, async (newVal, oldVal) => {
-		if (newVal === true || oldVal === false) return;
+		if (!oldVal || newVal) return;
+
+		// The preview shows the saved item
+		const urlBefore = previewURL.value;
 
 		try {
 			await fetchPreviewValues();
+
+			// A new URL is loaded by the preview itself, and by the popup reopened above
+			if (previewURL.value !== urlBefore) return;
+
 			window.refreshLivePreview?.(previewURL.value);
 			popupWindow?.refreshLivePreview?.(previewURL.value);
 		} catch {

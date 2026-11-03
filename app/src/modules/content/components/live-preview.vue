@@ -32,14 +32,14 @@
 					:value="displayWidth"
 					class="width"
 					:disabled="fullscreen"
-					@input="width = Number(($event as any).target.value)"
+					@input="width = Number(($event.target as HTMLInputElement).value)"
 				/>
 				<v-icon x-small name="close" />
 				<input
 					:value="displayHeight"
 					class="height"
 					:disabled="fullscreen"
-					@input="height = Number(($event as any).target.value)"
+					@input="height = Number(($event.target as HTMLInputElement).value)"
 				/>
 				<v-select
 					v-model="zoom"
@@ -172,9 +172,7 @@ function refresh(url: string | null) {
 
 	isRefreshing.value = true;
 
-	// this is technically a self-assignment, but it works to refresh the iframe
-	const newSrc = url || frameEl.value.src;
-	frameEl.value.src = newSrc;
+	frameEl.value.src = url || frameEl.value.src;
 }
 
 function onIframeLoad() {
@@ -208,12 +206,6 @@ onBeforeUnmount(() => {
 	}
 });
 </script>
-
-<style>
-#split-content {
-	background-color: var(--background-subdued);
-}
-</style>
 
 <style scoped lang="scss">
 .live-preview {

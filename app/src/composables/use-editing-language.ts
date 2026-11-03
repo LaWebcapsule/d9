@@ -1,4 +1,4 @@
-import { computed, reactive, Ref, unref } from 'vue';
+import { computed, reactive, Ref } from 'vue';
 
 /**
  * Content language being edited in the translations interface of an item, by `collection:primaryKey`
@@ -20,11 +20,11 @@ export function setEditingLanguage(
 }
 
 export function useEditingLanguage(
-	collection: Ref<string | null | undefined> | string,
+	collection: Ref<string | null | undefined>,
 	primaryKey: Ref<string | number | null | undefined>
 ) {
 	return computed(() => {
-		const key = getKey(unref(collection), primaryKey.value);
+		const key = getKey(collection.value, primaryKey.value);
 		return key ? editingLanguages[key] : undefined;
 	});
 }

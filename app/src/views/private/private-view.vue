@@ -475,6 +475,7 @@ function openSidebar(event: PointerEvent) {
 
 		#split-content {
 			flex-grow: 1;
+			background-color: var(--background-subdued);
 			min-width: 0;
 			height: 100%;
 			overflow: auto;
