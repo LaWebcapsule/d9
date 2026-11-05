@@ -233,10 +233,54 @@ A collection that only contains one single item. For example, a website's **Abou
 
 The preview is loaded in an iframe, which d9's default Content Security Policy only allows for the d9 domain. To preview
 pages of another domain, allow it with the `CONTENT_SECURITY_POLICY_DIRECTIVES__FRAME_SRC` environment variable, for
-example `CONTENT_SECURITY_POLICY_DIRECTIVES__FRAME_SRC="'self',https://example.com"`. Your website must also allow being
-framed by d9 (`frame-ancestors` / `X-Frame-Options`).
+example `CONTENT_SECURITY_POLICY_DIRECTIVES__FRAME_SRC="'self',blob:,https://example.com"`.
+
+This replaces the default (`'self' blob:`), so keep `'self'` and `blob:`. Never use `*` or `https:`, which would allow
+framing any website.
 
 :::
+
+#### Allow Framing on Your Website
+
+Your website must allow being framed by d9: send `Content-Security-Policy: frame-ancestors 'self' https://d9.example.com`
+and no `X-Frame-Options` header (it can't allow another domain). For example with Caddy:
+
+```caddy
+header {
+	-X-Frame-Options
+	Content-Security-Policy "frame-ancestors 'self' https://d9.example.com"
+}
+```
+
+#### Websites Behind Basic Auth
+
+Browsers don't send credentials from the URL (`https://user:pass@…`) in an iframe and may not show a login prompt.
+Instead, let the preview through with a secret token in the Preview URL, e.g.
+`https://example.com/{{slug}}?preview_token=<secret>`. The web server skips Basic Auth when the token is present and sets
+a cookie, so that assets and links inside the preview work too. For example with Caddy:
+
+```caddy
+@preview_query query preview_token=<secret>
+@preview_cookie header Cookie *preview=<secret>*
+
+route {
+	handle @preview_query {
+		header Set-Cookie "preview=<secret>; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=43200"
+		reverse_proxy localhost:3000
+	}
+	handle @preview_cookie {
+		reverse_proxy localhost:3000
+	}
+	handle {
+		basic_auth { … }
+		reverse_proxy localhost:3000
+	}
+}
+```
+
+`SameSite=Lax` works when d9 and the website share a domain (e.g. `cms.example.com` and `www.example.com`). On different
+domains use `SameSite=None`, though some browsers block such cookies in iframes. The token is stored in the Preview URL,
+so anyone who can see the collection's settings can see it.
 
 ### Archive
 
