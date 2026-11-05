@@ -4,6 +4,7 @@ import { User } from '@wbce-d9/types';
 import { userName } from '@/utils/user-name';
 import { merge } from 'lodash';
 import { defineStore } from 'pinia';
+import type { RouteLocationNormalized } from 'vue-router';
 
 type ShareUser = {
 	share: string;
@@ -72,13 +73,16 @@ export const useUserStore = defineStore({
 				// Do nothing
 			}
 		},
-		async trackPage(page: string) {
+		async trackPage(to: RouteLocationNormalized) {
+			// The full screen live preview has no navigation, so it must not become the page opened after login
+			if (to.path.endsWith('/preview')) return;
+
 			const latencyStore = useLatencyStore();
 
 			const start = performance.now();
 
 			await api.patch(`/users/me/track/page`, {
-				last_page: page,
+				last_page: to.fullPath,
 			});
 
 			const end = performance.now();
@@ -89,7 +93,7 @@ export const useUserStore = defineStore({
 			});
 
 			if (this.currentUser && !('share' in this.currentUser)) {
-				this.currentUser.last_page = page;
+				this.currentUser.last_page = to.fullPath;
 			}
 		},
 	},
