@@ -242,45 +242,16 @@ framing any website.
 
 #### Allow Framing on Your Website
 
-Your website must allow being framed by d9: send `Content-Security-Policy: frame-ancestors 'self' https://d9.example.com`
-and no `X-Frame-Options` header (it can't allow another domain). For example with Caddy:
+Your website must allow framing by d9: add `https://d9.example.com` to the `frame-ancestors` directive of its
+`Content-Security-Policy` header, and don't send an `X-Frame-Options` header.
 
-```caddy
-header {
-	-X-Frame-Options
-	Content-Security-Policy "frame-ancestors 'self' https://d9.example.com"
-}
-```
+:::warning Websites Behind Basic Auth
 
-#### Websites Behind Basic Auth
+Don't put credentials in the Preview URL (`https://user:password@…`): anyone with read access to the collection can see
+them, and Chrome blocks them in the preview frame. Instead, let the preview through on your web server or reverse proxy,
+for example by skipping Basic Auth for a secret preview token or cookie, or for requests from your network or VPN.
 
-Browsers don't send credentials from the URL (`https://user:pass@…`) in an iframe and may not show a login prompt.
-Instead, let the preview through with a secret token in the Preview URL, e.g.
-`https://example.com/{{slug}}?preview_token=<secret>`. The web server skips Basic Auth when the token is present and sets
-a cookie, so that assets and links inside the preview work too. For example with Caddy:
-
-```caddy
-@preview_query query preview_token=<secret>
-@preview_cookie header Cookie *preview=<secret>*
-
-route {
-	handle @preview_query {
-		header Set-Cookie "preview=<secret>; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=43200"
-		reverse_proxy localhost:3000
-	}
-	handle @preview_cookie {
-		reverse_proxy localhost:3000
-	}
-	handle {
-		basic_auth { … }
-		reverse_proxy localhost:3000
-	}
-}
-```
-
-`SameSite=Lax` works when d9 and the website share a domain (e.g. `cms.example.com` and `www.example.com`). On different
-domains use `SameSite=None`, though some browsers block such cookies in iframes. The token is stored in the Preview URL,
-so anyone who can see the collection's settings can see it.
+:::
 
 ### Archive
 

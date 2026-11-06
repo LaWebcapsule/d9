@@ -172,6 +172,10 @@ export default defineModule({
 			path: ':collection/:primaryKey/preview',
 			component: Preview,
 			props: true,
+			// The full screen preview has no navigation, so it must not become the page opened after login
+			meta: {
+				track: false,
+			},
 		},
 		{
 			name: 'content-item-not-found',

@@ -74,9 +74,6 @@ export const useUserStore = defineStore({
 			}
 		},
 		async trackPage(to: RouteLocationNormalized) {
-			// The full screen live preview has no navigation, so it must not become the page opened after login
-			if (to.path.endsWith('/preview')) return;
-
 			const latencyStore = useLatencyStore();
 
 			const start = performance.now();

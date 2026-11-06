@@ -17,6 +17,13 @@ const nonPublicRoutes = ['first', 'second', 'third'].map((route) => ({
 	meta: {}, // make sure 'meta.public' is not set so that they are tracked
 }));
 
+const untrackedRoute = {
+	name: 'untracked',
+	path: '/untracked',
+	component: testComponent,
+	meta: { track: false },
+};
+
 let router: Router;
 const authRefresh = vi.fn();
 const userStoreTrackPage = vi.fn();
@@ -57,7 +64,7 @@ beforeEach(async () => {
 
 	router = createRouter({
 		history: createMemoryHistory(), // intentionally use memory for tests
-		routes: [...importedRouter.defaultRoutes, ...nonPublicRoutes],
+		routes: [...importedRouter.defaultRoutes, ...nonPublicRoutes, untrackedRoute],
 	});
 
 	router.beforeEach(importedRouter.onBeforeEach);
@@ -137,5 +144,20 @@ describe('onAfterEach', () => {
 		// advance past the trackTimeout duration
 		vi.advanceTimersByTime(1000);
 		expect(userStoreTrackPage).toHaveBeenCalledOnce();
+	});
+
+	test('should not trackPage for routes with meta.track set to false', async () => {
+		router.push('/');
+		await router.isReady();
+
+		// mock authenticated to prevent redirection back to login page
+		const appStore = useAppStore();
+		appStore.hydrated = true;
+		appStore.authenticated = true;
+
+		await router.push(untrackedRoute.path);
+
+		vi.advanceTimersByTime(1000);
+		expect(userStoreTrackPage).not.toHaveBeenCalled();
 	});
 });

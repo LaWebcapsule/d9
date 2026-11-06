@@ -166,16 +166,5 @@ describe('actions', () => {
 
 			expect((userStore.currentUser as User).last_page).toBe(page);
 		});
-
-		test('should not set last_page for the full screen live preview', async () => {
-			const latencyStore = useLatencyStore();
-			vi.spyOn(latencyStore, 'save').mockReturnValue();
-
-			const userStore = useUserStore();
-			await userStore.hydrate();
-			await userStore.trackPage(route('/content/articles/1/preview'));
-
-			expect((userStore.currentUser as User).last_page).toBe(null);
-		});
 	});
 });
