@@ -1,7 +1,12 @@
 <template>
 	<div class="translations" :class="{ split: splitViewEnabled }">
-		<div class="primary" :class="splitViewEnabled ? 'half' : 'full'">
-			<language-select v-if="showLanguageSelect" v-model="firstLang" :items="languageOptions">
+		<div class="primary" :class="splitViewEnabled ? 'half' : 'full'" @focusin="activeSide = 'first'">
+			<language-select
+				v-if="showLanguageSelect"
+				v-model="firstLang"
+				:items="languageOptions"
+				@update:model-value="activeSide = 'first'"
+			>
 				<template #append>
 					<v-icon
 						v-if="splitViewAvailable && !splitViewEnabled"
@@ -28,12 +33,22 @@
 				:direction="languageOptions.find((lang) => lang.value === firstLang)?.direction"
 				:autofocus="autofocus"
 				inline
-				@update:model-value="updateValue($event, firstLang)"
+				@update:model-value="updateValue($event, firstLang, 'first')"
 			/>
 			<v-divider />
 		</div>
-		<div v-if="splitViewEnabled" class="secondary" :class="splitViewEnabled ? 'half' : 'full'">
-			<language-select v-model="secondLang" :items="languageOptions" secondary>
+		<div
+			v-if="splitViewEnabled"
+			class="secondary"
+			:class="splitViewEnabled ? 'half' : 'full'"
+			@focusin="activeSide = 'second'"
+		>
+			<language-select
+				v-model="secondLang"
+				:items="languageOptions"
+				secondary
+				@update:model-value="activeSide = 'second'"
+			>
 				<template #append>
 					<v-icon
 						v-tooltip="t('interfaces.translations.toggle_split_view')"
@@ -58,7 +73,7 @@
 				:direction="languageOptions.find((lang) => lang.value === secondLang)?.direction"
 				:model-value="secondItem"
 				inline
-				@update:model-value="updateValue($event, secondLang)"
+				@update:model-value="updateValue($event, secondLang, 'second')"
 			/>
 			<v-divider />
 		</div>
@@ -70,6 +85,7 @@ import api from '@/api';
 import VDivider from '@/components/v-divider.vue';
 import VForm from '@/components/v-form/v-form.vue';
 import VIcon from '@/components/v-icon/v-icon.vue';
+import { setEditingLanguage } from '@/composables/use-editing-language';
 import { useRelationM2M } from '@/composables/use-relation-m2m';
 import { DisplayItem, RelationQueryMultiple, useRelationMultiple } from '@/composables/use-relation-multiple';
 import { useRelationPermissionsM2M } from '@/composables/use-relation-permissions';
@@ -80,7 +96,7 @@ import { usePermissionsStore } from '@/stores/permissions';
 import { unexpectedError } from '@/utils/unexpected-error';
 import { toArray } from '@wbce-d9/utils';
 import { cloneDeep, isNil } from 'lodash';
-import { computed, ref, toRefs, watch } from 'vue';
+import { computed, onBeforeUnmount, ref, toRefs, watch, watchEffect } from 'vue';
 import { useI18n } from 'vue-i18n';
 import LanguageSelect from './language-select.vue';
 
@@ -130,8 +146,13 @@ const splitView = ref(false);
 const firstLang = ref<string>();
 const secondLang = ref<string>();
 
+// Side of the split view last focused or edited: its language is the one being edited, e.g. for the live preview
+const activeSide = ref<'first' | 'second'>('first');
+
 watch(splitView, (splitViewEnabled) => {
 	const lang = languageOptions.value;
+
+	activeSide.value = 'first';
 
 	if (splitViewEnabled && secondLang.value === firstLang.value) {
 		secondLang.value = lang[0].value === firstLang.value ? lang[1].value : lang[0].value;
@@ -183,7 +204,9 @@ function getItemWithLang<T extends Record<string, any>>(items: T[], lang: string
 	return items.find((item) => item?.[langField]?.[relatedPKField] === lang);
 }
 
-function updateValue(item: DisplayItem, lang: string | undefined) {
+function updateValue(item: DisplayItem, lang: string | undefined, side: 'first' | 'second') {
+	activeSide.value = side;
+
 	const info = relationInfo.value;
 	if (!info) return;
 
@@ -224,6 +247,14 @@ const splitViewAvailable = computed(() => {
 const splitViewEnabled = computed(() => {
 	return splitViewAvailable.value && splitView.value;
 });
+
+const activeLang = computed(() =>
+	splitViewEnabled.value && activeSide.value === 'second' ? secondLang.value : firstLang.value
+);
+
+watchEffect(() => setEditingLanguage(collection.value, primaryKey.value, activeLang.value));
+
+onBeforeUnmount(() => setEditingLanguage(collection.value, primaryKey.value, undefined));
 
 const showLanguageSelect = computed(() => {
 	return languageOptions.value.length > 1;

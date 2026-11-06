@@ -32,6 +32,10 @@ Short description displayed in the Admin App.
 `display_template` **string**\
 How items in this collection should be displayed when viewed relationally in the Admin App.
 
+`preview_url` **string**\
+URL template of the item's page on your website, shown in the [Live Preview](/app/content/items#live-preview) of the Admin
+App.
+
 `hidden` **boolean**\
 Whether or not this collection is hidden in the Admin App.
 
@@ -106,6 +110,7 @@ well. If a primary key field is omitted, the request will auto-generate an auto-
 		"icon": "article",
 		"note": "Blog posts",
 		"display_template": "{{ title }}",
+		"preview_url": "https://example.com/blog/{{ slug }}",
 		"hidden": false,
 		"singleton": false,
 		"translations": [
