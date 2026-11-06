@@ -81,3 +81,7 @@ fields:
         - collection
         - item
     width: half
+
+  - field: session_id
+    hidden: true
+    width: half
