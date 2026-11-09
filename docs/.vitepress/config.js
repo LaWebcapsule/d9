@@ -398,6 +398,10 @@ function sidebar() {
 					text: 'Folders',
 				},
 				{
+					link: '/reference/system/indexes',
+					text: 'Indexes',
+				},
+				{
 					link: '/reference/system/notifications',
 					text: 'Notifications',
 				},

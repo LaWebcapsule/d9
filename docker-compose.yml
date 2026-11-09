@@ -78,7 +78,8 @@ services:
       - 5100:5432
 
   mysql:
-    image: mysql:8
+    # MySQL 8.4 removed --default-authentication-plugin; Directus 9 still uses the mysql driver.
+    image: mysql:8.0
     command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: secret

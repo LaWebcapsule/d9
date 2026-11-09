@@ -152,6 +152,12 @@ They are Font Awesome 5's brands icons. Full list of icons
 icons, make sure to use underscores, such as `blogger_b` for
 [blogger-b](https://fontawesome.com/v5.15/icons/blogger-b?style=brands) icon.
 
+## Indexes
+
+Indexes are database structures that speed up reads on one or more fields, at the cost of storage and write speed. d9
+lists every index of a collection and lets admins create and drop plain and partial indexes; primary, unique and
+foreign-key indexes are read-only. To learn more, see [Indexes](/app/data-model/collections#indexes).
+
 ## Interfaces
 
 Interfaces determine how you view or interact with a field. In most cases, they offer some sort of input tailored to

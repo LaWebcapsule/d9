@@ -2,6 +2,7 @@ import type { Knex } from 'knex';
 import type { Table } from './table.js';
 import type { Column } from './column.js';
 import type { ForeignKey } from './foreign-key.js';
+import type { Index } from './index.js';
 import type { SchemaOverview } from './overview.js';
 
 export interface SchemaInspector {
@@ -26,6 +27,8 @@ export interface SchemaInspector {
 	primary(table: string): Promise<string | null>;
 
 	foreignKeys(table?: string): Promise<ForeignKey[]>;
+
+	indexes(table?: string): Promise<Index[]>;
 
 	// Not in MySQL
 	withSchema?(schema: string): void;

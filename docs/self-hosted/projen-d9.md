@@ -220,8 +220,9 @@ This writes the schema to `sql/schema.sql`, the configuration tables to
 shared files to the intermediate storage. Add your reference tables to
 `sql/tables_to_dump.txt`, one per line. Commit `sql/` and `permissions/`.
 
-`sql/schema.sql` can also be edited by hand, for instance to add indexes the d9 app
-cannot create. See [Edit the Schema with SQL](/guides/migration/projen#edit-the-schema-with-sql).
+`sql/schema.sql` can also be edited by hand, for instance to add index types the index panel doesn't create. Plain and
+partial indexes created from the app are captured by `save` too. See
+[Edit the Schema with SQL](/guides/migration/projen#edit-the-schema-with-sql).
 
 ### Apply a schema
 

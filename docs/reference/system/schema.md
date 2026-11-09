@@ -8,6 +8,13 @@ pageClass: page-reference
 
 > Retrieve and update the schema of an instance.
 
+::: warning Indexes are not part of a schema snapshot
+These endpoints cover collections, fields and relations only: **indexes are not included**. They are not created,
+altered or dropped by `/schema/diff` or `/schema/apply`. With the projen workflow, `d9-plumbing save` captures the full
+database schema, **indexes included**, in `sql/schema.sql`; otherwise, recreate the indexes on the target. See
+[Indexes](/reference/system/indexes).
+:::
+
 ## Retrieve Schema Snapshot
 
 Retrieve the current schema. This endpoint is only available to admin users.
