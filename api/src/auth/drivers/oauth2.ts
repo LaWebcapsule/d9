@@ -118,7 +118,8 @@ export class OAuth2AuthDriver extends BaseOAuthDriver {
 		try {
 			const codeChallenge = await oidc.calculatePKCECodeChallenge(payload['codeVerifier']);
 
-			const callbackUrl = new URL(payload['callbackPath'], this.redirectUrl);
+			const callbackUrl = new URL(this.redirectUrl);
+			callbackUrl.search = payload['callbackSearch'] ?? '';
 
 			tokenSet = await oidc.authorizationCodeGrant(this.client, callbackUrl, {
 				pkceCodeVerifier: payload['codeVerifier'],
@@ -234,7 +235,7 @@ export function createOAuth2AuthRouter(providerName: string): Router {
 
 			try {
 				authResponse = await authenticationService.login(providerName, {
-					callbackPath: req.originalUrl,
+					callbackSearch: new URL(req.originalUrl, 'https://relative.invalid').search,
 					code: req.query['code'],
 					codeVerifier: verifier,
 					state: req.query['state'],

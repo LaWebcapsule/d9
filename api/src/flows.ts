@@ -41,6 +41,12 @@ const redactLogs = fastRedact({
 	serialize: false,
 });
 
+const redactRequestCredentials = fastRedact({
+	censor: '--redacted--',
+	paths: ['headers.authorization', 'headers.cookie', 'query.access_token'],
+	serialize: false,
+});
+
 export function getFlowManager(): FlowManager {
 	if (flowManager) {
 		return flowManager;
@@ -445,10 +451,13 @@ class FlowManager {
 	}
 
 	/**
-	 * Return a copy of the event data whose payload has its concealed fields masked, as they would be on read.
-	 * The data is returned as is when there is nothing to conceal.
+	 * Return a copy of the trigger data with its secrets masked: the concealed fields of an event payload, as they
+	 * would be on read, and the credentials (authorization header, cookies, access_token query parameter) of a
+	 * webhook or manual request. The data is returned as is when there is nothing to conceal.
 	 */
 	private async concealEventPayload(flow: Flow, data: unknown, knex: Knex, schema: SchemaOverview): Promise<unknown> {
+		if (flow.trigger === 'webhook' || flow.trigger === 'manual') return redactRequestCredentials(cloneDeep(data));
+
 		if (flow.trigger !== 'event') return data;
 
 		const { collection, payload } = data as { collection: string; payload: Record<string, unknown> };

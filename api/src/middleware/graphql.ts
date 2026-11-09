@@ -5,6 +5,8 @@ import { getOperationAST, parse, Source } from 'graphql';
 import { InvalidPayloadException, InvalidQueryException, MethodNotAllowedException } from '../exceptions/index.js';
 import type { GraphQLParams } from '../types/index.js';
 import asyncHandler from '../utils/async-handler.js';
+import { getGraphQLQueryCost } from '../utils/get-graphql-query-cost.js';
+import { consumeRateLimit } from './rate-limiter-ip.js';
 
 export const parseGraphQL: RequestHandler = asyncHandler(async (req, res, next) => {
 	if (req.method !== 'GET' && req.method !== 'POST') {
@@ -60,6 +62,14 @@ export const parseGraphQL: RequestHandler = asyncHandler(async (req, res, next) 
 	// Prevent caching responses when mutations are made
 	if (operationAST?.operation === 'mutation') {
 		res.locals['cache'] = false;
+	}
+
+	// A GraphQL request costs one rate limit point per root field. The request itself already consumed one point,
+	// so only the remaining cost is consumed here. Does nothing when the rate limiter is disabled.
+	const cost = getGraphQLQueryCost(document, operationAST);
+
+	if (cost > 1) {
+		await consumeRateLimit(req, res, cost - 1);
 	}
 
 	res.locals['graphqlParams'] = {

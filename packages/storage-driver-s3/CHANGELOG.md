@@ -1,5 +1,16 @@
 # @wbce-d9/storage-driver-s3
 
+## 10.0.6
+
+### Patch Changes
+
+- [#475](https://github.com/LaWebcapsule/d9/pull/475)
+  [`7914db7`](https://github.com/LaWebcapsule/d9/commit/7914db700b5134d019074a18b958480d5819e0fd) - security: add a
+  metadata-only asset resolution for HEAD requests, only open the storage read stream once an image (CVE-2025-30350,
+  GHSA-rv78-qqrq-73m5, CVE-2025-30225, GHSA-j8xj-7jff-46mx) transformation has been validated, and release per-read S3
+  clients when their stream closes, preventing repeated requests from exhausting the S3 connections and making all
+  assets unavailable (GHSA-rv78-qqrq-73m5, GHSA-j8xj-7jff-46mx)
+
 ## 10.0.5
 
 ### Patch Changes

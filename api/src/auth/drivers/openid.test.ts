@@ -6,6 +6,7 @@ import request from 'supertest';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import type { SchemaOverview } from '@wbce-d9/types';
 import { getAuthProvider } from '../../auth.js';
+import env from '../../env.js';
 import { OpenIDAuthDriver, createOpenIDAuthRouter } from './openid.js';
 
 vi.mock('../../env', () => {
@@ -43,6 +44,11 @@ vi.mock('openid-client', () => ({
 		(_client: unknown, params: Record<string, string>) =>
 			new URL(`https://idp.example/authorize?${new URLSearchParams(params).toString()}`)
 	),
+	authorizationCodeGrant: vi.fn(async () => ({
+		access_token: 'access-token',
+		refresh_token: 'refresh-token',
+		claims: () => ({ sub: 'user-1', email: 'user@example.com' }),
+	})),
 }));
 
 const SERVER_REDIRECT_URI = 'https://app.example/auth/login/myidp/callback';
@@ -110,6 +116,63 @@ describe('OpenIDAuthDriver.generateAuthUrl', () => {
 	});
 });
 
+describe('OpenIDAuthDriver.getTokenSetAndUserInfo', () => {
+	const originalPublicUrl = env['PUBLIC_URL'];
+
+	afterEach(() => {
+		env['PUBLIC_URL'] = originalPublicUrl;
+	});
+
+	test('exchanges the code with the same redirect_uri as the authorization request, path prefix included', async () => {
+		// PUBLIC_URL carries the prefix; the callback only contributes the query string
+		env['PUBLIC_URL'] = 'https://app.example/cms/';
+		vi.mocked(oidc.authorizationCodeGrant).mockClear();
+
+		const driver = createDriver();
+
+		await driver.getTokenSetAndUserInfo({
+			callbackSearch: '?code=the-code&state=STATE',
+			codeVerifier: 'code-verifier',
+		});
+
+		const callbackUrl = vi.mocked(oidc.authorizationCodeGrant).mock.calls[0]![1] as URL;
+
+		expect(callbackUrl.href).toBe('https://app.example/cms/auth/login/myidp/callback?code=the-code&state=STATE');
+	});
+
+	test('keeps the configured redirect_uri when the callback request has no query string', async () => {
+		env['PUBLIC_URL'] = 'https://app.example/cms/';
+		vi.mocked(oidc.authorizationCodeGrant).mockClear();
+
+		const driver = createDriver();
+
+		await driver.getTokenSetAndUserInfo({
+			callbackSearch: '',
+			codeVerifier: 'code-verifier',
+		});
+
+		const callbackUrl = vi.mocked(oidc.authorizationCodeGrant).mock.calls[0]![1] as URL;
+
+		// no trailing "?" and no leftover fragment from the request
+		expect(callbackUrl.href).toBe('https://app.example/cms/auth/login/myidp/callback');
+	});
+
+	test('keeps the previous behaviour when PUBLIC_URL has no path prefix', async () => {
+		vi.mocked(oidc.authorizationCodeGrant).mockClear();
+
+		const driver = createDriver();
+
+		await driver.getTokenSetAndUserInfo({
+			callbackSearch: '?code=the-code&state=STATE',
+			codeVerifier: 'code-verifier',
+		});
+
+		const callbackUrl = vi.mocked(oidc.authorizationCodeGrant).mock.calls[0]![1] as URL;
+
+		expect(callbackUrl.href).toBe('https://app.example/auth/login/myidp/callback?code=the-code&state=STATE');
+	});
+});
+
 describe('createOpenIDAuthRouter GET / (filters reserved query params)', () => {
 	function app() {
 		const instance = express();
@@ -157,6 +220,19 @@ describe('createOpenIDAuthRouter GET /callback (preserves PR #163 behavior)', ()
 
 		expect(res.status).toBe(302);
 		expect(res.headers['location']).toBe('https://app.example/admin/login?reason=INVALID_CREDENTIALS');
+	});
+
+	test('keeps the PUBLIC_URL path prefix in the login redirect', async () => {
+		env['PUBLIC_URL'] = 'https://app.example/cms/';
+
+		try {
+			const res = await request(app()).get('/auth/login/myidp/callback?state=somestate');
+
+			expect(res.status).toBe(302);
+			expect(res.headers['location']).toBe('https://app.example/cms/admin/login?reason=INVALID_CREDENTIALS');
+		} finally {
+			env['PUBLIC_URL'] = 'https://app.example';
+		}
 	});
 
 	test('redirects to an allowed redirect target with reason=INVALID_CREDENTIALS on cookie failure', async () => {

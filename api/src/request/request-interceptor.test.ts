@@ -12,7 +12,19 @@ import { validateIP } from './validate-ip.js';
 
 vi.mock('axios');
 vi.mock('node:net');
-vi.mock('node:url');
+
+vi.mock('node:url', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('node:url')>();
+
+	// Keep a working URL for modules evaluated at import time; individual tests override it below
+	return {
+		...actual,
+		URL: vi.fn(function (this: unknown, ...args: ConstructorParameters<typeof URL>) {
+			return new actual.URL(...args);
+		}) as unknown as typeof actual.URL,
+	};
+});
+
 vi.mock('node:dns/promises');
 vi.mock('./validate-ip');
 vi.mock('../logger');

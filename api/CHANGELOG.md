@@ -1,5 +1,58 @@
 # @wbce-d9/api
 
+## 12.7.4
+
+### Patch Changes
+
+- [#474](https://github.com/LaWebcapsule/d9/pull/474)
+  [`6c59127`](https://github.com/LaWebcapsule/d9/commit/6c59127a964524cddf757f7bafd2f21861a76f39) - Fix OpenID/OAuth2
+  login and cookie paths when `PUBLIC_URL` contains a path prefix (redirect_uri mismatch and hard-coded cookie scopes)
+
+## 12.7.3
+
+### Patch Changes
+
+- [#483](https://github.com/LaWebcapsule/d9/pull/483)
+  [`aacdd03`](https://github.com/LaWebcapsule/d9/commit/aacdd039937e19e2cbcecc6924a965616f884736) - security: bump
+  nodemailer to 10.2.1 (GHSA-8c8m-p3m8-cjg8, GHSA-m943-m63m-w62w, GHSA-85x2-q946-cp5h)
+
+- [#479](https://github.com/LaWebcapsule/d9/pull/479)
+  [`41ead8b`](https://github.com/LaWebcapsule/d9/commit/41ead8bd2633f9413c73935c3fba029845e0eb80) - security: bump
+  sanitize-html to 2.18.1 (GHSA-cv27-6wvh-8x7j / CVE-2026-113661, GHSA-x3q4-9hxx-gx8m / CVE-2026-113654,
+  GHSA-374f-7chj-9948 / CVE-2026-113657)
+
+- [#465](https://github.com/LaWebcapsule/d9/pull/465)
+  [`ff27c30`](https://github.com/LaWebcapsule/d9/commit/ff27c30fa40a919dfe24a9968bd06eeb9b68a965) - security: the
+  `authorization` and `cookie` headers and the `access_token` query parameter of the request that triggers a
+  (GHSA-f24x-rm6g-3w5v) webhook or manual flow are redacted in the log operation and in the flow logs, so that admins
+  can't hijack the session of the user (GHSA-f24x-rm6g-3w5v)
+
+- [#476](https://github.com/LaWebcapsule/d9/pull/476)
+  [`86ade75`](https://github.com/LaWebcapsule/d9/commit/86ade753e889713fd59b543b482150a655a64cf2) - security: when the
+  rate limiter is enabled, a GraphQL request consumes one point per root field of the executed (GHSA-ph52-67fq-75wj,
+  CVE-2026-35441) operation instead of one point per request, so repeating expensive reads under aliases with different
+  arguments counts against the client IP's budget (GHSA-ph52-67fq-75wj). Raise `RATE_LIMITER_POINTS` if your clients
+  send documents with many root fields.
+
+- [#468](https://github.com/LaWebcapsule/d9/pull/468)
+  [`cfb05b8`](https://github.com/LaWebcapsule/d9/commit/cfb05b8fc5bb00d15b00ed385caa848f694b2ccf) - security: a GraphQL
+  query field returning a scalar, repeated under several aliases with the same arguments, is only (GHSA-6q22-g298-grjh)
+  resolved once per request, to prevent amplifying expensive resolvers such as `server_health` (GHSA-6q22-g298-grjh)
+
+- [#475](https://github.com/LaWebcapsule/d9/pull/475)
+  [`7914db7`](https://github.com/LaWebcapsule/d9/commit/7914db700b5134d019074a18b958480d5819e0fd) - security: add a
+  metadata-only asset resolution for HEAD requests, only open the storage read stream once an image (CVE-2025-30350,
+  GHSA-rv78-qqrq-73m5, CVE-2025-30225, GHSA-j8xj-7jff-46mx) transformation has been validated, and release per-read S3
+  clients when their stream closes, preventing repeated requests from exhausting the S3 connections and making all
+  assets unavailable (GHSA-rv78-qqrq-73m5, GHSA-j8xj-7jff-46mx)
+- Updated dependencies [[`aacdd03`](https://github.com/LaWebcapsule/d9/commit/aacdd039937e19e2cbcecc6924a965616f884736),
+  [`be77810`](https://github.com/LaWebcapsule/d9/commit/be7781069ea8af02a7d77b7fa6bd089f7254a107),
+  [`7914db7`](https://github.com/LaWebcapsule/d9/commit/7914db700b5134d019074a18b958480d5819e0fd)]:
+  - @wbce-d9/storage-driver-cloudinary@10.0.7
+  - @wbce-d9/update-check@10.0.5
+  - @wbce-d9/app@11.3.1
+  - @wbce-d9/storage-driver-s3@10.0.6
+
 ## 12.7.2
 
 ### Patch Changes

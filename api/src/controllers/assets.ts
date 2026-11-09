@@ -170,7 +170,13 @@ router.get(
 			}
 		}
 
-		const { stream, file, stat } = await service.getAsset(id, transformation, range);
+		const isHead = req.method.toLowerCase() === 'head';
+
+		const asset = isHead
+			? await service.getAssetInfo(id, transformation, range)
+			: await service.getAsset(id, transformation, range);
+
+		const { stream, file, stat } = asset;
 
 		const filename = req.params['filename'] ?? file.filename_download;
 		res.attachment(filename);
@@ -218,11 +224,7 @@ router.get(
 			res.setHeader('Content-Disposition', contentDisposition(filename, { type: 'inline' }));
 		}
 
-		if (req.method.toLowerCase() === 'head') {
-			res.status(200);
-			res.setHeader('Accept-Ranges', 'bytes');
-			res.setHeader('Content-Length', stat.size);
-
+		if (!stream) {
 			return res.end();
 		}
 

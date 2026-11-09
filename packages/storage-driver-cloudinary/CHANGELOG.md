@@ -1,5 +1,14 @@
 # @wbce-d9/storage-driver-cloudinary
 
+## 10.0.7
+
+### Patch Changes
+
+- [#483](https://github.com/LaWebcapsule/d9/pull/483)
+  [`aacdd03`](https://github.com/LaWebcapsule/d9/commit/aacdd039937e19e2cbcecc6924a965616f884736) - security: bump
+  undici to 7.30.1 (GHSA-xjj6-f33q-929c / CVE-2026-109869, GHSA-4qv8-2p9j-2685 / CVE-2026-109924, GHSA-f72v-6w45-q472 /
+  CVE-2026-109841)
+
 ## 10.0.6
 
 ### Patch Changes

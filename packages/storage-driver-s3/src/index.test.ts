@@ -384,6 +384,27 @@ describe('#read', () => {
 		expect(driver['client'].send).toHaveBeenCalledWith(mockGetObjectCommand);
 		expect(stream).toBe(sample.stream);
 	});
+
+	test('Destroys the per-read S3 client when the stream is closed', async () => {
+		const stream = new Readable({ read() {} });
+
+		const client = {
+			send: vi.fn().mockResolvedValue({ Body: stream }),
+			destroy: vi.fn(),
+		};
+
+		vi.spyOn(driver as any, 'getClient').mockReturnValue(client);
+
+		await driver.read(sample.path.input);
+
+		const closed = new Promise((resolve) => stream.once('close', resolve));
+
+		stream.destroy();
+
+		await closed;
+
+		expect(client.destroy).toHaveBeenCalledOnce();
+	});
 });
 
 describe('#stat', () => {
