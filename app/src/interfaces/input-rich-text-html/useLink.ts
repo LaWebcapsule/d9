@@ -109,7 +109,7 @@ export default function useLink(editor: Ref<any>): UsableLink {
 	}
 
 	function saveLink() {
-		editor.value.fire('focus');
+		editor.value.dispatch('focus');
 
 		const link = linkSelection.value;
 

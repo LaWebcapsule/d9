@@ -4,6 +4,7 @@
 			ref="editorElement"
 			v-model="internalValue"
 			:init="editorOptions"
+			license-key="gpl"
 			:disabled="disabled"
 			model-events="change keydown blur focus paste ExecCommand SetContent"
 			@focusin="setFocus(true)"
