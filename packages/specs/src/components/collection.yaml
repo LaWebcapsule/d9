@@ -35,6 +35,11 @@ properties:
         type: string
         example: null
         nullable: true
+      preview_url:
+        description: URL template used for the live preview of items in the admin app.
+        type: string
+        example: null
+        nullable: true
       hidden:
         description: Whether or not the collection is hidden from the navigation in the admin app.
         type: boolean
