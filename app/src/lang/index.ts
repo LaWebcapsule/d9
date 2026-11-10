@@ -1,11 +1,22 @@
 import { RequestError } from '@/api';
-import { createI18n, I18nOptions } from 'vue-i18n';
+import { compile } from '@intlify/core-base';
+import { createI18n, I18nOptions, MessageCompiler } from 'vue-i18n';
 import availableLanguages from './available-languages.yaml';
 import datetimeFormats from './date-formats.yaml';
 import numberFormats from './number-formats.yaml';
 import enUSBase from './translations/en-US.yaml';
 
+// Renders a message that doesn't compile (such as an email address, read as a linked message, in a
+// translation string set by an admin) as is, instead of throwing
+const messageCompiler: MessageCompiler = (message, context) => {
+	let failed = false;
+	const render = compile(message, { ...context, onError: () => (failed = true) });
+
+	return failed && typeof message === 'string' ? () => message : render;
+};
+
 export const i18n = createI18n({
+	messageCompiler,
 	legacy: false,
 	locale: 'en-US',
 	fallbackLocale: 'en-US',
