@@ -837,8 +837,8 @@ importers:
         specifier: 8.6.19
         version: 8.6.19(storybook@8.6.19(prettier@2.8.8))(vite@7.3.7(@types/node@25.2.3)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))(vue@3.5.44(typescript@5.0.4))
       '@tinymce/tinymce-vue':
-        specifier: 6.0.1
-        version: 6.0.1(vue@3.5.44(typescript@5.0.4))
+        specifier: 6.3.0
+        version: 6.3.0(tinymce@8.10.1)(vue@3.5.44(typescript@5.0.4))
       '@turf/meta':
         specifier: 6.5.0
         version: 6.5.0
@@ -1032,8 +1032,8 @@ importers:
         specifier: 8.6.19
         version: 8.6.19(prettier@2.8.8)
       tinymce:
-        specifier: 7.9.3
-        version: 7.9.3
+        specifier: 8.10.1
+        version: 8.10.1
       typescript:
         specifier: 'catalog:'
         version: 5.0.4
@@ -4229,10 +4229,14 @@ packages:
     resolution: {integrity: sha512-4BAffykYOgO+5nzBWYwE3W90sBgLJoUPRWWcL8wlyiM8IB8ipJz3UMJ9KXQd1RKQXpKp8Tutn80HZtWsu2u76w==}
     engines: {node: '>=10'}
 
-  '@tinymce/tinymce-vue@6.0.1':
-    resolution: {integrity: sha512-VzjI8AKlNrrsosIk3WuBez6kubqPsPMeaButkRLuts77uo4e2EwPRFX+VyB6fHbMGHwUPK22zNjOUGMvJFZFCw==}
+  '@tinymce/tinymce-vue@6.3.0':
+    resolution: {integrity: sha512-DSP8Jhd3XqCCliTnusfbmz3D8GqQ4iRzkc4aadYHDcJPVjkaqopJ61McOdH82CSy599vGLkPjGzqJYWJkRMiUA==}
     peerDependencies:
+      tinymce: ^8.0.0 || ^7.0.0 || ^6.0.0 || ^5.5.1
       vue: ^3.0.0
+    peerDependenciesMeta:
+      tinymce:
+        optional: true
 
   '@tootallnate/once@2.0.1':
     resolution: {integrity: sha512-HqmEUIGRJ5fSXchkVgR5F7qn48bDBzv0kWj/Kfu5e6uci4UlEeng4331LnBkWffb++Ei3FOVLxo8JJWMFBDMeQ==}
@@ -10415,8 +10419,8 @@ packages:
     resolution: {integrity: sha512-wXR/dYpcqKmfWpEdZjiKJOwCNFndD0DMnrW/cYjVGttEkBfVgcLFHoNrlj47mjOVic9yyNu65alsgF4NQyTa2g==}
     engines: {node: '>=12.0.0'}
 
-  tinymce@7.9.3:
-    resolution: {integrity: sha512-Mtm54U5YJ6Pyo/GaAx+JSHXTGEuxrg2AowVWCD9zy1eBolp5Ub7S1rTtsyQdxhPegfhLuR3VLiTKGw1tacv09g==}
+  tinymce@8.10.1:
+    resolution: {integrity: sha512-Mgdnx8HuEPRlLqKTyHcy7+JJn9reXH7b7L/1ywPCzKAyjaq8fzEPE+CYBLW42GgBlaaoIOd0dTOcYHUlPZyV2A==}
 
   tinyqueue@2.0.3:
     resolution: {integrity: sha512-ppJZNDuKGgxzkHihX8v9v9G5f+18gzaTfrukGrq6ueg0lmH4nqVnA2IPG0AEH3jKEk2GRJCUhDoqpoiw3PHLBA==}
@@ -14253,10 +14257,11 @@ snapshots:
     dependencies:
       defer-to-connect: 2.0.1
 
-  '@tinymce/tinymce-vue@6.0.1(vue@3.5.44(typescript@5.0.4))':
+  '@tinymce/tinymce-vue@6.3.0(tinymce@8.10.1)(vue@3.5.44(typescript@5.0.4))':
     dependencies:
-      tinymce: 7.9.3
       vue: 3.5.44(typescript@5.0.4)
+    optionalDependencies:
+      tinymce: 8.10.1
 
   '@tootallnate/once@2.0.1': {}
 
@@ -21662,7 +21667,7 @@ snapshots:
       fdir: 6.5.0(picomatch@4.0.4)
       picomatch: 4.0.4
 
-  tinymce@7.9.3: {}
+  tinymce@8.10.1: {}
 
   tinyqueue@2.0.3: {}
 
