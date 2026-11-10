@@ -28,7 +28,7 @@ import path from 'path';
 import type { Plugin, RollupError, RollupOptions, OutputOptions as RollupOutputOptions } from 'rollup';
 import { rollup, watch as rollupWatch } from 'rollup';
 import esbuildDefault from 'rollup-plugin-esbuild';
-import stylesDefault from 'rollup-plugin-styles';
+import styles from 'rollup-plugin-styler';
 import vueDefault from 'rollup-plugin-vue';
 import type { Language, RollupConfig, RollupMode } from '../types.js';
 import { getLanguageFromPath, isLanguage } from '../utils/languages.js';
@@ -42,7 +42,6 @@ import { validateSplitEntrypointOption } from './helpers/validate-cli-options.js
 const virtual = virtualDefault as unknown as typeof virtualDefault.default;
 const vue = vueDefault as unknown as typeof vueDefault.default;
 const esbuild = esbuildDefault as unknown as typeof esbuildDefault.default;
-const styles = stylesDefault as unknown as typeof stylesDefault.default;
 const commonjs = commonjsDefault as unknown as typeof commonjsDefault.default;
 const json = jsonDefault as unknown as typeof jsonDefault.default;
 const replace = replaceDefault as unknown as typeof replaceDefault.default;
