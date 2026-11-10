@@ -177,13 +177,17 @@ On an empty database, `npx d9-plumbing first-import` applies the snapshot and pu
 ## Edit the Schema with SQL
 
 `sql/schema.sql` is the source of truth for the schema: `apply-schema` loads it into a temporary database, computes the
-difference with the target database, and applies only that difference. You can therefore change the schema
-by editing the file, for instance to add an index, which the d9 app cannot create:
+difference with the target database, and applies only that difference. You can therefore change the schema by editing
+the file.
+
+Plain and partial indexes can be created from **Settings > Data Model > [Collection] > Indexes**. `save` captures them,
+along with the rest of the schema, in `sql/schema.sql`. Use SQL for unique, expression and other index types the panel
+doesn't create, then apply the change:
 
 1. Add the statement to `sql/schema.sql`:
 
    ```sql
-   CREATE INDEX "articles_published_at_idx" ON "public"."articles" ("published_at");
+   CREATE UNIQUE INDEX "articles_slug_unique" ON "public"."articles" ("slug");
    ```
 
 2. Apply it to your local d9:

@@ -4,9 +4,26 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      vendor:
+        description: Database vendor to test
+        type: choice
+        default: sqlite3
+        options:
+          - sqlite3
+          - all
+          - postgres
+          - postgres10
+          - mysql
+          - mysql5
+          - maria
+          - mssql
+          - oracle
+          - cockroachdb
 
 concurrency:
-  group: blackbox-pr-${{ github.ref }}
+  group: blackbox-pr-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: true
 
 env:
@@ -14,8 +31,18 @@ env:
 
 jobs:
   test:
-    name: SQLite Only
+    # Pull requests keep the historical "SQLite Only" check name
+    name: ${{ github.event_name == 'pull_request' && 'SQLite Only' || matrix.vendor }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Pull requests only run SQLite. A manual run picks one vendor or "all" (cockroachdb is left out of
+        # "all", like on main, but can be picked on its own)
+        vendor:
+          ${{ fromJSON( github.event_name != 'workflow_dispatch' && '["sqlite3"]' || inputs.vendor == 'all' &&
+          '["sqlite3","postgres","postgres10","mysql","mysql5","maria","mssql","oracle"]' || format('["{0}"]',
+          inputs.vendor)) }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -23,9 +50,16 @@ jobs:
       - name: Prepare
         uses: ./.github/actions/prepare
 
-      - name: Start services
+      - name: Start services (SQLite)
+        if: matrix.vendor == 'sqlite3'
         run:
           docker compose -f tests/blackbox/docker-compose.yml up auth-saml redis minio minio-mc -d --quiet-pull --wait
 
+      - name: Start services (other vendors)
+        if: matrix.vendor != 'sqlite3'
+        run:
+          docker compose -f tests/blackbox/docker-compose.yml up ${{ matrix.vendor }} auth-saml redis minio minio-mc -d
+          --quiet-pull --wait
+
       - name: Run tests
-        run: TEST_DB=sqlite3 pnpm run test:blackbox
+        run: TEST_DB=${{ matrix.vendor }} pnpm run test:blackbox

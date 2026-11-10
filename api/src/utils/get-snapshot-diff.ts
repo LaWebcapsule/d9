@@ -1,10 +1,16 @@
 import deepDiff from 'deep-diff';
 import { orderBy } from 'lodash-es';
+import { systemFieldRows } from '../database/system-data/fields/index.js';
 import type { Snapshot, SnapshotDiff } from '../types/index.js';
 import { DiffKind } from '../types/index.js';
 import { sanitizeCollection, sanitizeField, sanitizeRelation } from './sanitize-schema.js';
 
+const systemFields = new Set(systemFieldRows.map(({ collection, field }) => `${collection}.${field}`));
+
 export function getSnapshotDiff(current: Snapshot, after: Snapshot): SnapshotDiff {
+	// Snapshots from older versions may still list fields that are now system fields
+	const afterFields = after.fields.filter(({ collection, field }) => !systemFields.has(`${collection}.${field}`));
+
 	const diffedSnapshot: SnapshotDiff = {
 		collections: orderBy(
 			[
@@ -36,7 +42,7 @@ export function getSnapshotDiff(current: Snapshot, after: Snapshot): SnapshotDif
 		fields: orderBy(
 			[
 				...current.fields.map((currentField) => {
-					const afterField = after.fields.find(
+					const afterField = afterFields.find(
 						(afterField) => afterField.collection === currentField.collection && afterField.field === currentField.field
 					);
 
@@ -52,7 +58,7 @@ export function getSnapshotDiff(current: Snapshot, after: Snapshot): SnapshotDif
 						),
 					};
 				}),
-				...after.fields
+				...afterFields
 					.filter((afterField) => {
 						const currentField = current.fields.find(
 							(currentField) =>

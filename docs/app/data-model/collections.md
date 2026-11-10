@@ -166,9 +166,11 @@ To configure a collection, follow these steps.
 
 1. Navigate to **Settings > Data Model** and click the desired collection.\
    The collection's configuration page will open.
-2. Make configurations as desired. Configuration options are broken into six categories.
+2. Make configurations as desired. Configuration options are broken into the following categories.
    - [Fields and Layout](#fields-layout)
+   - [Indexes](#indexes)
    - [Collection Setup](#collection-setup)
+   - [Preview](#preview)
    - [Archive](#archive)
    - [Sort](#sort-field)
    - [Accountability](#accountability)
@@ -181,6 +183,22 @@ To configure a collection, follow these steps.
 This section allows you to create and configure fields, as well as configure how fields are displayed on the
 [Item Details Page](/app/content/items). To learn more, please see the documentation on
 [fields](/app/data-model/fields).
+
+### Indexes
+
+
+The **Indexes** section, below **Fields & Layout**, lists the collection's indexes and lets admins create and delete
+plain indexes. Partial indexes are available when the database supports them. Indexes are database objects, not rows in
+d9 tables; d9 reads them directly from the database, so indexes created outside d9 are listed too.
+
+::: warning Limitations
+
+The **Indexes** section currently supports a standard subset of options: B-tree indexes, composite indexes, and partial
+indexes where the database supports them.
+
+:::
+
+See the [Indexes API](/reference/system/indexes) for the full request and response contract.
 
 ### Collection Setup
 
@@ -213,6 +231,42 @@ human readable names, but you can also use translations to explicitly rename mor
 :::tip What's a Singleton?
 
 A collection that only contains one single item. For example, a website's **About Us** page.
+
+:::
+
+### Preview
+
+- **Preview URL** — The URL of the page that shows an item on your website, used for the
+  [Live Preview](/app/content/items#live-preview). Insert field values with the same syntax as a
+  [Display Template](/app/display-templates), for example `https://example.com/blog/{{slug}}?preview=true`. Only
+  `http` and `https` URLs are previewed.\
+  For multilingual websites, pick **Editing Language** in the field list to insert `{{$lang}}`, the language being edited
+  in the item's [Translations](/app/data-model/relationships#translations-o2m) field, for example
+  `https://example.com/{{$lang}}/{{slug}}`.
+  With two languages side by side, it is the language of the side last focused or edited. Items without a Translations
+  field show no preview with such a URL.
+
+:::warning Content Security Policy
+
+The preview is loaded in an iframe, which d9's default Content Security Policy only allows for the d9 domain. To preview
+pages of another domain, allow it with the `CONTENT_SECURITY_POLICY_DIRECTIVES__FRAME_SRC` environment variable, for
+example `CONTENT_SECURITY_POLICY_DIRECTIVES__FRAME_SRC="'self',blob:,https://example.com"`.
+
+This replaces the default (`'self' blob:`), so keep `'self'` and `blob:`. Never use `*` or `https:`, which would allow
+framing any website.
+
+:::
+
+#### Allow Framing on Your Website
+
+Your website must allow framing by d9: add `https://d9.example.com` to the `frame-ancestors` directive of its
+`Content-Security-Policy` header, and don't send an `X-Frame-Options` header.
+
+:::warning Websites Behind Basic Auth
+
+Don't put credentials in the Preview URL (`https://user:password@…`): anyone with read access to the collection can see
+them, and Chrome blocks them in the preview frame. Instead, let the preview through on your web server or reverse proxy,
+for example by skipping Basic Auth for a secret preview token or cookie, or for requests from your network or VPN.
 
 :::
 
