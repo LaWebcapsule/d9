@@ -166,8 +166,9 @@ To configure a collection, follow these steps.
 
 1. Navigate to **Settings > Data Model** and click the desired collection.\
    The collection's configuration page will open.
-2. Make configurations as desired. Configuration options are broken into seven categories.
+2. Make configurations as desired. Configuration options are broken into the following categories.
    - [Fields and Layout](#fields-layout)
+   - [Indexes](#indexes)
    - [Collection Setup](#collection-setup)
    - [Preview](#preview)
    - [Archive](#archive)
@@ -182,6 +183,22 @@ To configure a collection, follow these steps.
 This section allows you to create and configure fields, as well as configure how fields are displayed on the
 [Item Details Page](/app/content/items). To learn more, please see the documentation on
 [fields](/app/data-model/fields).
+
+### Indexes
+
+
+The **Indexes** section, below **Fields & Layout**, lists the collection's indexes and lets admins create and delete
+plain indexes. Partial indexes are available when the database supports them. Indexes are database objects, not rows in
+d9 tables; d9 reads them directly from the database, so indexes created outside d9 are listed too.
+
+::: warning Limitations
+
+The **Indexes** section currently supports a standard subset of options: B-tree indexes, composite indexes, and partial
+indexes where the database supports them.
+
+:::
+
+See the [Indexes API](/reference/system/indexes) for the full request and response contract.
 
 ### Collection Setup
 
