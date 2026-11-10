@@ -8,35 +8,61 @@ type UsableTemplateData = {
 	templateData: Ref<Record<string, any> | undefined>;
 	loading: Ref<boolean>;
 	error: Ref<any>;
+	fetchTemplateValues: () => Promise<void>;
 };
 
-export function useTemplateData(collection: Ref<Collection | null>, primaryKey: Ref<string>): UsableTemplateData {
+/**
+ * Fetches the item values needed by a template: the collection's display template by default, or `template` when given
+ */
+export function useTemplateData(
+	collection: Ref<Collection | null>,
+	primaryKey: Ref<string | null>,
+	template?: Ref<string>
+): UsableTemplateData {
 	const templateData = ref<Record<string, any>>();
 	const loading = ref(false);
 	const error = ref<any>(null);
 
 	const fields = computed(() => {
-		if (!collection.value?.meta?.display_template) return null;
-		return adjustFieldsForDisplays(
-			getFieldsFromTemplate(collection.value.meta.display_template),
-			collection.value?.collection
-		);
+		const _template = template?.value || collection.value?.meta?.display_template;
+
+		if (!_template || !collection.value) return null;
+
+		// `$`-prefixed variables, like `$lang` of the preview URL, aren't fields of the item
+		const templateFields = getFieldsFromTemplate(_template).filter((field) => !field.startsWith('$'));
+
+		return adjustFieldsForDisplays(templateFields, collection.value.collection);
 	});
 
-	watch([collection, primaryKey], fetchTemplateValues, { immediate: true });
+	const isSingleton = computed(() => !!collection.value?.meta?.singleton);
 
-	return { templateData, loading, error };
+	watch([collection, primaryKey, fields], fetchTemplateValues, { immediate: true });
+
+	return { templateData, loading, error, fetchTemplateValues };
 
 	async function fetchTemplateValues() {
-		if (!primaryKey.value || primaryKey.value === '+' || fields.value === null || !collection.value) return;
+		if (
+			(!primaryKey.value && !isSingleton.value) ||
+			primaryKey.value === '+' ||
+			fields.value === null ||
+			!collection.value
+		) {
+			return;
+		}
 
 		loading.value = true;
 
 		const baseEndpoint = getEndpoint(collection.value.collection);
 
-		const endpoint = collection.value.collection.startsWith('directus_')
-			? `${baseEndpoint}/${primaryKey.value}`
-			: `${baseEndpoint}/${encodeURIComponent(primaryKey.value)}`;
+		let endpoint: string;
+
+		if (isSingleton.value) {
+			endpoint = baseEndpoint;
+		} else {
+			endpoint = collection.value.collection.startsWith('directus_')
+				? `${baseEndpoint}/${primaryKey.value}`
+				: `${baseEndpoint}/${encodeURIComponent(primaryKey.value!)}`;
+		}
 
 		try {
 			const result = await api.get(endpoint, {

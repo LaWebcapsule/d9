@@ -9,6 +9,7 @@
 			:collection="collection"
 			:model-value="value"
 			:disabled="disabled"
+			:inject="injectFields"
 			@update:model-value="$emit('input', $event)"
 		/>
 	</div>
@@ -18,6 +19,7 @@
 import { useI18n } from 'vue-i18n';
 import { defineComponent, inject, ref, computed } from 'vue';
 import { useCollectionsStore } from '@/stores/collections';
+import { Field } from '@wbce-d9/types';
 
 export default defineComponent({
 	props: {
@@ -36,6 +38,11 @@ export default defineComponent({
 		collectionName: {
 			type: String,
 			default: null,
+		},
+		/** Offers `{{$lang}}`, the content language being edited in a translations field, e.g. for the preview URL */
+		injectLanguageField: {
+			type: Boolean,
+			default: false,
 		},
 	},
 	emits: ['input'],
@@ -62,7 +69,22 @@ export default defineComponent({
 			return collectionName;
 		});
 
-		return { t, collection };
+		const injectFields = computed(() => {
+			if (!props.injectLanguageField || !collection.value) return null;
+
+			const languageField: Field = {
+				collection: collection.value,
+				field: '$lang',
+				name: t('interfaces.system-display-template.editing_language'),
+				type: 'string',
+				schema: null,
+				meta: null,
+			};
+
+			return { fields: [languageField], relations: [] };
+		});
+
+		return { t, collection, injectFields };
 	},
 });
 </script>
