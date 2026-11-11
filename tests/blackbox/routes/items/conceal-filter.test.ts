@@ -1,3 +1,4 @@
+import { beforeAll, describe, expect, it, test } from 'vitest';
 import request from 'supertest';
 import { getUrl } from '@common/config.ts';
 import vendors from '@common/get-dbs-to-test.ts';
