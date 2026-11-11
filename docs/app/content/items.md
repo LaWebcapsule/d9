@@ -84,6 +84,22 @@ To do an advanced save when you create or edit an item, follow these steps.
    - **Save as Copy**
    - **Discard all Changes**
 
+## Live Preview
+
+When a [Preview URL](/app/data-model/collections#preview) is set for the collection, click
+<span mi icon>visibility</span> in the page header to show the item's page of your website next to the form. The preview
+shows the saved item and reloads each time you save.
+
+- Drag the edge between the form and the preview to resize them.
+- Click <span mi icon>devices</span> to preview the page at a given size and zoom level.
+- Click <span mi icon>refresh</span> to reload the preview.
+- Click <span mi icon>open_in_new</span> to open the preview in a separate window, to put it on another screen for
+  example. Click <span mi icon>exit_to_app</span> in that window, or close it, to bring the preview back next to the
+  form.
+
+Your website receives the URL as is: to show unpublished content, read the parameters you put in the Preview URL (for
+example `?preview=true`) and load the content from d9 accordingly.
+
 ## Archive an Item
 
 

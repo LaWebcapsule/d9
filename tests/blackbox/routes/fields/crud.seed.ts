@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { CreateCollection, DeleteCollection } from '../../common/functions.ts';
 import vendors from '../../common/get-dbs-to-test.ts';
 import { PRIMARY_KEY_TYPES } from '../../common/variables.ts';
