@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { PrepareRequest, type RequestOptions } from '@utils/prepare-request.ts';
 import vendors from '@common/get-dbs-to-test.ts';
 import * as testsSchema from '@schema/index.ts';

@@ -146,6 +146,7 @@ devs
 DigitalOcean
 DigitalOcean's
 d9
+d9's
 d9[-.](.*)
 directus
 Directus
@@ -200,6 +201,7 @@ HTTPS?
 IAM
 IETF
 IETF's
+iframe
 IIS
 iisnode
 incongruent
@@ -384,6 +386,7 @@ viewability
 VitePress
 volta
 VPC
+VPN
 Vue
 Vue's
 WebDAV
