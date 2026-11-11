@@ -1,15 +1,13 @@
 /* eslint-disable no-console */
 
-import axios from 'axios';
 import { spawn, spawnSync } from 'child_process';
 import knex from 'knex';
 import { Listr } from 'listr2';
 import { clone } from 'lodash-es';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import config, { getUrl, paths } from '../common/config.ts';
+import config, { paths } from '../common/config.ts';
 import vendors from '../common/get-dbs-to-test.ts';
-import { USER } from '../common/variables.ts';
 import { awaitDatabaseConnection, awaitDirectusConnection } from '../utils/await-connection.ts';
 import global from './global.ts';
 
@@ -96,7 +94,10 @@ export default async (): Promise<void> => {
 
 									serverNoCache.on('exit', async (code) => {
 										if (process.env.TEST_SAVE_LOGS) {
-											await fs.writeFile(__dirname + `/../server-log-${vendor}-no-cache.txt`, serverNoCacheOutput);
+											await fs.writeFile(
+												path.join(paths.cwd, `server-log-${vendor}-no-cache.txt`),
+												serverNoCacheOutput
+											);
 										}
 
 										if (code !== null)
@@ -111,59 +112,6 @@ export default async (): Promise<void> => {
 					}),
 					{ concurrent: true }
 				);
-			},
-		},
-		{
-			title: 'Setup test data flow',
-			task: async () => {
-				return new Listr([
-					{
-						title: 'Testing server connectivity and bootstrap tests flow',
-						task: async () => {
-							const totalTestsCount = Number(process.env.totalTestsCount);
-
-							if (isNaN(totalTestsCount)) {
-								throw new Error('Unable to read totalTestsCount');
-							}
-
-							for (const vendor of vendors) {
-								try {
-									const serverUrl = getUrl(vendor);
-
-									let response = await axios.get(
-										`${serverUrl}/items/tests_flow_data?access_token=${USER.TESTS_FLOW.TOKEN}`
-									);
-
-									if (response.status !== 200) {
-										continue;
-									}
-
-									const body = {
-										total_tests_count: totalTestsCount,
-									};
-
-									response = await axios.post(`${serverUrl}/items/tests_flow_data`, body, {
-										headers: {
-											Authorization: 'Bearer ' + USER.TESTS_FLOW.TOKEN,
-											'Content-Type': 'application/json',
-										},
-									});
-
-									if (response.status === 200) {
-										process.env.serverUrl = serverUrl;
-										break;
-									}
-								} catch (err) {
-									continue;
-								}
-							}
-
-							if (!process.env.serverUrl) {
-								throw new Error('Unable to connect to any directus server');
-							}
-						},
-					},
-				]);
 			},
 		},
 	])

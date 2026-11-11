@@ -35,7 +35,7 @@ export default function useSourceCode(editor: Ref<any>): UsableSourceCode {
 	}
 
 	function saveCode() {
-		editor.value.fire('focus');
+		editor.value.dispatch('focus');
 
 		editor.value.setContent(code.value);
 		editor.value.undoManager.add();

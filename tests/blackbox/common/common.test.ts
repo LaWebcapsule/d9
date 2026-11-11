@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import request from 'supertest';
 import { collectionName, collectionNameM2O, collectionNameO2M } from './common.seed.ts';
 import { getUrl } from './config.ts';
