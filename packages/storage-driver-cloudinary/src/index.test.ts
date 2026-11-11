@@ -483,7 +483,7 @@ describe('#getBasicAuth', () => {
 
 		mockToString = vi.fn();
 
-		vi.spyOn(Buffer, 'from').mockReturnValue({ toString: mockToString } as unknown as Buffer);
+		vi.spyOn(Buffer, 'from').mockReturnValue({ toString: mockToString } as unknown as Buffer<ArrayBuffer>);
 	});
 
 	test('Creates base64 hash of key:secret', () => {

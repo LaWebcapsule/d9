@@ -57,7 +57,7 @@ function renderMustache<T extends JsonValue>(item: T, scope: Scope, skipUndefine
 	}
 }
 
-export function optionToObject<T>(option: T): Exclude<T, string> {
+export function optionToObject<T>(option: T | string): T {
 	return typeof option === 'string' ? parseJSON(option) : option;
 }
 
