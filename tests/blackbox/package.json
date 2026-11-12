@@ -27,7 +27,7 @@
 		"listr2": "6.3.1",
 		"portfinder": "^1.0.32",
 		"seedrandom": "3.0.5",
-		"typescript": "5.7.3"
+		"typescript": "catalog:"
 	},
 	"version": "10.0.3"
 }
