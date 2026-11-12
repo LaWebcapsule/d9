@@ -1,5 +1,15 @@
 # @wbce-d9/types
 
+## 10.2.0
+
+### Minor Changes
+
+- [#499](https://github.com/LaWebcapsule/d9/pull/499)
+  [`da52f9f`](https://github.com/LaWebcapsule/d9/commit/da52f9fc57205bbb2e5594b6b3ab18d9ff240f62) - Added Live Preview,
+  ported from Directus 10.2 (GPLv3): set a Preview URL template in a collection's settings to show the item's page of
+  your website next to the item form, or in a separate window. The preview reloads on save, and only `http(s)` URLs are
+  previewed. `{{$lang}}` in the Preview URL inserts the language being edited in the item's translations field.
+
 ## 10.1.0
 
 ### Minor Changes

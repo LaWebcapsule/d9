@@ -1,5 +1,35 @@
 # @wbce-d9/app
 
+## 11.4.0
+
+### Minor Changes
+
+- [#499](https://github.com/LaWebcapsule/d9/pull/499)
+  [`da52f9f`](https://github.com/LaWebcapsule/d9/commit/da52f9fc57205bbb2e5594b6b3ab18d9ff240f62) - Added Live Preview,
+  ported from Directus 10.2 (GPLv3): set a Preview URL template in a collection's settings to show the item's page of
+  your website next to the item form, or in a separate window. The preview reloads on save, and only `http(s)` URLs are
+  previewed. `{{$lang}}` in the Preview URL inserts the language being edited in the item's translations field.
+
+- [#504](https://github.com/LaWebcapsule/d9/pull/504)
+  [`106f4e4`](https://github.com/LaWebcapsule/d9/commit/106f4e4a0df0272c26e601f920e9b69541cad05c) - security: upgrade
+  vue-i18n from 9 to 11 (GHSA-83rm-6c8r-g728 / CVE-2026-118257, GHSA-8rc2-428q-7ww3 / CVE-2026-118256)
+
+  App extensions share the app's vue-i18n: an extension calling `tc` or `$tc`, removed in vue-i18n 11, must call `t`
+  with the plural count instead. A translation that can't be compiled, such as one containing an email address, is still
+  shown as is.
+
+### Patch Changes
+
+- [#502](https://github.com/LaWebcapsule/d9/pull/502)
+  [`9ff7fbf`](https://github.com/LaWebcapsule/d9/commit/9ff7fbfc482718d108487dbdd74e0ecc2da4fe91) - security: upgrade
+  the WYSIWYG editor to TinyMCE 8.10.1 (GHSA-mf2p-h6hf-fcwm / CVE-2026-116675)
+
+  TinyMCE 8 sanitizes content more strictly: HTML comments that contain tags and attributes with HTML-like values may be
+  removed when content is opened in the editor.
+
+- Updated dependencies []:
+  - @wbce-d9/composables@10.0.6
+
 ## 11.3.1
 
 ### Patch Changes

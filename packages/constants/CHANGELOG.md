@@ -1,5 +1,15 @@
 # @wbce-d9/constants
 
+## 10.0.1
+
+### Patch Changes
+
+- [#507](https://github.com/LaWebcapsule/d9/pull/507)
+  [`36e451f`](https://github.com/LaWebcapsule/d9/commit/36e451f3bfaf23e7125fc08fabad44af63801bd2) - security: upgrade
+  zod from 3 to 4 (GHSA-mrhx-c7xc-m3w5 / CVE-2023-54404)
+
+  The extension schemas exported by this package (`ExtensionManifest`, `ExtensionOptions`, …) are now zod 4 schemas.
+
 ## 10.0.0
 
 ### Major Changes
