@@ -1,6 +1,6 @@
 {
 	"name": "@wbce-d9/specs",
-	"version": "9.26.5",
+	"version": "9.27.0",
 	"description": "OpenAPI Specification of the Directus API",
 	"homepage": "https://directus.io",
 	"type": "module",

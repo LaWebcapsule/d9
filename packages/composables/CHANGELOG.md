@@ -1,5 +1,15 @@
 # @wbce-d9/composables
 
+## 10.0.6
+
+### Patch Changes
+
+- Updated dependencies [[`8a9c8dc`](https://github.com/LaWebcapsule/d9/commit/8a9c8dca1c5c315468b1963b428d1ba923f8c438),
+  [`b25f94e`](https://github.com/LaWebcapsule/d9/commit/b25f94e0f539179e93b487704b166b7f0e51fe86),
+  [`36e451f`](https://github.com/LaWebcapsule/d9/commit/36e451f3bfaf23e7125fc08fabad44af63801bd2)]:
+  - @wbce-d9/utils@10.0.6
+  - @wbce-d9/constants@10.0.1
+
 ## 10.0.5
 
 ### Patch Changes

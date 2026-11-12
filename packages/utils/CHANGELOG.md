@@ -1,5 +1,22 @@
 # @wbce-d9/utils
 
+## 10.0.6
+
+### Patch Changes
+
+- [#501](https://github.com/LaWebcapsule/d9/pull/501)
+  [`8a9c8dc`](https://github.com/LaWebcapsule/d9/commit/8a9c8dca1c5c315468b1963b428d1ba923f8c438) - security: bump joi
+  to 18.3.2 (GHSA-4528-x5fx-h6hg / CVE-2026-118772)
+
+- [#506](https://github.com/LaWebcapsule/d9/pull/506)
+  [`b25f94e`](https://github.com/LaWebcapsule/d9/commit/b25f94e0f539179e93b487704b166b7f0e51fe86) - Built with
+  TypeScript 5.9: `primary()` of the CockroachDB, Oracle and MSSQL schema inspectors is now typed as returning
+  `string | null`, as it returns `null` when there is no primary key, and `optionToObject` is typed
+  `(option: T | string) => T`
+- Updated dependencies
+  [[`36e451f`](https://github.com/LaWebcapsule/d9/commit/36e451f3bfaf23e7125fc08fabad44af63801bd2)]:
+  - @wbce-d9/constants@10.0.1
+
 ## 10.0.5
 
 ### Patch Changes
