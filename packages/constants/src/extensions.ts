@@ -80,6 +80,6 @@ export const ExtensionOptions = ExtensionOptionsBase.and(
 export const ExtensionManifest = z.object({
 	name: z.string(),
 	version: z.string(),
-	dependencies: z.record(z.string()).optional(),
+	dependencies: z.record(z.string(), z.string()).optional(),
 	[EXTENSION_PKG_KEY]: ExtensionOptions,
 });
