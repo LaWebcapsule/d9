@@ -46,7 +46,7 @@ export function validateQuery(query: Query): Query {
 	return query;
 }
 
-function validateFilter(filter: Query['filter']) {
+function validateFilter(filter: Query['filter'] | Query['filter'][]) {
 	if (!filter) throw new InvalidQueryException('Invalid filter object');
 
 	for (const [key, nested] of Object.entries(filter)) {

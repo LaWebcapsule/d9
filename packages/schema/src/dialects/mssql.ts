@@ -410,7 +410,7 @@ export default class MSSQL implements SchemaInspector {
 	/**
 	 * Get the primary key column for the given table
 	 */
-	async primary(table: string) {
+	async primary(table: string): Promise<string | null> {
 		const results = await this.knex.raw(
 			`SELECT
          Col.Column_Name
@@ -426,8 +426,7 @@ export default class MSSQL implements SchemaInspector {
 			[table, this.schema]
 		);
 
-		const columnName = results.length > 0 ? results[0]['Column_Name'] : null;
-		return columnName as string;
+		return results.length > 0 ? results[0]['Column_Name'] : null;
 	}
 
 	// Indexes
