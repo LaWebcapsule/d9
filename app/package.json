@@ -61,6 +61,7 @@
 		"@fullcalendar/interaction": "6.1.20",
 		"@fullcalendar/list": "6.1.20",
 		"@fullcalendar/timegrid": "6.1.20",
+		"@intlify/core-base": "11.4.18",
 		"@joeattardi/emoji-button": "4.6.4",
 		"@mapbox/mapbox-gl-draw": "1.4.1",
 		"@mapbox/mapbox-gl-draw-static-mode": "1.0.1",
@@ -126,7 +127,7 @@
 		"storybook": "8.6.19",
 		"tinymce": "8.10.1",
 		"vite": "catalog:",
-		"vue-i18n": "9.14.5",
+		"vue-i18n": "11.4.18",
 		"vuedraggable": "4.1.0",
 		"webpack": "5.104.1"
 	},

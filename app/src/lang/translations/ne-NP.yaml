@@ -1451,7 +1451,7 @@ interfaces:
     zoom: जुम
     geometry_type: ज्यामिति प्रकार
     default_view: पूर्वनिर्धारित दृश्य
-    unexpected_geometry: अपेक्षित {expected}, {got} प्राप्त भयो}।
+    unexpected_geometry: अपेक्षित {expected}, {got} प्राप्त भयो।
     fit_bounds: सबै डेटा देखाउन दृश्य फिट गर्नुहोस्
     geojson: GeoJSON
     wkt: WKT
