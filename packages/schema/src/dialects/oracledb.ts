@@ -379,7 +379,7 @@ export default class oracleDB implements SchemaInspector {
 	/**
 	 * Get the primary key column for the given table
 	 */
-	async primary(table: string): Promise<string> {
+	async primary(table: string): Promise<string | null> {
 		/**
 		 * NOTE: Keep in mind, this query is optimized for speed.
 		 */
