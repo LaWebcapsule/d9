@@ -54,7 +54,7 @@
 		"@rollup/plugin-terser": "0.4.1",
 		"esbuild": "0.28.1",
 		"rollup-plugin-esbuild": "5.0.0",
-		"rollup-plugin-styles": "4.0.0",
+		"rollup-plugin-styler": "3.0.1",
 		"rollup-plugin-vue": "6.0.0"
 	},
 	"devDependencies": {
