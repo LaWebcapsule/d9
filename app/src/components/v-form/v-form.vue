@@ -239,11 +239,14 @@ function useForm() {
 	const fieldsMap: ComputedRef<Record<string, Field | undefined>> = computed(() => {
 		if (props.loading) return {} as Record<string, undefined>;
 		const valuesWithDefaults = Object.assign({}, defaultValues.value, values.value);
-		return formFields.value.reduce((result: Record<string, Field>, field: Field) => {
-			const newField = applyConditions(valuesWithDefaults, setPrimaryKeyReadonly(field));
-			if (newField.field) result[newField.field] = newField;
-			return result;
-		}, {} as Record<string, Field>);
+		return formFields.value.reduce(
+			(result: Record<string, Field>, field: Field) => {
+				const newField = applyConditions(valuesWithDefaults, setPrimaryKeyReadonly(field));
+				if (newField.field) result[newField.field] = newField;
+				return result;
+			},
+			{} as Record<string, Field>
+		);
 	});
 
 	const fieldsInGroup = computed(() =>
@@ -337,7 +340,7 @@ function apply(updates: { [field: string]: any }) {
 				const field = fieldsMap.value[key];
 				if (!field) return false;
 				return field.schema?.is_primary_key || !isDisabled(field);
-		  });
+			});
 
 	if (!isNil(props.group)) {
 		const groupFields = getFieldsForGroup(props.group)

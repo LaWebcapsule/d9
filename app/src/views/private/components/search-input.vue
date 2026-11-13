@@ -188,7 +188,9 @@ export default defineComponent({
 	overflow: hidden;
 	border: 2px solid var(--border-normal);
 	border-radius: calc(44px / 2);
-	transition: width var(--slow) var(--transition), border-bottom-left-radius var(--fast) var(--transition),
+	transition:
+		width var(--slow) var(--transition),
+		border-bottom-left-radius var(--fast) var(--transition),
 		border-bottom-right-radius var(--fast) var(--transition);
 
 	.icon-empty {
@@ -267,7 +269,9 @@ export default defineComponent({
 		border-bottom: none;
 		border-bottom-right-radius: 0;
 		border-bottom-left-radius: 0;
-		transition: border-bottom-left-radius none, border-bottom-right-radius none;
+		transition:
+			border-bottom-left-radius none,
+			border-bottom-right-radius none;
 
 		&::after {
 			position: absolute;

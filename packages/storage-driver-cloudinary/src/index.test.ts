@@ -219,7 +219,7 @@ describe('#toFormUrlEncoded', () => {
 		mockProps = Array.from(Array(3), () => randAlphaNumeric({ length: randNumber({ min: 2, max: 15 }) }).join('')) as [
 			string,
 			string,
-			string
+			string,
 		];
 
 		mockValues = randWord({ length: 3 }) as [string, string, string];

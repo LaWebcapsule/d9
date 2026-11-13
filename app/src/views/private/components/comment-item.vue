@@ -215,7 +215,9 @@ function useEdits() {
 	font-size: 12px;
 	background-color: var(--background-normal);
 	border-radius: 12px;
-	transition: color var(--fast) var(--transition), background-color var(--fast) var(--transition);
+	transition:
+		color var(--fast) var(--transition),
+		background-color var(--fast) var(--transition);
 }
 
 .comment-item.expand .content .expand-text:hover span {

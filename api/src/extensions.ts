@@ -341,7 +341,7 @@ class ExtensionManager {
 							? [
 									path.resolve(extension.path, extension.entrypoint.app),
 									path.resolve(extension.path, extension.entrypoint.api),
-							  ]
+								]
 							: path.resolve(extension.path, extension.entrypoint)
 					);
 

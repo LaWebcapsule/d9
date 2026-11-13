@@ -37,8 +37,8 @@ describe('schema', () => {
 	const newTz = isWindows
 		? String(newTzOffset * 60)
 		: newTzOffset === 180
-		? 'America/Sao_Paulo'
-		: 'America/Mexico_City';
+			? 'America/Sao_Paulo'
+			: 'America/Mexico_City';
 
 	const sampleDates: SchemaTimezoneTypesObject[] = [];
 

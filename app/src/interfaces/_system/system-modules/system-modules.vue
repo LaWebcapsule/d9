@@ -135,13 +135,11 @@ export default defineComponent({
 		const availableModulesAsBarModule = computed<SettingsModuleBarModule[]>(() => {
 			return registeredModules.value
 				.filter((module) => module.hidden !== true)
-				.map(
-					(module): SettingsModuleBarModule => ({
-						type: 'module',
-						id: module.id,
-						enabled: false,
-					})
-				);
+				.map((module): SettingsModuleBarModule => ({
+					type: 'module',
+					id: module.id,
+					enabled: false,
+				}));
 		});
 
 		const valuesWithData = computed<PreviewValue[]>({

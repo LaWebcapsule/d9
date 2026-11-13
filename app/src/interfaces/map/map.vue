@@ -162,7 +162,7 @@ export default defineComponent({
 
 		const style = computed(() => {
 			const source = basemaps.find((source) => source.name == basemap.value) ?? basemaps[0];
-			return basemap.value, getStyleFromBasemapSource(source);
+			return (basemap.value, getStyleFromBasemapSource(source));
 		});
 
 		let parse: GeoJSONParser;

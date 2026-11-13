@@ -10,7 +10,10 @@ export type FnHelperOptions = {
 };
 
 export abstract class FnHelper extends DatabaseHelper {
-	constructor(knex: Knex, protected schema: SchemaOverview) {
+	constructor(
+		knex: Knex,
+		protected schema: SchemaOverview
+	) {
 		super(knex);
 		this.schema = schema;
 	}

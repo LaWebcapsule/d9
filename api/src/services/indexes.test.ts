@@ -53,7 +53,7 @@ const field = (name: string, type: string) =>
 		scale: null,
 		note: null,
 		validation: null,
-	} as any);
+	}) as any;
 
 const schema: SchemaOverview = {
 	collections: {

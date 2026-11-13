@@ -144,7 +144,7 @@ describe('actions', () => {
 
 	describe('trackPage', () => {
 		const page = '/test';
-		const route = (path: string) => ({ path, fullPath: path } as RouteLocationNormalized);
+		const route = (path: string) => ({ path, fullPath: path }) as RouteLocationNormalized;
 
 		test('should not set last_page if there is no current user', async () => {
 			const latencyStore = useLatencyStore();
