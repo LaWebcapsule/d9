@@ -2,7 +2,7 @@ import { test, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 
 import VSelect from './v-select.vue';
-import { GlobalMountOptions } from '@vue/test-utils/dist/types';
+import type { GlobalMountOptions } from '@/__utils__/mount';
 import { createI18n } from 'vue-i18n';
 import { Focus } from '@/__utils__/focus';
 

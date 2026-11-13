@@ -2,7 +2,7 @@ import { test, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 
 import VTextOverflow from './v-text-overflow.vue';
-import { GlobalMountOptions } from '@vue/test-utils/dist/types';
+import type { GlobalMountOptions } from '@/__utils__/mount';
 import { Tooltip } from '@/__utils__/tooltip';
 
 const global: GlobalMountOptions = {

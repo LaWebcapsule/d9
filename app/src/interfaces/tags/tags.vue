@@ -169,7 +169,11 @@ export default defineComponent({
 		}
 
 		function toggleTag(tag: string) {
-			selectedVals.value.includes(tag) ? removeTag(tag) : addTag(tag);
+			if (selectedVals.value.includes(tag)) {
+				removeTag(tag);
+			} else {
+				addTag(tag);
+			}
 		}
 
 		function addTag(tag: string) {
