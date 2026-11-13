@@ -1,6 +1,6 @@
 {
 	"name": "@wbce-d9/types",
-	"version": "10.1.0",
+	"version": "10.2.0",
 	"type": "module",
 	"scripts": {
 		"build": "tsc --build",

@@ -1,5 +1,22 @@
 # @wbce-d9/extensions-sdk
 
+## 10.1.1
+
+### Patch Changes
+
+- [#505](https://github.com/LaWebcapsule/d9/pull/505)
+  [`4147402`](https://github.com/LaWebcapsule/d9/commit/414740270e61613db8fd4f744d3129eacb150ef3) - security: replace
+  unmaintained rollup-plugin-styles with rollup-plugin-styler 3.0.1 (drops vulnerable decode-uri-component,
+  GHSA-qr28-fpjm-wq7f / GHSA-vcc3-ghjq-m6fr)
+- Updated dependencies [[`8a9c8dc`](https://github.com/LaWebcapsule/d9/commit/8a9c8dca1c5c315468b1963b428d1ba923f8c438),
+  [`da52f9f`](https://github.com/LaWebcapsule/d9/commit/da52f9fc57205bbb2e5594b6b3ab18d9ff240f62),
+  [`b25f94e`](https://github.com/LaWebcapsule/d9/commit/b25f94e0f539179e93b487704b166b7f0e51fe86),
+  [`36e451f`](https://github.com/LaWebcapsule/d9/commit/36e451f3bfaf23e7125fc08fabad44af63801bd2)]:
+  - @wbce-d9/utils@10.0.6
+  - @wbce-d9/types@10.2.0
+  - @wbce-d9/constants@10.0.1
+  - @wbce-d9/composables@10.0.6
+
 ## 10.1.0
 
 ### Minor Changes

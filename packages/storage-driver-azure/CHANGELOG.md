@@ -1,5 +1,13 @@
 # @wbce-d9/storage-driver-azure
 
+## 10.0.6
+
+### Patch Changes
+
+- Updated dependencies [[`8a9c8dc`](https://github.com/LaWebcapsule/d9/commit/8a9c8dca1c5c315468b1963b428d1ba923f8c438),
+  [`b25f94e`](https://github.com/LaWebcapsule/d9/commit/b25f94e0f539179e93b487704b166b7f0e51fe86)]:
+  - @wbce-d9/utils@10.0.6
+
 ## 10.0.5
 
 ### Patch Changes

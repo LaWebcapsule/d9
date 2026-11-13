@@ -1,5 +1,50 @@
 # @wbce-d9/api
 
+## 12.8.0
+
+### Minor Changes
+
+- [#499](https://github.com/LaWebcapsule/d9/pull/499)
+  [`da52f9f`](https://github.com/LaWebcapsule/d9/commit/da52f9fc57205bbb2e5594b6b3ab18d9ff240f62) - Added Live Preview,
+  ported from Directus 10.2 (GPLv3): set a Preview URL template in a collection's settings to show the item's page of
+  your website next to the item form, or in a separate window. The preview reloads on save, and only `http(s)` URLs are
+  previewed. `{{$lang}}` in the Preview URL inserts the language being edited in the item's translations field.
+
+### Patch Changes
+
+- [#501](https://github.com/LaWebcapsule/d9/pull/501)
+  [`8a9c8dc`](https://github.com/LaWebcapsule/d9/commit/8a9c8dca1c5c315468b1963b428d1ba923f8c438) - security: bump joi
+  to 18.3.2 (GHSA-4528-x5fx-h6hg / CVE-2026-118772)
+
+- [#501](https://github.com/LaWebcapsule/d9/pull/501)
+  [`8a9c8dc`](https://github.com/LaWebcapsule/d9/commit/8a9c8dca1c5c315468b1963b428d1ba923f8c438) - security: bump qs to
+  6.16.1 (GHSA-6pq8-jhm2-2vcw / CVE-2026-110816)
+
+- [#490](https://github.com/LaWebcapsule/d9/pull/490)
+  [`f5d3826`](https://github.com/LaWebcapsule/d9/commit/f5d3826df336e20461cac11b1306d9e006369ec9) - Register
+  `directus_sessions.session_id`, `directus_sessions.fallback_token` and `directus_activity.session_id` as system fields
+  so schema snapshots no longer export them and schema apply can no longer drop them, and ignore system fields listed in
+  snapshots from older versions so those snapshots still apply ([#478](https://github.com/LaWebcapsule/d9/issues/478))
+- Updated dependencies [[`8a9c8dc`](https://github.com/LaWebcapsule/d9/commit/8a9c8dca1c5c315468b1963b428d1ba923f8c438),
+  [`da52f9f`](https://github.com/LaWebcapsule/d9/commit/da52f9fc57205bbb2e5594b6b3ab18d9ff240f62),
+  [`b25f94e`](https://github.com/LaWebcapsule/d9/commit/b25f94e0f539179e93b487704b166b7f0e51fe86),
+  [`4147402`](https://github.com/LaWebcapsule/d9/commit/414740270e61613db8fd4f744d3129eacb150ef3),
+  [`9ff7fbf`](https://github.com/LaWebcapsule/d9/commit/9ff7fbfc482718d108487dbdd74e0ecc2da4fe91),
+  [`106f4e4`](https://github.com/LaWebcapsule/d9/commit/106f4e4a0df0272c26e601f920e9b69541cad05c),
+  [`36e451f`](https://github.com/LaWebcapsule/d9/commit/36e451f3bfaf23e7125fc08fabad44af63801bd2)]:
+  - @wbce-d9/utils@10.0.6
+  - @wbce-d9/app@11.4.0
+  - @wbce-d9/specs@9.27.0
+  - @wbce-d9/schema@10.0.1
+  - @wbce-d9/extensions-sdk@10.1.1
+  - @wbce-d9/constants@10.0.1
+  - @wbce-d9/storage-driver-azure@10.0.6
+  - @wbce-d9/storage-driver-cloudinary@10.0.8
+  - @wbce-d9/storage-driver-gcs@10.0.6
+  - @wbce-d9/storage-driver-local@10.0.6
+  - @wbce-d9/storage-driver-s3@10.0.7
+  - @wbce-d9/exceptions@10.0.1
+
 ## 12.7.4
 
 ### Patch Changes
