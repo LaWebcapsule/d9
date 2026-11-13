@@ -32,9 +32,9 @@ export default async function getASTFromQuery(
 
 	const permissions =
 		accountability && accountability.admin !== true
-			? accountability?.permissions?.filter((permission) => {
+			? (accountability?.permissions?.filter((permission) => {
 					return permission.action === action;
-			  }) ?? []
+				}) ?? [])
 			: null;
 
 	let fields = ['*'];

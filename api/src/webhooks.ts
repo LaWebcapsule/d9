@@ -65,7 +65,7 @@ function createHandler(webhook: Webhook, event: string): ActionHandler {
 				? {
 						user: context.accountability.user,
 						role: context.accountability.role,
-				  }
+					}
 				: null,
 			...meta,
 		};

@@ -1,6 +1,7 @@
 {
 	"extends": "@wbce-d9/tsconfig/node22",
 	"compilerOptions": {
+		"rootDir": "src",
 		"outDir": "dist",
 		"lib": ["es2022", "DOM"]
 	},

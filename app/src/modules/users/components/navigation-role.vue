@@ -45,7 +45,7 @@ export default defineComponent({
 				? {
 						name: 'settings-roles-item',
 						params: { primaryKey: props.role.id, lastAdminRoleId: props.role.id },
-				  }
+					}
 				: `/settings/roles/${props.role.id}`;
 		});
 

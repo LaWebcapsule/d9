@@ -264,7 +264,9 @@ export default defineComponent({
 		z-index: 3;
 		margin: 4px;
 		opacity: 0;
-		transition: opacity var(--fast) var(--transition), color var(--fast) var(--transition);
+		transition:
+			opacity var(--fast) var(--transition),
+			color var(--fast) var(--transition);
 
 		&:hover {
 			opacity: 1 !important;

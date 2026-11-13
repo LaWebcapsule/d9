@@ -1,4 +1,3 @@
-/* eslint-env es2022 */
 /* eslint-disable no-console -- CLI script */
 
 // For each Dependabot alert on upstream Directus 9 packages (see .pnpmfile.cjs) dismissed as

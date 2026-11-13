@@ -245,7 +245,7 @@ class OASSpecsService implements SpecificationSubService {
 														},
 													},
 												},
-										  },
+											},
 									responses: {
 										'200': {
 											content:
@@ -263,7 +263,7 @@ class OASSpecsService implements SpecificationSubService {
 																	},
 																},
 															},
-													  },
+														},
 										},
 									},
 								},
@@ -292,7 +292,7 @@ class OASSpecsService implements SpecificationSubService {
 														},
 													},
 												},
-										  },
+											},
 									responses: {
 										'200': {
 											content:
@@ -308,7 +308,7 @@ class OASSpecsService implements SpecificationSubService {
 																	},
 																},
 															},
-													  },
+														},
 										},
 									},
 								},

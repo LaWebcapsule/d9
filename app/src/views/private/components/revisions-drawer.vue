@@ -97,7 +97,7 @@ export default defineComponent({
 							text: t('creation_preview'),
 							value: 'revision_preview',
 						},
-				  ]
+					]
 				: [
 						{
 							text: t('updates_made'),
@@ -107,7 +107,7 @@ export default defineComponent({
 							text: t('revision_preview'),
 							value: 'revision_preview',
 						},
-				  ];
+					];
 		});
 
 		const hasPastRevision = computed(() => {

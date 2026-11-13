@@ -132,7 +132,7 @@ router.get(
 		const transformation: TransformationParams = res.locals['transformation'].key
 			? (res.locals['shortcuts'] as TransformationParams[]).find(
 					(transformation) => transformation['key'] === res.locals['transformation'].key
-			  )
+				)
 			: res.locals['transformation'];
 
 		if (transformation.format === 'auto') {

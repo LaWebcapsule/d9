@@ -6,16 +6,15 @@
 		"jsx": "preserve",
 		"importHelpers": true,
 		"skipLibCheck": true,
-		"moduleResolution": "node",
+		"moduleResolution": "bundler",
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
 		"resolveJsonModule": true,
 		"sourceMap": true,
-		"baseUrl": ".",
 		"types": ["vite/client"],
 		"paths": {
-			"@/*": ["src/*"],
-			"preact/*": ["stub/empty.d.ts"]
+			"@/*": ["./src/*"],
+			"preact/*": ["./stub/empty.d.ts"]
 		},
 		"lib": ["esnext", "dom", "dom.iterable", "scripthost"]
 	},

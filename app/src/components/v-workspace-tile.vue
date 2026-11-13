@@ -392,7 +392,9 @@ function useDragDrop() {
 	background-color: var(--background-page);
 	border-top-right-radius: var(--border-radius-outline);
 	opacity: 0;
-	transition: opacity var(--fast) var(--transition), color var(--fast) var(--transition);
+	transition:
+		opacity var(--fast) var(--transition),
+		color var(--fast) var(--transition);
 	pointer-events: none;
 }
 .tile-content {

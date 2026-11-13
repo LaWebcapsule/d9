@@ -146,7 +146,7 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 								schema: this.schema,
 								accountability: this.accountability,
 							}
-					  )
+						)
 					: payload;
 
 			const payloadWithPresets = this.accountability
@@ -372,7 +372,7 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 							schema: this.schema,
 							accountability: this.accountability,
 						}
-				  )
+					)
 				: query;
 
 		let ast = await getASTFromQuery(this.collection, updatedQuery, this.schema, {
@@ -418,7 +418,7 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 							schema: this.schema,
 							accountability: this.accountability,
 						}
-				  )
+					)
 				: records;
 
 		if (opts?.emitEvents !== false) {
@@ -588,7 +588,7 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 							schema: this.schema,
 							accountability: this.accountability,
 						}
-				  )
+					)
 				: payload;
 
 		// Sort keys to ensure that the order is maintained

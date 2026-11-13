@@ -105,7 +105,9 @@ export default defineComponent({
 	padding: 0 10px;
 	background-color: var(--background-page);
 	box-shadow: 0;
-	transition: box-shadow var(--medium) var(--transition), margin var(--fast) var(--transition);
+	transition:
+		box-shadow var(--medium) var(--transition),
+		margin var(--fast) var(--transition);
 
 	.nav-toggle {
 		@media (min-width: 960px) {

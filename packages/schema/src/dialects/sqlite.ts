@@ -306,17 +306,15 @@ export default class SQLite implements SchemaInspector {
 		if (table) {
 			const keys = await this.knex.raw(`PRAGMA foreign_key_list(??)`, table);
 
-			return keys.map(
-				(key: RawForeignKey): ForeignKey => ({
-					table,
-					column: key.from,
-					foreign_key_table: key.table,
-					foreign_key_column: key.to,
-					on_update: key.on_update,
-					on_delete: key.on_delete,
-					constraint_name: null,
-				})
-			);
+			return keys.map((key: RawForeignKey): ForeignKey => ({
+				table,
+				column: key.from,
+				foreign_key_table: key.table,
+				foreign_key_column: key.to,
+				on_update: key.on_update,
+				on_delete: key.on_delete,
+				constraint_name: null,
+			}));
 		}
 
 		const tables = await this.tables();
