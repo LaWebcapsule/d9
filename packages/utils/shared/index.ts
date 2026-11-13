@@ -17,6 +17,7 @@ export * from './get-output-type-for-function.js';
 export * from './get-relation-type.js';
 export * from './get-simple-hash.js';
 export * from './get-with-arrays.js';
+export * from './hash-value.js';
 export * from './inject-function-results.js';
 export * from './is-dynamic-variable.js';
 export * from './is-valid-json.js';

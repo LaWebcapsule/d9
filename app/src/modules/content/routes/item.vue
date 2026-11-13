@@ -176,6 +176,18 @@
 			<live-preview v-if="previewURL" :url="previewURL" @new-window="livePreviewMode = 'popup'" />
 		</template>
 
+		<conflicts-drawer
+			v-if="conflicts"
+			active
+			:collection="collection"
+			:primary-key="internalPrimaryKey"
+			:edits="edits"
+			:conflicts="conflicts"
+			:saving="saving"
+			@resolve="resolveConflictsAndStay"
+			@cancel="conflicts = null"
+		/>
+
 		<v-dialog v-model="confirmLeave" @esc="confirmLeave = false">
 			<v-card>
 				<v-card-title>{{ t('unsaved_changes') }}</v-card-title>
@@ -242,8 +254,10 @@ import { usePermissions } from '@/composables/use-permissions';
 import { useShortcut } from '@/composables/use-shortcut';
 import { useTemplateData } from '@/composables/use-template-data';
 import { useTitle } from '@/composables/use-title';
+import { ConflictChoice } from '@/utils/edit-conflicts';
 import { renderStringTemplate } from '@/utils/render-string-template';
 import CommentsSidebarDetail from '@/views/private/components/comments-sidebar-detail.vue';
+import ConflictsDrawer from '@/views/private/components/conflicts-drawer.vue';
 import FlowSidebarDetail from '@/views/private/components/flow-sidebar-detail.vue';
 import RevisionsDrawerDetail from '@/views/private/components/revisions-drawer-detail.vue';
 import SaveOptions from '@/views/private/components/save-options.vue';
@@ -296,6 +310,8 @@ const {
 	saveAsCopy,
 	refresh,
 	validationErrors,
+	conflicts,
+	resolveConflicts,
 } = useItem(collection, primaryKey);
 
 const { templateData, loading: templateDataLoading } = useTemplateData(collectionInfo, primaryKey);
@@ -528,6 +544,15 @@ async function saveAndStay() {
 		}
 	} catch {
 		// Save shows unexpected error dialog
+	}
+}
+
+async function resolveConflictsAndStay(choices: ConflictChoice[]) {
+	try {
+		await resolveConflicts(choices);
+		revisionsDrawerDetailRef.value?.refresh?.();
+	} catch {
+		// Save shows unexpected error dialog, or the conflicts again when there are new ones
 	}
 }
 

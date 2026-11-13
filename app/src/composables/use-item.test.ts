@@ -6,6 +6,10 @@ import { setActivePinia } from 'pinia';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { computed, ref } from 'vue';
 
+import { useFieldsStore } from '@/stores/fields';
+import { unexpectedError } from '@/utils/unexpected-error';
+import { hashValue } from '@wbce-d9/utils';
+import { flushPromises } from '@vue/test-utils';
 import { useItem } from './use-item';
 
 vi.mock('@/utils/notify', () => ({
@@ -17,11 +21,16 @@ vi.mock('@/api', () => {
 		default: {
 			get: vi.fn(),
 			post: vi.fn(),
+			patch: vi.fn(),
 		},
 	};
 });
 
 vi.mock('@wbce-d9/composables');
+
+vi.mock('@/utils/unexpected-error', () => ({
+	unexpectedError: vi.fn(),
+}));
 
 beforeEach(() => {
 	setActivePinia(
@@ -223,5 +232,143 @@ describe('Save As Copy', () => {
 		await saveAsCopy();
 
 		expect(apiPostSpy.mock.lastCall![1]).not.toHaveProperty(mockPrimaryKeyFieldName);
+	});
+});
+
+describe('Edit conflicts', () => {
+	const primaryKeyField = {
+		collection: 'test',
+		field: 'id',
+		type: 'integer',
+		schema: { is_primary_key: true, has_auto_increment: true },
+		meta: null,
+	} as unknown as Field;
+
+	const fields = [
+		primaryKeyField,
+		{ collection: 'test', field: 'title', type: 'string', schema: {}, meta: null },
+		{ collection: 'test', field: 'status', type: 'string', schema: {}, meta: null },
+	] as unknown as Field[];
+
+	const conflict = {
+		collection: 'test',
+		key: 1,
+		action: 'update',
+		type: 'changed',
+		field: 'title',
+		current: 'Theirs',
+	};
+
+	const conflictError = {
+		response: {
+			status: 409,
+			data: { errors: [{ message: 'Conflict', extensions: { code: 'CONFLICT', conflicts: [conflict] } }] },
+		},
+	};
+
+	async function setup(singleton = false) {
+		useFieldsStore().fields = fields;
+
+		vi.mocked(useCollection).mockReturnValue({
+			info: computed(() => ({ collection: 'test', meta: { singleton, archive_field: null } })),
+			primaryKeyField: computed(() => primaryKeyField),
+			fields: computed(() => fields),
+		} as any);
+
+		vi.mocked(api.get).mockResolvedValue({ data: { data: { id: 1, title: 'Title', status: 'draft' } } });
+
+		const usable = useItem(ref('test'), ref(singleton ? null : 1));
+		await flushPromises();
+		return usable;
+	}
+
+	test('sends the hashes of the loaded values of the changed fields', async () => {
+		vi.mocked(api.patch).mockResolvedValue({ data: { data: { id: 1, title: 'Mine', status: 'draft' } } });
+
+		const { edits, save } = await setup();
+
+		edits.value = { title: 'Mine' };
+		await save();
+
+		expect(api.patch).toHaveBeenCalledWith('/items/test/1', { title: 'Mine', $base: { title: hashValue('Title') } });
+	});
+
+	test('keeps the edits and exposes the conflicts on a 409', async () => {
+		vi.mocked(api.patch).mockRejectedValue(conflictError);
+
+		const { edits, save, conflicts } = await setup();
+
+		edits.value = { title: 'Mine' };
+		await expect(save()).rejects.toBe(conflictError);
+
+		expect(edits.value).toEqual({ title: 'Mine' });
+		expect(conflicts.value).toEqual([conflict]);
+		expect(unexpectedError).not.toHaveBeenCalled();
+	});
+
+	test('saves again with the chosen versions', async () => {
+		vi.mocked(api.patch).mockRejectedValueOnce(conflictError);
+		vi.mocked(api.patch).mockResolvedValueOnce({ data: { data: { id: 1, title: 'Mine', status: 'draft' } } });
+
+		const { edits, save, conflicts, resolveConflicts } = await setup();
+
+		edits.value = { title: 'Mine' };
+		await save().catch(() => undefined);
+		await resolveConflicts(['mine']);
+
+		expect(api.patch).toHaveBeenLastCalledWith('/items/test/1', {
+			title: 'Mine',
+			$base: { title: hashValue('Theirs') },
+		});
+
+		expect(conflicts.value).toBeNull();
+		expect(edits.value).toEqual({});
+	});
+
+	test('keeps checking against the originally loaded values after a reload', async () => {
+		vi.mocked(api.patch).mockResolvedValue({ data: { data: { id: 1, title: 'Mine', status: 'draft' } } });
+
+		const { edits, save, getItem } = await setup();
+
+		edits.value = { title: 'Mine' };
+
+		vi.mocked(api.get).mockResolvedValue({ data: { data: { id: 1, title: 'Changed', status: 'published' } } });
+		await getItem();
+
+		edits.value = { title: 'Mine', status: 'archived' };
+		await save();
+
+		expect(api.patch).toHaveBeenCalledWith('/items/test/1', {
+			title: 'Mine',
+			status: 'archived',
+			$base: { title: hashValue('Title'), status: hashValue('published') },
+		});
+	});
+
+	test('resolves the conflicts of a singleton', async () => {
+		vi.mocked(api.patch).mockRejectedValueOnce(conflictError);
+		vi.mocked(api.patch).mockResolvedValueOnce({ data: { data: { id: 1, title: 'Theirs', status: 'draft' } } });
+
+		const { edits, save, resolveConflicts } = await setup(true);
+
+		edits.value = { title: 'Mine' };
+		await save().catch(() => undefined);
+		await resolveConflicts(['theirs']);
+
+		expect(api.patch).toHaveBeenLastCalledWith('/items/test', {
+			title: 'Theirs',
+			$base: { title: hashValue('Theirs') },
+		});
+	});
+
+	test('does not send base hashes when saving as a copy', async () => {
+		vi.mocked(api.post).mockResolvedValue({ data: { data: { id: 2 } } });
+
+		const { edits, saveAsCopy } = await setup();
+
+		edits.value = { title: 'Mine', meta: { $base: { a: 'hash' }, nested: true } };
+		await saveAsCopy();
+
+		expect(api.post).toHaveBeenCalledWith('/items/test', { title: 'Mine', status: 'draft', meta: { nested: true } });
 	});
 });

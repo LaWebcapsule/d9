@@ -1558,6 +1558,9 @@ importers:
 
   packages/utils:
     dependencies:
+      '@noble/hashes':
+        specifier: 1.8.0
+        version: 1.8.0
       '@wbce-d9/constants':
         specifier: workspace:*
         version: link:../constants
@@ -13716,7 +13719,7 @@ snapshots:
       obug: 2.1.1
       std-env: 4.0.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.12(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.12)(happy-dom@21.0.4)(vite@7.3.7(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
+      vitest: 4.1.12(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.12)(happy-dom@21.0.4)(vite@7.3.7(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
 
   '@vitest/expect@4.1.12':
     dependencies:

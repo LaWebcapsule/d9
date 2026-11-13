@@ -348,6 +348,69 @@ mutation {
 }
 ```
 
+### Detecting Conflicting Changes
+
+To make sure an update doesn't overwrite changes someone else saved in the meantime, add `$base` to the request body:
+the hashes of the values the changes are based on, by field. The hash of a value is the SHA-256 hex digest of its JSON
+with sorted object keys, see `hashValue()` in `@wbce-d9/utils`. Many-to-one fields are hashed as the foreign key.
+
+```json
+{
+	"title": "An updated title",
+	"$base": { "title": "<hash of the title as it was loaded>" }
+}
+```
+
+`$base` also works in nested items, for example in the `update` items of a translations field. To check items before
+deleting them, add `$deleteBase` to the nested changes, with the hashes of the loaded values by primary key:
+
+```json
+{
+	"translations": {
+		"create": [],
+		"update": [{ "id": 7, "body": "Updated text", "$base": { "body": "<hash>" } }],
+		"delete": [9],
+		"$deleteBase": { "9": { "body": "<hash>" } }
+	}
+}
+```
+
+If any of the values changed, or an updated item doesn't exist anymore, nothing is saved and the API responds with `409`
+and the error code `CONFLICT`. `extensions.conflicts` lists every conflict, with the current value if you're allowed to
+read it. A hash of `null` skips the check of that field. Without `$base`, the last update wins.
+
+```json
+{
+	"errors": [
+		{
+			"message": "The item has been changed by someone else in the meantime. Review the changes and try again.",
+			"extensions": {
+				"code": "CONFLICT",
+				"conflicts": [
+					{
+						"collection": "articles",
+						"key": 15,
+						"action": "update",
+						"type": "changed",
+						"field": "title",
+						"current": "A title someone else saved",
+						"user": "<id of the user who changed the item last>",
+						"timestamp": "2026-11-13T10:00:00.000Z"
+					}
+				]
+			}
+		}
+	]
+}
+```
+
+::: tip Hooks and Flows
+
+`$base` of the item itself is removed before filter hooks run. Nested `$base` and `$deleteBase` are still part of the
+payload that hooks and Flows receive.
+
+:::
+
 ---
 
 ## Update Multiple Items

@@ -1396,6 +1396,26 @@ live_preview:
   refresh: Refresh Preview
   new_window: Open in New Window
   close_window: Open in Split View
+edit_conflicts:
+  title: Conflicting Changes
+  description: >-
+    Someone else saved changes to this item while you were editing it. Nothing has been saved yet. Choose which
+    version to keep for each conflict, then save again.
+  changed_by: Changed by {user} {time}
+  changed: Changed
+  theirs: Their version
+  mine: My version
+  keep_theirs: Keep their version
+  keep_mine: Keep my version
+  no_access: You don't have permission to see the current value. Keeping your version will overwrite it.
+  item_deleted: This item was deleted by someone else. Your changes can't be saved to it, but you can save them as a copy.
+  nested_deleted: Someone else deleted this item while you were editing it.
+  restore_mine: Restore it with my changes
+  discard_mine: Discard my changes
+  delete_changed: You deleted this item, but someone else changed it in the meantime.
+  delete_anyway: Delete it anyway
+  keep_item: Keep the item
+  resolve: Save With Selected Versions
 shares: Shares
 unlimited_usage: Unlimited usage
 uses_left: No uses left | 1 use left | {n} uses left
