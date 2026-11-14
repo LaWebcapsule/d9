@@ -3,9 +3,11 @@ import type { Knex } from 'knex';
 import { cloneDeep, mergeWith } from 'lodash-es';
 import type {
 	OpenAPIObject,
+	OperationObject,
 	ParameterObject,
 	PathItemObject,
 	ReferenceObject,
+	RequestBodyObject,
 	SchemaObject,
 	TagObject,
 } from 'openapi3-ts';
@@ -218,105 +220,23 @@ class OASSpecsService implements SpecificationSubService {
 						if (!paths[`/items/${collection}/{id}`]) paths[`/items/${collection}/{id}`] = {};
 
 						if (listBase[method]) {
-							paths[`/items/${collection}`][method] = mergeWith(
-								cloneDeep(listBase[method]),
-								{
-									description: listBase[method].description.replace('item', collection + ' item'),
-									tags: [tag.name],
-									parameters: 'parameters' in listBase ? this.filterCollectionFromParams(listBase.parameters) : [],
-									operationId: `${this.getActionForMethod(method)}${tag.name}`,
-									requestBody: ['get', 'delete'].includes(method)
-										? undefined
-										: {
-												content: {
-													'application/json': {
-														schema: {
-															oneOf: [
-																{
-																	type: 'array',
-																	items: {
-																		$ref: `#/components/schemas/${tag.name}`,
-																	},
-																},
-																{
-																	$ref: `#/components/schemas/${tag.name}`,
-																},
-															],
-														},
-													},
-												},
-										  },
-									responses: {
-										'200': {
-											content:
-												method === 'delete'
-													? undefined
-													: {
-															'application/json': {
-																schema: {
-																	properties: {
-																		data: {
-																			items: {
-																				$ref: `#/components/schemas/${tag.name}`,
-																			},
-																		},
-																	},
-																},
-															},
-													  },
-										},
-									},
-								},
-								(obj, src) => {
-									if (Array.isArray(obj)) return obj.concat(src);
-									return undefined;
-								}
-							);
+							paths[`/items/${collection}`][method] = this.generateItemsOperation(listBase, method, {
+								description: listBase[method].description.replace('item', collection + ' item'),
+								tags: [tag.name],
+								operationId: `${this.getActionForMethod(method)}${tag.name}`,
+								requestBody: this.getItemsRequestBody(method, tag.name, 'list'),
+								data: { type: 'array', items: { $ref: `#/components/schemas/${tag.name}` } },
+							});
 						}
 
 						if (detailBase[method]) {
-							paths[`/items/${collection}/{id}`][method] = mergeWith(
-								cloneDeep(detailBase[method]),
-								{
-									description: detailBase[method].description.replace('item', collection + ' item'),
-									tags: [tag.name],
-									operationId: `${this.getActionForMethod(method)}Single${tag.name}`,
-									parameters: 'parameters' in detailBase ? this.filterCollectionFromParams(detailBase.parameters) : [],
-									requestBody: ['get', 'delete'].includes(method)
-										? undefined
-										: {
-												content: {
-													'application/json': {
-														schema: {
-															$ref: `#/components/schemas/${tag.name}`,
-														},
-													},
-												},
-										  },
-									responses: {
-										'200': {
-											content:
-												method === 'delete'
-													? undefined
-													: {
-															'application/json': {
-																schema: {
-																	properties: {
-																		data: {
-																			$ref: `#/components/schemas/${tag.name}`,
-																		},
-																	},
-																},
-															},
-													  },
-										},
-									},
-								},
-								(obj, src) => {
-									if (Array.isArray(obj)) return obj.concat(src);
-									return undefined;
-								}
-							);
+							paths[`/items/${collection}/{id}`][method] = this.generateItemsOperation(detailBase, method, {
+								description: detailBase[method].description.replace('item', collection + ' item'),
+								tags: [tag.name],
+								operationId: `${this.getActionForMethod(method)}Single${tag.name}`,
+								requestBody: this.getItemsRequestBody(method, tag.name, 'detail'),
+								data: { $ref: `#/components/schemas/${tag.name}` },
+							});
 						}
 					}
 				}
@@ -324,6 +244,89 @@ class OASSpecsService implements SpecificationSubService {
 		}
 
 		return paths;
+	}
+
+	private generateItemsOperation(
+		base: PathItemObject,
+		method: string,
+		options: {
+			description: string;
+			tags: string[];
+			operationId: string;
+			requestBody: RequestBodyObject | undefined;
+			data: SchemaObject | ReferenceObject;
+		}
+	): OperationObject {
+		const operation: OperationObject = mergeWith(
+			cloneDeep(base[method as keyof PathItemObject]),
+			{
+				description: options.description,
+				tags: options.tags,
+				operationId: options.operationId,
+				parameters: 'parameters' in base ? this.filterCollectionFromParams(base.parameters) : [],
+				// Deletes don't respond with data
+				responses:
+					method === 'delete'
+						? {}
+						: {
+								'200': {
+									content: {
+										'application/json': {
+											schema: {
+												properties: {
+													data: options.data,
+												},
+											},
+										},
+									},
+								},
+						  },
+			},
+			(obj, src) => {
+				if (Array.isArray(obj)) return obj.concat(src);
+				return undefined;
+			}
+		);
+
+		// Replaced instead of merged, as merging would combine the generic and the collection schemas
+		if (options.requestBody) operation.requestBody = options.requestBody;
+
+		return operation;
+	}
+
+	private getItemsRequestBody(method: string, tagName: string, path: 'list' | 'detail'): RequestBodyObject | undefined {
+		const item: ReferenceObject = { $ref: `#/components/schemas/${tagName}` };
+
+		let schema: SchemaObject | ReferenceObject | undefined;
+
+		if (method === 'post' && path === 'list') {
+			schema = { oneOf: [{ type: 'array', items: item }, item] };
+		} else if (method === 'patch' && path === 'list') {
+			schema = {
+				oneOf: [
+					{ type: 'array', items: item },
+					{
+						type: 'object',
+						required: ['keys', 'data'],
+						properties: {
+							keys: { type: 'array', items: { oneOf: [{ type: 'integer' }, { type: 'string' }] } },
+							data: item,
+						},
+					},
+					{
+						type: 'object',
+						required: ['query', 'data'],
+						properties: { query: { $ref: '#/components/schemas/Query' }, data: item },
+					},
+				],
+			};
+		} else if (method === 'patch' && path === 'detail') {
+			schema = item;
+		}
+
+		if (!schema) return undefined;
+
+		return { content: { 'application/json': { schema } } };
 	}
 
 	private async generateComponents(

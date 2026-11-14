@@ -71,7 +71,7 @@ delete:
     - Items
   operationId: deleteItem
   responses:
-    '200':
+    '204':
       description: Successful request
     '401':
       $ref: '../../openapi.yaml#/components/responses/UnauthorizedError'

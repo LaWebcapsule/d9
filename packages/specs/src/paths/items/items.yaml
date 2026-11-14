@@ -43,8 +43,12 @@ post:
   requestBody:
     content:
       application/json:
-        # Intentionally empty, see https://github.com/LaWebcapsule/d9/pull/16294
         schema:
+          oneOf:
+            - type: array
+              items:
+                type: object
+            - type: object
   responses:
     '200':
       description: Successful request
@@ -52,6 +56,103 @@ post:
         application/json:
           schema:
             type: object
+    '401':
+      $ref: '../../openapi.yaml#/components/responses/UnauthorizedError'
+
+patch:
+  summary: Update Multiple Items
+  description: >-
+    Update multiple items at the same time. The body is either an array of partial items including their primary key,
+    the primary keys and the changes for all of them, or a query and the changes for all items it matches. To detect
+    changes someone else saved in the meantime, add `$base` to the changes, see the update of a single item.
+  tags:
+    - Items
+  operationId: updateItems
+  parameters:
+    - $ref: '../../openapi.yaml#/components/parameters/Fields'
+    - $ref: '../../openapi.yaml#/components/parameters/Meta'
+  requestBody:
+    content:
+      application/json:
+        schema:
+          oneOf:
+            - type: array
+              items:
+                type: object
+            - type: object
+              required:
+                - keys
+                - data
+              properties:
+                keys:
+                  type: array
+                  items:
+                    oneOf:
+                      - type: integer
+                      - type: string
+                data:
+                  type: object
+            - type: object
+              required:
+                - query
+                - data
+              properties:
+                query:
+                  $ref: '../../openapi.yaml#/components/schemas/Query'
+                data:
+                  type: object
+  responses:
+    '200':
+      description: Successful request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  type: object
+    '401':
+      $ref: '../../openapi.yaml#/components/responses/UnauthorizedError'
+    '409':
+      $ref: '../../openapi.yaml#/components/responses/ConflictError'
+
+delete:
+  summary: Delete Multiple Items
+  description: Delete multiple items at the same time, either by an array of primary keys or by a query.
+  tags:
+    - Items
+  operationId: deleteItems
+  requestBody:
+    content:
+      application/json:
+        schema:
+          oneOf:
+            - type: array
+              items:
+                oneOf:
+                  - type: integer
+                  - type: string
+            - type: object
+              required:
+                - keys
+              properties:
+                keys:
+                  type: array
+                  items:
+                    oneOf:
+                      - type: integer
+                      - type: string
+            - type: object
+              required:
+                - query
+              properties:
+                query:
+                  $ref: '../../openapi.yaml#/components/schemas/Query'
+  responses:
+    '204':
+      description: Successful request
     '401':
       $ref: '../../openapi.yaml#/components/responses/UnauthorizedError'
 parameters:

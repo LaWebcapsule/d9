@@ -384,25 +384,25 @@ describe('Integration Tests', () => {
 				});
 
 				describe('path', () => {
-					it('requestBody for CreateItems POST path should not have type in schema', async () => {
-						const collection: Collection = {
+					const collection: Collection = {
+						collection: 'test_table',
+						meta: {
+							accountability: 'all',
 							collection: 'test_table',
-							meta: {
-								accountability: 'all',
-								collection: 'test_table',
-								group: null,
-								hidden: false,
-								icon: null,
-								item_duplication_fields: null,
-								note: null,
-								singleton: false,
-								translations: {},
-							},
-							schema: {
-								name: 'test_table',
-							},
-						};
+							group: null,
+							hidden: false,
+							icon: null,
+							item_duplication_fields: null,
+							note: null,
+							singleton: false,
+							translations: {},
+						},
+						schema: {
+							name: 'test_table',
+						},
+					};
 
+					beforeEach(() => {
 						vi.spyOn(CollectionsService.prototype, 'readByQuery').mockResolvedValue([collection]);
 
 						vi.spyOn(FieldsService.prototype, 'readAll').mockResolvedValue([
@@ -455,7 +455,9 @@ describe('Integration Tests', () => {
 						]);
 
 						vi.spyOn(RelationsService.prototype, 'readAll').mockResolvedValue([]);
+					});
 
+					it('requestBody for CreateItems POST path should not have type in schema', async () => {
 						const spec = await service.oas.generate();
 
 						const targetSchema =
@@ -463,6 +465,45 @@ describe('Integration Tests', () => {
 
 						expect(targetSchema).toHaveProperty('oneOf');
 						expect(targetSchema).not.toHaveProperty('type');
+					});
+
+					it('documents updating multiple items with the schema of the collection', async () => {
+						const spec = await service.oas.generate();
+
+						const operation = spec.paths[`/items/${collection.collection}`].patch;
+						const item = { $ref: '#/components/schemas/ItemsTestTable' };
+
+						expect(operation.operationId).toBe('updateItemsTestTable');
+						expect(operation.responses).toHaveProperty('409');
+
+						expect(operation.requestBody.content['application/json'].schema.oneOf).toEqual([
+							{ type: 'array', items: item },
+							expect.objectContaining({ required: ['keys', 'data'] }),
+							expect.objectContaining({ required: ['query', 'data'] }),
+						]);
+					});
+
+					it('replaces the generic requestBody of updating an item with the schema of the collection', async () => {
+						const spec = await service.oas.generate();
+
+						const operation = spec.paths[`/items/${collection.collection}/{id}`].patch;
+
+						expect(operation.requestBody.content['application/json'].schema).toEqual({
+							$ref: '#/components/schemas/ItemsTestTable',
+						});
+
+						expect(operation.responses).toHaveProperty('409');
+					});
+
+					it('documents deleting items without a response body', async () => {
+						const spec = await service.oas.generate();
+
+						const list = spec.paths[`/items/${collection.collection}`].delete;
+						const detail = spec.paths[`/items/${collection.collection}/{id}`].delete;
+
+						expect(list.requestBody.content['application/json'].schema).toHaveProperty('oneOf');
+						expect(Object.keys(list.responses)).toEqual(['204', '401']);
+						expect(Object.keys(detail.responses)).toEqual(['204', '401', '404']);
 					});
 				});
 			});
