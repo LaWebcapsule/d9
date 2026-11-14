@@ -1,0 +1,55 @@
+description: 'Error: The item has been changed by someone else in the meantime.'
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+              extensions:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: CONFLICT
+                  conflicts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        collection:
+                          type: string
+                        key:
+                          oneOf:
+                            - type: integer
+                            - type: string
+                        action:
+                          type: string
+                          enum:
+                            - update
+                            - delete
+                          description: What the client tried to do with the item.
+                        type:
+                          type: string
+                          enum:
+                            - changed
+                            - deleted
+                          description: Whether the field was changed by someone else or the item doesn't exist anymore.
+                        field:
+                          type: string
+                        current:
+                          description: Current value of the field, only included when the user is allowed to read it.
+                        user:
+                          type: string
+                          nullable: true
+                          description: User who changed the item last.
+                        timestamp:
+                          type: string
+                          format: date-time
+                          nullable: true
+                          description: Time of the latest change of the item.

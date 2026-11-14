@@ -347,6 +347,8 @@ components:
     Export:
       $ref: './parameters/export.yaml'
   responses:
+    ConflictError:
+      $ref: './responses/conflictError.yaml'
     NotFoundError:
       $ref: './responses/notFoundError.yaml'
     UnauthorizedError:
