@@ -69,7 +69,7 @@
 								<v-notice v-if="!('current' in conflicts[index]!)" type="info">
 									{{ t('edit_conflicts.no_access') }}
 								</v-notice>
-								<pre v-else class="value">{{ formatValue(conflicts[index]!.current) }}</pre>
+								<revisions-drawer-updates-change v-else deleted :changes="changes[index]!" />
 							</div>
 
 							<div class="version" :class="{ selected: choices[index] === 'mine' }">
@@ -80,7 +80,7 @@
 									:label="t('edit_conflicts.keep_mine')"
 									@update:model-value="choices[index] = 'mine'"
 								/>
-								<pre class="value">{{ formatValue(getMyValue(conflicts[index]!)) }}</pre>
+								<revisions-drawer-updates-change added :changes="changes[index]!" />
 							</div>
 						</div>
 					</div>
@@ -98,8 +98,10 @@ import { ConflictChoice, EditConflict, walkEdits } from '@/utils/edit-conflicts'
 import { localizedFormatDistance } from '@/utils/localized-format-distance';
 import { userName } from '@/utils/user-name';
 import { User } from '@wbce-d9/types';
+import { diffArrays, diffJson, diffWordsWithSpace } from 'diff';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import RevisionsDrawerUpdatesChange, { Change } from './revisions-drawer-updates-change.vue';
 
 interface Props {
 	active: boolean;
@@ -218,8 +220,33 @@ function getChangedBy(conflict: EditConflict) {
 	});
 }
 
+// Their version compared to mine, in the same way revisions show what an update changed
+const changes = computed(() =>
+	props.conflicts.map((conflict) => getChanges(conflict.current, getMyValue(conflict)) as Change[])
+);
+
+function getChanges(theirs: unknown, mine: unknown) {
+	if (typeof theirs === 'string' && typeof mine === 'string' && mine.length > 25) {
+		return diffWordsWithSpace(theirs, mine);
+	}
+
+	if (Array.isArray(theirs) && Array.isArray(mine)) {
+		return diffArrays(theirs, mine);
+	}
+
+	if (theirs && mine && typeof theirs === 'object' && typeof mine === 'object') {
+		return diffJson(theirs, mine);
+	}
+
+	// This is considering the whole thing a change
+	return [
+		{ removed: true, value: formatValue(theirs) },
+		{ added: true, value: formatValue(mine) },
+	];
+}
+
 function formatValue(value: unknown) {
-	if (value === null || value === undefined) return '--';
+	if (value === null || value === undefined) return '';
 	if (typeof value === 'string') return value;
 	return JSON.stringify(value, null, 2);
 }
@@ -301,15 +328,11 @@ async function loadUsers(conflicts: EditConflict[]) {
 	}
 }
 
-.value {
+.versions .version .change-line {
 	max-height: 240px;
-	margin: 0;
-	padding: 8px;
 	overflow: auto;
-	font-family: var(--family-monospace);
 	white-space: pre-wrap;
 	word-break: break-word;
-	background-color: var(--background-subdued);
 	border-radius: var(--border-radius);
 }
 </style>

@@ -25,10 +25,10 @@ get:
 patch:
   summary: Update an Item
   description: >-
-    Update an existing item. To detect changes someone else saved in the meantime, add `$base` to the body (also in
-    nested items): the SHA-256 hashes of the values the changes are based on, by field. Nested `delete` alterations can
-    contain `$deleteBase` with the hashes by primary key. If any of the values changed, nothing is saved and the API
-    responds with 409 CONFLICT.
+    Update an existing item. To detect changes someone else saved in the meantime, add `base` to the reserved `$__meta`
+    key of the body (also in nested items): the SHA-256 hashes of the values the changes are based on, by field. The
+    `$__meta` of nested `delete` alterations can contain `deleteBase` with the hashes by primary key. If any of the
+    values changed, nothing is saved and the API responds with 409 CONFLICT.
   tags:
     - Items
   operationId: updateItem
@@ -41,12 +41,17 @@ patch:
         schema:
           type: object
           properties:
-            $base:
+            $__meta:
               type: object
-              description: Hashes of the values the changes are based on, by field. A hash of `null` skips the check.
-              additionalProperties:
-                type: string
-                nullable: true
+              description: Information about the update that is not part of the item itself.
+              properties:
+                base:
+                  type: object
+                  description: >-
+                    Hashes of the values the changes are based on, by field. A hash of `null` skips the check.
+                  additionalProperties:
+                    type: string
+                    nullable: true
   responses:
     '200':
       description: Successful request

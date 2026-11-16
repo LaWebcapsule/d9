@@ -19,7 +19,7 @@ import type {
 	MutationOptions,
 	PrimaryKey,
 } from '../types/index.js';
-import { detectConflicts, extractBase } from '../utils/conflicts.js';
+import { detectConflicts, extractBase, hasUnfilteredAccess } from '../utils/conflicts.js';
 import getASTFromQuery from '../utils/get-ast-from-query.js';
 import { validateKeys } from '../utils/validate-keys.js';
 import { AuthorizationService } from './authorization.js';
@@ -616,8 +616,9 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 		// Sort keys to ensure that the order is maintained
 		keys.sort();
 
-		// Items that were deleted in the meantime are a conflict, not a permission error
-		if (base) {
+		// Items that were deleted in the meantime are a conflict, not a permission error. Only for users who
+		// can update every item of the collection, anyone else could use it to find out which items exist.
+		if (base && hasUnfilteredAccess(this.accountability, this.collection, 'update')) {
 			const existingKeys = (
 				await this.knex.select(primaryKeyField).from(this.collection).whereIn(primaryKeyField, keys)
 			).map((row) => String(row[primaryKeyField]));

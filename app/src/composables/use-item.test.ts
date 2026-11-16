@@ -290,7 +290,10 @@ describe('Edit conflicts', () => {
 		edits.value = { title: 'Mine' };
 		await save();
 
-		expect(api.patch).toHaveBeenCalledWith('/items/test/1', { title: 'Mine', $base: { title: hashValue('Title') } });
+		expect(api.patch).toHaveBeenCalledWith('/items/test/1', {
+			title: 'Mine',
+			$__meta: { base: { title: hashValue('Title') } },
+		});
 	});
 
 	test('keeps the edits and exposes the conflicts on a 409', async () => {
@@ -318,7 +321,7 @@ describe('Edit conflicts', () => {
 
 		expect(api.patch).toHaveBeenLastCalledWith('/items/test/1', {
 			title: 'Mine',
-			$base: { title: hashValue('Theirs') },
+			$__meta: { base: { title: hashValue('Theirs') } },
 		});
 
 		expect(conflicts.value).toBeNull();
@@ -341,7 +344,7 @@ describe('Edit conflicts', () => {
 		expect(api.patch).toHaveBeenCalledWith('/items/test/1', {
 			title: 'Mine',
 			status: 'archived',
-			$base: { title: hashValue('Title'), status: hashValue('published') },
+			$__meta: { base: { title: hashValue('Title'), status: hashValue('published') } },
 		});
 	});
 
@@ -357,7 +360,7 @@ describe('Edit conflicts', () => {
 
 		expect(api.patch).toHaveBeenLastCalledWith('/items/test', {
 			title: 'Theirs',
-			$base: { title: hashValue('Theirs') },
+			$__meta: { base: { title: hashValue('Theirs') } },
 		});
 	});
 
@@ -366,7 +369,7 @@ describe('Edit conflicts', () => {
 
 		const { edits, saveAsCopy } = await setup();
 
-		edits.value = { title: 'Mine', meta: { $base: { a: 'hash' }, nested: true } };
+		edits.value = { title: 'Mine', meta: { $__meta: { base: { a: 'hash' } }, nested: true } };
 		await saveAsCopy();
 
 		expect(api.post).toHaveBeenCalledWith('/items/test', { title: 'Mine', status: 'draft', meta: { nested: true } });

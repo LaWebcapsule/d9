@@ -3,7 +3,7 @@ import { hashValue } from '@wbce-d9/utils';
 import type { Knex } from 'knex';
 import knex from 'knex';
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import { ConflictException, InvalidPayloadException } from '../exceptions/index.js';
+import { ConflictException, ForbiddenException, InvalidPayloadException } from '../exceptions/index.js';
 import { ItemsService } from '../services/items.js';
 
 let db: Knex;
@@ -57,6 +57,7 @@ const schema = {
 				meta: field('meta', 'json', { special: ['cast-json'] }),
 				author: field('author', 'integer'),
 				date_updated: field('date_updated', 'timestamp', { special: ['date-updated'] }),
+				user_updated: field('user_updated', 'uuid', { special: ['user-updated'] }),
 				translations: field('translations', 'alias', { alias: true, special: ['translations'] }),
 			},
 		},
@@ -84,6 +85,22 @@ const schema = {
 				articles_id: field('articles_id', 'integer'),
 				languages_code: field('languages_code', 'string'),
 				body: field('body', 'text'),
+			},
+		},
+		directus_activity: {
+			collection: 'directus_activity',
+			primary: 'id',
+			singleton: false,
+			note: null,
+			sortField: null,
+			accountability: null,
+			fields: {
+				id: field('id', 'integer', { nullable: false, defaultValue: 'AUTO_INCREMENT' }),
+				action: field('action', 'string'),
+				user: field('user', 'uuid'),
+				timestamp: field('timestamp', 'timestamp'),
+				collection: field('collection', 'string'),
+				item: field('item', 'string'),
 			},
 		},
 	},
@@ -129,8 +146,32 @@ const schema = {
 
 const admin = { role: null, admin: true, user: 'ccd3fbd7-8dc0-4b0c-8a46-c8e3a63fdb08' };
 
+const otherUser = '3e0ba0f1-6a52-4d1b-8a63-1f0e3e6b1d8b';
+
 function service(collection = 'articles') {
 	return new ItemsService(collection, { knex: db, schema, accountability: admin });
+}
+
+function permission(collection: string, action: string, fields = ['*'], permissions: Record<string, any> = {}) {
+	return { id: 1, role: 'editor', collection, action, permissions, validation: {}, presets: {}, fields };
+}
+
+function editorService(permissions: ReturnType<typeof permission>[], collection = 'articles') {
+	return new ItemsService(collection, {
+		knex: db,
+		schema,
+		accountability: { role: 'editor', admin: false, user: admin.user, permissions } as any,
+	});
+}
+
+async function addActivity(collection: string, item: string, user = otherUser) {
+	await db('directus_activity').insert({
+		action: 'update',
+		user,
+		timestamp: '2026-11-13T10:00:00.000Z',
+		collection,
+		item,
+	});
 }
 
 async function conflictOf(promise: Promise<unknown>): Promise<ConflictException> {
@@ -152,6 +193,7 @@ beforeAll(async () => {
 		table.string('status');
 		table.text('meta');
 		table.timestamp('date_updated');
+		table.uuid('user_updated');
 		table.integer('author');
 	});
 
@@ -204,7 +246,7 @@ beforeEach(async () => {
 });
 
 describe('edit conflicts', () => {
-	it('keeps last-write-wins behaviour without a $base', async () => {
+	it('keeps last-write-wins behaviour without a base', async () => {
 		await db('articles').where({ id: 1 }).update({ title: 'Changed by someone else' });
 
 		await service().updateOne(1, { title: 'Mine' }, { emitEvents: false });
@@ -215,7 +257,11 @@ describe('edit conflicts', () => {
 	it('saves when the base matches the current values', async () => {
 		await service().updateOne(
 			1,
-			{ title: 'Mine', meta: { a: 3 }, $base: { title: hashValue('Title'), meta: hashValue({ a: 2, b: 1 }) } },
+			{
+				title: 'Mine',
+				meta: { a: 3 },
+				$__meta: { base: { title: hashValue('Title'), meta: hashValue({ a: 2, b: 1 }) } },
+			},
 			{ emitEvents: false }
 		);
 
@@ -227,18 +273,16 @@ describe('edit conflicts', () => {
 	it('rejects the whole save when a field was changed in the meantime', async () => {
 		await db('articles').where({ id: 1 }).update({ title: 'Changed by someone else' });
 
-		await db('directus_activity').insert({
-			action: 'update',
-			user: '3e0ba0f1-6a52-4d1b-8a63-1f0e3e6b1d8b',
-			timestamp: '2026-11-13T10:00:00.000Z',
-			collection: 'articles',
-			item: '1',
-		});
+		await addActivity('articles', '1');
 
 		const error = await conflictOf(
 			service().updateOne(
 				1,
-				{ title: 'Mine', status: 'published', $base: { title: hashValue('Title'), status: hashValue('draft') } },
+				{
+					title: 'Mine',
+					status: 'published',
+					$__meta: { base: { title: hashValue('Title'), status: hashValue('draft') } },
+				},
 				{ emitEvents: false }
 			)
 		);
@@ -254,7 +298,7 @@ describe('edit conflicts', () => {
 				type: 'changed',
 				field: 'title',
 				current: 'Changed by someone else',
-				user: '3e0ba0f1-6a52-4d1b-8a63-1f0e3e6b1d8b',
+				user: otherUser,
 				timestamp: '2026-11-13T10:00:00.000Z',
 			},
 		]);
@@ -272,7 +316,7 @@ describe('edit conflicts', () => {
 			{
 				title: 'Mine',
 				status: 'published',
-				$base: { title: hashValue('Title'), status: null, date_updated: hashValue(null), unknown: 'x' },
+				$__meta: { base: { title: hashValue('Title'), status: null, date_updated: hashValue(null), unknown: 'x' } },
 			},
 			{ emitEvents: false }
 		);
@@ -280,10 +324,10 @@ describe('edit conflicts', () => {
 		expect((await db('articles').first()).title).toBe('Mine');
 	});
 
-	it('rejects an invalid $base', async () => {
-		await expect(service().updateOne(1, { title: 'Mine', $base: { title: 1 } }, { emitEvents: false })).rejects.toThrow(
-			InvalidPayloadException
-		);
+	it('rejects an invalid base', async () => {
+		await expect(
+			service().updateOne(1, { title: 'Mine', $__meta: { base: { title: 1 } } }, { emitEvents: false })
+		).rejects.toThrow(InvalidPayloadException);
 	});
 
 	it('only conflicts on the translation that was changed', async () => {
@@ -294,7 +338,7 @@ describe('edit conflicts', () => {
 			{
 				translations: {
 					create: [],
-					update: [{ id: 10, body: 'English (mine)', $base: { body: hashValue('English') } }],
+					update: [{ id: 10, body: 'English (mine)', $__meta: { base: { body: hashValue('English') } } }],
 					delete: [],
 				},
 			},
@@ -313,12 +357,12 @@ describe('edit conflicts', () => {
 				1,
 				{
 					title: 'Mine',
-					$base: { title: hashValue('Title') },
+					$__meta: { base: { title: hashValue('Title') } },
 					translations: {
 						create: [{ languages_code: 'fr', body: 'Français' }],
 						update: [
-							{ id: 10, body: 'English (mine)', $base: { body: hashValue('English') } },
-							{ id: 11, body: 'Deutsch (mine)', $base: { body: hashValue('Deutsch') } },
+							{ id: 10, body: 'English (mine)', $__meta: { base: { body: hashValue('English') } } },
+							{ id: 11, body: 'Deutsch (mine)', $__meta: { base: { body: hashValue('Deutsch') } } },
 						],
 						delete: [],
 					},
@@ -346,7 +390,7 @@ describe('edit conflicts', () => {
 				{
 					translations: {
 						create: [],
-						update: [{ id: 10, body: 'English (mine)', $base: { body: hashValue('English') } }],
+						update: [{ id: 10, body: 'English (mine)', $__meta: { base: { body: hashValue('English') } } }],
 						delete: [],
 					},
 				},
@@ -361,13 +405,13 @@ describe('edit conflicts', () => {
 		expect(await db('articles_translations').where({ id: 10 })).toHaveLength(0);
 	});
 
-	describe('$deleteBase', () => {
+	describe('deleteBase', () => {
 		const deleteEnglish = {
 			translations: {
 				create: [],
 				update: [],
 				delete: [10],
-				$deleteBase: { 10: { body: hashValue('English'), languages_code: hashValue('en') } },
+				$__meta: { deleteBase: { 10: { body: hashValue('English'), languages_code: hashValue('en') } } },
 			},
 		};
 
@@ -405,8 +449,8 @@ describe('edit conflicts', () => {
 		const error = await conflictOf(
 			service().updateBatch(
 				[
-					{ id: 1, status: 'published', $base: { status: hashValue('draft') } },
-					{ id: 2, status: 'published', $base: { status: hashValue('draft') } },
+					{ id: 1, status: 'published', $__meta: { base: { status: hashValue('draft') } } },
+					{ id: 2, status: 'published', $__meta: { base: { status: hashValue('draft') } } },
 				],
 				{ emitEvents: false }
 			)
@@ -424,14 +468,17 @@ describe('edit conflicts', () => {
 		await db('articles').where({ id: 1 }).delete();
 
 		const error = await conflictOf(
-			service().updateOne(1, { title: 'Mine', $base: { title: hashValue('Title') } }, { emitEvents: false })
+			service().updateOne(1, { title: 'Mine', $__meta: { base: { title: hashValue('Title') } } }, { emitEvents: false })
 		);
 
 		expect(error.extensions['conflicts']).toMatchObject([{ collection: 'articles', key: 1, type: 'deleted' }]);
 	});
 
-	it('ignores a $base when creating an item', async () => {
-		await service().createOne({ id: 2, title: 'New', $base: { title: hashValue('Other') } }, { emitEvents: false });
+	it('ignores a base when creating an item', async () => {
+		await service().createOne(
+			{ id: 2, title: 'New', $__meta: { base: { title: hashValue('Other') } } },
+			{ emitEvents: false }
+		);
 
 		expect((await db('articles').where({ id: 2 }).first()).title).toBe('New');
 	});
@@ -442,7 +489,7 @@ describe('edit conflicts', () => {
 		const error = await conflictOf(
 			service().updateOne(
 				1,
-				{ title: 'Mine', author: { id: 5, name: 'Jane Doe', $base: { name: hashValue('Jane') } } },
+				{ title: 'Mine', author: { id: 5, name: 'Jane Doe', $__meta: { base: { name: hashValue('Jane') } } } },
 				{ emitEvents: false }
 			)
 		);
@@ -454,37 +501,184 @@ describe('edit conflicts', () => {
 		expect((await db('articles').first()).title).toBe('Title');
 	});
 
-	it('omits the current value when the user is not allowed to read it', async () => {
-		await db('articles').where({ id: 1 }).update({ title: 'Changed by someone else' });
+	it('rejects unknown keys in the reserved meta key', async () => {
+		await expect(
+			service().updateOne(1, { title: 'Mine', $__meta: { deleteBase: {} } }, { emitEvents: false })
+		).rejects.toThrow(InvalidPayloadException);
 
-		const permission = (action: string, fields: string[]) => ({
-			id: action.length,
-			role: 'editor',
-			collection: 'articles',
-			action,
-			permissions: {},
-			validation: {},
-			presets: {},
-			fields,
+		await expect(
+			service().updateOne(
+				1,
+				{ translations: { create: [], update: [], delete: [10], $__meta: { base: {} } } },
+				{ emitEvents: false }
+			)
+		).rejects.toThrow(InvalidPayloadException);
+	});
+
+	describe('last change', () => {
+		const mine = { title: 'Mine', $__meta: { base: { title: hashValue('Title') } } };
+
+		it('prefers the user-updated and date-updated fields of the item over the activity', async () => {
+			await db('articles').where({ id: 1 }).update({
+				title: 'Changed by someone else',
+				user_updated: otherUser,
+				date_updated: '2026-11-14T08:30:00.000Z',
+			});
+
+			await addActivity('articles', '1', admin.user);
+
+			const error = await conflictOf(service().updateOne(1, mine, { emitEvents: false }));
+
+			expect(error.extensions['conflicts']).toMatchObject([
+				{ field: 'title', user: otherUser, timestamp: '2026-11-14T08:30:00.000Z' },
+			]);
 		});
 
-		const editorService = new ItemsService('articles', {
-			knex: db,
-			schema,
-			accountability: {
-				role: 'editor',
-				admin: false,
-				user: admin.user,
-				permissions: [permission('read', ['id', 'status']), permission('update', ['*'])],
-			} as any,
+		it('omits them when the user can read neither these fields nor the activity', async () => {
+			await db('articles').where({ id: 1 }).update({
+				title: 'Changed by someone else',
+				user_updated: otherUser,
+				date_updated: '2026-11-14T08:30:00.000Z',
+			});
+
+			await addActivity('articles', '1');
+
+			const editor = editorService([permission('articles', 'read', ['id', 'title']), permission('articles', 'update')]);
+			const error = await conflictOf(editor.updateOne(1, mine, { emitEvents: false }));
+			const [conflict] = error.extensions['conflicts'];
+
+			expect(conflict).toMatchObject({ field: 'title', current: 'Changed by someone else' });
+			expect(conflict).not.toHaveProperty('user');
+			expect(conflict).not.toHaveProperty('timestamp');
 		});
 
-		const error = await conflictOf(
-			editorService.updateOne(1, { title: 'Mine', $base: { title: hashValue('Title') } }, { emitEvents: false })
-		);
+		it('only uses an activity the user is allowed to read', async () => {
+			await db('articles').where({ id: 1 }).update({ title: 'Changed by someone else' });
+			await addActivity('articles', '1', admin.user);
+			await addActivity('articles', '1', otherUser);
 
-		const [conflict] = error.extensions['conflicts'];
-		expect(conflict).toMatchObject({ collection: 'articles', key: 1, field: 'title', type: 'changed' });
-		expect(conflict).not.toHaveProperty('current');
+			const articles = [permission('articles', 'read', ['id', 'title']), permission('articles', 'update')];
+
+			// The latest activity is not their own, the one before must not be reported instead
+			const ownActivity = permission('directus_activity', 'read', ['*'], { user: { _eq: admin.user } });
+
+			const restricted = await conflictOf(
+				editorService([...articles, ownActivity]).updateOne(1, mine, { emitEvents: false })
+			);
+
+			expect(restricted.extensions['conflicts'][0]).not.toHaveProperty('user');
+
+			const allActivity = permission('directus_activity', 'read');
+
+			const allowed = await conflictOf(
+				editorService([...articles, allActivity]).updateOne(1, mine, { emitEvents: false })
+			);
+
+			expect(allowed.extensions['conflicts']).toMatchObject([
+				{ field: 'title', user: otherUser, timestamp: '2026-11-13T10:00:00.000Z' },
+			]);
+		});
+	});
+
+	describe('permissions', () => {
+		it('does not compare fields the user is not allowed to read', async () => {
+			await db('articles').where({ id: 1 }).update({ title: 'Changed by someone else', status: 'archived' });
+
+			const editor = editorService([
+				permission('articles', 'read', ['id', 'status']),
+				permission('articles', 'update'),
+			]);
+
+			const error = await conflictOf(
+				editor.updateOne(
+					1,
+					{ title: 'Mine', $__meta: { base: { title: hashValue('Title'), status: hashValue('draft') } } },
+					{ emitEvents: false }
+				)
+			);
+
+			// A conflict on the title would tell that the guessed value is wrong
+			expect(error.extensions['conflicts']).toMatchObject([{ field: 'status', current: 'archived' }]);
+			expect(error.extensions['conflicts']).toHaveLength(1);
+		});
+
+		it('does not compare items the user is not allowed to read', async () => {
+			await db('articles_translations').where({ id: 10 }).update({ body: 'English (changed)' });
+
+			const editor = editorService([
+				permission('articles', 'read'),
+				permission('articles', 'update'),
+				permission('articles_translations', 'read', ['*'], { languages_code: { _eq: 'de' } }),
+				permission('articles_translations', 'delete'),
+			]);
+
+			await editor.updateOne(
+				1,
+				{
+					translations: {
+						create: [],
+						update: [],
+						delete: [10],
+						$__meta: { deleteBase: { 10: { body: hashValue('guess') } } },
+					},
+				},
+				{ emitEvents: false }
+			);
+
+			// A conflict would tell that the guessed value is wrong
+			expect(await db('articles_translations').where({ id: 10 })).toHaveLength(0);
+		});
+
+		it('reports a deleted item to users who can update every item of the collection', async () => {
+			await db('articles').where({ id: 1 }).delete();
+
+			const editor = editorService([permission('articles', 'read'), permission('articles', 'update')]);
+
+			const error = await conflictOf(
+				editor.updateOne(1, { title: 'Mine', $__meta: { base: { title: hashValue('Title') } } }, { emitEvents: false })
+			);
+
+			expect(error.extensions['conflicts']).toMatchObject([{ collection: 'articles', key: 1, type: 'deleted' }]);
+		});
+
+		it.each([
+			['a filtered update permission', [permission('articles', 'update', ['*'], { status: { _eq: 'draft' } })]],
+			['no update permission', [permission('articles', 'read')]],
+		])('does not tell users with %s whether an item exists', async (_title, permissions) => {
+			await db('articles').where({ id: 1 }).update({ status: 'published' });
+
+			const update = (key: number) =>
+				editorService(permissions).updateOne(key, { title: 'Mine', $__meta: { base: {} } }, { emitEvents: false });
+
+			// Exists, but isn't theirs to update
+			await expect(update(1)).rejects.toThrow(ForbiddenException);
+			// Doesn't exist
+			await expect(update(999)).rejects.toThrow(ForbiddenException);
+		});
+
+		it('does not tell whether a nested item exists without access to all items of its collection', async () => {
+			await db('articles_translations').where({ id: 10 }).delete();
+
+			const editor = editorService([
+				permission('articles', 'read'),
+				permission('articles', 'update'),
+				permission('articles_translations', 'read'),
+				permission('articles_translations', 'update', ['*'], { languages_code: { _eq: 'en' } }),
+			]);
+
+			await expect(
+				editor.updateOne(
+					1,
+					{
+						translations: {
+							create: [],
+							update: [{ id: 10, body: 'English (mine)', $__meta: { base: { body: hashValue('English') } } }],
+							delete: [],
+						},
+					},
+					{ emitEvents: false }
+				)
+			).rejects.toThrow(ForbiddenException);
+		});
 	});
 });

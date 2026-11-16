@@ -1,10 +1,15 @@
 import { useFieldsStore } from '@/stores/fields';
+import { usePermissionsStore } from '@/stores/permissions';
 import { useRelationsStore } from '@/stores/relations';
+import { useUserStore } from '@/stores/user';
 import { hashValue } from '@wbce-d9/utils';
 import { cloneDeep, isPlainObject } from 'lodash';
 
-export const BASE_KEY = '$base';
-export const DELETE_BASE_KEY = '$deleteBase';
+/**
+ * Reserved key for information about a change that is not part of the item itself: items contain `base`,
+ * o2m alterations `deleteBase`
+ */
+export const META_KEY = '$__meta';
 
 /**
  * Conflict as reported by the API in a 409 CONFLICT response
@@ -45,10 +50,30 @@ export function getBaseHashes(
 		const fieldInfo = fieldsStore.getField(collection, field);
 		if (!fieldInfo || fieldInfo.type === 'alias') continue;
 
+		// A related item the user isn't allowed to read is loaded as `null`, like an empty relation. Its hash
+		// would never match the stored foreign key.
+		if (original[field] === null && !canReadAllRelatedItems(collection, field, original)) continue;
+
 		base[field] = hashValue(getStoredValue(collection, field, original[field]));
 	}
 
 	return base;
+}
+
+function canReadAllRelatedItems(collection: string, field: string, item: Record<string, any>) {
+	const relation = useRelationsStore().getRelationForField(collection, field);
+
+	if (relation?.collection !== collection || relation.field !== field) return true;
+
+	const relatedCollection =
+		relation.related_collection ??
+		(relation.meta?.one_collection_field ? item[relation.meta.one_collection_field] : null);
+
+	if (!relatedCollection || useUserStore().isAdmin) return true;
+
+	const permission = usePermissionsStore().getPermissionsForUser(relatedCollection, 'read');
+
+	return !!permission && Object.keys(permission.permissions ?? {}).length === 0;
 }
 
 /**
@@ -76,7 +101,7 @@ export function stripBases<T>(value: T): T {
 	const result: Record<string, any> = {};
 
 	for (const [key, child] of Object.entries(value as Record<string, any>)) {
-		if (key !== BASE_KEY && key !== DELETE_BASE_KEY) result[key] = stripBases(child);
+		if (key !== META_KEY) result[key] = stripBases(child);
 	}
 
 	return result as T;
@@ -162,7 +187,7 @@ export function resolveEditConflicts(options: {
 					}
 
 					// Deleting anyway doesn't need a check anymore
-					if (alterations[DELETE_BASE_KEY]) delete alterations[DELETE_BASE_KEY][String(conflict.key)];
+					delete alterations[META_KEY]?.deleteBase?.[String(conflict.key)];
 
 					return;
 				}
@@ -179,16 +204,16 @@ export function resolveEditConflicts(options: {
 
 				// Restore the deleted item with the local changes
 				if (choice === 'mine') {
-					const { [primaryKeyField]: _key, [BASE_KEY]: _base, ...values } = removed;
+					const { [primaryKeyField]: _key, [META_KEY]: _meta, ...values } = removed;
 					alterations.create = [...(alterations.create ?? []), values];
 				}
 			},
 			item(itemCollection, item) {
 				if (conflict.action !== 'update' || conflict.type !== 'changed' || !conflict.field) return;
 				if (itemCollection !== conflict.collection || !primaryKeyField) return;
-				if (!isSameKey(item[primaryKeyField], conflict.key) || !(BASE_KEY in item)) return;
+				if (!isSameKey(item[primaryKeyField], conflict.key) || !item[META_KEY]?.base) return;
 
-				applyFieldChoice(item, item[BASE_KEY], conflict.field, choice, conflict.current, hasCurrent);
+				applyFieldChoice(item, item[META_KEY].base, conflict.field, choice, conflict.current, hasCurrent);
 			},
 		});
 	});

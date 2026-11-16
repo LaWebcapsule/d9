@@ -1,5 +1,7 @@
 import { useFieldsStore } from '@/stores/fields';
+import { usePermissionsStore } from '@/stores/permissions';
 import { useRelationsStore } from '@/stores/relations';
+import { useUserStore } from '@/stores/user';
 import { createTestingPinia } from '@pinia/testing';
 import { Field, Relation } from '@wbce-d9/types';
 import { hashValue } from '@wbce-d9/utils';
@@ -70,7 +72,7 @@ describe('getBaseHashes', () => {
 	test('skips the primary key, alias fields, unknown fields and fields that were not loaded', () => {
 		const original = { id: 1, title: 'Title', translations: [1, 2], unknown: 'x' };
 
-		expect(getBaseHashes('articles', original, ['id', 'translations', 'unknown', 'author', '$base'])).toEqual({});
+		expect(getBaseHashes('articles', original, ['id', 'translations', 'unknown', 'author', '$__meta'])).toEqual({});
 	});
 
 	test('uses the foreign key of nested many-to-one values', () => {
@@ -81,18 +83,53 @@ describe('getBaseHashes', () => {
 			body: hashValue('English'),
 		});
 	});
+
+	describe('empty many-to-one values', () => {
+		const original = { id: 1, title: null, author: null };
+
+		function setReadPermission(permissions: Record<string, any> | null, admin = false) {
+			useUserStore().currentUser = { role: { id: 'editor', admin_access: admin } } as any;
+
+			usePermissionsStore().permissions = permissions
+				? ([{ role: 'editor', collection: 'users', action: 'read', permissions, fields: ['*'] }] as any)
+				: [];
+		}
+
+		test('are hashed when the user can read every related item', () => {
+			setReadPermission({});
+
+			expect(getBaseHashes('articles', original, ['title', 'author'])).toEqual({
+				title: hashValue(null),
+				author: hashValue(null),
+			});
+
+			setReadPermission(null, true);
+
+			expect(getBaseHashes('articles', original, ['author'])).toEqual({ author: hashValue(null) });
+		});
+
+		test('are skipped when the related item could be hidden from the user', () => {
+			setReadPermission({ id: { _eq: '$CURRENT_USER' } });
+
+			expect(getBaseHashes('articles', original, ['title', 'author'])).toEqual({ title: hashValue(null) });
+
+			setReadPermission(null);
+
+			expect(getBaseHashes('articles', original, ['author'])).toEqual({});
+		});
+	});
 });
 
 describe('stripBases', () => {
 	test('removes base hashes at every level', () => {
 		const edits = {
 			title: 'Title',
-			$base: { title: 'hash' },
+			$__meta: { base: { title: 'hash' } },
 			translations: {
 				create: [],
-				update: [{ id: 10, body: 'Body', $base: { body: 'hash' } }],
+				update: [{ id: 10, body: 'Body', $__meta: { base: { body: 'hash' } } }],
 				delete: [11],
-				$deleteBase: { 11: { body: 'hash' } },
+				$__meta: { deleteBase: { 11: { body: 'hash' } } },
 			},
 		};
 
@@ -149,7 +186,7 @@ describe('resolveEditConflicts', () => {
 		title: 'Mine',
 		translations: {
 			create: [],
-			update: [{ id: 10, body: 'My body', $base: { body: hashValue('Body') } }],
+			update: [{ id: 10, body: 'My body', $__meta: { base: { body: hashValue('Body') } } }],
 			delete: [],
 		},
 	});
@@ -174,7 +211,7 @@ describe('resolveEditConflicts', () => {
 		expect(result.edits.translations.update[0]).toEqual({
 			id: 10,
 			body: 'My body',
-			$base: { body: hashValue('Their body') },
+			$__meta: { base: { body: hashValue('Their body') } },
 		});
 	});
 
@@ -192,7 +229,7 @@ describe('resolveEditConflicts', () => {
 
 		const mine = resolve([hiddenTitle, hiddenBody], ['mine', 'mine']);
 		expect(mine.rootBase).toEqual({ title: null });
-		expect(mine.edits.translations.update[0].$base).toEqual({ body: null });
+		expect(mine.edits.translations.update[0].$__meta.base).toEqual({ body: null });
 
 		const theirs = resolve([hiddenTitle, hiddenBody], ['theirs', 'theirs']);
 		expect(theirs.edits).not.toHaveProperty('title');
@@ -221,16 +258,21 @@ describe('resolveEditConflicts', () => {
 		};
 
 		const input = () => ({
-			translations: { create: [], update: [], delete: [11], $deleteBase: { 11: { body: hashValue('Old') } } },
+			translations: {
+				create: [],
+				update: [],
+				delete: [11],
+				$__meta: { deleteBase: { 11: { body: hashValue('Old') } } },
+			},
 		});
 
 		const mine = resolve([deleteChanged], ['mine'], input() as any);
 		expect(mine.edits.translations.delete).toEqual([11]);
-		expect(mine.edits.translations.$deleteBase).toEqual({});
+		expect(mine.edits.translations.$__meta.deleteBase).toEqual({});
 
 		const theirs = resolve([deleteChanged], ['theirs'], input() as any);
 		expect(theirs.edits.translations.delete).toEqual([]);
-		expect(theirs.edits.translations.$deleteBase).toEqual({});
+		expect(theirs.edits.translations.$__meta.deleteBase).toEqual({});
 	});
 
 	test('does not change the passed edits', () => {

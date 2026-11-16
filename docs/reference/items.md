@@ -14,8 +14,8 @@ pageClass: page-reference
 ## The Item Object
 
 Items don't have a predefined schema. The format depends completely on how you configured your collections and fields in
-d9. For the sake of documentation, we'll use a fictional articles collection with the following fields: `id`,
-`status`, `title`, `body`, `featured_image`, and `author`.
+d9. For the sake of documentation, we'll use a fictional articles collection with the following fields: `id`, `status`,
+`title`, `body`, `featured_image`, and `author`.
 
 ::: tip Relational Data
 
@@ -350,34 +350,36 @@ mutation {
 
 ### Detecting Conflicting Changes
 
-To make sure an update doesn't overwrite changes someone else saved in the meantime, add `$base` to the request body:
-the hashes of the values the changes are based on, by field. The hash of a value is the SHA-256 hex digest of its JSON
-with sorted object keys, see `hashValue()` in `@wbce-d9/utils`. Many-to-one fields are hashed as the foreign key.
+To make sure an update doesn't overwrite changes someone else saved in the meantime, add `base` to the reserved
+`$__meta` key of the request body: the hashes of the values the changes are based on, by field. The hash of a value is
+the SHA-256 hex digest of its JSON with sorted object keys, see `hashValue()` in `@wbce-d9/utils`. Many-to-one fields
+are hashed as the foreign key.
 
 ```json
 {
 	"title": "An updated title",
-	"$base": { "title": "<hash of the title as it was loaded>" }
+	"$__meta": { "base": { "title": "<hash of the title as it was loaded>" } }
 }
 ```
 
-`$base` also works in nested items, for example in the `update` items of a translations field. To check items before
-deleting them, add `$deleteBase` to the nested changes, with the hashes of the loaded values by primary key:
+`$__meta.base` also works in nested items, for example in the `update` items of a translations field. To check items
+before deleting them, add `deleteBase` to the `$__meta` of the nested changes, with the hashes of the loaded values by
+primary key:
 
 ```json
 {
 	"translations": {
 		"create": [],
-		"update": [{ "id": 7, "body": "Updated text", "$base": { "body": "<hash>" } }],
+		"update": [{ "id": 7, "body": "Updated text", "$__meta": { "base": { "body": "<hash>" } } }],
 		"delete": [9],
-		"$deleteBase": { "9": { "body": "<hash>" } }
+		"$__meta": { "deleteBase": { "9": { "body": "<hash>" } } }
 	}
 }
 ```
 
 If any of the values changed, or an updated item doesn't exist anymore, nothing is saved and the API responds with `409`
-and the error code `CONFLICT`. `extensions.conflicts` lists every conflict, with the current value if you're allowed to
-read it. A hash of `null` skips the check of that field. Without `$base`, the last update wins.
+and the error code `CONFLICT`. `extensions.conflicts` lists every conflict with the current value. A hash of `null`
+skips the check of that field. Without a base, the last update wins.
 
 ```json
 {
@@ -404,10 +406,21 @@ read it. A hash of `null` skips the check of that field. Without `$base`, the la
 }
 ```
 
+`user` and `timestamp` are taken from the item's "user updated" and "date updated" fields, or from the latest activity
+of the item when it doesn't have them. They are only included when you're allowed to read them.
+
+::: tip Permissions
+
+- Fields you're not allowed to read are not compared, so a conflict can't be used to guess their value.
+- An item that doesn't exist anymore is only reported as a conflict when your `update` permission for the collection
+  covers all of its items. Otherwise, the API responds with `403`, as it does for any item you can't access.
+
+:::
+
 ::: tip Hooks and Flows
 
-`$base` of the item itself is removed before filter hooks run. Nested `$base` and `$deleteBase` are still part of the
-payload that hooks and Flows receive.
+`$__meta` of the item itself is removed before filter hooks run. The `$__meta` of nested items and nested changes is
+still part of the payload that hooks and Flows receive.
 
 :::
 

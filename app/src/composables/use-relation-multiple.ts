@@ -2,7 +2,7 @@ import api from '@/api';
 import { RelationM2A } from '@/composables/use-relation-m2a';
 import { RelationM2M } from '@/composables/use-relation-m2m';
 import { RelationO2M } from '@/composables/use-relation-o2m';
-import { BASE_KEY, DELETE_BASE_KEY, getBaseHashes } from '@/utils/edit-conflicts';
+import { META_KEY, getBaseHashes } from '@/utils/edit-conflicts';
 import { unexpectedError } from '@/utils/unexpected-error';
 import { Filter, Item } from '@wbce-d9/types';
 import { getEndpoint, toArray } from '@wbce-d9/utils';
@@ -30,7 +30,7 @@ export type ChangesItem = {
 	update: Record<string, any>[];
 	delete: (string | number)[];
 	/** Hashes of the loaded values of deleted items, so deleting items that were changed in the meantime is detected */
-	$deleteBase?: Record<string, Record<string, string | null>>;
+	$__meta?: { deleteBase?: Record<string, Record<string, string | null>> };
 };
 
 export function useRelationMultiple(
@@ -259,7 +259,7 @@ export function useRelationMultiple(
 					}
 				} else if (item.$type === 'deleted') {
 					const [key] = target.value.delete.splice(item.$index, 1);
-					if (key !== undefined) delete target.value[DELETE_BASE_KEY]?.[String(key)];
+					if (key !== undefined) delete target.value[META_KEY]?.deleteBase?.[String(key)];
 				}
 			}
 
@@ -318,7 +318,7 @@ export function useRelationMultiple(
 			const base = getBaseHashes(getTargetCollection(info), original, Object.keys(original));
 			if (Object.keys(base).length === 0) return;
 
-			changes[DELETE_BASE_KEY] = { ...(changes[DELETE_BASE_KEY] ?? {}), [String(key)]: base };
+			changes[META_KEY] = { deleteBase: { ...(changes[META_KEY]?.deleteBase ?? {}), [String(key)]: base } };
 		}
 
 		/**
@@ -334,8 +334,8 @@ export function useRelationMultiple(
 			const original = getFetchedItem(entry[getTargetPKField(info)]);
 			if (!original) return entry;
 
-			const base = mergeBase(getTargetCollection(info), original, entry, item[BASE_KEY]);
-			if (Object.keys(base).length > 0) entry[BASE_KEY] = base;
+			const base = mergeBase(getTargetCollection(info), original, entry, item[META_KEY]?.base);
+			if (Object.keys(base).length > 0) entry[META_KEY] = { base };
 
 			if (info.type === 'm2m' || info.type === 'm2a') {
 				const junctionField = info.junctionField.field;
@@ -348,10 +348,10 @@ export function useRelationMultiple(
 						: entry[info.collectionField.field] ?? original[info.collectionField.field];
 
 				if (isPlainObject(related) && isPlainObject(originalRelated) && relatedCollection) {
-					const relatedBase = mergeBase(relatedCollection, originalRelated, related, related[BASE_KEY]);
+					const relatedBase = mergeBase(relatedCollection, originalRelated, related, related[META_KEY]?.base);
 
 					if (Object.keys(relatedBase).length > 0) {
-						entry[junctionField] = { ...related, [BASE_KEY]: relatedBase };
+						entry[junctionField] = { ...related, [META_KEY]: { base: relatedBase } };
 					}
 				}
 			}

@@ -19,7 +19,7 @@ import type {
 	MutationOptions,
 	PrimaryKey,
 } from '../types/index.js';
-import { DELETE_BASE_KEY, detectConflicts, extractDeleteBase } from '../utils/conflicts.js';
+import { META_KEY, detectConflicts, extractDeleteBase } from '../utils/conflicts.js';
 import { generateHash } from '../utils/generate-hash.js';
 import { ItemsService } from './items.js';
 
@@ -613,7 +613,7 @@ export class PayloadService {
 			create: Joi.array().items(Joi.object().unknown()),
 			update: Joi.array().items(Joi.object().unknown()),
 			delete: Joi.array().items(Joi.string(), Joi.number()),
-			[DELETE_BASE_KEY]: Joi.object(),
+			[META_KEY]: Joi.object(),
 		});
 
 		for (const relation of relationsToProcess) {

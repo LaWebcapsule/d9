@@ -43,13 +43,13 @@ content:
                         field:
                           type: string
                         current:
-                          description: Current value of the field, only included when the user is allowed to read it.
+                          description: Current value of the field.
                         user:
                           type: string
-                          nullable: true
-                          description: User who changed the item last.
+                          description:
+                            User who changed the item last, only included when the user is allowed to read it.
                         timestamp:
                           type: string
                           format: date-time
-                          nullable: true
-                          description: Time of the latest change of the item.
+                          description: >-
+                            Time of the latest change of the item, only included when the user is allowed to read it.

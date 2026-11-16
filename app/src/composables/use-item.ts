@@ -5,9 +5,9 @@ import { useFieldsStore } from '@/stores/fields';
 import { useRelationsStore } from '@/stores/relations';
 import { APIError } from '@/types/error';
 import {
-	BASE_KEY,
 	ConflictChoice,
 	EditConflict,
+	META_KEY,
 	getBaseHashes,
 	resolveEditConflicts,
 	stripBases,
@@ -199,7 +199,7 @@ export function useItem(
 
 		const base = pick({ ...getBaseHashes(collection.value, loadedItem.value, fields), ...baseOverrides.value }, fields);
 
-		return Object.keys(base).length > 0 ? { ...payload, [BASE_KEY]: base } : payload;
+		return Object.keys(base).length > 0 ? { ...payload, [META_KEY]: { base } } : payload;
 	}
 
 	/**
