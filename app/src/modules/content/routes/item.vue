@@ -184,7 +184,7 @@
 			:edits="edits"
 			:conflicts="conflicts"
 			:saving="saving"
-			@resolve="resolveConflictsAndStay"
+			@resolve="resolveConflictsAndContinue"
 			@cancel="conflicts = null"
 		/>
 
@@ -519,8 +519,13 @@ function useBreadcrumb() {
 	return { breadcrumb };
 }
 
+// The kind of save that was started last. When it reports conflicts, resolving them finishes it.
+let lastSave: 'quit' | 'stay' | 'add-new' = 'stay';
+
 async function saveAndQuit() {
 	if (isSavable.value === false) return;
+
+	lastSave = 'quit';
 
 	try {
 		await save();
@@ -532,6 +537,8 @@ async function saveAndQuit() {
 
 async function saveAndStay() {
 	if (isSavable.value === false) return;
+
+	lastSave = 'stay';
 
 	try {
 		const savedItem: Record<string, any> = await save();
@@ -547,10 +554,18 @@ async function saveAndStay() {
 	}
 }
 
-async function resolveConflictsAndStay(choices: ConflictChoice[]) {
+async function resolveConflictsAndContinue(choices: ConflictChoice[]) {
 	try {
 		await resolveConflicts(choices);
-		revisionsDrawerDetailRef.value?.refresh?.();
+
+		// Conflicts are only reported for existing items
+		if (lastSave === 'quit') {
+			if (props.singleton === false) router.push(`/content/${props.collection}`);
+		} else if (lastSave === 'add-new') {
+			router.push(`/content/${props.collection}/+`);
+		} else {
+			revisionsDrawerDetailRef.value?.refresh?.();
+		}
 	} catch {
 		// Save shows unexpected error dialog, or the conflicts again when there are new ones
 	}
@@ -558,6 +573,8 @@ async function resolveConflictsAndStay(choices: ConflictChoice[]) {
 
 async function saveAndAddNew() {
 	if (isSavable.value === false) return;
+
+	lastSave = 'add-new';
 
 	try {
 		await save();
