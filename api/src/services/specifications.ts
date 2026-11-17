@@ -297,6 +297,11 @@ class OASSpecsService implements SpecificationSubService {
 	private getItemsRequestBody(method: string, tagName: string, path: 'list' | 'detail'): RequestBodyObject | undefined {
 		const item: ReferenceObject = { $ref: `#/components/schemas/${tagName}` };
 
+		// Updates can contain conditions next to the changes
+		const changes: SchemaObject = {
+			allOf: [item, { type: 'object', properties: { $__meta: { $ref: '#/components/schemas/UpdateMeta' } } }],
+		};
+
 		let schema: SchemaObject | ReferenceObject | undefined;
 
 		if (method === 'post' && path === 'list') {
@@ -304,24 +309,24 @@ class OASSpecsService implements SpecificationSubService {
 		} else if (method === 'patch' && path === 'list') {
 			schema = {
 				oneOf: [
-					{ type: 'array', items: item },
+					{ type: 'array', items: changes },
 					{
 						type: 'object',
 						required: ['keys', 'data'],
 						properties: {
 							keys: { type: 'array', items: { oneOf: [{ type: 'integer' }, { type: 'string' }] } },
-							data: item,
+							data: changes,
 						},
 					},
 					{
 						type: 'object',
 						required: ['query', 'data'],
-						properties: { query: { $ref: '#/components/schemas/Query' }, data: item },
+						properties: { query: { $ref: '#/components/schemas/Query' }, data: changes },
 					},
 				],
 			};
 		} else if (method === 'patch' && path === 'detail') {
-			schema = item;
+			schema = changes;
 		}
 
 		if (!schema) return undefined;

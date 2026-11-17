@@ -49,10 +49,19 @@ type UsableItem = {
 	resolveConflicts: (choices: ConflictChoice[]) => Promise<any>;
 };
 
+type UseItemOptions = {
+	/**
+	 * Let the API reject a save that would overwrite changes someone else saved in the meantime. Only for
+	 * pages that show the reported `conflicts`, otherwise the save would fail without the user knowing why.
+	 */
+	detectConflicts?: boolean;
+};
+
 export function useItem(
 	collection: Ref<string>,
 	primaryKey: Ref<string | number | null>,
-	query: Ref<Query> | Query = {}
+	query: Ref<Query> | Query = {},
+	{ detectConflicts = false }: UseItemOptions = {}
 ): UsableItem {
 	const { info: collectionInfo, primaryKeyField } = useCollection(collection);
 	const item = ref<Record<string, any> | null>(null);
@@ -170,7 +179,10 @@ export function useItem(
 					title: i18n.global.t('item_create_success', isBatch.value ? 2 : 1),
 				});
 			} else {
-				response = await api.patch(itemEndpoint.value, withOnlyIf(edits.value));
+				// Nested items get their conditions from the relational interfaces, whatever page they are used on
+				const payload = detectConflicts ? withOnlyIf(edits.value) : stripMeta(edits.value);
+
+				response = await api.patch(itemEndpoint.value, payload);
 
 				notify({
 					title: i18n.global.t('item_update_success', isBatch.value ? 2 : 1),
@@ -432,7 +444,7 @@ export function useItem(
 			(error: APIError) => error?.extensions?.code === 'CONFLICT'
 		);
 
-		if (conflictError) {
+		if (detectConflicts && conflictError) {
 			conflicts.value = conflictError.extensions.conflicts ?? [];
 			throw err;
 		}

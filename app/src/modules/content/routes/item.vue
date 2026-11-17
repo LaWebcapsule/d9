@@ -312,7 +312,7 @@ const {
 	validationErrors,
 	conflicts,
 	resolveConflicts,
-} = useItem(collection, primaryKey);
+} = useItem(collection, primaryKey, {}, { detectConflicts: true });
 
 const { templateData, loading: templateDataLoading } = useTemplateData(collectionInfo, primaryKey);
 

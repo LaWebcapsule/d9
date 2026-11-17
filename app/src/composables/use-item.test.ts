@@ -266,7 +266,7 @@ describe('Edit conflicts', () => {
 		},
 	};
 
-	async function setup(singleton = false) {
+	async function setup(singleton = false, options = { detectConflicts: true }) {
 		useFieldsStore().fields = fields;
 
 		vi.mocked(useCollection).mockReturnValue({
@@ -277,7 +277,7 @@ describe('Edit conflicts', () => {
 
 		vi.mocked(api.get).mockResolvedValue({ data: { data: { id: 1, title: 'Title', status: 'draft' } } });
 
-		const usable = useItem(ref('test'), ref(singleton ? null : 1));
+		const usable = useItem(ref('test'), ref(singleton ? null : 1), {}, options);
 		await flushPromises();
 		return usable;
 	}
@@ -293,6 +293,30 @@ describe('Edit conflicts', () => {
 		expect(api.patch).toHaveBeenCalledWith('/items/test/1', {
 			title: 'Mine',
 			$__meta: { onlyIf: { title: { _hash: hashValue('Title') } } },
+		});
+	});
+
+	test('does not send conditions from pages that do not show conflicts', async () => {
+		vi.mocked(api.patch).mockResolvedValue({ data: { data: { id: 1, title: 'Mine', status: 'draft' } } });
+
+		const { edits, save } = await setup(false, { detectConflicts: false });
+
+		// The relational interfaces add the conditions of nested items on every page
+		edits.value = {
+			title: 'Mine',
+			translations: {
+				create: [],
+				update: [{ id: 10, body: 'Mine', $__meta: { onlyIf: { body: { _hash: hashValue('Body') } } } }],
+				delete: [11],
+				$__meta: { deleteOnlyIf: { 11: { body: { _hash: hashValue('Other') } } } },
+			},
+		};
+
+		await save();
+
+		expect(api.patch).toHaveBeenCalledWith('/items/test/1', {
+			title: 'Mine',
+			translations: { create: [], update: [{ id: 10, body: 'Mine' }], delete: [11] },
 		});
 	});
 

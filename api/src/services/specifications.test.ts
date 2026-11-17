@@ -365,6 +365,28 @@ describe('Integration Tests', () => {
 							    },
 							    "type": "object",
 							  },
+							  "UpdateMeta": {
+							    "description": "Information about an update that is not part of the item itself.",
+							    "properties": {
+							      "onlyIf": {
+							        "additionalProperties": {
+							          "properties": {
+							            "_hash": {
+							              "description": "SHA-256 hash of the value the changes are based on.",
+							              "type": "string",
+							            },
+							          },
+							          "required": [
+							            "_hash",
+							          ],
+							          "type": "object",
+							        },
+							        "description": "Conditions the current values have to meet for the update to be saved, by field.",
+							        "type": "object",
+							      },
+							    },
+							    "type": "object",
+							  },
 							  "x-metadata": {
 							    "properties": {
 							      "filter_count": {
@@ -467,19 +489,32 @@ describe('Integration Tests', () => {
 						expect(targetSchema).not.toHaveProperty('type');
 					});
 
+					// The changes of an update: the item of the collection and the conditions for saving it
+					const changes = {
+						allOf: [
+							{ $ref: '#/components/schemas/ItemsTestTable' },
+							{ type: 'object', properties: { $__meta: { $ref: '#/components/schemas/UpdateMeta' } } },
+						],
+					};
+
 					it('documents updating multiple items with the schema of the collection', async () => {
 						const spec = await service.oas.generate();
 
 						const operation = spec.paths[`/items/${collection.collection}`].patch;
-						const item = { $ref: '#/components/schemas/ItemsTestTable' };
 
 						expect(operation.operationId).toBe('updateItemsTestTable');
 						expect(operation.responses).toHaveProperty('409');
 
 						expect(operation.requestBody.content['application/json'].schema.oneOf).toEqual([
-							{ type: 'array', items: item },
-							expect.objectContaining({ required: ['keys', 'data'] }),
-							expect.objectContaining({ required: ['query', 'data'] }),
+							{ type: 'array', items: changes },
+							expect.objectContaining({
+								required: ['keys', 'data'],
+								properties: expect.objectContaining({ data: changes }),
+							}),
+							expect.objectContaining({
+								required: ['query', 'data'],
+								properties: expect.objectContaining({ data: changes }),
+							}),
 						]);
 					});
 
@@ -488,11 +523,11 @@ describe('Integration Tests', () => {
 
 						const operation = spec.paths[`/items/${collection.collection}/{id}`].patch;
 
-						expect(operation.requestBody.content['application/json'].schema).toEqual({
-							$ref: '#/components/schemas/ItemsTestTable',
-						});
-
+						expect(operation.requestBody.content['application/json'].schema).toEqual(changes);
 						expect(operation.responses).toHaveProperty('409');
+
+						// The schema the request body refers to is part of the generated spec
+						expect(spec.components?.schemas?.['UpdateMeta']).toHaveProperty('properties.onlyIf');
 					});
 
 					it('documents deleting items without a response body', async () => {
