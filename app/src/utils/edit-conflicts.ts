@@ -6,10 +6,16 @@ import { hashValue } from '@wbce-d9/utils';
 import { cloneDeep, isPlainObject } from 'lodash';
 
 /**
- * Reserved key for information about a change that is not part of the item itself: items contain `base`,
- * o2m alterations `deleteBase`
+ * Reserved key for information about a change that is not part of the item itself: items contain `onlyIf`,
+ * o2m alterations `deleteOnlyIf`
  */
 export const META_KEY = '$__meta';
+
+/**
+ * Conditions the current values have to meet for a change to be saved, by field. The API only saves when
+ * the hash of the current value is the same.
+ */
+export type OnlyIf = Record<string, { _hash: string }>;
 
 /**
  * Conflict as reported by the API in a 409 CONFLICT response
@@ -21,8 +27,6 @@ export type EditConflict = {
 	type: 'changed' | 'deleted';
 	field?: string;
 	current?: unknown;
-	user?: string | null;
-	timestamp?: string | null;
 };
 
 /**
@@ -31,18 +35,14 @@ export type EditConflict = {
 export type ConflictChoice = 'mine' | 'theirs';
 
 /**
- * Hashes of the original values of the given fields, the API compares them with the current values
- * before saving
+ * Conditions with the hashes of the original values of the given fields, the API compares them with the
+ * current values before saving
  */
-export function getBaseHashes(
-	collection: string,
-	original: Record<string, any>,
-	fields: string[]
-): Record<string, string> {
+export function getOnlyIf(collection: string, original: Record<string, any>, fields: string[]): OnlyIf {
 	const fieldsStore = useFieldsStore();
 	const primaryKeyField = fieldsStore.getPrimaryKeyFieldForCollection(collection)?.field;
 
-	const base: Record<string, string> = {};
+	const onlyIf: OnlyIf = {};
 
 	for (const field of fields) {
 		if (field.startsWith('$') || field === primaryKeyField || !(field in original)) continue;
@@ -54,10 +54,10 @@ export function getBaseHashes(
 		// would never match the stored foreign key.
 		if (original[field] === null && !canReadAllRelatedItems(collection, field, original)) continue;
 
-		base[field] = hashValue(getStoredValue(collection, field, original[field]));
+		onlyIf[field] = { _hash: hashValue(getStoredValue(collection, field, original[field])) };
 	}
 
-	return base;
+	return onlyIf;
 }
 
 function canReadAllRelatedItems(collection: string, field: string, item: Record<string, any>) {
@@ -69,9 +69,18 @@ function canReadAllRelatedItems(collection: string, field: string, item: Record<
 		relation.related_collection ??
 		(relation.meta?.one_collection_field ? item[relation.meta.one_collection_field] : null);
 
-	if (!relatedCollection || useUserStore().isAdmin) return true;
+	if (!relatedCollection) return true;
 
-	const permission = usePermissionsStore().getPermissionsForUser(relatedCollection, 'read');
+	return canReadAllItems(relatedCollection);
+}
+
+/**
+ * Whether the user can read every item of a collection, so nothing is hidden from them
+ */
+export function canReadAllItems(collection: string) {
+	if (useUserStore().isAdmin) return true;
+
+	const permission = usePermissionsStore().getPermissionsForUser(collection, 'read');
 
 	return !!permission && Object.keys(permission.permissions ?? {}).length === 0;
 }
@@ -92,16 +101,16 @@ function getStoredValue(collection: string, field: string, value: unknown) {
 }
 
 /**
- * Remove all base hashes, eg. when the edits are saved as a new item
+ * Remove all conditions, eg. when the edits are saved as a new item
  */
-export function stripBases<T>(value: T): T {
-	if (Array.isArray(value)) return value.map(stripBases) as T;
+export function stripMeta<T>(value: T): T {
+	if (Array.isArray(value)) return value.map(stripMeta) as T;
 	if (!isPlainObject(value)) return value;
 
 	const result: Record<string, any> = {};
 
 	for (const [key, child] of Object.entries(value as Record<string, any>)) {
-		if (key !== META_KEY) result[key] = stripBases(child);
+		if (key !== META_KEY) result[key] = stripMeta(child);
 	}
 
 	return result as T;
@@ -145,33 +154,32 @@ export function walkEdits(collection: string, item: Record<string, any>, visitor
 
 /**
  * Apply the choices for the reported conflicts to the edits, so they can be saved again. Returns the
- * changed edits and the base hashes to use for the root item.
+ * changed edits and the conditions to use for the root item.
  */
 export function resolveEditConflicts(options: {
 	collection: string;
 	primaryKey: string | number;
 	edits: Record<string, any>;
-	rootBase: Record<string, string | null>;
+	rootOnlyIf: OnlyIf;
 	conflicts: EditConflict[];
 	choices: ConflictChoice[];
-}): { edits: Record<string, any>; rootBase: Record<string, string | null> } {
+}): { edits: Record<string, any>; rootOnlyIf: OnlyIf } {
 	const { collection, primaryKey, conflicts, choices } = options;
 	const fieldsStore = useFieldsStore();
 
 	const edits = cloneDeep(options.edits);
-	const rootBase = { ...options.rootBase };
+	const rootOnlyIf = { ...options.rootOnlyIf };
 
 	const isSameKey = (a: unknown, b: unknown) => String(a) === String(b);
 
 	conflicts.forEach((conflict, index) => {
 		const choice = choices[index] ?? 'mine';
 		const primaryKeyField = fieldsStore.getPrimaryKeyFieldForCollection(conflict.collection)?.field;
-		const hasCurrent = 'current' in conflict;
 
 		if (conflict.collection === collection && isSameKey(conflict.key, primaryKey)) {
 			if (conflict.type !== 'changed' || !conflict.field) return;
 
-			applyFieldChoice(edits, rootBase, conflict.field, choice, conflict.current, hasCurrent);
+			applyFieldChoice(edits, rootOnlyIf, conflict.field, choice, conflict.current);
 			return;
 		}
 
@@ -187,7 +195,7 @@ export function resolveEditConflicts(options: {
 					}
 
 					// Deleting anyway doesn't need a check anymore
-					delete alterations[META_KEY]?.deleteBase?.[String(conflict.key)];
+					delete alterations[META_KEY]?.deleteOnlyIf?.[String(conflict.key)];
 
 					return;
 				}
@@ -211,37 +219,26 @@ export function resolveEditConflicts(options: {
 			item(itemCollection, item) {
 				if (conflict.action !== 'update' || conflict.type !== 'changed' || !conflict.field) return;
 				if (itemCollection !== conflict.collection || !primaryKeyField) return;
-				if (!isSameKey(item[primaryKeyField], conflict.key) || !item[META_KEY]?.base) return;
+				if (!isSameKey(item[primaryKeyField], conflict.key) || !item[META_KEY]?.onlyIf) return;
 
-				applyFieldChoice(item, item[META_KEY].base, conflict.field, choice, conflict.current, hasCurrent);
+				applyFieldChoice(item, item[META_KEY].onlyIf, conflict.field, choice, conflict.current);
 			},
 		});
 	});
 
-	return { edits, rootBase };
+	return { edits, rootOnlyIf };
 }
 
 function applyFieldChoice(
 	item: Record<string, any>,
-	base: Record<string, string | null>,
+	onlyIf: OnlyIf,
 	field: string,
 	choice: ConflictChoice,
-	current: unknown,
-	hasCurrent: boolean
+	current: unknown
 ) {
-	if (choice === 'theirs') {
-		if (hasCurrent) {
-			// Show the current value in the form; saving it again doesn't change anything
-			item[field] = current;
-			base[field] = hashValue(current);
-		} else {
-			delete item[field];
-			base[field] = null;
-		}
-	} else if (hasCurrent) {
-		base[field] = hashValue(current);
-	} else {
-		// The current value can't be read, keeping the local change means overwriting it
-		base[field] = null;
-	}
+	// Their version is shown in the form; saving it again doesn't change anything
+	if (choice === 'theirs') item[field] = current;
+
+	// Either way, the save is now based on the current value
+	onlyIf[field] = { _hash: hashValue(current) };
 }

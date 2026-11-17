@@ -8,9 +8,10 @@ import {
 	ConflictChoice,
 	EditConflict,
 	META_KEY,
-	getBaseHashes,
+	OnlyIf,
+	getOnlyIf,
 	resolveEditConflicts,
-	stripBases,
+	stripMeta,
 } from '@/utils/edit-conflicts';
 import { notify } from '@/utils/notify';
 import { translate } from '@/utils/translate-object-values';
@@ -63,10 +64,11 @@ export function useItem(
 	const archiving = ref(false);
 	const edits = ref<Record<string, any>>({});
 	const conflicts = ref<EditConflict[] | null>(null);
-	// Item as returned by the API, before translating system values. Used for the conflict check base.
+	// Item as returned by the API, before translating system values. Used for the conditions of the conflict check.
 	const loadedItem = ref<Record<string, any> | null>(null);
-	// Base hashes chosen while resolving conflicts, `null` skips the check of a field
-	const baseOverrides = ref<Record<string, string | null>>({});
+	// Conditions that replace the ones of the loaded values: for fields edited before the item was reloaded
+	// and for resolved conflicts
+	const onlyIfOverrides = ref<OnlyIf>({});
 	const hasEdits = computed(() => Object.keys(edits.value).length > 0);
 	const isNew = computed(() => primaryKey.value === '+');
 	const isBatch = computed(() => typeof primaryKey.value === 'string' && primaryKey.value.includes(','));
@@ -125,7 +127,7 @@ export function useItem(
 
 		try {
 			const response = await api.get(itemEndpoint.value, { params: unref(query) });
-			keepBaseOfEditedFields();
+			keepConditionsOfEditedFields();
 			setItemValueToResponse(response);
 		} catch (err: any) {
 			error.value = err;
@@ -168,7 +170,7 @@ export function useItem(
 					title: i18n.global.t('item_create_success', isBatch.value ? 2 : 1),
 				});
 			} else {
-				response = await api.patch(itemEndpoint.value, withBase(edits.value));
+				response = await api.patch(itemEndpoint.value, withOnlyIf(edits.value));
 
 				notify({
 					title: i18n.global.t('item_update_success', isBatch.value ? 2 : 1),
@@ -177,7 +179,7 @@ export function useItem(
 
 			setItemValueToResponse(response);
 			edits.value = {};
-			baseOverrides.value = {};
+			onlyIfOverrides.value = {};
 			conflicts.value = null;
 			return response.data.data;
 		} catch (err: any) {
@@ -191,30 +193,30 @@ export function useItem(
 	 * Add the hashes of the loaded values of the changed fields, so the API can reject the save if someone
 	 * else changed them in the meantime. Nested items get their hashes in useRelationMultiple.
 	 */
-	function withBase(payload: Record<string, any>) {
+	function withOnlyIf(payload: Record<string, any>) {
 		if (isBatch.value || !loadedItem.value || !primaryKeyField.value) return payload;
 		if (!(primaryKeyField.value.field in loadedItem.value)) return payload;
 
 		const fields = Object.keys(payload);
 
-		const base = pick({ ...getBaseHashes(collection.value, loadedItem.value, fields), ...baseOverrides.value }, fields);
+		const onlyIf = pick({ ...getOnlyIf(collection.value, loadedItem.value, fields), ...onlyIfOverrides.value }, fields);
 
-		return Object.keys(base).length > 0 ? { ...payload, [META_KEY]: { base } } : payload;
+		return Object.keys(onlyIf).length > 0 ? { ...payload, [META_KEY]: { onlyIf } } : payload;
 	}
 
 	/**
 	 * When the item is reloaded while there are unsaved edits, the edited fields still have to be checked
 	 * against the values the user saw when starting to edit them
 	 */
-	function keepBaseOfEditedFields() {
+	function keepConditionsOfEditedFields() {
 		if (!loadedItem.value || !hasEdits.value) {
-			baseOverrides.value = {};
+			onlyIfOverrides.value = {};
 			return;
 		}
 
-		baseOverrides.value = {
-			...getBaseHashes(collection.value, loadedItem.value, Object.keys(edits.value)),
-			...baseOverrides.value,
+		onlyIfOverrides.value = {
+			...getOnlyIf(collection.value, loadedItem.value, Object.keys(edits.value)),
+			...onlyIfOverrides.value,
 		};
 	}
 
@@ -231,13 +233,13 @@ export function useItem(
 			collection: collection.value,
 			primaryKey: key,
 			edits: edits.value,
-			rootBase: baseOverrides.value,
+			rootOnlyIf: onlyIfOverrides.value,
 			conflicts: conflicts.value,
 			choices,
 		});
 
 		edits.value = resolved.edits;
-		baseOverrides.value = resolved.rootBase;
+		onlyIfOverrides.value = resolved.rootOnlyIf;
 		conflicts.value = null;
 
 		return await save();
@@ -341,7 +343,7 @@ export function useItem(
 		}
 
 		try {
-			const response = await api.post(getEndpoint(collection.value), stripBases(newItem));
+			const response = await api.post(getEndpoint(collection.value), stripMeta(newItem));
 
 			notify({
 				title: i18n.global.t('item_create_success', 1),

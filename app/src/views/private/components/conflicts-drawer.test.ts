@@ -1,15 +1,35 @@
+import api from '@/api';
+import { useFieldsStore } from '@/stores/fields';
+import { usePermissionsStore } from '@/stores/permissions';
+import { useUserStore } from '@/stores/user';
 import { EditConflict } from '@/utils/edit-conflicts';
 import { createTestingPinia } from '@pinia/testing';
-import { mount } from '@vue/test-utils';
-import { expect, test, vi } from 'vitest';
+import { flushPromises, mount } from '@vue/test-utils';
+import { setActivePinia } from 'pinia';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { createI18n } from 'vue-i18n';
 import ConflictsDrawer from './conflicts-drawer.vue';
 
 vi.mock('@/api', () => ({ default: { get: vi.fn().mockResolvedValue({ data: { data: [] } }) } }));
 
-const i18n = createI18n({ legacy: false, missingWarn: false, locale: 'en-US', messages: { 'en-US': {} } });
+const i18n = createI18n({
+	legacy: false,
+	missingWarn: false,
+	locale: 'en-US',
+	messages: { 'en-US': { edit_conflicts: { changed_by: 'Changed by {user} {time}' } } },
+});
 
-function mountDrawer(conflict: Partial<EditConflict>, edits: Record<string, any>) {
+beforeEach(() => {
+	vi.mocked(api.get)
+		.mockReset()
+		.mockResolvedValue({ data: { data: [] } });
+});
+
+function mountDrawer(
+	conflict: Partial<EditConflict>,
+	edits: Record<string, any>,
+	pinia = createTestingPinia({ createSpy: vi.fn, stubActions: false })
+) {
 	return mount(ConflictsDrawer, {
 		props: {
 			active: true,
@@ -19,7 +39,7 @@ function mountDrawer(conflict: Partial<EditConflict>, edits: Record<string, any>
 			conflicts: [{ collection: 'articles', key: 1, action: 'update', type: 'changed', ...conflict } as EditConflict],
 		},
 		global: {
-			plugins: [i18n, createTestingPinia({ createSpy: vi.fn })],
+			plugins: [i18n, pinia],
 			stubs: {
 				'v-drawer': { template: '<div><slot name="actions" /><slot /></div>' },
 				'v-notice': { template: '<div class="v-notice"><slot /></div>' },
@@ -55,9 +75,100 @@ test('shows values that are not text', () => {
 	expect(wrapper.find('.change-line.added').text()).toBe('false');
 });
 
-test('shows a notice instead of their version when the current value is unknown', () => {
-	const wrapper = mountDrawer({ field: 'title' }, { title: 'Mine' });
+describe('last change', () => {
+	const conflict = { field: 'title', current: 'Theirs' };
+	const edits = { title: 'Mine' };
+	const jane = { id: 'user-jane', first_name: 'Jane', last_name: 'Doe' };
 
-	expect(wrapper.find('.change-line.deleted').exists()).toBe(false);
-	expect(wrapper.find('.change-line.added').text()).toBe('Mine');
+	function mockApi(responses: Record<string, any>) {
+		vi.mocked(api.get).mockImplementation(async (url: string) => {
+			if (!(url in responses)) throw new Error('Forbidden');
+			return { data: { data: responses[url] } };
+		});
+	}
+
+	function setUser(admin: boolean, activityPermissions: Record<string, any> | null = null) {
+		useUserStore().currentUser = { id: 'user-me', role: { id: 'editor', admin_access: admin } } as any;
+
+		usePermissionsStore().permissions = activityPermissions
+			? ([{ role: 'editor', collection: 'directus_activity', action: 'read', permissions: activityPermissions }] as any)
+			: [];
+	}
+
+	function setFields(specials: Record<string, string>) {
+		useFieldsStore().fields = [
+			{ collection: 'articles', field: 'id', schema: { is_primary_key: true }, meta: null },
+			...Object.entries(specials).map(([field, special]) => ({
+				collection: 'articles',
+				field,
+				schema: {},
+				meta: { special: [special] },
+			})),
+		] as any;
+	}
+
+	async function changedBy(prepare: () => void) {
+		const pinia = createTestingPinia({ createSpy: vi.fn, stubActions: false });
+		setActivePinia(pinia);
+		prepare();
+
+		const wrapper = mountDrawer(conflict, edits, pinia);
+		await flushPromises();
+
+		return wrapper.find('.changed-by');
+	}
+
+	test('is read from the fields of the item that track it', async () => {
+		mockApi({
+			'/items/articles': [{ user_updated: 'user-jane', date_updated: '2026-11-13T10:00:00.000Z' }],
+			'/users': [jane],
+		});
+
+		const element = await changedBy(() => {
+			setUser(false);
+			setFields({ user_updated: 'user-updated', date_updated: 'date-updated' });
+		});
+
+		expect(element.text()).toContain('Jane Doe');
+
+		expect(api.get).toHaveBeenCalledWith('/items/articles', {
+			params: { filter: { id: { _eq: 1 } }, fields: ['user_updated', 'date_updated'], limit: 1 },
+		});
+
+		expect(api.get).not.toHaveBeenCalledWith('/activity', expect.anything());
+	});
+
+	test('is read from the activity when the item does not track it', async () => {
+		mockApi({ '/activity': [{ user: 'user-jane', timestamp: '2026-11-13T10:00:00.000Z' }], '/users': [jane] });
+
+		const element = await changedBy(() => {
+			setUser(false, {});
+			setFields({});
+		});
+
+		expect(element.text()).toContain('Jane Doe');
+	});
+
+	test('is not read from the activity when the user can only see a part of it', async () => {
+		mockApi({ '/activity': [{ user: 'user-me', timestamp: '2026-11-13T10:00:00.000Z' }], '/users': [] });
+
+		const element = await changedBy(() => {
+			setUser(false, { user: { _eq: '$CURRENT_USER' } });
+			setFields({});
+		});
+
+		expect(element.exists()).toBe(false);
+		expect(api.get).not.toHaveBeenCalledWith('/activity', expect.anything());
+	});
+
+	test('is left out when it can not be read', async () => {
+		mockApi({});
+
+		const element = await changedBy(() => {
+			setUser(false, {});
+			setFields({ user_updated: 'user-updated', date_updated: 'date-updated' });
+		});
+
+		expect(element.exists()).toBe(false);
+	});
 });

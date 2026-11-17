@@ -19,7 +19,7 @@ import type {
 	MutationOptions,
 	PrimaryKey,
 } from '../types/index.js';
-import { detectConflicts, extractBase, hasUnfilteredAccess } from '../utils/conflicts.js';
+import { detectConflicts, extractOnlyIf, hasUnfilteredAccess } from '../utils/conflicts.js';
 import getASTFromQuery from '../utils/get-ast-from-query.js';
 import { validateKeys } from '../utils/validate-keys.js';
 import { AuthorizationService } from './authorization.js';
@@ -109,8 +109,8 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 			.filter((field) => field.alias === true)
 			.map((field) => field.field);
 
-		// Base hashes only apply to existing items
-		const payload: AnyItem = cloneDeep(extractBase(data).data);
+		// Conditions only apply to existing items
+		const payload: AnyItem = cloneDeep(extractOnlyIf(data).data);
 		const nestedActionEvents: ActionEventParams[] = [];
 
 		// Nested mutations collect their conflicts in the list of the mutation that started the tree, which
@@ -579,8 +579,8 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 			.filter((field) => field.alias === true)
 			.map((field) => field.field);
 
-		const { data: dataWithoutBase, base } = extractBase(data);
-		const payload: Partial<AnyItem> = cloneDeep(dataWithoutBase);
+		const { data: dataWithoutMeta, onlyIf } = extractOnlyIf(data);
+		const payload: Partial<AnyItem> = cloneDeep(dataWithoutMeta);
 		const nestedActionEvents: ActionEventParams[] = [];
 
 		const conflicts = opts.conflicts ?? [];
@@ -618,7 +618,7 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 
 		// Items that were deleted in the meantime are a conflict, not a permission error. Only for users who
 		// can update every item of the collection, anyone else could use it to find out which items exist.
-		if (base && hasUnfilteredAccess(this.accountability, this.collection, 'update')) {
+		if (onlyIf && hasUnfilteredAccess(this.accountability, this.collection, 'update')) {
 			const existingKeys = (
 				await this.knex.select(primaryKeyField).from(this.collection).whereIn(primaryKeyField, keys)
 			).map((row) => String(row[primaryKeyField]));
@@ -663,7 +663,7 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 				schema: this.schema,
 			});
 
-			if (base) {
+			if (onlyIf) {
 				conflicts.push(
 					...(await detectConflicts({
 						knex: trx,
@@ -671,7 +671,7 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 						accountability: this.accountability,
 						collection: this.collection,
 						keys,
-						base,
+						onlyIf,
 						action: 'update',
 					}))
 				);

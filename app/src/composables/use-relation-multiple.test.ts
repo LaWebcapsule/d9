@@ -529,7 +529,7 @@ describe('edit conflict base hashes', () => {
 				id: 10,
 				languages_code: { code: 'en' },
 				body: 'English (edited)',
-				$__meta: { base: { languages_code: hashValue('en'), body: hashValue('English') } },
+				$__meta: { onlyIf: { languages_code: { _hash: hashValue('en') }, body: { _hash: hashValue('English') } } },
 			},
 		]);
 	});
@@ -544,7 +544,7 @@ describe('edit conflict base hashes', () => {
 		wrapper.vm.update({ id: 2, name: 'test2-edited' });
 
 		expect(wrapper.vm.value.update).toEqual([
-			{ id: 2, name: 'test2-edited', $__meta: { base: { name: hashValue('test2') } } },
+			{ id: 2, name: 'test2-edited', $__meta: { onlyIf: { name: { _hash: hashValue('test2') } } } },
 		]);
 	});
 
@@ -559,7 +559,12 @@ describe('edit conflict base hashes', () => {
 		wrapper.vm.update({ ...wrapper.vm.displayItems[1], name: 'second' });
 
 		expect(wrapper.vm.value.update).toEqual([
-			{ id: 2, name: 'second', facility: 1, $__meta: { base: { name: hashValue('test2'), facility: hashValue(1) } } },
+			{
+				id: 2,
+				name: 'second',
+				facility: 1,
+				$__meta: { onlyIf: { name: { _hash: hashValue('test2') }, facility: { _hash: hashValue(1) } } },
+			},
 		]);
 	});
 
@@ -576,12 +581,12 @@ describe('edit conflict base hashes', () => {
 			create: [],
 			update: [],
 			delete: [2],
-			$__meta: { deleteBase: { 2: { name: hashValue('test2'), facility: hashValue(1) } } },
+			$__meta: { deleteOnlyIf: { 2: { name: { _hash: hashValue('test2') }, facility: { _hash: hashValue(1) } } } },
 		});
 
 		wrapper.vm.remove(wrapper.vm.displayItems[1]);
 
-		expect(wrapper.vm.value?.$__meta?.deleteBase ?? {}).toEqual({});
+		expect(wrapper.vm.value?.$__meta?.deleteOnlyIf ?? {}).toEqual({});
 	});
 });
 

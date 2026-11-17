@@ -2,7 +2,7 @@ import api from '@/api';
 import { RelationM2A } from '@/composables/use-relation-m2a';
 import { RelationM2M } from '@/composables/use-relation-m2m';
 import { RelationO2M } from '@/composables/use-relation-o2m';
-import { META_KEY, getBaseHashes } from '@/utils/edit-conflicts';
+import { META_KEY, OnlyIf, getOnlyIf } from '@/utils/edit-conflicts';
 import { unexpectedError } from '@/utils/unexpected-error';
 import { Filter, Item } from '@wbce-d9/types';
 import { getEndpoint, toArray } from '@wbce-d9/utils';
@@ -29,8 +29,8 @@ export type ChangesItem = {
 	create: Record<string, any>[];
 	update: Record<string, any>[];
 	delete: (string | number)[];
-	/** Hashes of the loaded values of deleted items, so deleting items that were changed in the meantime is detected */
-	$__meta?: { deleteBase?: Record<string, Record<string, string | null>> };
+	/** Conditions for deleting items, so deleting items that were changed in the meantime is detected */
+	$__meta?: { deleteOnlyIf?: Record<string, OnlyIf> };
 };
 
 export function useRelationMultiple(
@@ -217,18 +217,18 @@ export function useRelationMultiple(
 
 			for (const item of items) {
 				if (item.$type === undefined || item.$index === undefined) {
-					target.value.update.push(withBase(item));
+					target.value.update.push(withOnlyIf(item));
 				} else if (item.$type === 'created') {
 					target.value.create[item.$index] = cleanItem(item);
 				} else if (item.$type === 'updated') {
 					if (isEmpty(item)) target.value.update.splice(item.$index, 1);
-					else target.value.update[item.$index] = withBase(item);
+					else target.value.update[item.$index] = withOnlyIf(item);
 				} else if (item.$type === 'deleted') {
 					if (item.$edits !== undefined) {
 						if (isEmpty(item)) target.value.update.splice(item.$index, 1);
-						else target.value.update[item.$edits] = withBase(item);
+						else target.value.update[item.$edits] = withOnlyIf(item);
 					} else {
-						target.value.update.push(withBase(item));
+						target.value.update.push(withOnlyIf(item));
 					}
 				}
 			}
@@ -247,7 +247,7 @@ export function useRelationMultiple(
 			for (const item of items) {
 				if (item.$type === undefined || item.$index === undefined) {
 					target.value.delete.push(item[pkField]);
-					addDeleteBase(target.value, item[pkField]);
+					addDeleteOnlyIf(target.value, item[pkField]);
 				} else if (item.$type === 'created') {
 					target.value.create.splice(item.$index, 1);
 				} else if (item.$type === 'updated') {
@@ -255,11 +255,11 @@ export function useRelationMultiple(
 						target.value.update.splice(item.$index, 1);
 					} else {
 						target.value.delete.push(item[pkField]);
-						addDeleteBase(target.value, item[pkField]);
+						addDeleteOnlyIf(target.value, item[pkField]);
 					}
 				} else if (item.$type === 'deleted') {
 					const [key] = target.value.delete.splice(item.$index, 1);
-					if (key !== undefined) delete target.value[META_KEY]?.deleteBase?.[String(key)];
+					if (key !== undefined) delete target.value[META_KEY]?.deleteOnlyIf?.[String(key)];
 				}
 			}
 
@@ -308,17 +308,17 @@ export function useRelationMultiple(
 		}
 
 		/**
-		 * Remember the hashes of the loaded values of the deleted item, see `withBase`
+		 * Remember the hashes of the loaded values of the deleted item, see `withOnlyIf`
 		 */
-		function addDeleteBase(changes: Item, key: string | number) {
+		function addDeleteOnlyIf(changes: Item, key: string | number) {
 			const info = relation.value;
 			const original = info ? getFetchedItem(key) : undefined;
 			if (!info || !original) return;
 
-			const base = getBaseHashes(getTargetCollection(info), original, Object.keys(original));
-			if (Object.keys(base).length === 0) return;
+			const onlyIf = getOnlyIf(getTargetCollection(info), original, Object.keys(original));
+			if (Object.keys(onlyIf).length === 0) return;
 
-			changes[META_KEY] = { deleteBase: { ...(changes[META_KEY]?.deleteBase ?? {}), [String(key)]: base } };
+			changes[META_KEY] = { deleteOnlyIf: { ...(changes[META_KEY]?.deleteOnlyIf ?? {}), [String(key)]: onlyIf } };
 		}
 
 		/**
@@ -326,7 +326,7 @@ export function useRelationMultiple(
 		 * changed them in the meantime. Hashes that already exist are kept: they belong to the values the
 		 * user saw when starting to edit.
 		 */
-		function withBase(item: DisplayItem) {
+		function withOnlyIf(item: DisplayItem) {
 			const entry = cleanItem(item);
 			const info = relation.value;
 			if (!info) return entry;
@@ -334,8 +334,8 @@ export function useRelationMultiple(
 			const original = getFetchedItem(entry[getTargetPKField(info)]);
 			if (!original) return entry;
 
-			const base = mergeBase(getTargetCollection(info), original, entry, item[META_KEY]?.base);
-			if (Object.keys(base).length > 0) entry[META_KEY] = { base };
+			const onlyIf = mergeOnlyIf(getTargetCollection(info), original, entry, item[META_KEY]?.onlyIf);
+			if (Object.keys(onlyIf).length > 0) entry[META_KEY] = { onlyIf };
 
 			if (info.type === 'm2m' || info.type === 'm2a') {
 				const junctionField = info.junctionField.field;
@@ -348,10 +348,10 @@ export function useRelationMultiple(
 						: entry[info.collectionField.field] ?? original[info.collectionField.field];
 
 				if (isPlainObject(related) && isPlainObject(originalRelated) && relatedCollection) {
-					const relatedBase = mergeBase(relatedCollection, originalRelated, related, related[META_KEY]?.base);
+					const relatedOnlyIf = mergeOnlyIf(relatedCollection, originalRelated, related, related[META_KEY]?.onlyIf);
 
-					if (Object.keys(relatedBase).length > 0) {
-						entry[junctionField] = { ...related, [META_KEY]: { base: relatedBase } };
+					if (Object.keys(relatedOnlyIf).length > 0) {
+						entry[junctionField] = { ...related, [META_KEY]: { onlyIf: relatedOnlyIf } };
 					}
 				}
 			}
@@ -359,14 +359,14 @@ export function useRelationMultiple(
 			return entry;
 		}
 
-		function mergeBase(
+		function mergeOnlyIf(
 			collection: string,
 			original: Record<string, any>,
 			edits: Record<string, any>,
-			existingBase: Record<string, string | null> | undefined
+			existingOnlyIf: OnlyIf | undefined
 		) {
 			const fields = Object.keys(edits).filter((field) => !field.startsWith('$'));
-			return pick({ ...getBaseHashes(collection, original, fields), ...(existingBase ?? {}) }, fields);
+			return pick({ ...getOnlyIf(collection, original, fields), ...(existingOnlyIf ?? {}) }, fields);
 		}
 	}
 

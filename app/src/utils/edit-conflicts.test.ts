@@ -7,7 +7,7 @@ import { Field, Relation } from '@wbce-d9/types';
 import { hashValue } from '@wbce-d9/utils';
 import { setActivePinia } from 'pinia';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { EditConflict, getBaseHashes, resolveEditConflicts, stripBases, walkEdits } from './edit-conflicts';
+import { EditConflict, getOnlyIf, resolveEditConflicts, stripMeta, walkEdits } from './edit-conflicts';
 
 function field(collection: string, name: string, type = 'string', primary = false): Field {
 	return {
@@ -64,23 +64,25 @@ beforeEach(() => {
 	mockSchema();
 });
 
-describe('getBaseHashes', () => {
+describe('getOnlyIf', () => {
 	test('hashes the original values of the given fields', () => {
-		expect(getBaseHashes('articles', { id: 1, title: 'Title' }, ['title'])).toEqual({ title: hashValue('Title') });
+		expect(getOnlyIf('articles', { id: 1, title: 'Title' }, ['title'])).toEqual({
+			title: { _hash: hashValue('Title') },
+		});
 	});
 
 	test('skips the primary key, alias fields, unknown fields and fields that were not loaded', () => {
 		const original = { id: 1, title: 'Title', translations: [1, 2], unknown: 'x' };
 
-		expect(getBaseHashes('articles', original, ['id', 'translations', 'unknown', 'author', '$__meta'])).toEqual({});
+		expect(getOnlyIf('articles', original, ['id', 'translations', 'unknown', 'author', '$__meta'])).toEqual({});
 	});
 
 	test('uses the foreign key of nested many-to-one values', () => {
 		const original = { languages_code: { code: 'en' }, body: 'English' };
 
-		expect(getBaseHashes('articles_translations', original, ['languages_code', 'body'])).toEqual({
-			languages_code: hashValue('en'),
-			body: hashValue('English'),
+		expect(getOnlyIf('articles_translations', original, ['languages_code', 'body'])).toEqual({
+			languages_code: { _hash: hashValue('en') },
+			body: { _hash: hashValue('English') },
 		});
 	});
 
@@ -98,42 +100,42 @@ describe('getBaseHashes', () => {
 		test('are hashed when the user can read every related item', () => {
 			setReadPermission({});
 
-			expect(getBaseHashes('articles', original, ['title', 'author'])).toEqual({
-				title: hashValue(null),
-				author: hashValue(null),
+			expect(getOnlyIf('articles', original, ['title', 'author'])).toEqual({
+				title: { _hash: hashValue(null) },
+				author: { _hash: hashValue(null) },
 			});
 
 			setReadPermission(null, true);
 
-			expect(getBaseHashes('articles', original, ['author'])).toEqual({ author: hashValue(null) });
+			expect(getOnlyIf('articles', original, ['author'])).toEqual({ author: { _hash: hashValue(null) } });
 		});
 
 		test('are skipped when the related item could be hidden from the user', () => {
 			setReadPermission({ id: { _eq: '$CURRENT_USER' } });
 
-			expect(getBaseHashes('articles', original, ['title', 'author'])).toEqual({ title: hashValue(null) });
+			expect(getOnlyIf('articles', original, ['title', 'author'])).toEqual({ title: { _hash: hashValue(null) } });
 
 			setReadPermission(null);
 
-			expect(getBaseHashes('articles', original, ['author'])).toEqual({});
+			expect(getOnlyIf('articles', original, ['author'])).toEqual({});
 		});
 	});
 });
 
-describe('stripBases', () => {
+describe('stripMeta', () => {
 	test('removes base hashes at every level', () => {
 		const edits = {
 			title: 'Title',
-			$__meta: { base: { title: 'hash' } },
+			$__meta: { onlyIf: { title: 'hash' } },
 			translations: {
 				create: [],
-				update: [{ id: 10, body: 'Body', $__meta: { base: { body: 'hash' } } }],
+				update: [{ id: 10, body: 'Body', $__meta: { onlyIf: { body: 'hash' } } }],
 				delete: [11],
-				$__meta: { deleteBase: { 11: { body: 'hash' } } },
+				$__meta: { deleteOnlyIf: { 11: { body: 'hash' } } },
 			},
 		};
 
-		expect(stripBases(edits)).toEqual({
+		expect(stripMeta(edits)).toEqual({
 			title: 'Title',
 			translations: { create: [], update: [{ id: 10, body: 'Body' }], delete: [11] },
 		});
@@ -186,7 +188,7 @@ describe('resolveEditConflicts', () => {
 		title: 'Mine',
 		translations: {
 			create: [],
-			update: [{ id: 10, body: 'My body', $__meta: { base: { body: hashValue('Body') } } }],
+			update: [{ id: 10, body: 'My body', $__meta: { onlyIf: { body: { _hash: hashValue('Body') } } } }],
 			delete: [],
 		},
 	});
@@ -196,7 +198,7 @@ describe('resolveEditConflicts', () => {
 			collection: 'articles',
 			primaryKey: '1',
 			edits: input,
-			rootBase: {},
+			rootOnlyIf: {},
 			conflicts,
 			choices,
 		});
@@ -206,12 +208,12 @@ describe('resolveEditConflicts', () => {
 		const result = resolve([changedTitle, changedBody], ['mine', 'mine']);
 
 		expect(result.edits.title).toBe('Mine');
-		expect(result.rootBase).toEqual({ title: hashValue('Theirs') });
+		expect(result.rootOnlyIf).toEqual({ title: { _hash: hashValue('Theirs') } });
 
 		expect(result.edits.translations.update[0]).toEqual({
 			id: 10,
 			body: 'My body',
-			$__meta: { base: { body: hashValue('Their body') } },
+			$__meta: { onlyIf: { body: { _hash: hashValue('Their body') } } },
 		});
 	});
 
@@ -219,21 +221,8 @@ describe('resolveEditConflicts', () => {
 		const result = resolve([changedTitle, changedBody], ['theirs', 'theirs']);
 
 		expect(result.edits.title).toBe('Theirs');
-		expect(result.rootBase).toEqual({ title: hashValue('Theirs') });
+		expect(result.rootOnlyIf).toEqual({ title: { _hash: hashValue('Theirs') } });
 		expect(result.edits.translations.update[0].body).toBe('Their body');
-	});
-
-	test('without read access, mine overwrites and theirs drops the change', () => {
-		const { current: _title, ...hiddenTitle } = changedTitle;
-		const { current: _body, ...hiddenBody } = changedBody;
-
-		const mine = resolve([hiddenTitle, hiddenBody], ['mine', 'mine']);
-		expect(mine.rootBase).toEqual({ title: null });
-		expect(mine.edits.translations.update[0].$__meta.base).toEqual({ body: null });
-
-		const theirs = resolve([hiddenTitle, hiddenBody], ['theirs', 'theirs']);
-		expect(theirs.edits).not.toHaveProperty('title');
-		expect(theirs.edits.translations.update[0]).not.toHaveProperty('body');
 	});
 
 	test('restores a deleted nested item with the local changes, or discards them', () => {
@@ -262,17 +251,17 @@ describe('resolveEditConflicts', () => {
 				create: [],
 				update: [],
 				delete: [11],
-				$__meta: { deleteBase: { 11: { body: hashValue('Old') } } },
+				$__meta: { deleteOnlyIf: { 11: { body: { _hash: hashValue('Old') } } } },
 			},
 		});
 
 		const mine = resolve([deleteChanged], ['mine'], input() as any);
 		expect(mine.edits.translations.delete).toEqual([11]);
-		expect(mine.edits.translations.$__meta.deleteBase).toEqual({});
+		expect(mine.edits.translations.$__meta.deleteOnlyIf).toEqual({});
 
 		const theirs = resolve([deleteChanged], ['theirs'], input() as any);
 		expect(theirs.edits.translations.delete).toEqual([]);
-		expect(theirs.edits.translations.$__meta.deleteBase).toEqual({});
+		expect(theirs.edits.translations.$__meta.deleteOnlyIf).toEqual({});
 	});
 
 	test('does not change the passed edits', () => {

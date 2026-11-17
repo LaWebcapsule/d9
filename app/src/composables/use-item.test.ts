@@ -292,7 +292,7 @@ describe('Edit conflicts', () => {
 
 		expect(api.patch).toHaveBeenCalledWith('/items/test/1', {
 			title: 'Mine',
-			$__meta: { base: { title: hashValue('Title') } },
+			$__meta: { onlyIf: { title: { _hash: hashValue('Title') } } },
 		});
 	});
 
@@ -321,7 +321,7 @@ describe('Edit conflicts', () => {
 
 		expect(api.patch).toHaveBeenLastCalledWith('/items/test/1', {
 			title: 'Mine',
-			$__meta: { base: { title: hashValue('Theirs') } },
+			$__meta: { onlyIf: { title: { _hash: hashValue('Theirs') } } },
 		});
 
 		expect(conflicts.value).toBeNull();
@@ -344,7 +344,7 @@ describe('Edit conflicts', () => {
 		expect(api.patch).toHaveBeenCalledWith('/items/test/1', {
 			title: 'Mine',
 			status: 'archived',
-			$__meta: { base: { title: hashValue('Title'), status: hashValue('published') } },
+			$__meta: { onlyIf: { title: { _hash: hashValue('Title') }, status: { _hash: hashValue('published') } } },
 		});
 	});
 
@@ -360,7 +360,7 @@ describe('Edit conflicts', () => {
 
 		expect(api.patch).toHaveBeenLastCalledWith('/items/test', {
 			title: 'Theirs',
-			$__meta: { base: { title: hashValue('Theirs') } },
+			$__meta: { onlyIf: { title: { _hash: hashValue('Theirs') } } },
 		});
 	});
 
@@ -369,7 +369,7 @@ describe('Edit conflicts', () => {
 
 		const { edits, saveAsCopy } = await setup();
 
-		edits.value = { title: 'Mine', meta: { $__meta: { base: { a: 'hash' } }, nested: true } };
+		edits.value = { title: 'Mine', meta: { $__meta: { onlyIf: { a: 'hash' } }, nested: true } };
 		await saveAsCopy();
 
 		expect(api.post).toHaveBeenCalledWith('/items/test', { title: 'Mine', status: 'draft', meta: { nested: true } });

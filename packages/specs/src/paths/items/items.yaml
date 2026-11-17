@@ -64,7 +64,7 @@ patch:
   description: >-
     Update multiple items at the same time. The body is either an array of partial items including their primary key,
     the primary keys and the changes for all of them, or a query and the changes for all items it matches. To detect
-    changes someone else saved in the meantime, add `$__meta.base` to the changes, see the update of a single item.
+    changes someone else saved in the meantime, add `$__meta.onlyIf` to the changes, see the update of a single item.
   tags:
     - Items
   operationId: updateItems

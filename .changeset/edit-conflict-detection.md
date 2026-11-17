@@ -5,8 +5,8 @@
 ---
 
 Added edit conflict detection, so saving an item no longer silently overwrites changes another user saved in the
-meantime. Update payloads can contain `$__meta.base`, the hashes (`hashValue` from `@wbce-d9/utils`) of the values the
-changes are based on, also in nested items, and `$__meta.deleteBase` in nested `delete` alterations. When a value
-changed, the whole save is rolled back and the API responds with `409 CONFLICT` and the list of conflicts. The item page
-sends these hashes for the item and its nested items (including translations) and shows the conflicting versions to
-choose from. Requests without a base behave as before.
+meantime. Update payloads can contain `$__meta.onlyIf`, conditions with the hashes (`hashValue` from `@wbce-d9/utils`)
+of the values the changes are based on, also in nested items, and `$__meta.deleteOnlyIf` in nested `delete` alterations.
+When a value changed, the whole save is rolled back and the API responds with `409 CONFLICT` and the list of conflicts.
+The item page sends these conditions for the item and its nested items (including translations) and shows the
+conflicting versions to choose from. Requests without conditions behave as before.

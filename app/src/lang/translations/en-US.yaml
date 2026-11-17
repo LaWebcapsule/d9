@@ -1407,7 +1407,6 @@ edit_conflicts:
   mine: My version
   keep_theirs: Keep their version
   keep_mine: Keep my version
-  no_access: You don't have permission to see the current value. Keeping your version will overwrite it.
   item_deleted: This item was deleted by someone else. Your changes can't be saved to it, but you can save them as a copy.
   nested_deleted: Someone else deleted this item while you were editing it.
   restore_mine: Restore it with my changes

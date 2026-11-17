@@ -1,7 +1,8 @@
 import type { Accountability, PermissionsAction, SchemaOverview } from '@wbce-d9/types';
-import { hashValue } from '@wbce-d9/utils';
+import { stableStringify } from '@wbce-d9/utils';
 import type { Knex } from 'knex';
 import { isPlainObject } from 'lodash-es';
+import { webcrypto } from 'node:crypto';
 import { getHelpers } from '../database/helpers/index.js';
 import { getDatabaseClient } from '../database/index.js';
 import { InvalidPayloadException } from '../exceptions/invalid-payload.js';
@@ -9,10 +10,11 @@ import type { Item, PrimaryKey } from '../types/index.js';
 import { getColumn } from './get-column.js';
 
 /**
- * Hashes (see `hashValue` in @wbce-d9/utils) of the field values the client based its edits on.
- * `null` explicitly skips the check of a field, eg. when the client chose to overwrite it.
+ * Conditions the current field values have to meet for a mutation to be applied, by field. The only
+ * operator is `_hash`: the hash (see `hashValue` in @wbce-d9/utils) of the value the client based its
+ * edits on.
  */
-export type ConflictBase = Record<string, string | null>;
+export type OnlyIf = Record<string, { _hash: string }>;
 
 export type Conflict = {
 	collection: string;
@@ -24,14 +26,11 @@ export type Conflict = {
 	field?: string;
 	/** Current value of the field */
 	current?: unknown;
-	/** User and timestamp of the latest change of the item, only included when the user is allowed to read them */
-	user?: string;
-	timestamp?: string;
 };
 
 /**
  * Reserved key for information about a mutation that isn't part of the item itself. Items can contain
- * `base`, nested o2m alterations `deleteBase`.
+ * `onlyIf`, nested o2m alterations `deleteOnlyIf`.
  */
 export const META_KEY = '$__meta';
 
@@ -50,45 +49,53 @@ const UNCHECKED_SPECIALS = [
 ];
 
 /**
- * Split the base off a mutation payload
+ * Same result as `hashValue` in @wbce-d9/utils, which the clients use, without blocking the event loop
  */
-export function extractBase<T extends Partial<Item>>(data: T): { data: T; base: ConflictBase | null } {
-	if (!data || typeof data !== 'object' || !(META_KEY in data)) return { data, base: null };
-
-	const { [META_KEY]: meta, ...rest } = data;
-
-	assertMeta(meta, 'base');
-
-	if (meta['base'] === undefined) return { data: rest as T, base: null };
-
-	assertBase(meta['base'], `${META_KEY}.base`);
-
-	return { data: rest as T, base: meta['base'] };
+export async function hashValue(value: unknown): Promise<string> {
+	const digest = await webcrypto.subtle.digest('SHA-256', Buffer.from(stableStringify(value)));
+	return Buffer.from(digest).toString('hex');
 }
 
 /**
- * Validate and return the delete base of a nested o2m alterations object
+ * Split the conditions off a mutation payload
  */
-export function extractDeleteBase(alterations: Record<string, any>): Record<string, ConflictBase> | null {
+export function extractOnlyIf<T extends Partial<Item>>(data: T): { data: T; onlyIf: OnlyIf | null } {
+	if (!data || typeof data !== 'object' || !(META_KEY in data)) return { data, onlyIf: null };
+
+	const { [META_KEY]: meta, ...rest } = data;
+
+	assertMeta(meta, 'onlyIf');
+
+	if (meta['onlyIf'] === undefined) return { data: rest as T, onlyIf: null };
+
+	assertOnlyIf(meta['onlyIf'], `${META_KEY}.onlyIf`);
+
+	return { data: rest as T, onlyIf: meta['onlyIf'] };
+}
+
+/**
+ * Validate and return the conditions for deleting items of a nested o2m alterations object, by primary key
+ */
+export function extractDeleteOnlyIf(alterations: Record<string, any>): Record<string, OnlyIf> | null {
 	if (!(META_KEY in alterations)) return null;
 
 	const meta = alterations[META_KEY];
 
-	assertMeta(meta, 'deleteBase');
+	assertMeta(meta, 'deleteOnlyIf');
 
-	if (meta['deleteBase'] === undefined) return null;
+	if (meta['deleteOnlyIf'] === undefined) return null;
 
-	if (!isPlainObject(meta['deleteBase'])) {
-		throw new InvalidPayloadException(`"${META_KEY}.deleteBase" has to be an object of primary keys to field hashes.`);
+	if (!isPlainObject(meta['deleteOnlyIf'])) {
+		throw new InvalidPayloadException(`"${META_KEY}.deleteOnlyIf" has to be an object of primary keys to conditions.`);
 	}
 
-	const deleteBase = meta['deleteBase'] as Record<string, unknown>;
+	const deleteOnlyIf = meta['deleteOnlyIf'] as Record<string, unknown>;
 
-	for (const [key, base] of Object.entries(deleteBase)) {
-		assertBase(base, `${META_KEY}.deleteBase.${key}`);
+	for (const [key, onlyIf] of Object.entries(deleteOnlyIf)) {
+		assertOnlyIf(onlyIf, `${META_KEY}.deleteOnlyIf.${key}`);
 	}
 
-	return deleteBase as Record<string, ConflictBase>;
+	return deleteOnlyIf as Record<string, OnlyIf>;
 }
 
 function assertMeta(meta: unknown, allowedKey: string): asserts meta is Record<string, unknown> {
@@ -97,9 +104,16 @@ function assertMeta(meta: unknown, allowedKey: string): asserts meta is Record<s
 	}
 }
 
-function assertBase(base: unknown, path: string): asserts base is ConflictBase {
-	if (!isPlainObject(base) || Object.values(base as object).some((hash) => hash !== null && typeof hash !== 'string')) {
-		throw new InvalidPayloadException(`"${path}" has to be an object of field names to value hashes.`);
+function assertOnlyIf(onlyIf: unknown, path: string): asserts onlyIf is OnlyIf {
+	const isHashCondition = (condition: unknown) =>
+		isPlainObject(condition) &&
+		Object.keys(condition as object).length === 1 &&
+		typeof (condition as Record<string, unknown>)['_hash'] === 'string';
+
+	if (!isPlainObject(onlyIf) || !Object.values(onlyIf as object).every(isHashCondition)) {
+		throw new InvalidPayloadException(
+			`"${path}" has to be an object of field names to conditions. The only supported operator is "_hash".`
+		);
 	}
 }
 
@@ -126,43 +140,31 @@ type DetectConflictsOptions = {
 	accountability: Accountability | null;
 	collection: string;
 	keys: PrimaryKey[];
-	base: ConflictBase;
+	onlyIf: OnlyIf;
 	action: 'update' | 'delete';
 };
 
 /**
- * Compare the base hashes sent by the client with the current values in the database.
+ * Check the conditions sent by the client against the current values in the database.
  * Has to be called inside the transaction that does the mutation: the rows are locked until the
  * transaction finishes, so nobody can change them between the check and the write.
  */
 export async function detectConflicts(options: DetectConflictsOptions): Promise<Conflict[]> {
-	const { knex, schema, accountability, collection, keys, base, action } = options;
+	const { knex, schema, accountability, collection, keys, onlyIf, action } = options;
 
 	if (keys.length === 0) return [];
 
 	const collectionInfo = schema.collections[collection]!;
 	const primaryKeyField = collectionInfo.primary;
 
-	const fields = Object.keys(base).filter((field) => {
-		if (base[field] === null) return false;
+	const fields = Object.keys(onlyIf).filter((field) => {
 		const fieldInfo = collectionInfo.fields[field];
 		if (!fieldInfo || fieldInfo.alias || field === primaryKeyField) return false;
 		return !fieldInfo.special?.some((special) => UNCHECKED_SPECIALS.includes(special));
 	});
 
-	const userUpdatedField = getFieldWithSpecial(collectionInfo, 'user-updated');
-	const dateUpdatedField = getFieldWithSpecial(collectionInfo, 'date-updated');
-
-	const rows = await readAndLockRows(knex, schema, collection, keys, [
-		...fields,
-		...(userUpdatedField ? [userUpdatedField] : []),
-		...(dateUpdatedField ? [dateUpdatedField] : []),
-	]);
-
+	const rows = await readAndLockRows(knex, schema, collection, keys, fields);
 	const canRead = await getReadAccess({ knex, schema, accountability, collection, keys });
-
-	const getLastChangeFromActivity = (key: PrimaryKey) =>
-		readLastChangeFromActivity({ knex, schema, accountability, collection, key });
 
 	const conflicts: Conflict[] = [];
 
@@ -171,49 +173,21 @@ export async function detectConflicts(options: DetectConflictsOptions): Promise<
 
 		if (!row) {
 			// Deleting an item that is already gone is fine
-			if (action === 'update') {
-				conflicts.push({ collection, key, action, type: 'deleted', ...(await getLastChangeFromActivity(key)) });
-			}
-
+			if (action === 'update') conflicts.push({ collection, key, action, type: 'deleted' });
 			continue;
 		}
 
-		// Fields the user can't read are not compared: the result would tell if a guessed value is right
-		const changedFields = fields.filter((field) => canRead(key, field) && hashValue(row[field]) !== base[field]);
+		for (const field of fields) {
+			// Fields the user can't read are not compared: the result would tell if a guessed value is right
+			if (!canRead(key, field)) continue;
 
-		if (changedFields.length === 0) continue;
-
-		// The fields that track the latest change are part of the locked row and follow the field permissions
-		const lastChange: Pick<Conflict, 'user' | 'timestamp'> = {};
-
-		if (userUpdatedField && canRead(key, userUpdatedField) && row[userUpdatedField]) {
-			lastChange.user = String(row[userUpdatedField]);
-		}
-
-		if (dateUpdatedField && canRead(key, dateUpdatedField) && row[dateUpdatedField]) {
-			const timestamp = toISOString(row[dateUpdatedField]);
-			if (timestamp) lastChange.timestamp = timestamp;
-		}
-
-		if (!lastChange.user || !lastChange.timestamp) {
-			Object.assign(lastChange, { ...(await getLastChangeFromActivity(key)), ...lastChange });
-		}
-
-		for (const field of changedFields) {
-			conflicts.push({ collection, key, action, type: 'changed', field, current: row[field], ...lastChange });
+			if ((await hashValue(row[field])) !== onlyIf[field]!._hash) {
+				conflicts.push({ collection, key, action, type: 'changed', field, current: row[field] });
+			}
 		}
 	}
 
 	return conflicts;
-}
-
-function toISOString(value: unknown): string | null {
-	const date = new Date(value as string | number | Date);
-	return Number.isNaN(date.getTime()) ? null : date.toISOString();
-}
-
-function getFieldWithSpecial(collectionInfo: SchemaOverview['collections'][string], special: string) {
-	return Object.values(collectionInfo.fields).find((field) => !field.alias && field.special?.includes(special))?.field;
 }
 
 /**
@@ -289,45 +263,4 @@ async function getReadAccess(context: {
 
 	return (key, field) =>
 		readableKeys.has(String(key)) && (allowedFields.includes('*') || allowedFields.includes(field));
-}
-
-/**
- * User and timestamp of the latest activity of an item, if the user is allowed to read it
- */
-async function readLastChangeFromActivity(context: {
-	knex: Knex;
-	schema: SchemaOverview;
-	accountability: Accountability | null;
-	collection: string;
-	key: PrimaryKey;
-}): Promise<Pick<Conflict, 'user' | 'timestamp'>> {
-	const { knex, schema, accountability, collection, key } = context;
-
-	const activity = await knex
-		.select('id', 'user', 'timestamp')
-		.from('directus_activity')
-		.where({ collection, item: String(key) })
-		.orderBy('id', 'desc')
-		.first();
-
-	if (!activity) return {};
-
-	if (accountability && accountability.admin !== true) {
-		try {
-			const { ActivityService } = await import('../services/activity.js');
-			const activityService = new ActivityService({ knex, schema, accountability });
-			const rows = await activityService.readMany([activity.id], { fields: ['user', 'timestamp'] });
-
-			if (rows.length === 0) return {};
-		} catch {
-			return {};
-		}
-	}
-
-	const timestamp = activity.timestamp ? toISOString(activity.timestamp) : null;
-
-	return {
-		...(activity.user ? { user: String(activity.user) } : {}),
-		...(timestamp ? { timestamp } : {}),
-	};
 }

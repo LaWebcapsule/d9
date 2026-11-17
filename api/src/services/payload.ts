@@ -19,7 +19,7 @@ import type {
 	MutationOptions,
 	PrimaryKey,
 } from '../types/index.js';
-import { META_KEY, detectConflicts, extractDeleteBase } from '../utils/conflicts.js';
+import { META_KEY, detectConflicts, extractDeleteOnlyIf } from '../utils/conflicts.js';
 import { generateHash } from '../utils/generate-hash.js';
 import { ItemsService } from './items.js';
 
@@ -820,12 +820,12 @@ export class PayloadService {
 				}
 
 				if (alterations.delete) {
-					const deleteBase = extractDeleteBase(alterations);
+					const deleteOnlyIf = extractDeleteOnlyIf(alterations);
 
-					if (deleteBase) {
+					if (deleteOnlyIf) {
 						for (const key of alterations.delete) {
-							const base = deleteBase[String(key)];
-							if (!base) continue;
+							const onlyIf = deleteOnlyIf[String(key)];
+							if (!onlyIf) continue;
 
 							const conflicts = await detectConflicts({
 								knex: this.knex,
@@ -833,7 +833,7 @@ export class PayloadService {
 								accountability: this.accountability,
 								collection: relation.collection,
 								keys: [key],
-								base,
+								onlyIf,
 								action: 'delete',
 							});
 

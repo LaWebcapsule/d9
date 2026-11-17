@@ -66,10 +66,7 @@
 									:label="t('edit_conflicts.keep_theirs')"
 									@update:model-value="choices[index] = 'theirs'"
 								/>
-								<v-notice v-if="!('current' in conflicts[index]!)" type="info">
-									{{ t('edit_conflicts.no_access') }}
-								</v-notice>
-								<revisions-drawer-updates-change v-else deleted :changes="changes[index]!" />
+								<revisions-drawer-updates-change deleted :changes="changes[index]!" />
 							</div>
 
 							<div class="version" :class="{ selected: choices[index] === 'mine' }">
@@ -94,11 +91,13 @@
 import api from '@/api';
 import { useCollectionsStore } from '@/stores/collections';
 import { useFieldsStore } from '@/stores/fields';
-import { ConflictChoice, EditConflict, walkEdits } from '@/utils/edit-conflicts';
+import { ConflictChoice, EditConflict, canReadAllItems, walkEdits } from '@/utils/edit-conflicts';
 import { localizedFormatDistance } from '@/utils/localized-format-distance';
 import { userName } from '@/utils/user-name';
 import { User } from '@wbce-d9/types';
+import { getEndpoint } from '@wbce-d9/utils';
 import { diffArrays, diffJson, diffWordsWithSpace } from 'diff';
+import { uniqBy } from 'lodash';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import RevisionsDrawerUpdatesChange, { Change } from './revisions-drawer-updates-change.vue';
@@ -126,7 +125,10 @@ const { t } = useI18n();
 const collectionsStore = useCollectionsStore();
 const fieldsStore = useFieldsStore();
 
+type LastChange = { user?: string; timestamp?: string };
+
 const choices = ref<ConflictChoice[]>([]);
+const lastChanges = ref<Record<string, LastChange>>({});
 const users = ref<Record<string, Partial<User>>>({});
 
 watch(
@@ -134,7 +136,7 @@ watch(
 	(conflicts) => {
 		// Keeping the local changes is the default, nothing gets lost by accident
 		choices.value = conflicts.map(() => 'mine');
-		loadUsers(conflicts);
+		loadLastChanges(conflicts);
 	},
 	{ immediate: true }
 );
@@ -210,14 +212,99 @@ function getMyValue(conflict: EditConflict) {
 }
 
 function getChangedBy(conflict: EditConflict) {
-	if (!conflict.timestamp) return null;
+	const lastChange = lastChanges.value[getItemId(conflict)];
 
-	const user = conflict.user ? users.value[conflict.user] : undefined;
+	if (!lastChange?.timestamp) return null;
+
+	const user = lastChange.user ? users.value[lastChange.user] : undefined;
 
 	return t('edit_conflicts.changed_by', {
 		user: user ? userName(user) : t('unknown_user'),
-		time: localizedFormatDistance(new Date(conflict.timestamp), new Date(), { addSuffix: true }),
+		time: localizedFormatDistance(new Date(lastChange.timestamp), new Date(), { addSuffix: true }),
 	});
+}
+
+function getItemId(conflict: EditConflict) {
+	return `${conflict.collection}:${conflict.key}`;
+}
+
+/**
+ * Who changed the conflicting items last and when, as far as the user is allowed to know
+ */
+async function loadLastChanges(conflicts: EditConflict[]) {
+	const loaded = await Promise.all(
+		uniqBy(conflicts, getItemId).map(async (conflict) => {
+			const lastChange = conflict.type === 'deleted' ? {} : await getLastChangeFromItem(conflict);
+
+			if (!lastChange.user || !lastChange.timestamp) {
+				Object.assign(lastChange, { ...(await getLastChangeFromActivity(conflict)), ...lastChange });
+			}
+
+			return [getItemId(conflict), lastChange] as const;
+		})
+	);
+
+	lastChanges.value = Object.fromEntries(loaded);
+
+	await loadUsers(loaded.map(([_id, lastChange]) => lastChange.user));
+}
+
+async function getLastChangeFromItem(conflict: EditConflict): Promise<LastChange> {
+	const fields = fieldsStore.getFieldsForCollection(conflict.collection);
+	const userField = fields.find((field) => field.meta?.special?.includes('user-updated'))?.field;
+	const dateField = fields.find((field) => field.meta?.special?.includes('date-updated'))?.field;
+	const primaryKeyField = fieldsStore.getPrimaryKeyFieldForCollection(conflict.collection)?.field;
+
+	if ((!userField && !dateField) || !primaryKeyField) return {};
+
+	try {
+		const response = await api.get(getEndpoint(conflict.collection), {
+			params: {
+				filter: { [primaryKeyField]: { _eq: conflict.key } },
+				fields: [userField, dateField].filter((field) => field),
+				limit: 1,
+			},
+		});
+
+		// Singletons are returned as a single item
+		const item = Array.isArray(response.data.data) ? response.data.data[0] : response.data.data;
+
+		return {
+			...(userField && item?.[userField] ? { user: String(item[userField]) } : {}),
+			...(dateField && item?.[dateField] ? { timestamp: item[dateField] } : {}),
+		};
+	} catch {
+		return {};
+	}
+}
+
+async function getLastChangeFromActivity(conflict: EditConflict): Promise<LastChange> {
+	// The latest activity the user can see is only the latest one when nothing is hidden from them
+	if (!canReadAllItems('directus_activity')) return {};
+
+	try {
+		const response = await api.get('/activity', {
+			params: {
+				filter: {
+					collection: { _eq: conflict.collection },
+					item: { _eq: String(conflict.key) },
+					action: { _in: ['create', 'update', 'delete'] },
+				},
+				sort: ['-id'],
+				fields: ['user', 'timestamp'],
+				limit: 1,
+			},
+		});
+
+		const activity = response.data.data[0];
+
+		return {
+			...(activity?.user ? { user: String(activity.user) } : {}),
+			...(activity?.timestamp ? { timestamp: activity.timestamp } : {}),
+		};
+	} catch {
+		return {};
+	}
 }
 
 // Their version compared to mine, in the same way revisions show what an update changed
@@ -251,10 +338,8 @@ function formatValue(value: unknown) {
 	return JSON.stringify(value, null, 2);
 }
 
-async function loadUsers(conflicts: EditConflict[]) {
-	const ids = [...new Set(conflicts.map((conflict) => conflict.user).filter((id): id is string => !!id))].filter(
-		(id) => !(id in users.value)
-	);
+async function loadUsers(userIds: (string | undefined)[]) {
+	const ids = [...new Set(userIds.filter((id): id is string => !!id))].filter((id) => !(id in users.value));
 
 	if (ids.length === 0) return;
 

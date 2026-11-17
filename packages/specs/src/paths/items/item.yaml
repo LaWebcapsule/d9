@@ -25,10 +25,11 @@ get:
 patch:
   summary: Update an Item
   description: >-
-    Update an existing item. To detect changes someone else saved in the meantime, add `base` to the reserved `$__meta`
-    key of the body (also in nested items): the SHA-256 hashes of the values the changes are based on, by field. The
-    `$__meta` of nested `delete` alterations can contain `deleteBase` with the hashes by primary key. If any of the
-    values changed, nothing is saved and the API responds with 409 CONFLICT.
+    Update an existing item. To detect changes someone else saved in the meantime, add `onlyIf` to the reserved
+    `$__meta` key of the body (also in nested items): the conditions the current values have to meet, by field. The only
+    operator is `_hash`, the SHA-256 hash of the value the changes are based on. The `$__meta` of nested `delete`
+    alterations can contain `deleteOnlyIf` with the conditions by primary key. If any of the conditions isn't met,
+    nothing is saved and the API responds with 409 CONFLICT.
   tags:
     - Items
   operationId: updateItem
@@ -45,13 +46,17 @@ patch:
               type: object
               description: Information about the update that is not part of the item itself.
               properties:
-                base:
+                onlyIf:
                   type: object
-                  description: >-
-                    Hashes of the values the changes are based on, by field. A hash of `null` skips the check.
+                  description: Conditions the current values have to meet for the update to be saved, by field.
                   additionalProperties:
-                    type: string
-                    nullable: true
+                    type: object
+                    required:
+                      - _hash
+                    properties:
+                      _hash:
+                        type: string
+                        description: SHA-256 hash of the value the changes are based on.
   responses:
     '200':
       description: Successful request

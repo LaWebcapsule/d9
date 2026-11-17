@@ -350,36 +350,36 @@ mutation {
 
 ### Detecting Conflicting Changes
 
-To make sure an update doesn't overwrite changes someone else saved in the meantime, add `base` to the reserved
-`$__meta` key of the request body: the hashes of the values the changes are based on, by field. The hash of a value is
-the SHA-256 hex digest of its JSON with sorted object keys, see `hashValue()` in `@wbce-d9/utils`. Many-to-one fields
-are hashed as the foreign key.
+To make sure an update doesn't overwrite changes someone else saved in the meantime, add `onlyIf` to the reserved
+`$__meta` key of the request body: the conditions the current values have to meet for the update to be saved, by field.
+The only operator is `_hash`, the hash of the value the changes are based on. The hash of a value is the SHA-256 hex
+digest of its JSON with sorted object keys, see `hashValue()` in `@wbce-d9/utils`. Many-to-one fields are hashed as the
+foreign key.
 
 ```json
 {
 	"title": "An updated title",
-	"$__meta": { "base": { "title": "<hash of the title as it was loaded>" } }
+	"$__meta": { "onlyIf": { "title": { "_hash": "<hash of the title as it was loaded>" } } }
 }
 ```
 
-`$__meta.base` also works in nested items, for example in the `update` items of a translations field. To check items
-before deleting them, add `deleteBase` to the `$__meta` of the nested changes, with the hashes of the loaded values by
-primary key:
+`$__meta.onlyIf` also works in nested items, for example in the `update` items of a translations field. To check items
+before deleting them, add `deleteOnlyIf` to the `$__meta` of the nested changes, with the conditions by primary key:
 
 ```json
 {
 	"translations": {
 		"create": [],
-		"update": [{ "id": 7, "body": "Updated text", "$__meta": { "base": { "body": "<hash>" } } }],
+		"update": [{ "id": 7, "body": "Updated text", "$__meta": { "onlyIf": { "body": { "_hash": "<hash>" } } } }],
 		"delete": [9],
-		"$__meta": { "deleteBase": { "9": { "body": "<hash>" } } }
+		"$__meta": { "deleteOnlyIf": { "9": { "body": { "_hash": "<hash>" } } } }
 	}
 }
 ```
 
-If any of the values changed, or an updated item doesn't exist anymore, nothing is saved and the API responds with `409`
-and the error code `CONFLICT`. `extensions.conflicts` lists every conflict with the current value. A hash of `null`
-skips the check of that field. Without a base, the last update wins.
+If any of the conditions isn't met, or an updated item doesn't exist anymore, nothing is saved and the API responds with
+`409` and the error code `CONFLICT`. `extensions.conflicts` lists every conflict with the current value. Fields without
+a condition are not checked. Without conditions, the last update wins.
 
 ```json
 {
@@ -395,9 +395,7 @@ skips the check of that field. Without a base, the last update wins.
 						"action": "update",
 						"type": "changed",
 						"field": "title",
-						"current": "A title someone else saved",
-						"user": "<id of the user who changed the item last>",
-						"timestamp": "2026-11-13T10:00:00.000Z"
+						"current": "A title someone else saved"
 					}
 				]
 			}
@@ -405,9 +403,6 @@ skips the check of that field. Without a base, the last update wins.
 	]
 }
 ```
-
-`user` and `timestamp` are taken from the item's "user updated" and "date updated" fields, or from the latest activity
-of the item when it doesn't have them. They are only included when you're allowed to read them.
 
 ::: tip Permissions
 

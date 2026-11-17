@@ -44,12 +44,3 @@ content:
                           type: string
                         current:
                           description: Current value of the field.
-                        user:
-                          type: string
-                          description:
-                            User who changed the item last, only included when the user is allowed to read it.
-                        timestamp:
-                          type: string
-                          format: date-time
-                          description: >-
-                            Time of the latest change of the item, only included when the user is allowed to read it.
