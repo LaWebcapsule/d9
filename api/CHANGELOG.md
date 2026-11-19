@@ -1,5 +1,20 @@
 # @wbce-d9/api
 
+## 12.8.1
+
+### Patch Changes
+
+- [#511](https://github.com/LaWebcapsule/d9/pull/511)
+  [`4cc2339`](https://github.com/LaWebcapsule/d9/commit/4cc23396651328e794a8fe80bc10326cc52d3c36) - Fixed public
+  registration never activating an account: `GET /auth/login/register/verify-email` answered `403 FORBIDDEN` for every
+  valid link, and the 60 second limit on confirmation mails was never applied. The local driver wrote the `system-only`
+  field `auth_data` through a service that carries an accountability, which the payload service refuses.
+
+- [#510](https://github.com/LaWebcapsule/d9/pull/510)
+  [`bf742a9`](https://github.com/LaWebcapsule/d9/commit/bf742a941a7f35372346e5811a024a9a0594861c) -
+  `POST /auth/login/register` now rejects a `verification_url` that isn't in `AUTH_<PROVIDER>_REGISTER_URL_ALLOW_LIST`
+  with `400 INVALID_PAYLOAD` before responding, instead of answering `204` and silently sending no email.
+
 ## 12.8.0
 
 ### Minor Changes
