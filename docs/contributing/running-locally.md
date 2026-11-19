@@ -13,8 +13,8 @@ readTime: 4 min read
 
 ::: tip Minimum Requirements
 
-You will need to have [the latest version of Node](https://nodejs.org/en/download/current) to _build_ a Development
-version of d9.
+You will need the Node.js version listed in [Supported Node.js Versions](/self-hosted/node-versions) to _build_ a
+Development version of d9. The `.nvmrc` file at the root of the repository sets it for nvm, fnm and Volta.
 
 You will also need to have the package manager [pnpm](https://pnpm.io) installed.
 

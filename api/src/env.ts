@@ -28,6 +28,7 @@ const allowedEnvironmentVars = [
 	'SERVE_APP',
 	'SERVE_GRAPHQL',
 	'GRAPHQL_INTROSPECTION',
+	'NODE_VERSION_WARNING',
 	'MAX_BATCH_MUTATION',
 	'LOGGER_.+',
 	'ROBOTS_TXT',
@@ -298,6 +299,8 @@ const defaults: Record<string, any> = {
 	EMAIL_SENDMAIL_PATH: '/usr/sbin/sendmail',
 
 	TELEMETRY: true,
+
+	NODE_VERSION_WARNING: true,
 
 	ASSETS_CACHE_TTL: '30d',
 	ASSETS_TRANSFORM_MAX_CONCURRENT: 25,
