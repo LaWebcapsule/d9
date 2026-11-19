@@ -159,10 +159,6 @@ export class LocalAuthDriver extends AuthDriver {
 
 		const url = input.verification_url ?? null;
 
-		if (url && isUrlAllowed(url, config['registerUrlAllowList']) === false) {
-			throw new InvalidPayloadException(`Url "${url}" can't be used to verify registrations.`);
-		}
-
 		const service = this.getRegistrationService();
 		const existing = await this.getAccountByEmail(input.email);
 
@@ -347,6 +343,15 @@ export function createLocalAuthRouter(provider: string): Router {
 			asyncHandler(async (req, res) => {
 				const { error } = userRegisterSchema.validate(req.body);
 				if (error) throw new InvalidPayloadException(error.message);
+
+				// Checked before the 204 so a misconfigured frontend gets an error instead of silence.
+				// The outcome depends only on the payload and the config, never on the account, so it
+				// reveals nothing about which addresses are registered.
+				const url = req.body.verification_url;
+
+				if (url && isUrlAllowed(url, config['registerUrlAllowList']) === false) {
+					throw new InvalidPayloadException(`Url "${url}" can't be used to verify registrations.`);
+				}
 
 				const driver = new LocalAuthDriver({ knex: getDatabase(), schema: req.schema }, config);
 
