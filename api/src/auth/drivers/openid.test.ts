@@ -7,6 +7,7 @@ import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import type { SchemaOverview } from '@wbce-d9/types';
 import { getAuthProvider } from '../../auth.js';
 import env from '../../env.js';
+import { ServiceUnavailableException } from '../../exceptions/index.js';
 import { OpenIDAuthDriver, createOpenIDAuthRouter } from './openid.js';
 
 vi.mock('../../env', () => {
@@ -35,6 +36,8 @@ vi.mock('../../auth.js', () => ({
 // The constructor kicks off provider discovery; stub it so no network call happens
 // and capture the parameters handed to the authorization-URL builder.
 vi.mock('openid-client', () => ({
+	ResponseBodyError: class ResponseBodyError extends Error {},
+	ClientError: class ClientError extends Error {},
 	discovery: vi.fn(async () => ({
 		serverMetadata: () => ({ response_types_supported: ['code'] }),
 	})),
@@ -113,6 +116,68 @@ describe('OpenIDAuthDriver.generateAuthUrl', () => {
 		expect(params['state']).toBe('SERVER_CHALLENGE');
 		expect(params['nonce']).toBe('SERVER_CHALLENGE');
 		expect(params['code_challenge']).toBe('SERVER_CHALLENGE');
+	});
+});
+
+describe('OpenIDAuthDriver provider discovery', () => {
+	const defaultDiscovery = vi.mocked(oidc.discovery).getMockImplementation()!;
+
+	beforeEach(() => {
+		vi.mocked(oidc.discovery).mockReset().mockImplementation(defaultDiscovery);
+	});
+
+	afterEach(() => {
+		vi.mocked(oidc.discovery).mockReset().mockImplementation(defaultDiscovery);
+	});
+
+	test('does not exit the process nor discover when the provider is unreachable at boot', async () => {
+		const exit = vi.spyOn(process, 'exit').mockImplementation(() => undefined as never);
+		vi.mocked(oidc.discovery).mockRejectedValue(new Error('connect ECONNREFUSED'));
+
+		createDriver();
+		await new Promise((resolve) => setImmediate(resolve));
+
+		expect(exit).not.toHaveBeenCalled();
+		expect(oidc.discovery).not.toHaveBeenCalled();
+	});
+
+	test('answers 503 while the provider is unreachable and discovers again on the next use', async () => {
+		vi.mocked(oidc.discovery).mockRejectedValueOnce(new Error('connect ECONNREFUSED'));
+
+		const driver = createDriver();
+
+		await expect(driver.generateAuthUrl('code-verifier')).rejects.toMatchObject({
+			status: 503,
+			code: 'SERVICE_UNAVAILABLE',
+		});
+
+		await expect(driver.generateAuthUrl('code-verifier')).resolves.toContain('https://idp.example/authorize');
+		expect(oidc.discovery).toHaveBeenCalledTimes(2);
+	});
+
+	test('discovers the provider once for concurrent and later uses', async () => {
+		const driver = createDriver();
+
+		await Promise.all([driver.getClient(), driver.getClient()]);
+		await driver.getClient();
+
+		expect(oidc.discovery).toHaveBeenCalledTimes(1);
+	});
+
+	test('login route responds 503 when the provider is unreachable', async () => {
+		vi.mocked(oidc.discovery).mockRejectedValueOnce(new Error('connect ECONNREFUSED'));
+		vi.mocked(getAuthProvider).mockReturnValue(createDriver());
+
+		const instance = express();
+		instance.use('/auth/login/myidp', createOpenIDAuthRouter('myidp'));
+
+		instance.use(((err, _req, res, _next) => {
+			res.status(err instanceof ServiceUnavailableException ? err.status : 500).end();
+		}) as express.ErrorRequestHandler);
+
+		const res = await request(instance).get('/auth/login/myidp');
+
+		expect(res.status).toBe(503);
 	});
 });
 

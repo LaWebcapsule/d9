@@ -12,6 +12,7 @@ import {
 	InvalidCredentialsException,
 	InvalidTokenException,
 	InvalidPayloadException,
+	ServiceUnavailableException,
 } from '../../exceptions/index.js';
 import logger from '../../logger.js';
 import { respond } from '../../middleware/respond.js';
@@ -44,13 +45,57 @@ const RESERVED_AUTH_PARAMS = new Set([
 ]);
 
 export class OpenIDAuthDriver extends BaseOAuthDriver {
-	client: Promise<oidc.Configuration>;
+	clientPromise: Promise<oidc.Configuration> | null = null;
+	discoveryOptions: { issuerUrl: string; clientId: string; clientSecret: string; overrides: Record<string, any> };
 	redirectUrl: string;
 	usersService: UsersService;
 	config: Record<string, any>;
 
+	/**
+	 * The provider is discovered on first use, and again after a failure, rather than at boot: an unreachable provider
+	 * must not take the whole API down with it.
+	 */
 	getClient(): Promise<oidc.Configuration> {
-		return this.client;
+		if (this.clientPromise) return this.clientPromise;
+
+		const { issuerUrl, clientId, clientSecret, overrides } = this.discoveryOptions;
+
+		const clientPromise = (async () => {
+			let config: oidc.Configuration;
+
+			try {
+				config = await oidc.discovery(new URL(issuerUrl), clientId, {
+					client_secret: clientSecret,
+					...overrides,
+				});
+			} catch (e) {
+				logger.error(e, '[OpenID] Failed to fetch provider config');
+
+				throw new ServiceUnavailableException('OpenID provider is unreachable', {
+					service: 'openid',
+					provider: this.config['provider'],
+				});
+			}
+
+			const supportedTypes = config.serverMetadata().response_types_supported;
+
+			if (supportedTypes && !supportedTypes.includes('code')) {
+				throw new InvalidConfigException('OpenID provider does not support required code flow', {
+					provider: this.config['provider'],
+				});
+			}
+
+			return config;
+		})();
+
+		this.clientPromise = clientPromise;
+
+		// Forget a failed attempt so that the next use discovers the provider again
+		clientPromise.catch(() => {
+			if (this.clientPromise === clientPromise) this.clientPromise = null;
+		});
+
+		return clientPromise;
 	}
 
 	getredirectUrl(): string {
@@ -90,29 +135,7 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 		this.usersService = new UsersService({ knex: this.knex, schema: this.schema });
 		this.config = additionalConfig;
 
-		this.client = (async () => {
-			let config: oidc.Configuration;
-
-			try {
-				config = await oidc.discovery(new URL(issuerUrl), clientId, {
-					client_secret: clientSecret,
-					...clientOptionsOverrides,
-				});
-			} catch (e) {
-				logger.error(e, '[OpenID] Failed to fetch provider config');
-				process.exit(1);
-			}
-
-			const supportedTypes = config!.serverMetadata().response_types_supported;
-
-			if (supportedTypes && !supportedTypes.includes('code')) {
-				throw new InvalidConfigException('OpenID provider does not support required code flow', {
-					provider: additionalConfig['provider'],
-				});
-			}
-
-			return config!;
-		})();
+		this.discoveryOptions = { issuerUrl, clientId, clientSecret, overrides: clientOptionsOverrides };
 	}
 
 	async generateAuthUrl(
@@ -121,7 +144,7 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 		additionalParams?: Record<string, string>
 	): Promise<string> {
 		try {
-			const client = await this.client;
+			const client = await this.getClient();
 			const codeChallenge = await oidc.calculatePKCECodeChallenge(codeVerifier);
 			const paramsConfig = typeof this.config['params'] === 'object' ? this.config['params'] : {};
 
@@ -155,7 +178,7 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 		let userInfo: Record<string, unknown>;
 
 		try {
-			const client = await this.client;
+			const client = await this.getClient();
 			const codeChallenge = await oidc.calculatePKCECodeChallenge(payload['codeVerifier']);
 
 			const callbackUrl = new URL(this.redirectUrl);
