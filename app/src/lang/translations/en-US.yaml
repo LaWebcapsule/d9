@@ -712,6 +712,7 @@ change_advanced_filter_operator: Change Operator
 advanced: Advanced
 operators:
   eq: Equals
+  ieq: Equals (insensitive)
   neq: Doesn't equal
   lt: Less than
   gt: Greater than
@@ -725,7 +726,9 @@ operators:
   ncontains: Doesn't contain
   icontains: Contains (insensitive)
   starts_with: Starts with
+  istarts_with: Starts with (insensitive)
   nstarts_with: Doesn't start with
+  nistarts_with: Doesn't start with (insensitive)
   ends_with: Ends with
   nends_with: Doesn't end with
   between: Is between
