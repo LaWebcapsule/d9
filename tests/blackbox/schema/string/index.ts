@@ -17,10 +17,13 @@ export const generateFilterForDataType = (filter: ClientFilterOperator, possible
 		case 'icontains':
 		case 'ncontains':
 		case 'starts_with':
+		case 'istarts_with':
 		case 'nstarts_with':
+		case 'nistarts_with':
 		case 'ends_with':
 		case 'nends_with':
 		case 'eq':
+		case 'ieq':
 		case 'neq':
 			if (Array.isArray(possibleValues)) {
 				return possibleValues.map((value) => {
@@ -114,14 +117,20 @@ export const getValidatorFunction = (filter: ClientFilterOperator): FilterValida
 		// 	return _nicontains;
 		case 'starts_with':
 			return _starts_with;
+		case 'istarts_with':
+			return _istarts_with;
 		case 'nstarts_with':
 			return _nstarts_with;
+		case 'nistarts_with':
+			return _nistarts_with;
 		case 'ends_with':
 			return _ends_with;
 		case 'nends_with':
 			return _nends_with;
 		case 'eq':
 			return _eq;
+		case 'ieq':
+			return _ieq;
 		case 'neq':
 			return _neq;
 		case 'empty':
@@ -189,6 +198,22 @@ const _nstarts_with = (inputValue: any, possibleValues: any): boolean => {
 	return false;
 };
 
+const _istarts_with = (inputValue: any, possibleValues: any): boolean => {
+	if (inputValue.toLowerCase().startsWith(possibleValues.toLowerCase())) {
+		return true;
+	}
+
+	return false;
+};
+
+const _nistarts_with = (inputValue: any, possibleValues: any): boolean => {
+	if (!inputValue.toLowerCase().startsWith(possibleValues.toLowerCase())) {
+		return true;
+	}
+
+	return false;
+};
+
 const _ends_with = (inputValue: any, possibleValues: any): boolean => {
 	if (inputValue.endsWith(possibleValues)) {
 		return true;
@@ -207,6 +232,14 @@ const _nends_with = (inputValue: any, possibleValues: any): boolean => {
 
 const _eq = (inputValue: any, possibleValues: any): boolean => {
 	if (inputValue === possibleValues) {
+		return true;
+	}
+
+	return false;
+};
+
+const _ieq = (inputValue: any, possibleValues: any): boolean => {
+	if (inputValue.toLowerCase() === possibleValues.toLowerCase()) {
 		return true;
 	}
 

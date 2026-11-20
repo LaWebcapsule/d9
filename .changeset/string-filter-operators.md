@@ -2,7 +2,8 @@
 '@wbce-d9/utils': patch
 '@wbce-d9/types': patch
 '@wbce-d9/app': patch
+'@wbce-d9/api': patch
 ---
 
-The filter builder now offers the case-insensitive `istarts_with`, `nistarts_with` and `ieq` operators on string fields,
-which the API already supports.
+String fields now accept the case-insensitive `istarts_with`, `nistarts_with` and `ieq` filter operators: the API no
+longer rejects them, the filter builder offers them, and validation rules using them are enforced.
