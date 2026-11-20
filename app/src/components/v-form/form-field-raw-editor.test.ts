@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils';
 import { createI18n } from 'vue-i18n';
 
 import formFieldRawEditor from './form-field-raw-editor.vue';
-import { GlobalMountOptions } from '@vue/test-utils/dist/types';
+import type { GlobalMountOptions } from '@/__utils__/mount';
 
 const i18n = createI18n({ legacy: false });
 

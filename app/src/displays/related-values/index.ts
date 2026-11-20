@@ -29,14 +29,14 @@ export default defineDisplay({
 							text: '$t:displays.related-values.display_template_configure_notice',
 						},
 						width: 'full',
-				  }
+					}
 				: {
 						interface: 'system-display-template',
 						options: {
 							collectionName: relatedCollection,
 						},
 						width: 'full',
-				  };
+					};
 
 		return [
 			{
@@ -86,7 +86,7 @@ export default defineDisplay({
 						interfaceOptions: field?.meta?.options ?? {},
 						field: field ?? undefined,
 						collection: collection,
-				  })
+					})
 				: fieldValue;
 
 			set(stringValues, key, stringValue);

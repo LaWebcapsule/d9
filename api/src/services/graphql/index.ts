@@ -240,22 +240,25 @@ export class GraphQLService {
 
 		if (readableCollections.length > 0) {
 			schemaComposer.Query.addFields(
-				readableCollections.reduce((acc, collection) => {
-					const collectionName = this.scope === 'items' ? collection.collection : collection.collection.substring(9);
-					acc[collectionName] = ReadCollectionTypes[collection.collection]!.getResolver(collection.collection);
+				readableCollections.reduce(
+					(acc, collection) => {
+						const collectionName = this.scope === 'items' ? collection.collection : collection.collection.substring(9);
+						acc[collectionName] = ReadCollectionTypes[collection.collection]!.getResolver(collection.collection);
 
-					if (this.schema.collections[collection.collection]!.singleton === false) {
-						acc[`${collectionName}_by_id`] = ReadCollectionTypes[collection.collection]!.getResolver(
-							`${collection.collection}_by_id`
-						);
+						if (this.schema.collections[collection.collection]!.singleton === false) {
+							acc[`${collectionName}_by_id`] = ReadCollectionTypes[collection.collection]!.getResolver(
+								`${collection.collection}_by_id`
+							);
 
-						acc[`${collectionName}_aggregated`] = ReadCollectionTypes[collection.collection]!.getResolver(
-							`${collection.collection}_aggregated`
-						);
-					}
+							acc[`${collectionName}_aggregated`] = ReadCollectionTypes[collection.collection]!.getResolver(
+								`${collection.collection}_aggregated`
+							);
+						}
 
-					return acc;
-				}, {} as ObjectTypeComposerFieldConfigAsObjectDefinition<any, any>)
+						return acc;
+					},
+					{} as ObjectTypeComposerFieldConfigAsObjectDefinition<any, any>
+				)
 			);
 		} else {
 			schemaComposer.Query.addFields({
@@ -272,19 +275,23 @@ export class GraphQLService {
 					.filter((collection) => collection.collection in CreateCollectionTypes && collection.singleton === false)
 					.filter(scopeFilter)
 					.filter((collection) => READ_ONLY.includes(collection.collection) === false)
-					.reduce((acc, collection) => {
-						const collectionName = this.scope === 'items' ? collection.collection : collection.collection.substring(9);
+					.reduce(
+						(acc, collection) => {
+							const collectionName =
+								this.scope === 'items' ? collection.collection : collection.collection.substring(9);
 
-						acc[`create_${collectionName}_items`] = CreateCollectionTypes[collection.collection]!.getResolver(
-							`create_${collection.collection}_items`
-						);
+							acc[`create_${collectionName}_items`] = CreateCollectionTypes[collection.collection]!.getResolver(
+								`create_${collection.collection}_items`
+							);
 
-						acc[`create_${collectionName}_item`] = CreateCollectionTypes[collection.collection]!.getResolver(
-							`create_${collection.collection}_item`
-						);
+							acc[`create_${collectionName}_item`] = CreateCollectionTypes[collection.collection]!.getResolver(
+								`create_${collection.collection}_item`
+							);
 
-						return acc;
-					}, {} as ObjectTypeComposerFieldConfigAsObjectDefinition<any, any>)
+							return acc;
+						},
+						{} as ObjectTypeComposerFieldConfigAsObjectDefinition<any, any>
+					)
 			);
 		}
 
@@ -294,29 +301,33 @@ export class GraphQLService {
 					.filter((collection) => collection.collection in UpdateCollectionTypes)
 					.filter(scopeFilter)
 					.filter((collection) => READ_ONLY.includes(collection.collection) === false)
-					.reduce((acc, collection) => {
-						const collectionName = this.scope === 'items' ? collection.collection : collection.collection.substring(9);
+					.reduce(
+						(acc, collection) => {
+							const collectionName =
+								this.scope === 'items' ? collection.collection : collection.collection.substring(9);
 
-						if (collection.singleton) {
-							acc[`update_${collectionName}`] = UpdateCollectionTypes[collection.collection]!.getResolver(
-								`update_${collection.collection}`
-							);
-						} else {
-							acc[`update_${collectionName}_items`] = UpdateCollectionTypes[collection.collection]!.getResolver(
-								`update_${collection.collection}_items`
-							);
+							if (collection.singleton) {
+								acc[`update_${collectionName}`] = UpdateCollectionTypes[collection.collection]!.getResolver(
+									`update_${collection.collection}`
+								);
+							} else {
+								acc[`update_${collectionName}_items`] = UpdateCollectionTypes[collection.collection]!.getResolver(
+									`update_${collection.collection}_items`
+								);
 
-							acc[`update_${collectionName}_batch`] = UpdateCollectionTypes[collection.collection]!.getResolver(
-								`update_${collection.collection}_batch`
-							);
+								acc[`update_${collectionName}_batch`] = UpdateCollectionTypes[collection.collection]!.getResolver(
+									`update_${collection.collection}_batch`
+								);
 
-							acc[`update_${collectionName}_item`] = UpdateCollectionTypes[collection.collection]!.getResolver(
-								`update_${collection.collection}_item`
-							);
-						}
+								acc[`update_${collectionName}_item`] = UpdateCollectionTypes[collection.collection]!.getResolver(
+									`update_${collection.collection}_item`
+								);
+							}
 
-						return acc;
-					}, {} as ObjectTypeComposerFieldConfigAsObjectDefinition<any, any>)
+							return acc;
+						},
+						{} as ObjectTypeComposerFieldConfigAsObjectDefinition<any, any>
+					)
 			);
 		}
 
@@ -326,19 +337,23 @@ export class GraphQLService {
 					.filter((collection) => collection.singleton === false)
 					.filter(scopeFilter)
 					.filter((collection) => READ_ONLY.includes(collection.collection) === false)
-					.reduce((acc, collection) => {
-						const collectionName = this.scope === 'items' ? collection.collection : collection.collection.substring(9);
+					.reduce(
+						(acc, collection) => {
+							const collectionName =
+								this.scope === 'items' ? collection.collection : collection.collection.substring(9);
 
-						acc[`delete_${collectionName}_items`] = DeleteCollectionTypes['many']!.getResolver(
-							`delete_${collection.collection}_items`
-						);
+							acc[`delete_${collectionName}_items`] = DeleteCollectionTypes['many']!.getResolver(
+								`delete_${collection.collection}_items`
+							);
 
-						acc[`delete_${collectionName}_item`] = DeleteCollectionTypes['one']!.getResolver(
-							`delete_${collection.collection}_item`
-						);
+							acc[`delete_${collectionName}_item`] = DeleteCollectionTypes['one']!.getResolver(
+								`delete_${collection.collection}_item`
+							);
 
-						return acc;
-					}, {} as ObjectTypeComposerFieldConfigAsObjectDefinition<any, any>)
+							return acc;
+						},
+						{} as ObjectTypeComposerFieldConfigAsObjectDefinition<any, any>
+					)
 			);
 		}
 
@@ -418,83 +433,89 @@ export class GraphQLService {
 
 				CollectionTypes[collection.collection] = schemaComposer.createObjectTC({
 					name: action === 'read' ? collection.collection : `${action}_${collection.collection}`,
-					fields: Object.values(collection.fields).reduce((acc, field) => {
-						let type: GraphQLScalarType | GraphQLNonNull<GraphQLNullableType> = getGraphQLType(
-							field.type,
-							field.special
-						);
+					fields: Object.values(collection.fields).reduce(
+						(acc, field) => {
+							let type: GraphQLScalarType | GraphQLNonNull<GraphQLNullableType> = getGraphQLType(
+								field.type,
+								field.special
+							);
 
-						// GraphQL doesn't differentiate between not-null and has-to-be-submitted. We
-						// can't non-null in update, as that would require every not-nullable field to be
-						// submitted on updates
-						if (
-							field.nullable === false &&
-							!field.defaultValue &&
-							!GENERATE_SPECIAL.some((flag) => field.special.includes(flag)) &&
-							action !== 'update'
-						) {
-							type = new GraphQLNonNull(type);
-						}
-
-						if (collection.primary === field.field) {
-							if (!field.defaultValue && !field.special.includes('uuid') && action === 'create')
-								type = new GraphQLNonNull(GraphQLID);
-							else if (['create', 'update'].includes(action)) type = GraphQLID;
-							else type = new GraphQLNonNull(GraphQLID);
-						}
-
-						acc[field.field] = {
-							type,
-							description: field.note,
-							resolve: (obj: Record<string, any>) => {
-								return obj[field.field];
-							},
-						} as ObjectTypeComposerFieldConfigDefinition<any, any>;
-
-						if (action === 'read') {
-							if (field.type === 'date') {
-								acc[`${field.field}_func`] = {
-									type: DateFunctions,
-									resolve: (obj: Record<string, any>) => {
-										const funcFields = Object.keys(DateFunctions.getFields()).map((key) => `${field.field}_${key}`);
-										return mapKeys(pick(obj, funcFields), (_value, key) => key.substring(field.field.length + 1));
-									},
-								};
+							// GraphQL doesn't differentiate between not-null and has-to-be-submitted. We
+							// can't non-null in update, as that would require every not-nullable field to be
+							// submitted on updates
+							if (
+								field.nullable === false &&
+								!field.defaultValue &&
+								!GENERATE_SPECIAL.some((flag) => field.special.includes(flag)) &&
+								action !== 'update'
+							) {
+								type = new GraphQLNonNull(type);
 							}
 
-							if (field.type === 'time') {
-								acc[`${field.field}_func`] = {
-									type: TimeFunctions,
-									resolve: (obj: Record<string, any>) => {
-										const funcFields = Object.keys(TimeFunctions.getFields()).map((key) => `${field.field}_${key}`);
-										return mapKeys(pick(obj, funcFields), (_value, key) => key.substring(field.field.length + 1));
-									},
-								};
+							if (collection.primary === field.field) {
+								if (!field.defaultValue && !field.special.includes('uuid') && action === 'create')
+									type = new GraphQLNonNull(GraphQLID);
+								else if (['create', 'update'].includes(action)) type = GraphQLID;
+								else type = new GraphQLNonNull(GraphQLID);
 							}
 
-							if (field.type === 'dateTime' || field.type === 'timestamp') {
-								acc[`${field.field}_func`] = {
-									type: DateTimeFunctions,
-									resolve: (obj: Record<string, any>) => {
-										const funcFields = Object.keys(DateTimeFunctions.getFields()).map((key) => `${field.field}_${key}`);
-										return mapKeys(pick(obj, funcFields), (_value, key) => key.substring(field.field.length + 1));
-									},
-								};
+							acc[field.field] = {
+								type,
+								description: field.note,
+								resolve: (obj: Record<string, any>) => {
+									return obj[field.field];
+								},
+							} as ObjectTypeComposerFieldConfigDefinition<any, any>;
+
+							if (action === 'read') {
+								if (field.type === 'date') {
+									acc[`${field.field}_func`] = {
+										type: DateFunctions,
+										resolve: (obj: Record<string, any>) => {
+											const funcFields = Object.keys(DateFunctions.getFields()).map((key) => `${field.field}_${key}`);
+											return mapKeys(pick(obj, funcFields), (_value, key) => key.substring(field.field.length + 1));
+										},
+									};
+								}
+
+								if (field.type === 'time') {
+									acc[`${field.field}_func`] = {
+										type: TimeFunctions,
+										resolve: (obj: Record<string, any>) => {
+											const funcFields = Object.keys(TimeFunctions.getFields()).map((key) => `${field.field}_${key}`);
+											return mapKeys(pick(obj, funcFields), (_value, key) => key.substring(field.field.length + 1));
+										},
+									};
+								}
+
+								if (field.type === 'dateTime' || field.type === 'timestamp') {
+									acc[`${field.field}_func`] = {
+										type: DateTimeFunctions,
+										resolve: (obj: Record<string, any>) => {
+											const funcFields = Object.keys(DateTimeFunctions.getFields()).map(
+												(key) => `${field.field}_${key}`
+											);
+
+											return mapKeys(pick(obj, funcFields), (_value, key) => key.substring(field.field.length + 1));
+										},
+									};
+								}
+
+								if (field.type === 'json' || field.type === 'alias') {
+									acc[`${field.field}_func`] = {
+										type: CountFunctions,
+										resolve: (obj: Record<string, any>) => {
+											const funcFields = Object.keys(CountFunctions.getFields()).map((key) => `${field.field}_${key}`);
+											return mapKeys(pick(obj, funcFields), (_value, key) => key.substring(field.field.length + 1));
+										},
+									};
+								}
 							}
 
-							if (field.type === 'json' || field.type === 'alias') {
-								acc[`${field.field}_func`] = {
-									type: CountFunctions,
-									resolve: (obj: Record<string, any>) => {
-										const funcFields = Object.keys(CountFunctions.getFields()).map((key) => `${field.field}_${key}`);
-										return mapKeys(pick(obj, funcFields), (_value, key) => key.substring(field.field.length + 1));
-									},
-								};
-							}
-						}
-
-						return acc;
-					}, {} as ObjectTypeComposerFieldConfigAsObjectDefinition<any, any>),
+							return acc;
+						},
+						{} as ObjectTypeComposerFieldConfigAsObjectDefinition<any, any>
+					),
 				});
 			}
 
@@ -899,37 +920,43 @@ export class GraphQLService {
 
 				AggregatedFields[collection.collection] = schemaComposer.createObjectTC({
 					name: `${collection.collection}_aggregated_fields`,
-					fields: Object.values(collection.fields).reduce((acc, field) => {
-						const graphqlType = getGraphQLType(field.type, field.special);
+					fields: Object.values(collection.fields).reduce(
+						(acc, field) => {
+							const graphqlType = getGraphQLType(field.type, field.special);
 
-						switch (graphqlType) {
-							case GraphQLBigInt:
-							case GraphQLInt:
-							case GraphQLFloat:
-								acc[field.field] = {
-									type: GraphQLFloat,
-									description: field.note,
-								};
+							switch (graphqlType) {
+								case GraphQLBigInt:
+								case GraphQLInt:
+								case GraphQLFloat:
+									acc[field.field] = {
+										type: GraphQLFloat,
+										description: field.note,
+									};
 
-								break;
-							default:
-								break;
-						}
+									break;
+								default:
+									break;
+							}
 
-						return acc;
-					}, {} as ObjectTypeComposerFieldConfigAsObjectDefinition<any, any>),
+							return acc;
+						},
+						{} as ObjectTypeComposerFieldConfigAsObjectDefinition<any, any>
+					),
 				});
 
 				const countType = schemaComposer.createObjectTC({
 					name: `${collection.collection}_aggregated_count`,
-					fields: Object.values(collection.fields).reduce((acc, field) => {
-						acc[field.field] = {
-							type: GraphQLInt,
-							description: field.note,
-						};
+					fields: Object.values(collection.fields).reduce(
+						(acc, field) => {
+							acc[field.field] = {
+								type: GraphQLInt,
+								description: field.note,
+							};
 
-						return acc;
-					}, {} as ObjectTypeComposerFieldConfigAsObjectDefinition<any, any>),
+							return acc;
+						},
+						{} as ObjectTypeComposerFieldConfigAsObjectDefinition<any, any>
+					),
 				});
 
 				AggregateMethods[collection.collection] = {
@@ -1001,7 +1028,7 @@ export class GraphQLService {
 						? ReadCollectionTypes[collection.collection]!
 						: new GraphQLNonNull(
 								new GraphQLList(new GraphQLNonNull(ReadCollectionTypes[collection.collection]!.getType()))
-						  ),
+							),
 					resolve: async ({ info, context }: { info: GraphQLResolveInfo; context: Record<string, any> }) => {
 						const result = await self.resolveQuery(info);
 						context['data'] = result;
@@ -1167,7 +1194,7 @@ export class GraphQLService {
 						type: collectionIsReadable
 							? new GraphQLNonNull(
 									new GraphQLList(new GraphQLNonNull(ReadCollectionTypes[collection.collection]!.getType()))
-							  )
+								)
 							: GraphQLBoolean,
 						resolve: async ({ args, info }: { args: Record<string, any>; info: GraphQLResolveInfo }) =>
 							await self.resolveMutation(args, info),
@@ -1238,7 +1265,7 @@ export class GraphQLService {
 							type: collectionIsReadable
 								? new GraphQLNonNull(
 										new GraphQLList(new GraphQLNonNull(ReadCollectionTypes[collection.collection]!.getType()))
-								  )
+									)
 								: GraphQLBoolean,
 							args: {
 								...(collectionIsReadable
@@ -1259,7 +1286,7 @@ export class GraphQLService {
 							type: collectionIsReadable
 								? new GraphQLNonNull(
 										new GraphQLList(new GraphQLNonNull(ReadCollectionTypes[collection.collection]!.getType()))
-								  )
+									)
 								: GraphQLBoolean,
 							args: {
 								...(collectionIsReadable
@@ -1898,7 +1925,7 @@ export class GraphQLService {
 									duration: { type: GraphQLInt },
 								},
 							}),
-					  }
+						}
 					: GraphQLBoolean,
 				rateLimitGlobal: env['RATE_LIMITER_GLOBAL_ENABLED']
 					? {
@@ -1909,7 +1936,7 @@ export class GraphQLService {
 									duration: { type: GraphQLInt },
 								},
 							}),
-					  }
+						}
 					: GraphQLBoolean,
 			});
 		}
@@ -2402,16 +2429,19 @@ export class GraphQLService {
 				collection: GraphQLString,
 				meta: schemaComposer.createObjectTC({
 					name: 'directus_collections_meta',
-					fields: Object.values(schema.read.collections['directus_collections']!.fields).reduce((acc, field) => {
-						acc[field.field] = {
-							type: field.nullable
-								? getGraphQLType(field.type, field.special)
-								: new GraphQLNonNull(getGraphQLType(field.type, field.special)),
-							description: field.note,
-						} as ObjectTypeComposerFieldConfigDefinition<any, any, any>;
+					fields: Object.values(schema.read.collections['directus_collections']!.fields).reduce(
+						(acc, field) => {
+							acc[field.field] = {
+								type: field.nullable
+									? getGraphQLType(field.type, field.special)
+									: new GraphQLNonNull(getGraphQLType(field.type, field.special)),
+								description: field.note,
+							} as ObjectTypeComposerFieldConfigDefinition<any, any, any>;
 
-						return acc;
-					}, {} as ObjectTypeComposerFieldConfigAsObjectDefinition<any, any>),
+							return acc;
+						},
+						{} as ObjectTypeComposerFieldConfigAsObjectDefinition<any, any>
+					),
 				}),
 				schema: schemaComposer.createObjectTC({
 					name: 'directus_collections_schema',
@@ -2459,16 +2489,19 @@ export class GraphQLService {
 				type: GraphQLString,
 				meta: schemaComposer.createObjectTC({
 					name: 'directus_fields_meta',
-					fields: Object.values(schema.read.collections['directus_fields']!.fields).reduce((acc, field) => {
-						acc[field.field] = {
-							type: field.nullable
-								? getGraphQLType(field.type, field.special)
-								: new GraphQLNonNull(getGraphQLType(field.type, field.special)),
-							description: field.note,
-						} as ObjectTypeComposerFieldConfigDefinition<any, any, any>;
+					fields: Object.values(schema.read.collections['directus_fields']!.fields).reduce(
+						(acc, field) => {
+							acc[field.field] = {
+								type: field.nullable
+									? getGraphQLType(field.type, field.special)
+									: new GraphQLNonNull(getGraphQLType(field.type, field.special)),
+								description: field.note,
+							} as ObjectTypeComposerFieldConfigDefinition<any, any, any>;
 
-						return acc;
-					}, {} as ObjectTypeComposerFieldConfigAsObjectDefinition<any, any>),
+							return acc;
+						},
+						{} as ObjectTypeComposerFieldConfigAsObjectDefinition<any, any>
+					),
 				}),
 				schema: schemaComposer.createObjectTC({
 					name: 'directus_fields_schema',
@@ -2554,14 +2587,17 @@ export class GraphQLService {
 				}),
 				meta: schemaComposer.createObjectTC({
 					name: 'directus_relations_meta',
-					fields: Object.values(schema.read.collections['directus_relations']!.fields).reduce((acc, field) => {
-						acc[field.field] = {
-							type: getGraphQLType(field.type, field.special),
-							description: field.note,
-						} as ObjectTypeComposerFieldConfigDefinition<any, any, any>;
+					fields: Object.values(schema.read.collections['directus_relations']!.fields).reduce(
+						(acc, field) => {
+							acc[field.field] = {
+								type: getGraphQLType(field.type, field.special),
+								description: field.note,
+							} as ObjectTypeComposerFieldConfigDefinition<any, any, any>;
 
-						return acc;
-					}, {} as ObjectTypeComposerFieldConfigAsObjectDefinition<any, any>),
+							return acc;
+						},
+						{} as ObjectTypeComposerFieldConfigAsObjectDefinition<any, any>
+					),
 				}),
 			});
 

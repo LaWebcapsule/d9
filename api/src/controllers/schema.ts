@@ -48,7 +48,7 @@ const schemaMultipartHandler: RequestHandler = (req, res, next) => {
 		: {
 				...req.headers,
 				'content-type': 'application/octet-stream',
-		  };
+			};
 
 	const busboy = Busboy({ headers });
 

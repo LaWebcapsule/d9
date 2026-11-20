@@ -16,7 +16,7 @@
 					modulePart.color
 						? {
 								'--v-button-color-active': modulePart.color,
-						  }
+							}
 						: null
 				"
 			>

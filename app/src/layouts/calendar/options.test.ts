@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { GlobalMountOptions } from '@vue/test-utils/dist/types';
+import type { GlobalMountOptions } from '@/__utils__/mount';
 import { beforeAll, expect, test, vi } from 'vitest';
 import { createI18n, I18n } from 'vue-i18n';
 

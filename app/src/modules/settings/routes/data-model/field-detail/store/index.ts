@@ -102,8 +102,7 @@ export const useFieldDetailStore = defineStore({
 				if (['files', 'm2m', 'translations', 'm2a'].includes(this.localType)) {
 					// These types rely on directus_relations fields being said, so meta should exist for these particular relations
 					this.relations.m2o = relations.find((relation) => relation.meta?.id !== this.relations.o2m?.meta?.id) as
-						| DeepPartial<Relation>
-						| undefined;
+						DeepPartial<Relation> | undefined;
 				} else {
 					this.relations.m2o = relations.find(
 						(relation) => relation.collection === collection && relation.field === field

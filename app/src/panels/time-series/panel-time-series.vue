@@ -257,7 +257,7 @@ function setupChart() {
 						: n(value, 'decimal', {
 								minimumFractionDigits: props.decimals ?? 0,
 								maximumFractionDigits: props.decimals ?? 0,
-						  } as any);
+							} as any);
 				},
 				yaxis: {
 					show: props.showYAxis ?? true,
@@ -274,7 +274,7 @@ function setupChart() {
 								: n(value, 'decimal', {
 										minimumFractionDigits: props.decimals ?? 0,
 										maximumFractionDigits: props.decimals ?? 0,
-								  } as any);
+									} as any);
 						},
 						style: {
 							fontFamily: 'var(--family-sans-serif)',

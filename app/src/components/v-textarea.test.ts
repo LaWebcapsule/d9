@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils';
 
 import VTextarea from './v-textarea.vue';
 import { Focus } from '@/__utils__/focus';
-import { GlobalMountOptions } from '@vue/test-utils/dist/types';
+import type { GlobalMountOptions } from '@/__utils__/mount';
 
 const global: GlobalMountOptions = {
 	directives: {

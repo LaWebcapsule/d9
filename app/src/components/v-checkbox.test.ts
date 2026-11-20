@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils';
 
 import VCheckbox from './v-checkbox.vue';
 import { h } from 'vue';
-import { GlobalMountOptions } from '@vue/test-utils/dist/types';
+import type { GlobalMountOptions } from '@/__utils__/mount';
 
 const global: GlobalMountOptions = {
 	stubs: ['v-icon'],

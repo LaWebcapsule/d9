@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { GlobalMountOptions } from '@vue/test-utils/dist/types';
+import type { GlobalMountOptions } from '@/__utils__/mount';
 import { beforeEach, expect, test, vi } from 'vitest';
 
 import { directive } from '@/directives/click-outside';

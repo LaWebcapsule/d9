@@ -64,11 +64,14 @@ export function useRelationM2A(collection: Ref<string>, field: Ref<string>) {
 			return acc;
 		}, [] as Collection[]);
 
-		const relationPrimaryKeyFields = allowedCollections.reduce((acc, collection) => {
-			const pkField = fieldsStore.getPrimaryKeyFieldForCollection(collection?.collection);
-			if (pkField) acc[collection.collection] = pkField;
-			return acc;
-		}, {} as Record<string, Field>);
+		const relationPrimaryKeyFields = allowedCollections.reduce(
+			(acc, collection) => {
+				const pkField = fieldsStore.getPrimaryKeyFieldForCollection(collection?.collection);
+				if (pkField) acc[collection.collection] = pkField;
+				return acc;
+			},
+			{} as Record<string, Field>
+		);
 
 		return {
 			allowedCollections,

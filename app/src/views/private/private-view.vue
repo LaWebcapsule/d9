@@ -429,7 +429,9 @@ function openSidebar(event: PointerEvent) {
 			position: relative;
 			flex-basis: 60px;
 			flex-shrink: 0;
-			transition: flex-basis var(--slow) var(--transition), transform var(--slow) var(--transition);
+			transition:
+				flex-basis var(--slow) var(--transition),
+				transform var(--slow) var(--transition);
 
 			&.is-open {
 				flex-basis: var(--sidebar-width, 280px);

@@ -345,7 +345,9 @@ function pressedEnter() {
 }
 
 .v-template-input {
-	transition: height var(--fast) var(--transition), padding var(--fast) var(--transition);
+	transition:
+		height var(--fast) var(--transition),
+		padding var(--fast) var(--transition);
 }
 
 .collapsed .v-template-input {

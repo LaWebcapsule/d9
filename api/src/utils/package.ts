@@ -13,7 +13,7 @@ const { name, version } = JSON.parse(readFileSync(apiPkgPath, 'utf8')) as {
 
 function pkgVersion(path: string): string | null {
 	try {
-		return existsSync(path) ? JSON.parse(readFileSync(path, 'utf8')).version ?? null : null;
+		return existsSync(path) ? (JSON.parse(readFileSync(path, 'utf8')).version ?? null) : null;
 	} catch {
 		return null;
 	}
