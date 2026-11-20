@@ -8,6 +8,7 @@ export type File = {
 	folder: string | null; // uuid
 	uploaded_by: string | null; // uuid
 	uploaded_on: Date;
+	modified_on: Date | string | number | null;
 	charset: string | null;
 	filesize: number;
 	width: number | null;
