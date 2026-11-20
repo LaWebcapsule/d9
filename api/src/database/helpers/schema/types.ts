@@ -156,8 +156,9 @@ export abstract class SchemaHelper extends DatabaseHelper {
 		orderByString: string,
 		orderByFields: Knex.Raw[]
 	): Knex.QueryBuilder {
-		// The alias is bound as an identifier instead of being passed to `rowNumber()`: knex < 3.3 emits that alias
-		// verbatim, knex >= 3.3 quotes it, so only an explicit `??` is quoted exactly once on every version.
+		// The alias is bound as an identifier instead of being passed to `rowNumber()`: knex < 3.2.10 emits that alias
+		// verbatim, knex >= 3.2.10 quotes it (knex/knex#6392), so only an explicit `??` is quoted exactly once on every
+		// version.
 		dbQuery.select(
 			knex.raw(`row_number() over (partition by ?? order by ${orderByString}) as ??`, [
 				`${table}.${primaryKey}`,
