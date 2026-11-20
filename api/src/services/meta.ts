@@ -53,16 +53,33 @@ export class MetaService {
 	}
 
 	async filterCount(collection: string, query: Query): Promise<number> {
-		const dbQuery = this.knex(collection).count('*', { as: 'count' });
+		const dbQuery = this.knex(collection);
 
 		const { filter, search } = await this.getAuthorizedQuery(collection, query);
 
+		let hasMultiRelationalFilter = false;
+
 		if (filter && Object.keys(filter).length > 0) {
-			applyFilter(this.knex, this.schema, dbQuery, filter, collection, {});
+			hasMultiRelationalFilter = applyFilter(
+				this.knex,
+				this.schema,
+				dbQuery,
+				filter,
+				collection,
+				{}
+			).hasMultiRelationalFilter;
 		}
 
 		if (search) {
 			applySearch(this.schema, dbQuery, search, collection);
+		}
+
+		if (hasMultiRelationalFilter) {
+			// A filter across a to-many relation joins it: count the distinct items, not the joined rows
+			const primaryKeyName = this.schema.collections[collection]!.primary;
+			dbQuery.countDistinct({ count: [`${collection}.${primaryKeyName}`] });
+		} else {
+			dbQuery.count('*', { as: 'count' });
 		}
 
 		const records = await dbQuery;
