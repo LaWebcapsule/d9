@@ -4,6 +4,7 @@ import contentDisposition from 'content-disposition';
 import { Router } from 'express';
 import helmet from 'helmet';
 import { merge, pick } from 'lodash-es';
+import hash from 'object-hash';
 import { ASSET_TRANSFORM_QUERY_KEYS, SYSTEM_ASSET_ALLOW_LIST } from '../constants.js';
 import getDatabase from '../database/index.js';
 import env from '../env.js';
@@ -172,15 +173,38 @@ router.get(
 
 		const isHead = req.method.toLowerCase() === 'head';
 
-		const asset = isHead
-			? await service.getAssetInfo(id, transformation, range)
-			: await service.getAsset(id, transformation, range);
+		const { modified_on, filesize } = await service.getFile(id);
+
+		res.setHeader('ETag', `W/"${hash({ id, modified_on, filesize, transformation })}"`);
+
+		const lastModified = modified_on === null ? undefined : new Date(modified_on);
+
+		if (lastModified && !Number.isNaN(lastModified.getTime())) {
+			res.setHeader('Last-Modified', lastModified.toUTCString());
+		}
+
+		const cacheControl = getCacheControlHeader(req, getMilliseconds(env['ASSETS_CACHE_TTL']), false, true);
+
+		if (req.fresh) {
+			res.setHeader('Cache-Control', cacheControl);
+			res.setHeader('Vary', vary.join(', '));
+			return res.status(304).end();
+		}
+
+		const asset = await (isHead
+			? service.getAssetInfo(id, transformation, range)
+			: service.getAsset(id, transformation, range)
+		).catch((error) => {
+			res.removeHeader('ETag');
+			res.removeHeader('Last-Modified');
+			throw error;
+		});
 
 		const { stream, file, stat } = asset;
 
 		const filename = req.params['filename'] ?? file.filename_download;
 		res.attachment(filename);
-		res.setHeader('Content-Type', file.type);
+		if (file.type) res.setHeader('Content-Type', file.type);
 		res.setHeader('X-Content-Type-Options', 'nosniff');
 		res.setHeader('Accept-Ranges', 'bytes');
 
@@ -202,15 +226,8 @@ router.get(
 			if (err) throw err;
 		});
 
-		res.setHeader('Cache-Control', getCacheControlHeader(req, getMilliseconds(env['ASSETS_CACHE_TTL']), false, true));
+		res.setHeader('Cache-Control', cacheControl);
 		res.setHeader('Vary', vary.join(', '));
-
-		const unixTime = Date.parse(file.modified_on);
-
-		if (!Number.isNaN(unixTime)) {
-			const lastModifiedDate = new Date(unixTime);
-			res.setHeader('Last-Modified', lastModifiedDate.toUTCString());
-		}
 
 		if (range) {
 			res.setHeader('Content-Range', `bytes ${range.start}-${range.end || stat.size - 1}/${stat.size}`);
@@ -246,6 +263,8 @@ router.get(
 				res.removeHeader('Content-Type');
 				res.removeHeader('Content-Disposition');
 				res.removeHeader('Cache-Control');
+				res.removeHeader('ETag');
+				res.removeHeader('Last-Modified');
 
 				res.status(500).json({
 					errors: [

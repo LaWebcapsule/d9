@@ -59,12 +59,7 @@ export class AssetsService {
 		return { file, stat };
 	}
 
-	private async resolveAsset(
-		storage: StorageManager,
-		id: string,
-		transformation: TransformationParams,
-		range?: Range
-	): Promise<{ file: any; filename: string; stat: Stat }> {
+	async getFile(id: string): Promise<File> {
 		const publicSettings = await this.knex
 			.select('project_logo', 'public_background', 'public_foreground')
 			.from('directus_settings')
@@ -88,6 +83,17 @@ export class AssetsService {
 		const file = (await this.knex.select('*').from('directus_files').where({ id }).first()) as File;
 
 		if (!file) throw new ForbiddenException();
+
+		return file;
+	}
+
+	private async resolveAsset(
+		storage: StorageManager,
+		id: string,
+		transformation: TransformationParams,
+		range?: Range
+	): Promise<{ file: any; filename: string; stat: Stat }> {
+		const file = await this.getFile(id);
 
 		const exists = await storage.location(file.storage).exists(file.filename_disk);
 
