@@ -121,14 +121,16 @@ export default defineComponent({
 	},
 	emits: ['update:field'],
 	setup(props, { emit }) {
-		const singleValueOperators = ['_eq', '_neq', '_lt', '_gt', '_lte', '_gte'];
+		const singleValueOperators = ['_eq', '_ieq', '_neq', '_lt', '_gt', '_lte', '_gte'];
 
 		const patternOperators = [
 			'_contains',
 			'_ncontains',
 			'_icontains',
 			'_starts_with',
+			'_istarts_with',
 			'_nstarts_with',
+			'_nistarts_with',
 			'_ends_with',
 			'_nends_with',
 			'_regex',
