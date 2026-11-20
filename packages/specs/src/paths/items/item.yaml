@@ -24,7 +24,12 @@ get:
 
 patch:
   summary: Update an Item
-  description: Update an existing item.
+  description: >-
+    Update an existing item. To detect changes someone else saved in the meantime, add `onlyIf` to the reserved
+    `$__meta` key of the body (also in nested items): the conditions the current values have to meet, by field. The only
+    operator is `_hash`, the SHA-256 hash of the value the changes are based on. The `$__meta` of nested `delete`
+    alterations can contain `deleteOnlyIf` with the conditions by primary key. If any of the conditions isn't met,
+    nothing is saved and the API responds with 409 CONFLICT.
   tags:
     - Items
   operationId: updateItem
@@ -36,6 +41,9 @@ patch:
       application/json:
         schema:
           type: object
+          properties:
+            $__meta:
+              $ref: '../../openapi.yaml#/components/schemas/UpdateMeta'
   responses:
     '200':
       description: Successful request
@@ -50,6 +58,8 @@ patch:
       $ref: '../../openapi.yaml#/components/responses/UnauthorizedError'
     '404':
       $ref: '../../openapi.yaml#/components/responses/NotFoundError'
+    '409':
+      $ref: '../../openapi.yaml#/components/responses/ConflictError'
 
 delete:
   summary: Delete an Item
@@ -58,7 +68,7 @@ delete:
     - Items
   operationId: deleteItem
   responses:
-    '200':
+    '204':
       description: Successful request
     '401':
       $ref: '../../openapi.yaml#/components/responses/UnauthorizedError'

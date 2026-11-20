@@ -303,6 +303,8 @@ components:
       $ref: './components/user.yaml'
     Query:
       $ref: './definitions/query.yaml'
+    UpdateMeta:
+      $ref: './definitions/update-meta.yaml'
     Webhooks:
       $ref: './components/webhook.yaml'
     x-metadata:
@@ -347,6 +349,8 @@ components:
     Export:
       $ref: './parameters/export.yaml'
   responses:
+    ConflictError:
+      $ref: './responses/conflictError.yaml'
     NotFoundError:
       $ref: './responses/notFoundError.yaml'
     UnauthorizedError:

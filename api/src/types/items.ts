@@ -6,6 +6,7 @@
 import type { BaseException } from '@wbce-d9/exceptions';
 import type { EventContext } from '@wbce-d9/types';
 import type { MutationTracker } from '../services/items.js';
+import type { Conflict } from '../utils/conflicts.js';
 
 export type Item = Record<string, any>;
 
@@ -62,6 +63,12 @@ export type MutationOptions = {
 	 * The validation error to throw right before the mutation takes place
 	 */
 	preMutationException?: BaseException | undefined;
+
+	/**
+	 * Collects the edit conflicts of nested mutations, so they can be reported together by the
+	 * mutation that started the tree
+	 */
+	conflicts?: Conflict[] | undefined;
 };
 
 export type ActionEventParams = {

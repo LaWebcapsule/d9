@@ -4,6 +4,15 @@ import { i18n } from '@/lang';
 import { useFieldsStore } from '@/stores/fields';
 import { useRelationsStore } from '@/stores/relations';
 import { APIError } from '@/types/error';
+import {
+	ConflictChoice,
+	EditConflict,
+	META_KEY,
+	OnlyIf,
+	getOnlyIf,
+	resolveEditConflicts,
+	stripMeta,
+} from '@/utils/edit-conflicts';
 import { notify } from '@/utils/notify';
 import { translate } from '@/utils/translate-object-values';
 import { unexpectedError } from '@/utils/unexpected-error';
@@ -11,7 +20,7 @@ import { validateItemConditions } from '@/utils/validate-item-conditions';
 import { useCollection } from '@wbce-d9/composables';
 import { getEndpoint } from '@wbce-d9/utils';
 import { AxiosResponse } from 'axios';
-import { mergeWith } from 'lodash';
+import { cloneDeep, mergeWith, pick } from 'lodash';
 import { computed, ComputedRef, isRef, Ref, ref, unref, watch } from 'vue';
 import { usePermissions } from './use-permissions';
 import { Field, Query, Relation } from '@wbce-d9/types';
@@ -36,12 +45,23 @@ type UsableItem = {
 	isBatch: ComputedRef<boolean>;
 	getItem: () => Promise<void>;
 	validationErrors: Ref<any[]>;
+	conflicts: Ref<EditConflict[] | null>;
+	resolveConflicts: (choices: ConflictChoice[]) => Promise<any>;
+};
+
+type UseItemOptions = {
+	/**
+	 * Let the API reject a save that would overwrite changes someone else saved in the meantime. Only for
+	 * pages that show the reported `conflicts`, otherwise the save would fail without the user knowing why.
+	 */
+	detectConflicts?: boolean;
 };
 
 export function useItem(
 	collection: Ref<string>,
 	primaryKey: Ref<string | number | null>,
-	query: Ref<Query> | Query = {}
+	query: Ref<Query> | Query = {},
+	{ detectConflicts = false }: UseItemOptions = {}
 ): UsableItem {
 	const { info: collectionInfo, primaryKeyField } = useCollection(collection);
 	const item = ref<Record<string, any> | null>(null);
@@ -52,6 +72,12 @@ export function useItem(
 	const deleting = ref(false);
 	const archiving = ref(false);
 	const edits = ref<Record<string, any>>({});
+	const conflicts = ref<EditConflict[] | null>(null);
+	// Item as returned by the API, before translating system values. Used for the conditions of the conflict check.
+	const loadedItem = ref<Record<string, any> | null>(null);
+	// Conditions that replace the ones of the loaded values: for fields edited before the item was reloaded
+	// and for resolved conflicts
+	const onlyIfOverrides = ref<OnlyIf>({});
 	const hasEdits = computed(() => Object.keys(edits.value).length > 0);
 	const isNew = computed(() => primaryKey.value === '+');
 	const isBatch = computed(() => typeof primaryKey.value === 'string' && primaryKey.value.includes(','));
@@ -100,6 +126,8 @@ export function useItem(
 		isBatch,
 		getItem,
 		validationErrors,
+		conflicts,
+		resolveConflicts,
 	};
 
 	async function getItem() {
@@ -108,6 +136,7 @@ export function useItem(
 
 		try {
 			const response = await api.get(itemEndpoint.value, { params: unref(query) });
+			keepConditionsOfEditedFields();
 			setItemValueToResponse(response);
 		} catch (err: any) {
 			error.value = err;
@@ -150,7 +179,10 @@ export function useItem(
 					title: i18n.global.t('item_create_success', isBatch.value ? 2 : 1),
 				});
 			} else {
-				response = await api.patch(itemEndpoint.value, edits.value);
+				// Nested items get their conditions from the relational interfaces, whatever page they are used on
+				const payload = detectConflicts ? withOnlyIf(edits.value) : stripMeta(edits.value);
+
+				response = await api.patch(itemEndpoint.value, payload);
 
 				notify({
 					title: i18n.global.t('item_update_success', isBatch.value ? 2 : 1),
@@ -159,12 +191,70 @@ export function useItem(
 
 			setItemValueToResponse(response);
 			edits.value = {};
+			onlyIfOverrides.value = {};
+			conflicts.value = null;
 			return response.data.data;
 		} catch (err: any) {
 			saveErrorHandler(err);
 		} finally {
 			saving.value = false;
 		}
+	}
+
+	/**
+	 * Add the hashes of the loaded values of the changed fields, so the API can reject the save if someone
+	 * else changed them in the meantime. Nested items get their hashes in useRelationMultiple.
+	 */
+	function withOnlyIf(payload: Record<string, any>) {
+		if (isBatch.value || !loadedItem.value || !primaryKeyField.value) return payload;
+		if (!(primaryKeyField.value.field in loadedItem.value)) return payload;
+
+		const fields = Object.keys(payload);
+
+		const onlyIf = pick({ ...getOnlyIf(collection.value, loadedItem.value, fields), ...onlyIfOverrides.value }, fields);
+
+		return Object.keys(onlyIf).length > 0 ? { ...payload, [META_KEY]: { onlyIf } } : payload;
+	}
+
+	/**
+	 * When the item is reloaded while there are unsaved edits, the edited fields still have to be checked
+	 * against the values the user saw when starting to edit them
+	 */
+	function keepConditionsOfEditedFields() {
+		if (!loadedItem.value || !hasEdits.value) {
+			onlyIfOverrides.value = {};
+			return;
+		}
+
+		onlyIfOverrides.value = {
+			...getOnlyIf(collection.value, loadedItem.value, Object.keys(edits.value)),
+			...onlyIfOverrides.value,
+		};
+	}
+
+	/**
+	 * Apply the choices for the reported conflicts to the edits and save again
+	 */
+	async function resolveConflicts(choices: ConflictChoice[]) {
+		// Singletons don't have the primary key in the route
+		const key = isSingle.value ? loadedItem.value?.[primaryKeyField.value?.field ?? ''] : primaryKey.value;
+
+		if (!conflicts.value || key === null || key === undefined) return;
+
+		const resolved = resolveEditConflicts({
+			collection: collection.value,
+			primaryKey: key,
+			edits: edits.value,
+			rootOnlyIf: onlyIfOverrides.value,
+			conflicts: conflicts.value,
+			choices,
+		});
+
+		edits.value = resolved.edits;
+		onlyIfOverrides.value = resolved.rootOnlyIf;
+		conflicts.value = null;
+
+		return await save();
 	}
 
 	async function saveAsCopy() {
@@ -265,7 +355,7 @@ export function useItem(
 		}
 
 		try {
-			const response = await api.post(getEndpoint(collection.value), newItem);
+			const response = await api.post(getEndpoint(collection.value), stripMeta(newItem));
 
 			notify({
 				title: i18n.global.t('item_create_success', 1),
@@ -350,6 +440,15 @@ export function useItem(
 	}
 
 	function saveErrorHandler(err: any) {
+		const conflictError = err?.response?.data?.errors?.find(
+			(error: APIError) => error?.extensions?.code === 'CONFLICT'
+		);
+
+		if (detectConflicts && conflictError) {
+			conflicts.value = conflictError.extensions.conflicts ?? [];
+			throw err;
+		}
+
 		if (err?.response?.data?.errors) {
 			validationErrors.value = err.response.data.errors
 				.filter((err: APIError) => VALIDATION_TYPES.includes(err?.extensions?.code))
@@ -440,14 +539,19 @@ export function useItem(
 		saving.value = false;
 		deleting.value = false;
 
+		conflicts.value = null;
+
 		if (isNew.value === true) {
 			item.value = null;
+			loadedItem.value = null;
 		} else {
 			getItem();
 		}
 	}
 
 	function setItemValueToResponse(response: AxiosResponse) {
+		loadedItem.value = isBatch.value ? null : cloneDeep(response.data.data);
+
 		if (
 			(collection.value.startsWith('directus_') && collection.value !== 'directus_collections') ||
 			(collection.value === 'directus_collections' && response.data.data.collection?.startsWith('directus_'))

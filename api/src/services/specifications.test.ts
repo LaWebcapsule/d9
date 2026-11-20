@@ -365,6 +365,28 @@ describe('Integration Tests', () => {
 							    },
 							    "type": "object",
 							  },
+							  "UpdateMeta": {
+							    "description": "Information about an update that is not part of the item itself.",
+							    "properties": {
+							      "onlyIf": {
+							        "additionalProperties": {
+							          "properties": {
+							            "_hash": {
+							              "description": "SHA-256 hash of the value the changes are based on.",
+							              "type": "string",
+							            },
+							          },
+							          "required": [
+							            "_hash",
+							          ],
+							          "type": "object",
+							        },
+							        "description": "Conditions the current values have to meet for the update to be saved, by field.",
+							        "type": "object",
+							      },
+							    },
+							    "type": "object",
+							  },
 							  "x-metadata": {
 							    "properties": {
 							      "filter_count": {
@@ -384,25 +406,25 @@ describe('Integration Tests', () => {
 				});
 
 				describe('path', () => {
-					it('requestBody for CreateItems POST path should not have type in schema', async () => {
-						const collection: Collection = {
+					const collection: Collection = {
+						collection: 'test_table',
+						meta: {
+							accountability: 'all',
 							collection: 'test_table',
-							meta: {
-								accountability: 'all',
-								collection: 'test_table',
-								group: null,
-								hidden: false,
-								icon: null,
-								item_duplication_fields: null,
-								note: null,
-								singleton: false,
-								translations: {},
-							},
-							schema: {
-								name: 'test_table',
-							},
-						};
+							group: null,
+							hidden: false,
+							icon: null,
+							item_duplication_fields: null,
+							note: null,
+							singleton: false,
+							translations: {},
+						},
+						schema: {
+							name: 'test_table',
+						},
+					};
 
+					beforeEach(() => {
 						vi.spyOn(CollectionsService.prototype, 'readByQuery').mockResolvedValue([collection]);
 
 						vi.spyOn(FieldsService.prototype, 'readAll').mockResolvedValue([
@@ -455,7 +477,9 @@ describe('Integration Tests', () => {
 						]);
 
 						vi.spyOn(RelationsService.prototype, 'readAll').mockResolvedValue([]);
+					});
 
+					it('requestBody for CreateItems POST path should not have type in schema', async () => {
 						const spec = await service.oas.generate();
 
 						const targetSchema =
@@ -463,6 +487,58 @@ describe('Integration Tests', () => {
 
 						expect(targetSchema).toHaveProperty('oneOf');
 						expect(targetSchema).not.toHaveProperty('type');
+					});
+
+					// The changes of an update: the item of the collection and the conditions for saving it
+					const changes = {
+						allOf: [
+							{ $ref: '#/components/schemas/ItemsTestTable' },
+							{ type: 'object', properties: { $__meta: { $ref: '#/components/schemas/UpdateMeta' } } },
+						],
+					};
+
+					it('documents updating multiple items with the schema of the collection', async () => {
+						const spec = await service.oas.generate();
+
+						const operation = spec.paths[`/items/${collection.collection}`].patch;
+
+						expect(operation.operationId).toBe('updateItemsTestTable');
+						expect(operation.responses).toHaveProperty('409');
+
+						expect(operation.requestBody.content['application/json'].schema.oneOf).toEqual([
+							{ type: 'array', items: changes },
+							expect.objectContaining({
+								required: ['keys', 'data'],
+								properties: expect.objectContaining({ data: changes }),
+							}),
+							expect.objectContaining({
+								required: ['query', 'data'],
+								properties: expect.objectContaining({ data: changes }),
+							}),
+						]);
+					});
+
+					it('replaces the generic requestBody of updating an item with the schema of the collection', async () => {
+						const spec = await service.oas.generate();
+
+						const operation = spec.paths[`/items/${collection.collection}/{id}`].patch;
+
+						expect(operation.requestBody.content['application/json'].schema).toEqual(changes);
+						expect(operation.responses).toHaveProperty('409');
+
+						// The schema the request body refers to is part of the generated spec
+						expect(spec.components?.schemas?.['UpdateMeta']).toHaveProperty('properties.onlyIf');
+					});
+
+					it('documents deleting items without a response body', async () => {
+						const spec = await service.oas.generate();
+
+						const list = spec.paths[`/items/${collection.collection}`].delete;
+						const detail = spec.paths[`/items/${collection.collection}/{id}`].delete;
+
+						expect(list.requestBody.content['application/json'].schema).toHaveProperty('oneOf');
+						expect(Object.keys(list.responses)).toEqual(['204', '401']);
+						expect(Object.keys(detail.responses)).toEqual(['204', '401', '404']);
 					});
 				});
 			});

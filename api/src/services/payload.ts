@@ -10,7 +10,7 @@ import { parse as wktToGeoJSON } from 'wellknown';
 import type { Helpers } from '../database/helpers/index.js';
 import { getHelpers } from '../database/helpers/index.js';
 import getDatabase from '../database/index.js';
-import { ForbiddenException, InvalidPayloadException } from '../exceptions/index.js';
+import { ConflictException, ForbiddenException, InvalidPayloadException } from '../exceptions/index.js';
 import type {
 	AbstractServiceOptions,
 	ActionEventParams,
@@ -19,6 +19,7 @@ import type {
 	MutationOptions,
 	PrimaryKey,
 } from '../types/index.js';
+import { META_KEY, detectConflicts, extractDeleteOnlyIf } from '../utils/conflicts.js';
 import { generateHash } from '../utils/generate-hash.js';
 import { ItemsService } from './items.js';
 
@@ -480,6 +481,7 @@ export class PayloadService {
 							opts?.bypassEmitAction ? opts.bypassEmitAction(params) : nestedActionEvents.push(params),
 						emitEvents: opts?.emitEvents,
 						mutationTracker: opts?.mutationTracker,
+						conflicts: opts?.conflicts,
 					});
 				}
 			} else {
@@ -489,6 +491,7 @@ export class PayloadService {
 						opts?.bypassEmitAction ? opts.bypassEmitAction(params) : nestedActionEvents.push(params),
 					emitEvents: opts?.emitEvents,
 					mutationTracker: opts?.mutationTracker,
+					conflicts: opts?.conflicts,
 				});
 			}
 
@@ -561,6 +564,7 @@ export class PayloadService {
 							opts?.bypassEmitAction ? opts.bypassEmitAction(params) : nestedActionEvents.push(params),
 						emitEvents: opts?.emitEvents,
 						mutationTracker: opts?.mutationTracker,
+						conflicts: opts?.conflicts,
 					});
 				}
 			} else {
@@ -570,6 +574,7 @@ export class PayloadService {
 						opts?.bypassEmitAction ? opts.bypassEmitAction(params) : nestedActionEvents.push(params),
 					emitEvents: opts?.emitEvents,
 					mutationTracker: opts?.mutationTracker,
+					conflicts: opts?.conflicts,
 				});
 			}
 
@@ -608,6 +613,7 @@ export class PayloadService {
 			create: Joi.array().items(Joi.object().unknown()),
 			update: Joi.array().items(Joi.object().unknown()),
 			delete: Joi.array().items(Joi.string(), Joi.number()),
+			[META_KEY]: Joi.object(),
 		});
 
 		for (const relation of relationsToProcess) {
@@ -701,6 +707,7 @@ export class PayloadService {
 							opts?.bypassEmitAction ? opts.bypassEmitAction(params) : nestedActionEvents.push(params),
 						emitEvents: opts?.emitEvents,
 						mutationTracker: opts?.mutationTracker,
+						conflicts: opts?.conflicts,
 					}))
 				);
 
@@ -729,6 +736,7 @@ export class PayloadService {
 							opts?.bypassEmitAction ? opts.bypassEmitAction(params) : nestedActionEvents.push(params),
 						emitEvents: opts?.emitEvents,
 						mutationTracker: opts?.mutationTracker,
+						conflicts: opts?.conflicts,
 					});
 				} else {
 					await itemsService.updateByQuery(
@@ -740,6 +748,7 @@ export class PayloadService {
 								opts?.bypassEmitAction ? opts.bypassEmitAction(params) : nestedActionEvents.push(params),
 							emitEvents: opts?.emitEvents,
 							mutationTracker: opts?.mutationTracker,
+							conflicts: opts?.conflicts,
 						}
 					);
 				}
@@ -789,6 +798,7 @@ export class PayloadService {
 							opts?.bypassEmitAction ? opts.bypassEmitAction(params) : nestedActionEvents.push(params),
 						emitEvents: opts?.emitEvents,
 						mutationTracker: opts?.mutationTracker,
+						conflicts: opts?.conflicts,
 					});
 				}
 
@@ -804,11 +814,36 @@ export class PayloadService {
 								opts?.bypassEmitAction ? opts.bypassEmitAction(params) : nestedActionEvents.push(params),
 							emitEvents: opts?.emitEvents,
 							mutationTracker: opts?.mutationTracker,
+							conflicts: opts?.conflicts,
 						});
 					}
 				}
 
 				if (alterations.delete) {
+					const deleteOnlyIf = extractDeleteOnlyIf(alterations);
+
+					if (deleteOnlyIf) {
+						for (const key of alterations.delete) {
+							const onlyIf = deleteOnlyIf[String(key)];
+							if (!onlyIf) continue;
+
+							const conflicts = await detectConflicts({
+								knex: this.knex,
+								schema: this.schema,
+								accountability: this.accountability,
+								collection: relation.collection,
+								keys: [key],
+								onlyIf,
+								action: 'delete',
+							});
+
+							if (conflicts.length > 0) {
+								if (!opts?.conflicts) throw new ConflictException(conflicts);
+								opts.conflicts.push(...conflicts);
+							}
+						}
+					}
+
 					const query: Query = {
 						filter: {
 							_and: [
@@ -832,6 +867,7 @@ export class PayloadService {
 								opts?.bypassEmitAction ? opts.bypassEmitAction(params) : nestedActionEvents.push(params),
 							emitEvents: opts?.emitEvents,
 							mutationTracker: opts?.mutationTracker,
+							conflicts: opts?.conflicts,
 						});
 					} else {
 						await itemsService.updateByQuery(
@@ -843,6 +879,7 @@ export class PayloadService {
 									opts?.bypassEmitAction ? opts.bypassEmitAction(params) : nestedActionEvents.push(params),
 								emitEvents: opts?.emitEvents,
 								mutationTracker: opts?.mutationTracker,
+								conflicts: opts?.conflicts,
 							}
 						);
 					}

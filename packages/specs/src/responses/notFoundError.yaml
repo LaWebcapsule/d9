@@ -4,11 +4,16 @@ content:
     schema:
       type: object
       properties:
-        error:
-          type: object
-          properties:
-            code:
-              type: integer
-              format: int64
-            message:
-              type: string
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+              extensions:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: ROUTE_NOT_FOUND

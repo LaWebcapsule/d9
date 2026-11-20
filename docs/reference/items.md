@@ -14,8 +14,8 @@ pageClass: page-reference
 ## The Item Object
 
 Items don't have a predefined schema. The format depends completely on how you configured your collections and fields in
-d9. For the sake of documentation, we'll use a fictional articles collection with the following fields: `id`,
-`status`, `title`, `body`, `featured_image`, and `author`.
+d9. For the sake of documentation, we'll use a fictional articles collection with the following fields: `id`, `status`,
+`title`, `body`, `featured_image`, and `author`.
 
 ::: tip Relational Data
 
@@ -347,6 +347,77 @@ mutation {
 	}
 }
 ```
+
+### Detecting Conflicting Changes
+
+To make sure an update doesn't overwrite changes someone else saved in the meantime, add `onlyIf` to the reserved
+`$__meta` key of the request body: the conditions the current values have to meet for the update to be saved, by field.
+The only operator is `_hash`, the hash of the value the changes are based on. The hash of a value is the SHA-256 hex
+digest of its JSON with sorted object keys, see `hashValue()` in `@wbce-d9/utils`. Many-to-one fields are hashed as the
+foreign key.
+
+```json
+{
+	"title": "An updated title",
+	"$__meta": { "onlyIf": { "title": { "_hash": "<hash of the title as it was loaded>" } } }
+}
+```
+
+`$__meta.onlyIf` also works in nested items, for example in the `update` items of a translations field. To check items
+before deleting them, add `deleteOnlyIf` to the `$__meta` of the nested changes, with the conditions by primary key:
+
+```json
+{
+	"translations": {
+		"create": [],
+		"update": [{ "id": 7, "body": "Updated text", "$__meta": { "onlyIf": { "body": { "_hash": "<hash>" } } } }],
+		"delete": [9],
+		"$__meta": { "deleteOnlyIf": { "9": { "body": { "_hash": "<hash>" } } } }
+	}
+}
+```
+
+If any of the conditions isn't met, or an updated item doesn't exist anymore, nothing is saved and the API responds with
+`409` and the error code `CONFLICT`. `extensions.conflicts` lists every conflict with the current value. Fields without
+a condition are not checked. Without conditions, the last update wins.
+
+```json
+{
+	"errors": [
+		{
+			"message": "The item has been changed by someone else in the meantime. Review the changes and try again.",
+			"extensions": {
+				"code": "CONFLICT",
+				"conflicts": [
+					{
+						"collection": "articles",
+						"key": 15,
+						"action": "update",
+						"type": "changed",
+						"field": "title",
+						"current": "A title someone else saved"
+					}
+				]
+			}
+		}
+	]
+}
+```
+
+::: tip Permissions
+
+- Fields you're not allowed to read are not compared, so a conflict can't be used to guess their value.
+- An item that doesn't exist anymore is only reported as a conflict when your `update` permission for the collection
+  covers all of its items. Otherwise, the API responds with `403`, as it does for any item you can't access.
+
+:::
+
+::: tip Hooks and Flows
+
+`$__meta` of the item itself is removed before filter hooks run. The `$__meta` of nested items and nested changes is
+still part of the payload that hooks and Flows receive.
+
+:::
 
 ---
 

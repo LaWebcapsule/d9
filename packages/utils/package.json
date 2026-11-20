@@ -40,6 +40,7 @@
 		"access": "public"
 	},
 	"dependencies": {
+		"@noble/hashes": "1.8.0",
 		"@wbce-d9/constants": "workspace:*",
 		"@wbce-d9/storage": "workspace:*",
 		"date-fns": "catalog:",
