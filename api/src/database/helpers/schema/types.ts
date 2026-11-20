@@ -156,9 +156,14 @@ export abstract class SchemaHelper extends DatabaseHelper {
 		orderByString: string,
 		orderByFields: Knex.Raw[]
 	): Knex.QueryBuilder {
-		dbQuery.rowNumber(
-			knex.ref('directus_row_number').toQuery(),
-			knex.raw(`partition by ?? order by ${orderByString}`, [`${table}.${primaryKey}`, ...orderByFields])
+		// The alias is bound as an identifier instead of being passed to `rowNumber()`: knex < 3.3 emits that alias
+		// verbatim, knex >= 3.3 quotes it, so only an explicit `??` is quoted exactly once on every version.
+		dbQuery.select(
+			knex.raw(`row_number() over (partition by ?? order by ${orderByString}) as ??`, [
+				`${table}.${primaryKey}`,
+				...orderByFields,
+				'directus_row_number',
+			])
 		);
 
 		return dbQuery;
