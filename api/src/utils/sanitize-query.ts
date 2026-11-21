@@ -1,6 +1,6 @@
 import type { Accountability, Aggregate, Filter, Query } from '@wbce-d9/types';
 import { parseFilter, parseJSON } from '@wbce-d9/utils';
-import { flatten, get, isPlainObject, merge, set } from 'lodash-es';
+import { flatten, isPlainObject, merge } from 'lodash-es';
 import env from '../env.js';
 import logger from '../logger.js';
 import { Meta } from '../types/index.js';
@@ -196,7 +196,17 @@ function sanitizeDeep(deep: Record<string, any>, accountability?: Accountability
 		}
 
 		if (Object.keys(parsedLevel).length > 0) {
-			set(result, path, merge({}, get(result, path, {}), parsedLevel));
+			// Walk own properties only: user-supplied keys must never resolve to inherited properties
+			// (e.g. `toString.call`), otherwise the write below lands on a shared built-in
+			let target = result;
+
+			for (const key of path) {
+				if (['__proto__', 'constructor', 'prototype'].includes(key)) return;
+				if (!Object.hasOwn(target, key)) target[key] = {};
+				target = target[key];
+			}
+
+			merge(target, parsedLevel);
 		}
 	}
 }
