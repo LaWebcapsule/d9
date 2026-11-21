@@ -99,6 +99,19 @@ describe('AssetsService.getAsset', () => {
 
 		expect(destroy).toHaveBeenCalled();
 	});
+
+	it.each([
+		['width', { width: 20000 }],
+		['height', { height: 20000 }],
+		['transforms resize', { transforms: [['resize', 20000, 20000]] as any }],
+		['transforms extend', { transforms: [['extend', 20000]] as any }],
+	])('rejects an output larger than ASSETS_TRANSFORM_IMAGE_MAX_DIMENSION (%s)', async (_, transformation) => {
+		storage.exists.mockImplementation(async (filename: string) => filename === 'original.png');
+
+		await expect(service.getAsset(FILE_ID, transformation)).rejects.toThrow(/exceeds the maximum/);
+
+		expect(storage.read).not.toHaveBeenCalled();
+	});
 });
 
 describe('AssetsService.getAssetInfo', () => {

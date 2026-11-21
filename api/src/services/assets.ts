@@ -172,6 +172,16 @@ export class AssetsService {
 				);
 			}
 
+			// The requested output is just as costly as the source, so it gets the same limit
+			if (
+				TransformationUtils.getMaxOutputDimension(transforms, width, height) >
+				env['ASSETS_TRANSFORM_IMAGE_MAX_DIMENSION']
+			) {
+				throw new IllegalAssetTransformation(
+					`Requested image size exceeds the maximum of ${env['ASSETS_TRANSFORM_IMAGE_MAX_DIMENSION']}px per side.`
+				);
+			}
+
 			const { queue, process } = sharp.counters();
 
 			if (queue + process > env['ASSETS_TRANSFORM_MAX_CONCURRENT']) {
