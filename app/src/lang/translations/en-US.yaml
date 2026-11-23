@@ -1686,6 +1686,10 @@ interfaces:
     description: Enter and preview markdown
     edit: Edit
     preview: Preview
+    rich_text: Rich text
+    markdown_mode: Markdown
+    rich_text_unavailable: This content uses formatting the visual editor can't show. Editing in Markdown.
+    link_url: Link URL
     editorFont: Editor Font
     previewFont: Preview Font
     customSyntax: Custom Blocks

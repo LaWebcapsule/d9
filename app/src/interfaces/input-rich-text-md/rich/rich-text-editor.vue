@@ -249,6 +249,12 @@ defineExpose({ run, isActive, insertImage, getSelectedLink, focus, clear, pasteH
 	line-height: 24px;
 }
 
+.rich-text-editor :deep(.ProseMirror li > p),
+.rich-text-editor :deep(.ProseMirror th > p),
+.rich-text-editor :deep(.ProseMirror td > p) {
+	margin: 0;
+}
+
 .rich-text-editor :deep(.ProseMirror a) {
 	color: var(--primary-125);
 	text-decoration: none;

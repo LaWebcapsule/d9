@@ -1,15 +1,22 @@
 <template>
-	<div ref="markdownInterface" class="interface-input-rich-text-md" :class="[view[0], { disabled }]">
+	<div ref="markdownInterface" class="interface-input-rich-text-md" :class="[viewClass, { disabled }]">
 		<div class="toolbar">
-			<template v-if="view[0] !== 'preview'">
+			<template v-if="viewClass !== 'preview'">
 				<v-menu
 					v-if="toolbar?.includes('heading')"
 					show-arrow
 					placement="bottom-start"
-					:class="[{ active: view[0] !== 'preview' }]"
+					:class="[{ active: viewClass !== 'preview' }]"
 				>
 					<template #activator="{ toggle }">
-						<v-button v-tooltip="t('wysiwyg_options.heading')" :disabled="disabled" small icon @click="toggle">
+						<v-button
+							v-tooltip="t('wysiwyg_options.heading')"
+							:class="{ active: isActive('heading') }"
+							:disabled="disabled"
+							small
+							icon
+							@click="toggle"
+						>
 							<v-icon name="format_size" />
 						</v-button>
 					</template>
@@ -24,6 +31,7 @@
 				<v-button
 					v-if="toolbar?.includes('bold')"
 					v-tooltip="t('wysiwyg_options.bold') + ' - ' + translateShortcut(['meta', 'b'])"
+					:class="{ active: isActive('bold') }"
 					:disabled="disabled"
 					small
 					icon
@@ -34,6 +42,7 @@
 				<v-button
 					v-if="toolbar?.includes('italic')"
 					v-tooltip="t('wysiwyg_options.italic') + ' - ' + translateShortcut(['meta', 'i'])"
+					:class="{ active: isActive('italic') }"
 					:disabled="disabled"
 					small
 					icon
@@ -44,6 +53,7 @@
 				<v-button
 					v-if="toolbar?.includes('strikethrough')"
 					v-tooltip="t('wysiwyg_options.strikethrough') + ' - ' + translateShortcut(['meta', 'alt', 'd'])"
+					:class="{ active: isActive('strikethrough') }"
 					:disabled="disabled"
 					small
 					icon
@@ -54,6 +64,7 @@
 				<v-button
 					v-if="toolbar?.includes('bullist')"
 					v-tooltip="t('wysiwyg_options.bullist')"
+					:class="{ active: isActive('listBulleted') }"
 					:disabled="disabled"
 					small
 					icon
@@ -64,6 +75,7 @@
 				<v-button
 					v-if="toolbar?.includes('numlist')"
 					v-tooltip="t('wysiwyg_options.numlist')"
+					:class="{ active: isActive('listNumbered') }"
 					:disabled="disabled"
 					small
 					icon
@@ -74,6 +86,7 @@
 				<v-button
 					v-if="toolbar?.includes('blockquote')"
 					v-tooltip="t('wysiwyg_options.blockquote') + ' - ' + translateShortcut(['meta', 'alt', 'q'])"
+					:class="{ active: isActive('blockquote') }"
 					:disabled="disabled"
 					small
 					icon
@@ -84,6 +97,7 @@
 				<v-button
 					v-if="toolbar?.includes('code')"
 					v-tooltip="t('wysiwyg_options.codeblock') + ' - ' + translateShortcut(['meta', 'alt', 'c'])"
+					:class="{ active: isActive('code') }"
 					:disabled="disabled"
 					small
 					icon
@@ -91,8 +105,37 @@
 				>
 					<v-icon name="code" />
 				</v-button>
+				<v-menu
+					v-if="toolbar?.includes('link') && mode === 'rich'"
+					v-model="linkMenuOpen"
+					show-arrow
+					:close-on-content-click="false"
+				>
+					<template #activator>
+						<v-button
+							v-tooltip="t('wysiwyg_options.link') + ' - ' + translateShortcut(['meta', 'k'])"
+							:class="{ active: isActive('link') }"
+							:disabled="disabled"
+							small
+							icon
+							@click="edit('link')"
+						>
+							<v-icon name="insert_link" />
+						</v-button>
+					</template>
+
+					<div class="link-options">
+						<div class="field full">
+							<p class="type-label">{{ t('interfaces.input-rich-text-md.link_url') }}</p>
+							<v-input v-model="linkHref" autofocus placeholder="https://" @keydown.enter.prevent="confirmLink" />
+						</div>
+						<div class="field full">
+							<v-button full-width @click="confirmLink">{{ t('done') }}</v-button>
+						</div>
+					</div>
+				</v-menu>
 				<v-button
-					v-if="toolbar?.includes('link')"
+					v-else-if="toolbar?.includes('link')"
 					v-tooltip="t('wysiwyg_options.link') + ' - ' + translateShortcut(['meta', 'k'])"
 					:disabled="disabled"
 					small
@@ -104,7 +147,14 @@
 
 				<v-menu v-if="toolbar?.includes('table')" show-arrow :close-on-content-click="false">
 					<template #activator="{ toggle }">
-						<v-button v-tooltip="t('wysiwyg_options.table')" :disabled="disabled" small icon @click="toggle">
+						<v-button
+							v-tooltip="t('wysiwyg_options.table')"
+							:class="{ active: isActive('table') }"
+							:disabled="disabled"
+							small
+							icon
+							@click="toggle"
+						>
 							<v-icon name="table_chart" />
 						</v-button>
 					</template>
@@ -147,22 +197,24 @@
 					<v-icon name="insert_photo" />
 				</v-button>
 
-				<v-button
-					v-for="custom in customSyntax"
-					:key="custom.name"
-					v-tooltip="custom.name"
-					:disabled="disabled"
-					small
-					icon
-					@click="edit('custom', custom)"
-				>
-					<v-icon :name="custom.icon" />
-				</v-button>
+				<template v-if="mode === 'markdown'">
+					<v-button
+						v-for="custom in customSyntax"
+						:key="custom.name"
+						v-tooltip="custom.name"
+						:disabled="disabled"
+						small
+						icon
+						@click="edit('custom', custom)"
+					>
+						<v-icon :name="custom.icon" />
+					</v-button>
+				</template>
 			</template>
 
 			<div class="spacer"></div>
 
-			<v-item-group v-model="view" class="view" mandatory rounded>
+			<v-item-group v-if="mode === 'markdown'" v-model="view" class="view" mandatory rounded>
 				<v-button x-small value="editor" :class="[{ active: view[0] !== 'preview' }]">
 					{{ t('interfaces.input-rich-text-md.edit') }}
 				</v-button>
@@ -170,9 +222,32 @@
 					{{ t('interfaces.input-rich-text-md.preview') }}
 				</v-button>
 			</v-item-group>
+
+			<v-item-group v-if="modeSwitchShown" :model-value="[mode]" class="view mode" mandatory rounded>
+				<v-button x-small value="rich" :class="[{ active: mode === 'rich' }]" @click="switchMode('rich')">
+					{{ t('interfaces.input-rich-text-md.rich_text') }}
+				</v-button>
+				<v-button x-small value="markdown" :class="[{ active: mode === 'markdown' }]" @click="switchMode('markdown')">
+					{{ t('interfaces.input-rich-text-md.markdown_mode') }}
+				</v-button>
+			</v-item-group>
 		</div>
 
-		<div ref="codemirrorEl"></div>
+		<v-notice v-if="richTextUnavailable" type="info" class="rich-text-unavailable">
+			{{ t('interfaces.input-rich-text-md.rich_text_unavailable') }}
+		</v-notice>
+
+		<rich-text-editor
+			v-if="mode === 'rich'"
+			ref="richEditor"
+			:value="value"
+			:disabled="disabled"
+			:placeholder="placeholder"
+			:font="editorFont"
+			@input="$emit('input', $event)"
+		/>
+
+		<div v-show="mode === 'markdown'" ref="codemirrorEl"></div>
 		<template v-if="softLength">
 			<span
 				class="remaining"
@@ -187,7 +262,7 @@
 		<div
 			v-md="markdownString"
 			class="preview-box"
-			:style="view[0] === 'preview' ? 'display:block' : 'display:none'"
+			:style="viewClass === 'preview' ? 'display:block' : 'display:none'"
 		></div>
 
 		<v-dialog
@@ -210,20 +285,38 @@
 
 <script lang="ts">
 import { useI18n } from 'vue-i18n';
-import { defineComponent, computed, ref, onMounted, watch, reactive, PropType } from 'vue';
+import { defineComponent, computed, ref, onMounted, watch, reactive, nextTick, PropType } from 'vue';
 
 import CodeMirror from 'codemirror';
 import 'codemirror/mode/markdown/markdown';
 import 'codemirror/addon/display/placeholder.js';
 
 import { applyEdit, CustomSyntax, Alteration } from './edits';
+import {
+	EditorMode,
+	EditorModeOption,
+	canSwitchTo,
+	readStoredMode,
+	resolveInitialMode,
+	showModeSwitch,
+	writeStoredMode,
+} from './editor-mode';
+import { isRepresentable } from './rich/markdown';
+import RichTextEditor from './rich/rich-text-editor.vue';
 import { getPublicURL } from '@/utils/get-root-path';
 import { useShortcut } from '@/composables/use-shortcut';
 import { translateShortcut } from '@/utils/translate-shortcut';
 import { percentage } from '@/utils/percentage';
 import { useWindowSize } from '@/composables/use-window-size';
 
+/**
+ * Alterations whose shortcut Tiptap's own keymap already applies while the Rich text editor has focus;
+ * running them again from the interface shortcut would toggle them straight back.
+ */
+const RICH_KEYMAP_ALTERATIONS: Alteration[] = ['bold', 'italic', 'code', 'heading'];
+
 export default defineComponent({
+	components: { RichTextEditor },
 	props: {
 		value: {
 			type: String,
@@ -279,6 +372,10 @@ export default defineComponent({
 			type: String,
 			default: undefined,
 		},
+		editorMode: {
+			type: String as PropType<EditorModeOption>,
+			default: 'rich-and-markdown',
+		},
 	},
 	emits: ['input'],
 	setup(props, { emit }) {
@@ -292,6 +389,23 @@ export default defineComponent({
 		let previousContent: string | null = null;
 
 		const view = ref(['editor']);
+
+		const richEditor = ref<InstanceType<typeof RichTextEditor>>();
+
+		const initialMode = resolveInitialMode({
+			option: props.editorMode,
+			stored: readStoredMode(),
+			representable: isRepresentable(props.value ?? ''),
+		});
+
+		const mode = ref<EditorMode>(initialMode.mode);
+		const richTextUnavailable = ref(initialMode.fellBack);
+		const modeSwitchShown = computed(() => showModeSwitch(props.editorMode));
+
+		const viewClass = computed(() => (mode.value === 'markdown' && view.value[0] === 'preview' ? 'preview' : 'editor'));
+
+		const linkMenuOpen = ref(false);
+		const linkHref = ref('');
 
 		const imageDialogOpen = ref(false);
 
@@ -390,18 +504,18 @@ export default defineComponent({
 		});
 
 		const percRemaining = computed(() => percentage(count.value, props.softLength) ?? 100);
-		useShortcut('meta+b', () => edit('bold'), markdownInterface);
-		useShortcut('meta+i', () => edit('italic'), markdownInterface);
-		useShortcut('meta+k', () => edit('link'), markdownInterface);
-		useShortcut('meta+alt+d', () => edit('strikethrough'), markdownInterface);
-		useShortcut('meta+alt+q', () => edit('blockquote'), markdownInterface);
-		useShortcut('meta+alt+c', () => edit('code'), markdownInterface);
-		useShortcut('meta+alt+1', () => edit('heading', { level: 1 }), markdownInterface);
-		useShortcut('meta+alt+2', () => edit('heading', { level: 2 }), markdownInterface);
-		useShortcut('meta+alt+3', () => edit('heading', { level: 3 }), markdownInterface);
-		useShortcut('meta+alt+4', () => edit('heading', { level: 4 }), markdownInterface);
-		useShortcut('meta+alt+5', () => edit('heading', { level: 5 }), markdownInterface);
-		useShortcut('meta+alt+6', () => edit('heading', { level: 6 }), markdownInterface);
+		useShortcut('meta+b', () => shortcut('bold'), markdownInterface);
+		useShortcut('meta+i', () => shortcut('italic'), markdownInterface);
+		useShortcut('meta+k', () => shortcut('link'), markdownInterface);
+		useShortcut('meta+alt+d', () => shortcut('strikethrough'), markdownInterface);
+		useShortcut('meta+alt+q', () => shortcut('blockquote'), markdownInterface);
+		useShortcut('meta+alt+c', () => shortcut('code'), markdownInterface);
+		useShortcut('meta+alt+1', () => shortcut('heading', { level: 1 }), markdownInterface);
+		useShortcut('meta+alt+2', () => shortcut('heading', { level: 2 }), markdownInterface);
+		useShortcut('meta+alt+3', () => shortcut('heading', { level: 3 }), markdownInterface);
+		useShortcut('meta+alt+4', () => shortcut('heading', { level: 4 }), markdownInterface);
+		useShortcut('meta+alt+5', () => shortcut('heading', { level: 5 }), markdownInterface);
+		useShortcut('meta+alt+6', () => shortcut('heading', { level: 6 }), markdownInterface);
 
 		return {
 			t,
@@ -419,25 +533,90 @@ export default defineComponent({
 			markdownInterface,
 			editFamily,
 			previewFamily,
+			richEditor,
+			mode,
+			modeSwitchShown,
+			richTextUnavailable,
+			viewClass,
+			switchMode,
+			isActive,
+			linkMenuOpen,
+			linkHref,
+			confirmLink,
 		};
 
 		function onImageUpload(image: any) {
-			if (!codemirror) return;
-
 			let url = getPublicURL() + `assets/` + image.id;
 
 			if (props.imageToken) {
 				url += '?access_token=' + props.imageToken;
 			}
 
-			codemirror.replaceSelection(`![${codemirror.getSelection()}](${url})`);
+			if (mode.value === 'rich') {
+				richEditor.value?.insertImage(url, '');
+			} else if (codemirror) {
+				codemirror.replaceSelection(`![${codemirror.getSelection()}](${url})`);
+			}
 
 			imageDialogOpen.value = false;
 		}
 
 		function edit(type: Alteration, options?: Record<string, any>) {
+			if (mode.value === 'rich') {
+				if (props.disabled) return;
+				if (type === 'link') openLinkMenu();
+				else richEditor.value?.run(type, options);
+				return;
+			}
+
 			if (codemirror) {
 				applyEdit(codemirror, type, options);
+			}
+		}
+
+		function shortcut(type: Alteration, options?: Record<string, any>) {
+			if (
+				mode.value === 'rich' &&
+				RICH_KEYMAP_ALTERATIONS.includes(type) &&
+				richEditor.value?.$el.contains(document.activeElement)
+			) {
+				return;
+			}
+
+			edit(type, options);
+		}
+
+		function isActive(type: Alteration, options?: Record<string, any>): boolean {
+			return mode.value === 'rich' && !!richEditor.value?.isActive(type, options);
+		}
+
+		function openLinkMenu() {
+			linkHref.value = richEditor.value?.getSelectedLink() ?? '';
+			linkMenuOpen.value = true;
+		}
+
+		function confirmLink() {
+			richEditor.value?.run('link', { href: linkHref.value.trim() });
+			linkMenuOpen.value = false;
+		}
+
+		function switchMode(target: EditorMode) {
+			if (target === mode.value) return;
+
+			const representable = target === 'rich' ? isRepresentable(props.value ?? '') : true;
+
+			if (!canSwitchTo(target, { option: props.editorMode, representable })) {
+				if (target === 'rich') richTextUnavailable.value = true;
+				return;
+			}
+
+			mode.value = target;
+			writeStoredMode(target);
+
+			if (target === 'rich') {
+				richTextUnavailable.value = false;
+			} else {
+				nextTick(() => codemirror?.refresh());
 			}
 		}
 	},
@@ -700,6 +879,9 @@ textarea {
 }
 
 .toolbar {
+	--v-button-background-color-active: var(--border-normal);
+	--v-button-color-active: var(--foreground-normal);
+
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
@@ -726,6 +908,11 @@ textarea {
 	}
 }
 
+.rich-text-unavailable {
+	margin: 12px 20px 0;
+}
+
+.link-options,
 .table-options {
 	@include form-grid;
 
@@ -737,5 +924,9 @@ textarea {
 	.v-input {
 		min-width: 100px;
 	}
+}
+
+.link-options .v-input {
+	min-width: 240px;
 }
 </style>
