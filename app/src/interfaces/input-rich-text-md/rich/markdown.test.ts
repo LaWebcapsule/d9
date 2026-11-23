@@ -57,3 +57,33 @@ test('plain text with markdown-special characters renders literally', () => {
 
 	expect(marked(md)).toContain('# not a heading *x* a_b [y] {{ a_b }}');
 });
+
+const paragraphs = (...texts: string[]) => ({
+	type: 'doc',
+	content: texts.map((text) => ({ type: 'paragraph', content: [{ type: 'text', text }] })),
+});
+
+describe('bare URLs typed as plain text are saved as working links', () => {
+	test.each([
+		['URL at paragraph end', 'More: https://x.com/my_page', 'https://x.com/my_page', 'https://x.com/my_page'],
+		['URL mid-paragraph', 'See https://x.com/my_page for more', 'https://x.com/my_page', 'https://x.com/my_page'],
+		['www URL', 'Go to www.example.com/a_b', 'http://www.example.com/a_b', 'www.example.com/a_b'],
+		['email', 'Mail first_last@example.com', 'mailto:first_last@example.com', 'first_last@example.com'],
+	])('%s', (_name, text, href, linkText) => {
+		const html = marked(richToMarkdown(paragraphs(text)), { mangle: false });
+		const anchor = new DOMParser().parseFromString(html, 'text/html').querySelector('a');
+
+		expect(html).not.toContain('%5C');
+		expect(html).not.toContain('\\');
+		expect(anchor?.getAttribute('href')).toBe(href);
+		expect(anchor?.textContent).toBe(linkText);
+	});
+
+	test('text a URL is only part of stays as typed', () => {
+		const html = marked(richToMarkdown(paragraphs('See https://x.com/my_page, then *stars* and a_b')), { mangle: false });
+
+		expect(new DOMParser().parseFromString(html, 'text/html').body.textContent?.trim()).toBe(
+			'See https://x.com/my_page, then *stars* and a_b'
+		);
+	});
+});

@@ -1,6 +1,6 @@
 import { Editor, type JSONContent } from '@tiptap/core';
 import { marked } from 'marked';
-import { createRichExtensions } from './extensions';
+import { createRichExtensions, serializeMarkdown } from './extensions';
 
 function withEditor<T>(content: string | JSONContent, contentType: 'markdown' | 'json', fn: (editor: Editor) => T): T {
 	const editor = new Editor({ extensions: createRichExtensions(), content, contentType });
@@ -17,7 +17,7 @@ export function markdownToRich(markdown: string): JSONContent {
 }
 
 export function richToMarkdown(doc: JSONContent): string {
-	return withEditor(doc, 'json', (editor) => editor.getMarkdown());
+	return withEditor(doc, 'json', serializeMarkdown);
 }
 
 /**

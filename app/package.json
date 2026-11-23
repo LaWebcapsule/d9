@@ -124,6 +124,7 @@
 		"happy-dom": "21.0.4",
 		"html-entities": "2.3.3",
 		"jsonlint-mod": "1.7.6",
+		"linkifyjs": "4.4.0",
 		"lodash": "catalog:",
 		"maplibre-gl": "6.11.2",
 		"mime": "3.0.0",

@@ -1016,6 +1016,9 @@ importers:
       jsonlint-mod:
         specifier: 1.7.6
         version: 1.7.6
+      linkifyjs:
+        specifier: 4.4.0
+        version: 4.4.0
       lodash:
         specifier: 'catalog:'
         version: 4.18.1

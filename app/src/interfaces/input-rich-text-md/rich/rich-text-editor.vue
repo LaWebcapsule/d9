@@ -4,9 +4,9 @@
 
 <script setup lang="ts">
 import { computed, watch } from 'vue';
-import { EditorContent, useEditor } from '@tiptap/vue-3';
+import { EditorContent, useEditor, type Editor } from '@tiptap/vue-3';
 import type { Alteration } from '../edits';
-import { createRichExtensions } from './extensions';
+import { createRichExtensions, serializeMarkdown } from './extensions';
 
 const props = withDefaults(
 	defineProps<{
@@ -23,7 +23,7 @@ const emit = defineEmits<{ (e: 'input', value: string): void }>();
 const family = computed(() => `var(--family-${props.font})`);
 
 // Tiptap's trailing-node extension appends an empty paragraph, which serializes as trailing newlines
-const serialize = (instance: { getMarkdown(): string }) => instance.getMarkdown().trimEnd();
+const serialize = (instance: Editor) => serializeMarkdown(instance).trimEnd();
 
 let lastValue = (props.value ?? '').trimEnd();
 
