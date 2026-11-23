@@ -4,7 +4,10 @@ import { describe, expect, test } from 'vitest';
 import RichTextEditor from './rich-text-editor.vue';
 
 const mountEditor = (props: Record<string, any> = {}) =>
-	mount(RichTextEditor, { props: { value: '', disabled: false, font: 'sans-serif', ...props }, attachTo: document.body });
+	mount(RichTextEditor, {
+		props: { value: '', disabled: false, font: 'sans-serif', ...props },
+		attachTo: document.body,
+	});
 
 test('loading a value does not emit', async () => {
 	const w = mountEditor({ value: '# Hi\n\n**there**' });

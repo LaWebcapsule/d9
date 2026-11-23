@@ -65,7 +65,11 @@ function linkifyTextNode(node: JSONContent): JSONContent[] {
 		pushText(text.slice(position, match.start));
 
 		const href =
-			match.type === 'email' ? `mailto:${match.value}` : match.value.startsWith('www.') ? `http://${match.value}` : match.value;
+			match.type === 'email'
+				? `mailto:${match.value}`
+				: match.value.startsWith('www.')
+				? `http://${match.value}`
+				: match.value;
 
 		pushText(match.value, [...(node.marks ?? []), { type: 'link', attrs: { href } }]);
 		position = match.end;
@@ -84,7 +88,9 @@ export function linkifyBareUrls(node: JSONContent): JSONContent {
 
 	return {
 		...node,
-		content: node.content.flatMap((child) => (child.type === 'text' ? linkifyTextNode(child) : [linkifyBareUrls(child)])),
+		content: node.content.flatMap((child) =>
+			child.type === 'text' ? linkifyTextNode(child) : [linkifyBareUrls(child)]
+		),
 	};
 }
 

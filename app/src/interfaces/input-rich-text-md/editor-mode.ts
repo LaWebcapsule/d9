@@ -39,10 +39,7 @@ export function resolveInitialMode(args: {
 	return isRepresentable() ? { mode: 'rich', fellBack: false } : { mode: 'markdown', fellBack: true };
 }
 
-export function canSwitchTo(
-	target: EditorMode,
-	args: { option: EditorModeOption; representable: boolean }
-): boolean {
+export function canSwitchTo(target: EditorMode, args: { option: EditorModeOption; representable: boolean }): boolean {
 	const { option, representable } = args;
 
 	if (target === 'rich') return option !== 'markdown-only' && representable;

@@ -89,6 +89,7 @@ const richEditorStub = ({ link = null }: { link?: string | null } = {}) => {
 				getSelectedLink: () => link,
 				focus: () => undefined,
 			});
+
 			return () => h('div', { class: 'rich-text-editor-stub' });
 		},
 	});

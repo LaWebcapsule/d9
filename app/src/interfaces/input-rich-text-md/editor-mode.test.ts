@@ -1,5 +1,12 @@
 import { afterEach, describe, expect, test, vi } from 'vitest';
-import { canSwitchTo, MODE_STORAGE_KEY, readStoredMode, resolveInitialMode, showModeSwitch, writeStoredMode } from './editor-mode';
+import {
+	canSwitchTo,
+	MODE_STORAGE_KEY,
+	readStoredMode,
+	resolveInitialMode,
+	showModeSwitch,
+	writeStoredMode,
+} from './editor-mode';
 
 describe('resolveInitialMode', () => {
 	test.each([
@@ -31,13 +38,16 @@ describe('canSwitchTo', () => {
 	test('rich refused when content not representable', () => {
 		expect(canSwitchTo('rich', { option: 'rich-and-markdown', representable: false })).toBe(false);
 	});
+
 	test('rich allowed when representable', () => {
 		expect(canSwitchTo('rich', { option: 'rich-and-markdown', representable: true })).toBe(true);
 	});
+
 	test('markdown always allowed except rich-only', () => {
 		expect(canSwitchTo('markdown', { option: 'rich-and-markdown', representable: true })).toBe(true);
 		expect(canSwitchTo('markdown', { option: 'rich-only', representable: true })).toBe(false);
 	});
+
 	test('nothing allowed for markdown-only except markdown', () => {
 		expect(canSwitchTo('rich', { option: 'markdown-only', representable: true })).toBe(false);
 	});
@@ -50,20 +60,31 @@ test('showModeSwitch', () => {
 });
 
 describe('stored mode', () => {
-	afterEach(() => { vi.restoreAllMocks(); localStorage.clear(); });
+	afterEach(() => {
+		vi.restoreAllMocks();
+		localStorage.clear();
+	});
 
 	test('round-trips', () => {
 		writeStoredMode('markdown');
 		expect(localStorage.getItem(MODE_STORAGE_KEY)).toBe('markdown');
 		expect(readStoredMode()).toBe('markdown');
 	});
+
 	test('invalid value reads as null', () => {
 		localStorage.setItem(MODE_STORAGE_KEY, 'bogus');
 		expect(readStoredMode()).toBeNull();
 	});
+
 	test('storage throwing is swallowed', () => {
-		vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => { throw new Error('blocked'); });
-		vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new Error('blocked'); });
+		vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+			throw new Error('blocked');
+		});
+
+		vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+			throw new Error('blocked');
+		});
+
 		expect(readStoredMode()).toBeNull();
 		expect(() => writeStoredMode('rich')).not.toThrow();
 	});

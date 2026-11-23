@@ -80,7 +80,9 @@ describe('bare URLs typed as plain text are saved as working links', () => {
 	});
 
 	test('text a URL is only part of stays as typed', () => {
-		const html = marked(richToMarkdown(paragraphs('See https://x.com/my_page, then *stars* and a_b')), { mangle: false });
+		const html = marked(richToMarkdown(paragraphs('See https://x.com/my_page, then *stars* and a_b')), {
+			mangle: false,
+		});
 
 		expect(new DOMParser().parseFromString(html, 'text/html').body.textContent?.trim()).toBe(
 			'See https://x.com/my_page, then *stars* and a_b'
@@ -106,5 +108,7 @@ test.each([
 ])('heading text %j keeps its trailing #', (text, level) => {
 	const doc = { type: 'doc', content: [{ type: 'heading', attrs: { level }, content: [{ type: 'text', text }] }] };
 
-	expect(marked(richToMarkdown(doc), { mangle: false }).trim()).toMatch(new RegExp(`^<h${level}[^>]*>${text}</h${level}>$`));
+	expect(marked(richToMarkdown(doc), { mangle: false }).trim()).toMatch(
+		new RegExp(`^<h${level}[^>]*>${text}</h${level}>$`)
+	);
 });
