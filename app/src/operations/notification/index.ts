@@ -78,6 +78,9 @@ export default defineOperationApp({
 			meta: {
 				width: 'full',
 				interface: 'input-rich-text-md',
+				options: {
+					editorMode: 'markdown-only',
+				},
 			},
 		},
 	],
