@@ -1,20 +1,22 @@
-import type { Accountability, PermissionsAction, SchemaOverview } from '@wbce-d9/types';
-import { stableStringify } from '@wbce-d9/utils';
+import type { Accountability, FieldFilter, SchemaOverview } from '@wbce-d9/types';
+import { stableStringify, validatePayload } from '@wbce-d9/utils';
+import Joi from 'joi';
 import type { Knex } from 'knex';
-import { isPlainObject } from 'lodash-es';
 import { webcrypto } from 'node:crypto';
-import { getHelpers } from '../database/helpers/index.js';
-import { getDatabaseClient } from '../database/index.js';
+import { ForbiddenException } from '../exceptions/forbidden.js';
 import { InvalidPayloadException } from '../exceptions/invalid-payload.js';
 import type { Item, PrimaryKey } from '../types/index.js';
-import { getColumn } from './get-column.js';
 
 /**
- * Conditions the current field values have to meet for a mutation to be applied, by field. The only
- * operator is `_hash`: the hash (see `hashValue` in @wbce-d9/utils) of the value the client based its
- * edits on.
+ * Condition for a single field: `_sha256` is the digest (see `sha256Digest` in @wbce-d9/utils) of the value the
+ * client based its edits on, `_eq` the value itself as the API returns it
  */
-export type OnlyIf = Record<string, { _hash: string }>;
+export type OnlyIfCondition = { _sha256: string } | { _eq: unknown };
+
+/**
+ * Conditions the current field values have to meet for a mutation to be applied, by field
+ */
+export type OnlyIf = Record<string, OnlyIfCondition>;
 
 export type Conflict = {
 	collection: string;
@@ -35,23 +37,24 @@ export type Conflict = {
 export const META_KEY = '$__meta';
 
 /**
- * Fields that are set by the system or never returned as-is, so they can't be compared
+ * Fields that are never returned as-is, so they can't be compared
  */
-const UNCHECKED_SPECIALS = [
-	'conceal',
-	'hash',
-	'date-created',
-	'date-updated',
-	'user-created',
-	'user-updated',
-	'role-created',
-	'role-updated',
-];
+const UNCHECKED_SPECIALS = ['conceal', 'hash'];
+
+const onlyIfSchema = Joi.object().pattern(
+	Joi.string(),
+	Joi.object({
+		_sha256: Joi.string().pattern(/^[0-9a-f]{64}$/),
+		_eq: Joi.any(),
+	})
+		.length(1)
+		.required()
+);
 
 /**
- * Same result as `hashValue` in @wbce-d9/utils, which the clients use, without blocking the event loop
+ * Same result as `sha256Digest` in @wbce-d9/utils, which the clients use, without blocking the event loop
  */
-export async function hashValue(value: unknown): Promise<string> {
+export async function sha256DigestAsync(value: unknown): Promise<string> {
 	const digest = await webcrypto.subtle.digest('SHA-256', Buffer.from(stableStringify(value)));
 	return Buffer.from(digest).toString('hex');
 }
@@ -64,13 +67,9 @@ export function extractOnlyIf<T extends Partial<Item>>(data: T): { data: T; only
 
 	const { [META_KEY]: meta, ...rest } = data;
 
-	assertMeta(meta, 'onlyIf');
+	const { onlyIf } = validateMeta(meta, { onlyIf: onlyIfSchema });
 
-	if (meta['onlyIf'] === undefined) return { data: rest as T, onlyIf: null };
-
-	assertOnlyIf(meta['onlyIf'], `${META_KEY}.onlyIf`);
-
-	return { data: rest as T, onlyIf: meta['onlyIf'] };
+	return { data: rest as T, onlyIf: (onlyIf as OnlyIf | undefined) ?? null };
 }
 
 /**
@@ -79,59 +78,23 @@ export function extractOnlyIf<T extends Partial<Item>>(data: T): { data: T; only
 export function extractDeleteOnlyIf(alterations: Record<string, any>): Record<string, OnlyIf> | null {
 	if (!(META_KEY in alterations)) return null;
 
-	const meta = alterations[META_KEY];
+	const { deleteOnlyIf } = validateMeta(alterations[META_KEY], {
+		deleteOnlyIf: Joi.object().pattern(Joi.string(), onlyIfSchema.required()),
+	});
 
-	assertMeta(meta, 'deleteOnlyIf');
-
-	if (meta['deleteOnlyIf'] === undefined) return null;
-
-	if (!isPlainObject(meta['deleteOnlyIf'])) {
-		throw new InvalidPayloadException(`"${META_KEY}.deleteOnlyIf" has to be an object of primary keys to conditions.`);
-	}
-
-	const deleteOnlyIf = meta['deleteOnlyIf'] as Record<string, unknown>;
-
-	for (const [key, onlyIf] of Object.entries(deleteOnlyIf)) {
-		assertOnlyIf(onlyIf, `${META_KEY}.deleteOnlyIf.${key}`);
-	}
-
-	return deleteOnlyIf as Record<string, OnlyIf>;
+	return (deleteOnlyIf as Record<string, OnlyIf> | undefined) ?? null;
 }
 
-function assertMeta(meta: unknown, allowedKey: string): asserts meta is Record<string, unknown> {
-	if (!isPlainObject(meta) || Object.keys(meta as object).some((key) => key !== allowedKey)) {
-		throw new InvalidPayloadException(`"${META_KEY}" has to be an object that only contains "${allowedKey}".`);
-	}
-}
+function validateMeta(meta: unknown, keys: Record<string, Joi.Schema>): Record<string, unknown> {
+	const { error } = Joi.object(keys).required().validate(meta);
 
-function assertOnlyIf(onlyIf: unknown, path: string): asserts onlyIf is OnlyIf {
-	const isHashCondition = (condition: unknown) =>
-		isPlainObject(condition) &&
-		Object.keys(condition as object).length === 1 &&
-		typeof (condition as Record<string, unknown>)['_hash'] === 'string';
-
-	if (!isPlainObject(onlyIf) || !Object.values(onlyIf as object).every(isHashCondition)) {
+	if (error) {
 		throw new InvalidPayloadException(
-			`"${path}" has to be an object of field names to conditions. The only supported operator is "_hash".`
+			`Invalid "${META_KEY}": ${error.message}. Conditions are objects of field names to a single "_sha256" or "_eq" operator.`
 		);
 	}
-}
 
-/**
- * Whether the permissions allow the action on every item of the collection
- */
-export function hasUnfilteredAccess(
-	accountability: Accountability | null,
-	collection: string,
-	action: PermissionsAction
-): boolean {
-	if (!accountability || accountability.admin === true) return true;
-
-	const permission = accountability.permissions?.find(
-		(permission) => permission.collection === collection && permission.action === action
-	);
-
-	return !!permission && Object.keys(permission.permissions ?? {}).length === 0;
+	return meta as Record<string, unknown>;
 }
 
 type DetectConflictsOptions = {
@@ -142,6 +105,7 @@ type DetectConflictsOptions = {
 	keys: PrimaryKey[];
 	onlyIf: OnlyIf;
 	action: 'update' | 'delete';
+	emitEvents?: boolean | undefined;
 };
 
 /**
@@ -150,7 +114,7 @@ type DetectConflictsOptions = {
  * transaction finishes, so nobody can change them between the check and the write.
  */
 export async function detectConflicts(options: DetectConflictsOptions): Promise<Conflict[]> {
-	const { knex, schema, accountability, collection, keys, onlyIf, action } = options;
+	const { schema, collection, keys, onlyIf, action } = options;
 
 	if (keys.length === 0) return [];
 
@@ -163,27 +127,17 @@ export async function detectConflicts(options: DetectConflictsOptions): Promise<
 		return !fieldInfo.special?.some((special) => UNCHECKED_SPECIALS.includes(special));
 	});
 
-	const rows = await readAndLockRows(knex, schema, collection, keys, fields);
-	const canRead = await getReadAccess({ knex, schema, accountability, collection, keys });
-
+	const rows = await readAndLockItems({ ...options, fields });
 	const conflicts: Conflict[] = [];
 
-	for (const key of keys) {
-		const row = rows.find((row) => String(row[primaryKeyField]) === String(key));
+	for (const row of rows) {
+		const key = keys.find((key) => String(key) === String(row[primaryKeyField])) ?? row[primaryKeyField];
 
-		if (!row) {
-			// Deleting an item that is already gone is fine
-			if (action === 'update') conflicts.push({ collection, key, action, type: 'deleted' });
-			continue;
-		}
+		// Fields the user can't read are not part of the row: the result would tell if a guessed value is right
+		const readableFields = fields.filter((field) => field in row);
 
-		for (const field of fields) {
-			// Fields the user can't read are not compared: the result would tell if a guessed value is right
-			if (!canRead(key, field)) continue;
-
-			if ((await hashValue(row[field])) !== onlyIf[field]!._hash) {
-				conflicts.push({ collection, key, action, type: 'changed', field, current: row[field] });
-			}
+		for (const field of await getUnmetConditions(row, readableFields, onlyIf)) {
+			conflicts.push({ collection, key, action, type: 'changed', field, current: row[field] });
 		}
 	}
 
@@ -191,54 +145,39 @@ export async function detectConflicts(options: DetectConflictsOptions): Promise<
 }
 
 /**
- * Read the current values in API read format with the query that locks the rows. A separate read after
- * locking could return the values of an older snapshot (MySQL / MariaDB with REPEATABLE READ), when the
- * transaction already read something before, as is the case for nested items.
+ * Read the current values with the permissions and hooks of the user, with the query that locks the rows.
+ * A separate read after locking could return the values of an older snapshot (MySQL / MariaDB with
+ * REPEATABLE READ), when the transaction already read something before, as is the case for nested items.
+ * Items the user isn't allowed to read are left out.
  */
-async function readAndLockRows(
-	knex: Knex,
-	schema: SchemaOverview,
-	collection: string,
-	keys: PrimaryKey[],
-	fields: string[]
-): Promise<Item[]> {
-	const collectionInfo = schema.collections[collection]!;
-	const primaryKeyField = collectionInfo.primary;
-	const helpers = getHelpers(knex);
-	const client = getDatabaseClient(knex);
+async function readAndLockItems(options: DetectConflictsOptions & { fields: string[] }): Promise<Item[]> {
+	const { knex, schema, accountability, collection, keys, fields, emitEvents } = options;
 
-	const columns = [...new Set([primaryKeyField, ...fields])].map((field) =>
-		collectionInfo.fields[field]!.type.startsWith('geometry')
-			? helpers.st.asText(collection, field)
-			: getColumn(knex, collection, field, false, schema)
-	);
+	// Requesting a single field the user can't read would make the whole read fail
+	const readableFields = getReadableFields(accountability, collection, fields);
 
-	const query = knex.select(columns).from(collection).whereIn(primaryKeyField, keys);
+	if (readableFields.length === 0) return [];
 
-	// SQLite serializes writes on its own, Redshift doesn't support row locks
-	if (client !== 'sqlite' && client !== 'redshift') query.forUpdate();
+	const { ItemsService } = await import('../services/items.js');
+	const itemsService = new ItemsService(collection, { knex, schema, accountability });
 
-	const { PayloadService } = await import('../services/payload.js');
-	const payloadService = new PayloadService(collection, { knex, schema });
-
-	const rows: Item[] = await query;
-
-	return await payloadService.processValues('read', rows);
+	try {
+		return await itemsService.readMany(
+			keys,
+			// Oracle applies a limit by wrapping the query, which then can't lock rows anymore
+			{ fields: readableFields, limit: -1 },
+			// The primary key isn't requested, but needed to tell the rows apart
+			{ forUpdate: true, stripNonRequested: false, ...(emitEvents !== undefined && { emitEvents }) }
+		);
+	} catch (error) {
+		// No read access to the collection, nothing to compare
+		if (error instanceof ForbiddenException) return [];
+		throw error;
+	}
 }
 
-/**
- * Returns a function that tells if the user is allowed to read a field of one of the items
- */
-async function getReadAccess(context: {
-	knex: Knex;
-	schema: SchemaOverview;
-	accountability: Accountability | null;
-	collection: string;
-	keys: PrimaryKey[];
-}): Promise<(key: PrimaryKey, field: string) => boolean> {
-	const { knex, schema, accountability, collection, keys } = context;
-
-	if (!accountability || accountability.admin === true) return () => true;
+function getReadableFields(accountability: Accountability | null, collection: string, fields: string[]): string[] {
+	if (!accountability || accountability.admin === true) return fields;
 
 	const permission = accountability.permissions?.find(
 		(permission) => permission.collection === collection && permission.action === 'read'
@@ -246,21 +185,85 @@ async function getReadAccess(context: {
 
 	const allowedFields = permission?.fields ?? [];
 
-	if (allowedFields.length === 0) return () => false;
+	return allowedFields.includes('*') ? fields : fields.filter((field) => allowedFields.includes(field));
+}
 
-	const primaryKeyField = schema.collections[collection]!.primary;
-	const readableKeys = new Set<string>();
+/**
+ * Validate the current values against the conditions, the same way permission rules are validated
+ * against a payload. Returns the fields with a condition that isn't met.
+ */
+async function getUnmetConditions(row: Item, fields: string[], onlyIf: OnlyIf): Promise<string[]> {
+	if (fields.length === 0) return [];
 
-	try {
-		const { ItemsService } = await import('../services/items.js');
-		const itemsService = new ItemsService(collection, { knex, schema, accountability });
-		const rows = await itemsService.readMany(keys, { fields: [primaryKeyField] }, { emitEvents: false });
+	const digests: Record<string, string> = {};
+	const rules: FieldFilter[] = [];
 
-		for (const row of rows) readableKeys.add(String(row[primaryKeyField]));
-	} catch {
-		// No read access to the items
+	for (const field of fields) {
+		const condition = onlyIf[field]!;
+
+		// Plain values are compared by their digest too: the `_eq` of filter rules treats '5' and 5 as equal and
+		// doesn't support arrays
+		const expected = '_sha256' in condition ? condition._sha256 : await sha256DigestAsync(condition._eq);
+
+		digests[field] = await sha256DigestAsync(row[field]);
+		rules.push({ [field]: { _eq: expected } });
 	}
 
-	return (key, field) =>
-		readableKeys.has(String(key)) && (allowedFields.includes('*') || allowedFields.includes(field));
+	const errors = validatePayload({ _and: rules }, digests, { requireAll: true });
+
+	return errors.flatMap((error) => error.details.map((detail) => String(detail.path[0])));
+}
+
+/**
+ * Returns the keys of the items that don't exist anymore, when the user is allowed to know they were
+ * deleted: they can read the activity of the deletion. Anyone else could use the result to find out
+ * which items exist.
+ */
+export async function getDeletedKeys(context: {
+	knex: Knex;
+	schema: SchemaOverview;
+	accountability: Accountability | null;
+	collection: string;
+	keys: PrimaryKey[];
+	emitEvents?: boolean | undefined;
+}): Promise<PrimaryKey[]> {
+	const { knex, schema, accountability, collection, keys, emitEvents } = context;
+	const primaryKeyField = schema.collections[collection]!.primary;
+
+	const existingKeys = (await knex.select(primaryKeyField).from(collection).whereIn(primaryKeyField, keys)).map((row) =>
+		String(row[primaryKeyField])
+	);
+
+	const missingKeys = keys.filter((key) => !existingKeys.includes(String(key)));
+
+	if (missingKeys.length === 0) return [];
+
+	const { ActivityService } = await import('../services/activity.js');
+	const activityService = new ActivityService({ knex, schema, accountability });
+
+	let deletions: Item[];
+
+	try {
+		deletions = await activityService.readByQuery(
+			{
+				fields: ['item'],
+				filter: {
+					_and: [
+						{ collection: { _eq: collection } },
+						{ action: { _eq: 'delete' } },
+						{ item: { _in: missingKeys.map(String) } },
+					],
+				},
+				limit: -1,
+			},
+			emitEvents !== undefined ? { emitEvents } : undefined
+		);
+	} catch (error) {
+		if (error instanceof ForbiddenException) return [];
+		throw error;
+	}
+
+	const deletedKeys = new Set(deletions.map((deletion) => String(deletion['item'])));
+
+	return missingKeys.filter((key) => deletedKeys.has(String(key)));
 }

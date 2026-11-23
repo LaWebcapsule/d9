@@ -2,8 +2,8 @@ import { useFieldsStore } from '@/stores/fields';
 import { usePermissionsStore } from '@/stores/permissions';
 import { useRelationsStore } from '@/stores/relations';
 import { useUserStore } from '@/stores/user';
-import { hashValue } from '@wbce-d9/utils';
-import { cloneDeep, isPlainObject } from 'lodash';
+import { sha256Digest } from '@wbce-d9/utils';
+import { cloneDeep, isPlainObject, pick } from 'lodash';
 
 /**
  * Reserved key for information about a change that is not part of the item itself: items contain `onlyIf`,
@@ -13,9 +13,9 @@ export const META_KEY = '$__meta';
 
 /**
  * Conditions the current values have to meet for a change to be saved, by field. The API only saves when
- * the hash of the current value is the same.
+ * the SHA-256 digest of the current value is the same.
  */
-export type OnlyIf = Record<string, { _hash: string }>;
+export type OnlyIf = Record<string, { _sha256: string }>;
 
 /**
  * Conflict as reported by the API in a 409 CONFLICT response
@@ -35,10 +35,13 @@ export type EditConflict = {
 export type ConflictChoice = 'mine' | 'theirs';
 
 /**
- * Conditions with the hashes of the original values of the given fields, the API compares them with the
+ * Conditions with the digests of the original values of the given fields, the API compares them with the
  * current values before saving
  */
 export function getOnlyIf(collection: string, original: Record<string, any>, fields: string[]): OnlyIf {
+	// Nothing to base conditions on, don't touch the stores
+	if (!fields.some((field) => field in original)) return {};
+
 	const fieldsStore = useFieldsStore();
 	const primaryKeyField = fieldsStore.getPrimaryKeyFieldForCollection(collection)?.field;
 
@@ -54,10 +57,23 @@ export function getOnlyIf(collection: string, original: Record<string, any>, fie
 		// would never match the stored foreign key.
 		if (original[field] === null && !canReadAllRelatedItems(collection, field, original)) continue;
 
-		onlyIf[field] = { _hash: hashValue(getStoredValue(collection, field, original[field])) };
+		onlyIf[field] = { _sha256: sha256Digest(getStoredValue(collection, field, original[field])) };
 	}
 
 	return onlyIf;
+}
+
+/**
+ * Add the conditions for the edited fields of an item, with the digests of the values the edits are based on.
+ * Conditions that already exist are kept: they belong to the values the user saw when starting to edit.
+ */
+export function withOnlyIf(collection: string, original: Record<string, any>, edits: Record<string, any>) {
+	const { [META_KEY]: meta, ...values } = edits;
+	const fields = Object.keys(values).filter((field) => !field.startsWith('$'));
+
+	const onlyIf: OnlyIf = pick({ ...getOnlyIf(collection, original, fields), ...(meta?.onlyIf ?? {}) }, fields);
+
+	return Object.keys(onlyIf).length > 0 ? { ...values, [META_KEY]: { onlyIf } } : values;
 }
 
 function canReadAllRelatedItems(collection: string, field: string, item: Record<string, any>) {
@@ -240,5 +256,5 @@ function applyFieldChoice(
 	if (choice === 'theirs') item[field] = current;
 
 	// Either way, the save is now based on the current value
-	onlyIf[field] = { _hash: hashValue(current) };
+	onlyIf[field] = { _sha256: sha256Digest(current) };
 }

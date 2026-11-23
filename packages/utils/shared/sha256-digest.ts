@@ -10,10 +10,11 @@ export function stableStringify(value: unknown): string {
 }
 
 /**
- * Generate a SHA-256 hex hash of a (JSON compatible) value. Used to detect concurrent edits:
- * clients send the hash of the value they loaded, the API compares it with the hash of the current value
+ * Generate the SHA-256 hex digest of a (JSON compatible) value. Used to detect concurrent edits:
+ * clients send the digest of the value they loaded (`_sha256` condition), the API compares it with the
+ * digest of the current value
  */
-export function hashValue(value: unknown): string {
+export function sha256Digest(value: unknown): string {
 	return bytesToHex(sha256(utf8ToBytes(stableStringify(value))));
 }
 

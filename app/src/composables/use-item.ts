@@ -12,6 +12,7 @@ import {
 	getOnlyIf,
 	resolveEditConflicts,
 	stripMeta,
+	withOnlyIf,
 } from '@/utils/edit-conflicts';
 import { notify } from '@/utils/notify';
 import { translate } from '@/utils/translate-object-values';
@@ -20,7 +21,7 @@ import { validateItemConditions } from '@/utils/validate-item-conditions';
 import { useCollection } from '@wbce-d9/composables';
 import { getEndpoint } from '@wbce-d9/utils';
 import { AxiosResponse } from 'axios';
-import { cloneDeep, mergeWith, pick } from 'lodash';
+import { cloneDeep, mergeWith } from 'lodash';
 import { computed, ComputedRef, isRef, Ref, ref, unref, watch } from 'vue';
 import { usePermissions } from './use-permissions';
 import { Field, Query, Relation } from '@wbce-d9/types';
@@ -180,7 +181,7 @@ export function useItem(
 				});
 			} else {
 				// Nested items get their conditions from the relational interfaces, whatever page they are used on
-				const payload = detectConflicts ? withOnlyIf(edits.value) : stripMeta(edits.value);
+				const payload = detectConflicts ? withRootOnlyIf(edits.value) : stripMeta(edits.value);
 
 				response = await api.patch(itemEndpoint.value, payload);
 
@@ -202,18 +203,17 @@ export function useItem(
 	}
 
 	/**
-	 * Add the hashes of the loaded values of the changed fields, so the API can reject the save if someone
-	 * else changed them in the meantime. Nested items get their hashes in useRelationMultiple.
+	 * Add the digests of the loaded values of the changed fields, so the API can reject the save if someone
+	 * else changed them in the meantime. Nested items get their conditions from the relational interfaces.
 	 */
-	function withOnlyIf(payload: Record<string, any>) {
+	function withRootOnlyIf(payload: Record<string, any>) {
 		if (isBatch.value || !loadedItem.value || !primaryKeyField.value) return payload;
 		if (!(primaryKeyField.value.field in loadedItem.value)) return payload;
 
-		const fields = Object.keys(payload);
-
-		const onlyIf = pick({ ...getOnlyIf(collection.value, loadedItem.value, fields), ...onlyIfOverrides.value }, fields);
-
-		return Object.keys(onlyIf).length > 0 ? { ...payload, [META_KEY]: { onlyIf } } : payload;
+		return withOnlyIf(collection.value, loadedItem.value, {
+			...payload,
+			[META_KEY]: { onlyIf: onlyIfOverrides.value },
+		});
 	}
 
 	/**

@@ -835,6 +835,7 @@ export class PayloadService {
 								keys: [key],
 								onlyIf,
 								action: 'delete',
+								emitEvents: opts?.emitEvents,
 							});
 
 							if (conflicts.length > 0) {

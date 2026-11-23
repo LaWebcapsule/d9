@@ -370,18 +370,21 @@ describe('Integration Tests', () => {
 							    "properties": {
 							      "onlyIf": {
 							        "additionalProperties": {
+							          "maxProperties": 1,
+							          "minProperties": 1,
 							          "properties": {
-							            "_hash": {
-							              "description": "SHA-256 hash of the value the changes are based on.",
+							            "_eq": {
+							              "description": "The value the changes are based on, as the API returns it.",
+							            },
+							            "_sha256": {
+							              "description": "SHA-256 hex digest of the value the changes are based on.",
+							              "pattern": "^[0-9a-f]{64}$",
 							              "type": "string",
 							            },
 							          },
-							          "required": [
-							            "_hash",
-							          ],
 							          "type": "object",
 							        },
-							        "description": "Conditions the current values have to meet for the update to be saved, by field.",
+							        "description": "Conditions the current values have to meet for the update to be saved, by field. Each condition has exactly one operator.",
 							        "type": "object",
 							      },
 							    },

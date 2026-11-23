@@ -3,7 +3,7 @@ import { useFieldsStore } from '@/stores/fields';
 import { useRelationsStore } from '@/stores/relations';
 import { createTestingPinia } from '@pinia/testing';
 import { Field, Relation } from '@wbce-d9/types';
-import { hashValue } from '@wbce-d9/utils';
+import { sha256Digest } from '@wbce-d9/utils';
 import { flushPromises, mount } from '@vue/test-utils';
 import { cloneDeep } from 'lodash';
 import { setActivePinia } from 'pinia';
@@ -529,7 +529,9 @@ describe('edit conflict base hashes', () => {
 				id: 10,
 				languages_code: { code: 'en' },
 				body: 'English (edited)',
-				$__meta: { onlyIf: { languages_code: { _hash: hashValue('en') }, body: { _hash: hashValue('English') } } },
+				$__meta: {
+					onlyIf: { languages_code: { _sha256: sha256Digest('en') }, body: { _sha256: sha256Digest('English') } },
+				},
 			},
 		]);
 	});
@@ -544,7 +546,7 @@ describe('edit conflict base hashes', () => {
 		wrapper.vm.update({ id: 2, name: 'test2-edited' });
 
 		expect(wrapper.vm.value.update).toEqual([
-			{ id: 2, name: 'test2-edited', $__meta: { onlyIf: { name: { _hash: hashValue('test2') } } } },
+			{ id: 2, name: 'test2-edited', $__meta: { onlyIf: { name: { _sha256: sha256Digest('test2') } } } },
 		]);
 	});
 
@@ -563,7 +565,69 @@ describe('edit conflict base hashes', () => {
 				id: 2,
 				name: 'second',
 				facility: 1,
-				$__meta: { onlyIf: { name: { _hash: hashValue('test2') }, facility: { _hash: hashValue(1) } } },
+				$__meta: { onlyIf: { name: { _sha256: sha256Digest('test2') }, facility: { _sha256: sha256Digest(1) } } },
+			},
+		]);
+	});
+
+	test('keeps the conditions of the item drawer for fields the list did not load', async () => {
+		const wrapper = mount(TestComponent, {
+			props: { relation: relationO2M, value: [], id: 1 },
+		});
+
+		await flushPromises();
+
+		// The list only loaded id, name and facility, the drawer loaded all fields
+		wrapper.vm.update({ id: 2, notes: 'Mine', $__meta: { onlyIf: { notes: { _sha256: sha256Digest('Notes') } } } });
+
+		expect(wrapper.vm.value.update).toEqual([
+			{ id: 2, notes: 'Mine', $__meta: { onlyIf: { notes: { _sha256: sha256Digest('Notes') } } } },
+		]);
+	});
+
+	test('keeps the conditions of the item drawer for the related item of a many-to-many relation', async () => {
+		const wrapper = mount(TestComponent, {
+			props: { relation: relationTranslations, value: [], id: 1 },
+		});
+
+		await flushPromises();
+
+		wrapper.vm.update({
+			id: 10,
+			languages_code: {
+				code: 'en',
+				name: 'English (edited)',
+				$__meta: { onlyIf: { name: { _sha256: sha256Digest('English') } } },
+			},
+		});
+
+		expect(wrapper.vm.value.update).toEqual([
+			{
+				id: 10,
+				languages_code: {
+					code: 'en',
+					name: 'English (edited)',
+					$__meta: { onlyIf: { name: { _sha256: sha256Digest('English') } } },
+				},
+				$__meta: { onlyIf: { languages_code: { _sha256: sha256Digest('en') } } },
+			},
+		]);
+	});
+
+	test('does not use the loaded values of another related item', async () => {
+		const wrapper = mount(TestComponent, {
+			props: { relation: relationTranslations, value: [], id: 1 },
+		});
+
+		await flushPromises();
+
+		wrapper.vm.update({ id: 10, languages_code: { code: 'de', code_iso: 'de-DE' } });
+
+		expect(wrapper.vm.value.update).toEqual([
+			{
+				id: 10,
+				languages_code: { code: 'de', code_iso: 'de-DE' },
+				$__meta: { onlyIf: { languages_code: { _sha256: sha256Digest('en') } } },
 			},
 		]);
 	});
@@ -581,7 +645,9 @@ describe('edit conflict base hashes', () => {
 			create: [],
 			update: [],
 			delete: [2],
-			$__meta: { deleteOnlyIf: { 2: { name: { _hash: hashValue('test2') }, facility: { _hash: hashValue(1) } } } },
+			$__meta: {
+				deleteOnlyIf: { 2: { name: { _sha256: sha256Digest('test2') }, facility: { _sha256: sha256Digest(1) } } },
+			},
 		});
 
 		wrapper.vm.remove(wrapper.vm.displayItems[1]);

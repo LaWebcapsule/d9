@@ -1,11 +1,12 @@
 import type { SchemaOverview } from '@wbce-d9/types';
-import { hashValue } from '@wbce-d9/utils';
+import { sha256Digest } from '@wbce-d9/utils';
 import type { Knex } from 'knex';
 import knex from 'knex';
-import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import emitter from '../emitter.js';
 import { ConflictException, ForbiddenException, InvalidPayloadException } from '../exceptions/index.js';
 import { ItemsService } from '../services/items.js';
-import { hashValue as hashValueAsync } from './conflicts.js';
+import { sha256DigestAsync } from './conflicts.js';
 
 let db: Knex;
 
@@ -58,6 +59,7 @@ const schema = {
 				meta: field('meta', 'json', { special: ['cast-json'] }),
 				author: field('author', 'integer'),
 				date_updated: field('date_updated', 'timestamp', { special: ['date-updated'] }),
+				secret: field('secret', 'string', { special: ['conceal'] }),
 				translations: field('translations', 'alias', { alias: true, special: ['translations'] }),
 			},
 		},
@@ -85,6 +87,21 @@ const schema = {
 				articles_id: field('articles_id', 'integer'),
 				languages_code: field('languages_code', 'string'),
 				body: field('body', 'text'),
+			},
+		},
+		directus_activity: {
+			collection: 'directus_activity',
+			primary: 'id',
+			singleton: false,
+			note: null,
+			sortField: null,
+			accountability: null,
+			fields: {
+				id: field('id', 'integer', { nullable: false, defaultValue: 'AUTO_INCREMENT' }),
+				action: field('action', 'string'),
+				user: field('user', 'uuid'),
+				collection: field('collection', 'string'),
+				item: field('item', 'string'),
 			},
 		},
 	},
@@ -129,6 +146,15 @@ const schema = {
 } as unknown as SchemaOverview;
 
 const admin = { role: null, admin: true, user: 'ccd3fbd7-8dc0-4b0c-8a46-c8e3a63fdb08' };
+const otherUser = '4b3c2d1e-0f9a-4b8c-8d7e-6f5a4b3c2d1e';
+
+/**
+ * Delete an item like the API does, with the activity of the deletion
+ */
+async function deleteWithActivity(collection: string, key: number, user = otherUser) {
+	await db(collection).where({ id: key }).delete();
+	await db('directus_activity').insert({ action: 'delete', user, collection, item: String(key) });
+}
 
 function service(collection = 'articles') {
 	return new ItemsService(collection, { knex: db, schema, accountability: admin });
@@ -165,7 +191,16 @@ beforeAll(async () => {
 		table.string('status');
 		table.text('meta');
 		table.timestamp('date_updated');
+		table.string('secret');
 		table.integer('author');
+	});
+
+	await db.schema.createTable('directus_activity', (table) => {
+		table.increments('id');
+		table.string('action');
+		table.uuid('user');
+		table.string('collection');
+		table.string('item');
 	});
 
 	await db.schema.createTable('authors', (table) => {
@@ -189,6 +224,7 @@ beforeEach(async () => {
 	await db('articles').delete();
 	await db('authors').delete();
 	await db('articles_translations').delete();
+	await db('directus_activity').delete();
 
 	await db('authors').insert({ id: 5, name: 'Jane' });
 
@@ -221,7 +257,9 @@ describe('edit conflicts', () => {
 			{
 				title: 'Mine',
 				meta: { a: 3 },
-				$__meta: { onlyIf: { title: { _hash: hashValue('Title') }, meta: { _hash: hashValue({ a: 2, b: 1 }) } } },
+				$__meta: {
+					onlyIf: { title: { _sha256: sha256Digest('Title') }, meta: { _sha256: sha256Digest({ a: 2, b: 1 }) } },
+				},
 			},
 			{ emitEvents: false }
 		);
@@ -240,7 +278,9 @@ describe('edit conflicts', () => {
 				{
 					title: 'Mine',
 					status: 'published',
-					$__meta: { onlyIf: { title: { _hash: hashValue('Title') }, status: { _hash: hashValue('draft') } } },
+					$__meta: {
+						onlyIf: { title: { _sha256: sha256Digest('Title') }, status: { _sha256: sha256Digest('draft') } },
+					},
 				},
 				{ emitEvents: false }
 			)
@@ -265,8 +305,8 @@ describe('edit conflicts', () => {
 		expect(row.status).toBe('draft');
 	});
 
-	it('ignores system fields, unknown fields and fields without a condition', async () => {
-		await db('articles').where({ id: 1 }).update({ date_updated: '2026-11-13 10:00:00', status: 'archived' });
+	it('ignores unknown fields, concealed fields and fields without a condition', async () => {
+		await db('articles').where({ id: 1 }).update({ secret: 'changed', status: 'archived' });
 
 		await service().updateOne(
 			1,
@@ -275,9 +315,9 @@ describe('edit conflicts', () => {
 				status: 'published',
 				$__meta: {
 					onlyIf: {
-						title: { _hash: hashValue('Title') },
-						date_updated: { _hash: hashValue(null) },
-						unknown: { _hash: 'x' },
+						title: { _sha256: sha256Digest('Title') },
+						secret: { _sha256: sha256Digest(null) },
+						unknown: { _sha256: sha256Digest('x') },
 					},
 				},
 			},
@@ -287,12 +327,73 @@ describe('edit conflicts', () => {
 		expect((await db('articles').first()).title).toBe('Mine');
 	});
 
+	it('checks system fields, like the date of the last update', async () => {
+		await db('articles').where({ id: 1 }).update({ date_updated: '2026-11-13 10:00:00' });
+
+		const error = await conflictOf(
+			service().updateOne(
+				1,
+				{ title: 'Mine', $__meta: { onlyIf: { date_updated: { _eq: null } } } },
+				{ emitEvents: false }
+			)
+		);
+
+		expect(error.extensions['conflicts']).toMatchObject([{ field: 'date_updated', type: 'changed' }]);
+		expect((await db('articles').first()).title).toBe('Title');
+	});
+
+	it('compares plain values with _eq', async () => {
+		await service().updateOne(
+			1,
+			{
+				title: 'Mine',
+				$__meta: { onlyIf: { title: { _eq: 'Title' }, meta: { _eq: { a: 2, b: 1 } }, author: { _eq: 5 } } },
+			},
+			{ emitEvents: false }
+		);
+
+		expect((await db('articles').first()).title).toBe('Mine');
+
+		const error = await conflictOf(
+			service().updateOne(
+				1,
+				{ status: 'published', $__meta: { onlyIf: { title: { _eq: 'Title' }, meta: { _eq: { a: 2 } } } } },
+				{ emitEvents: false }
+			)
+		);
+
+		expect(error.extensions['conflicts']).toMatchObject([
+			{ field: 'title', current: 'Mine' },
+			{ field: 'meta', current: { a: 2, b: 1 } },
+		]);
+	});
+
+	it('compares plain values exactly, whatever their type', async () => {
+		await db('articles')
+			.where({ id: 1 })
+			.update({ meta: JSON.stringify(['b', 'a']) });
+
+		const update = (onlyIf: Record<string, unknown>) =>
+			service().updateOne(1, { status: 'published', $__meta: { onlyIf } }, { emitEvents: false });
+
+		await update({ meta: { _eq: ['b', 'a'] }, author: { _eq: 5 } });
+
+		expect((await conflictOf(update({ meta: { _eq: ['a', 'b'] } }))).extensions['conflicts']).toMatchObject([
+			{ field: 'meta', current: ['b', 'a'] },
+		]);
+
+		expect((await conflictOf(update({ author: { _eq: '5' } }))).extensions['conflicts']).toMatchObject([
+			{ field: 'author', current: 5 },
+		]);
+	});
+
 	it.each([
 		['a value instead of a condition', { title: 'Title' }],
 		['an empty value', { title: null }],
-		['another operator', { title: { _eq: 'Title' } }],
-		['more than one operator', { title: { _hash: 'x', _eq: 'Title' } }],
-		['a hash that is not a string', { title: { _hash: 1 } }],
+		['another operator', { title: { _neq: 'Title' } }],
+		['more than one operator', { title: { _sha256: sha256Digest('Title'), _eq: 'Title' } }],
+		['a digest that is not a string', { title: { _sha256: 1 } }],
+		['a digest that is not a SHA-256 hex digest', { title: { _sha256: 'Title' } }],
 	])('rejects %s in the conditions', async (_title, onlyIf) => {
 		await expect(service().updateOne(1, { title: 'Mine', $__meta: { onlyIf } }, { emitEvents: false })).rejects.toThrow(
 			InvalidPayloadException
@@ -301,14 +402,16 @@ describe('edit conflicts', () => {
 		expect((await db('articles').first()).title).toBe('Title');
 	});
 
-	it('hashes values like the clients do', async () => {
+	it('digests values like the clients do', async () => {
 		const values = [null, undefined, '', 'Straße', 7, 1.5, true, ['b', 'a'], { b: 1, a: { d: [1, 2], c: null } }];
 
 		for (const value of values) {
-			expect(await hashValueAsync(value)).toBe(hashValue(value));
+			expect(await sha256DigestAsync(value)).toBe(sha256Digest(value));
 		}
 
-		expect(await hashValueAsync(new Date('2026-11-13T10:00:00.000Z'))).toBe(hashValue('2026-11-13T10:00:00.000Z'));
+		expect(await sha256DigestAsync(new Date('2026-11-13T10:00:00.000Z'))).toBe(
+			sha256Digest('2026-11-13T10:00:00.000Z')
+		);
 	});
 
 	it('only conflicts on the translation that was changed', async () => {
@@ -319,7 +422,9 @@ describe('edit conflicts', () => {
 			{
 				translations: {
 					create: [],
-					update: [{ id: 10, body: 'English (mine)', $__meta: { onlyIf: { body: { _hash: hashValue('English') } } } }],
+					update: [
+						{ id: 10, body: 'English (mine)', $__meta: { onlyIf: { body: { _sha256: sha256Digest('English') } } } },
+					],
 					delete: [],
 				},
 			},
@@ -338,12 +443,12 @@ describe('edit conflicts', () => {
 				1,
 				{
 					title: 'Mine',
-					$__meta: { onlyIf: { title: { _hash: hashValue('Title') } } },
+					$__meta: { onlyIf: { title: { _sha256: sha256Digest('Title') } } },
 					translations: {
 						create: [{ languages_code: 'fr', body: 'Français' }],
 						update: [
-							{ id: 10, body: 'English (mine)', $__meta: { onlyIf: { body: { _hash: hashValue('English') } } } },
-							{ id: 11, body: 'Deutsch (mine)', $__meta: { onlyIf: { body: { _hash: hashValue('Deutsch') } } } },
+							{ id: 10, body: 'English (mine)', $__meta: { onlyIf: { body: { _sha256: sha256Digest('English') } } } },
+							{ id: 11, body: 'Deutsch (mine)', $__meta: { onlyIf: { body: { _sha256: sha256Digest('Deutsch') } } } },
 						],
 						delete: [],
 					},
@@ -363,7 +468,7 @@ describe('edit conflicts', () => {
 	});
 
 	it('reports a conflict when an edited translation was deleted in the meantime', async () => {
-		await db('articles_translations').where({ id: 10 }).delete();
+		await deleteWithActivity('articles_translations', 10);
 
 		const error = await conflictOf(
 			service().updateOne(
@@ -372,7 +477,7 @@ describe('edit conflicts', () => {
 					translations: {
 						create: [],
 						update: [
-							{ id: 10, body: 'English (mine)', $__meta: { onlyIf: { body: { _hash: hashValue('English') } } } },
+							{ id: 10, body: 'English (mine)', $__meta: { onlyIf: { body: { _sha256: sha256Digest('English') } } } },
 						],
 						delete: [],
 					},
@@ -395,7 +500,9 @@ describe('edit conflicts', () => {
 				update: [],
 				delete: [10],
 				$__meta: {
-					deleteOnlyIf: { 10: { body: { _hash: hashValue('English') }, languages_code: { _hash: hashValue('en') } } },
+					deleteOnlyIf: {
+						10: { body: { _sha256: sha256Digest('English') }, languages_code: { _sha256: sha256Digest('en') } },
+					},
 				},
 			},
 		};
@@ -434,8 +541,8 @@ describe('edit conflicts', () => {
 		const error = await conflictOf(
 			service().updateBatch(
 				[
-					{ id: 1, status: 'published', $__meta: { onlyIf: { status: { _hash: hashValue('draft') } } } },
-					{ id: 2, status: 'published', $__meta: { onlyIf: { status: { _hash: hashValue('draft') } } } },
+					{ id: 1, status: 'published', $__meta: { onlyIf: { status: { _sha256: sha256Digest('draft') } } } },
+					{ id: 2, status: 'published', $__meta: { onlyIf: { status: { _sha256: sha256Digest('draft') } } } },
 				],
 				{ emitEvents: false }
 			)
@@ -450,12 +557,12 @@ describe('edit conflicts', () => {
 	});
 
 	it('reports a conflict when the item itself was deleted in the meantime', async () => {
-		await db('articles').where({ id: 1 }).delete();
+		await deleteWithActivity('articles', 1);
 
 		const error = await conflictOf(
 			service().updateOne(
 				1,
-				{ title: 'Mine', $__meta: { onlyIf: { title: { _hash: hashValue('Title') } } } },
+				{ title: 'Mine', $__meta: { onlyIf: { title: { _sha256: sha256Digest('Title') } } } },
 				{ emitEvents: false }
 			)
 		);
@@ -463,9 +570,19 @@ describe('edit conflicts', () => {
 		expect(error.extensions['conflicts']).toMatchObject([{ collection: 'articles', key: 1, type: 'deleted' }]);
 	});
 
+	it('does not report items that never existed as deleted', async () => {
+		await service().updateOne(
+			999,
+			{ title: 'Mine', $__meta: { onlyIf: { title: { _sha256: sha256Digest('Title') } } } },
+			{ emitEvents: false }
+		);
+
+		expect(await db('articles').where({ id: 999 })).toHaveLength(0);
+	});
+
 	it('ignores conditions when creating an item', async () => {
 		await service().createOne(
-			{ id: 2, title: 'New', $__meta: { onlyIf: { title: { _hash: hashValue('Other') } } } },
+			{ id: 2, title: 'New', $__meta: { onlyIf: { title: { _sha256: sha256Digest('Other') } } } },
 			{ emitEvents: false }
 		);
 
@@ -480,7 +597,7 @@ describe('edit conflicts', () => {
 				1,
 				{
 					title: 'Mine',
-					author: { id: 5, name: 'Jane Doe', $__meta: { onlyIf: { name: { _hash: hashValue('Jane') } } } },
+					author: { id: 5, name: 'Jane Doe', $__meta: { onlyIf: { name: { _sha256: sha256Digest('Jane') } } } },
 				},
 				{ emitEvents: false }
 			)
@@ -521,7 +638,9 @@ describe('edit conflicts', () => {
 					1,
 					{
 						title: 'Mine',
-						$__meta: { onlyIf: { title: { _hash: hashValue('Title') }, status: { _hash: hashValue('draft') } } },
+						$__meta: {
+							onlyIf: { title: { _sha256: sha256Digest('Title') }, status: { _sha256: sha256Digest('draft') } },
+						},
 					},
 					{ emitEvents: false }
 				)
@@ -549,7 +668,7 @@ describe('edit conflicts', () => {
 						create: [],
 						update: [],
 						delete: [10],
-						$__meta: { deleteOnlyIf: { 10: { body: { _hash: hashValue('guess') } } } },
+						$__meta: { deleteOnlyIf: { 10: { body: { _sha256: sha256Digest('guess') } } } },
 					},
 				},
 				{ emitEvents: false }
@@ -559,20 +678,48 @@ describe('edit conflicts', () => {
 			expect(await db('articles_translations').where({ id: 10 })).toHaveLength(0);
 		});
 
-		it('reports a deleted item to users who can update every item of the collection', async () => {
-			await db('articles').where({ id: 1 }).delete();
+		it('reports a deleted item to users who can read the activity of the deletion', async () => {
+			await deleteWithActivity('articles', 1);
 
-			const editor = editorService([permission('articles', 'read'), permission('articles', 'update')]);
+			const editor = editorService([
+				permission('articles', 'read'),
+				permission('articles', 'update', ['*'], { status: { _eq: 'draft' } }),
+				permission('directus_activity', 'read', ['*'], { collection: { _eq: 'articles' } }),
+			]);
 
 			const error = await conflictOf(
 				editor.updateOne(
 					1,
-					{ title: 'Mine', $__meta: { onlyIf: { title: { _hash: hashValue('Title') } } } },
+					{ title: 'Mine', $__meta: { onlyIf: { title: { _sha256: sha256Digest('Title') } } } },
 					{ emitEvents: false }
 				)
 			);
 
 			expect(error.extensions['conflicts']).toMatchObject([{ collection: 'articles', key: 1, type: 'deleted' }]);
+		});
+
+		it.each([
+			['no read permission for the activity', []],
+			[
+				'no read permission for the activity of others',
+				[permission('directus_activity', 'read', ['*'], { user: { _eq: admin.user } })],
+			],
+		])('does not report a deleted item to users with %s', async (_title, activityPermissions) => {
+			await deleteWithActivity('articles', 1);
+
+			const editor = editorService([
+				permission('articles', 'read'),
+				permission('articles', 'update'),
+				...activityPermissions,
+			]);
+
+			await expect(
+				editor.updateOne(
+					1,
+					{ title: 'Mine', $__meta: { onlyIf: { title: { _sha256: sha256Digest('Title') } } } },
+					{ emitEvents: false }
+				)
+			).rejects.toThrow(ForbiddenException);
 		});
 
 		it.each([
@@ -590,14 +737,14 @@ describe('edit conflicts', () => {
 			await expect(update(999)).rejects.toThrow(ForbiddenException);
 		});
 
-		it('does not tell whether a nested item exists without access to all items of its collection', async () => {
-			await db('articles_translations').where({ id: 10 }).delete();
+		it('does not tell whether a nested item was deleted without access to the activity', async () => {
+			await deleteWithActivity('articles_translations', 10);
 
 			const editor = editorService([
 				permission('articles', 'read'),
 				permission('articles', 'update'),
 				permission('articles_translations', 'read'),
-				permission('articles_translations', 'update', ['*'], { languages_code: { _eq: 'en' } }),
+				permission('articles_translations', 'update'),
 			]);
 
 			await expect(
@@ -607,7 +754,7 @@ describe('edit conflicts', () => {
 						translations: {
 							create: [],
 							update: [
-								{ id: 10, body: 'English (mine)', $__meta: { onlyIf: { body: { _hash: hashValue('English') } } } },
+								{ id: 10, body: 'English (mine)', $__meta: { onlyIf: { body: { _sha256: sha256Digest('English') } } } },
 							],
 							delete: [],
 						},
@@ -615,6 +762,36 @@ describe('edit conflicts', () => {
 					{ emitEvents: false }
 				)
 			).rejects.toThrow(ForbiddenException);
+		});
+	});
+
+	describe('hooks', () => {
+		afterEach(() => {
+			emitter.offFilter('articles_translations.items.read', hideTranslations);
+		});
+
+		function hideTranslations(items: unknown) {
+			return (items as Record<string, any>[]).filter((item) => item['id'] !== 10);
+		}
+
+		it('does not compare items that read hooks hide from the user', async () => {
+			await db('articles_translations').where({ id: 10 }).update({ body: 'English (changed)' });
+
+			emitter.onFilter('articles_translations.items.read', hideTranslations);
+
+			const update = {
+				translations: {
+					create: [],
+					update: [
+						{ id: 10, body: 'English (mine)', $__meta: { onlyIf: { body: { _sha256: sha256Digest('English') } } } },
+					],
+					delete: [],
+				},
+			};
+
+			await service().updateOne(1, update);
+
+			expect((await db('articles_translations').where({ id: 10 }).first()).body).toBe('English (mine)');
 		});
 	});
 });

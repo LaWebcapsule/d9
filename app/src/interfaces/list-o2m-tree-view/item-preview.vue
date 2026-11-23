@@ -19,6 +19,7 @@
 			:primary-key="item[props.relationInfo.relatedPrimaryKeyField.field] || '+'"
 			:edits="edits"
 			:circular-field="props.relationInfo.reverseJunctionField.field"
+			detect-conflicts
 			@input="$emit('input', $event)"
 		/>
 	</div>

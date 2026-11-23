@@ -30,6 +30,7 @@ import { computed, ref } from 'vue';
 import api from '@/api';
 import { useFieldsStore } from '@/stores/fields';
 import { useInsightsStore } from '@/stores/insights';
+import { stripMeta } from '@/utils/edit-conflicts';
 import { unexpectedError } from '@/utils/unexpected-error';
 
 const props = withDefaults(
@@ -70,7 +71,8 @@ function cancelEdit() {
 
 async function saveEdits(item: Record<string, any>) {
 	try {
-		await api.patch(`/items/${props.collection}/${currentlyEditing.value}`, item);
+		// Conflicts can't be shown here, don't let relational interfaces make the save fail
+		await api.patch(`/items/${props.collection}/${currentlyEditing.value}`, stripMeta(item));
 	} catch (err: any) {
 		unexpectedError(err);
 	}

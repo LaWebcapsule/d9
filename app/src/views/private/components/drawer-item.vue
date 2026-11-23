@@ -80,7 +80,7 @@
 <script setup lang="ts">
 import api from '@/api';
 import FilePreview from '@/views/private/components/file-preview.vue';
-import { isEmpty, merge, set } from 'lodash';
+import { isEmpty, isPlainObject, merge, set } from 'lodash';
 import { computed, ref, toRefs, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -88,6 +88,7 @@ import { usePermissions } from '@/composables/use-permissions';
 import { useTemplateData } from '@/composables/use-template-data';
 import { useFieldsStore } from '@/stores/fields';
 import { useRelationsStore } from '@/stores/relations';
+import { withOnlyIf } from '@/utils/edit-conflicts';
 import { unexpectedError } from '@/utils/unexpected-error';
 import { validateItemConditions } from '@/utils/validate-item-conditions';
 import { useCollection } from '@wbce-d9/composables';
@@ -112,6 +113,9 @@ interface Props {
 	// that relates back to the parent item.
 	circularField?: string | null;
 	junctionFieldLocation?: string;
+	// Add the conditions for detecting conflicting changes to the edits, based on the values loaded here. Only for
+	// edits that end up in the save of a page that shows the reported conflicts.
+	detectConflicts?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -123,6 +127,7 @@ const props = withDefaults(defineProps<Props>(), {
 	relatedPrimaryKey: '+',
 	circularField: null,
 	junctionFieldLocation: 'bottom',
+	detectConflicts: false,
 });
 
 const emit = defineEmits(['update:active', 'input']);
@@ -421,10 +426,41 @@ function useActions() {
 			internalEdits.value[primaryKeyField.value.field] = props.primaryKey;
 		}
 
-		emit('input', internalEdits.value);
+		emit('input', props.detectConflicts ? withConditions(internalEdits.value) : internalEdits.value);
 
 		internalActive.value = false;
 		internalEdits.value = {};
+	}
+
+	/**
+	 * The drawer loads all fields of the item, the list it was opened from usually only the displayed ones
+	 */
+	function withConditions(edits: Record<string, any>) {
+		if (!initialValues.value) return edits;
+
+		let result = edits;
+
+		if (props.primaryKey !== '+') {
+			result = withOnlyIf(props.collection, initialValues.value, result);
+		}
+
+		const junctionField = props.junctionField;
+		const originalRelated = junctionField ? initialValues.value[junctionField] : null;
+
+		if (
+			junctionField &&
+			relatedCollection.value &&
+			props.relatedPrimaryKey !== '+' &&
+			isPlainObject(result[junctionField]) &&
+			isPlainObject(originalRelated)
+		) {
+			result = {
+				...result,
+				[junctionField]: withOnlyIf(relatedCollection.value, originalRelated, result[junctionField]),
+			};
+		}
+
+		return result;
 	}
 
 	function cancel() {

@@ -352,16 +352,27 @@ mutation {
 
 To make sure an update doesn't overwrite changes someone else saved in the meantime, add `onlyIf` to the reserved
 `$__meta` key of the request body: the conditions the current values have to meet for the update to be saved, by field.
-The only operator is `_hash`, the hash of the value the changes are based on. The hash of a value is the SHA-256 hex
-digest of its JSON with sorted object keys, see `hashValue()` in `@wbce-d9/utils`. Many-to-one fields are hashed as the
-foreign key.
+Each condition has one of these operators:
+
+- `_eq`: the value the changes are based on, as the API returns it. Values are compared exactly, including their type
+  (`5` is not `"5"`). Many-to-one fields are compared as the foreign key.
+- `_sha256`: the SHA-256 hex digest of the value the changes are based on, to keep the request small for large values.
+  The digest is taken of the JSON of the value with sorted object keys, see `sha256Digest()` in `@wbce-d9/utils`.
 
 ```json
 {
 	"title": "An updated title",
-	"$__meta": { "onlyIf": { "title": { "_hash": "<hash of the title as it was loaded>" } } }
+	"$__meta": {
+		"onlyIf": {
+			"title": { "_sha256": "<digest of the title as it was loaded>" },
+			"date_updated": { "_eq": "2026-11-23T10:00:00.000Z" }
+		}
+	}
 }
 ```
+
+System fields like `date_updated` can be checked too, for example to make sure nothing in the item changed since it was
+loaded. Concealed and hashed fields can't be checked, their conditions are ignored.
 
 `$__meta.onlyIf` also works in nested items, for example in the `update` items of a translations field. To check items
 before deleting them, add `deleteOnlyIf` to the `$__meta` of the nested changes, with the conditions by primary key:
@@ -370,9 +381,9 @@ before deleting them, add `deleteOnlyIf` to the `$__meta` of the nested changes,
 {
 	"translations": {
 		"create": [],
-		"update": [{ "id": 7, "body": "Updated text", "$__meta": { "onlyIf": { "body": { "_hash": "<hash>" } } } }],
+		"update": [{ "id": 7, "body": "Updated text", "$__meta": { "onlyIf": { "body": { "_sha256": "<digest>" } } } }],
 		"delete": [9],
-		"$__meta": { "deleteOnlyIf": { "9": { "body": { "_hash": "<hash>" } } } }
+		"$__meta": { "deleteOnlyIf": { "9": { "body": { "_sha256": "<digest>" } } } }
 	}
 }
 ```
@@ -406,9 +417,10 @@ a condition are not checked. Without conditions, the last update wins.
 
 ::: tip Permissions
 
-- Fields you're not allowed to read are not compared, so a conflict can't be used to guess their value.
-- An item that doesn't exist anymore is only reported as a conflict when your `update` permission for the collection
-  covers all of its items. Otherwise, the API responds with `403`, as it does for any item you can't access.
+- The current values are read with your permissions and read hooks. Fields and items you're not allowed to read are not
+  compared, so a conflict can't be used to guess their value.
+- An item that doesn't exist anymore is only reported as a conflict when you're allowed to read the activity of its
+  deletion. Otherwise, the API responds with `403`, as it does for any item you can't access.
 
 :::
 

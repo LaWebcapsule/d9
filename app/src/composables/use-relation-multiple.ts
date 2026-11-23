@@ -2,11 +2,11 @@ import api from '@/api';
 import { RelationM2A } from '@/composables/use-relation-m2a';
 import { RelationM2M } from '@/composables/use-relation-m2m';
 import { RelationO2M } from '@/composables/use-relation-o2m';
-import { META_KEY, OnlyIf, getOnlyIf } from '@/utils/edit-conflicts';
+import { META_KEY, OnlyIf, getOnlyIf, withOnlyIf } from '@/utils/edit-conflicts';
 import { unexpectedError } from '@/utils/unexpected-error';
 import { Filter, Item } from '@wbce-d9/types';
 import { getEndpoint, toArray } from '@wbce-d9/utils';
-import { clamp, cloneDeep, get, isEqual, isPlainObject, merge, pick } from 'lodash';
+import { clamp, cloneDeep, get, isEqual, isPlainObject, merge } from 'lodash';
 import { Ref, computed, ref, unref, watch } from 'vue';
 
 export type RelationQueryMultiple = {
@@ -217,18 +217,18 @@ export function useRelationMultiple(
 
 			for (const item of items) {
 				if (item.$type === undefined || item.$index === undefined) {
-					target.value.update.push(withOnlyIf(item));
+					target.value.update.push(withConditions(item));
 				} else if (item.$type === 'created') {
 					target.value.create[item.$index] = cleanItem(item);
 				} else if (item.$type === 'updated') {
 					if (isEmpty(item)) target.value.update.splice(item.$index, 1);
-					else target.value.update[item.$index] = withOnlyIf(item);
+					else target.value.update[item.$index] = withConditions(item);
 				} else if (item.$type === 'deleted') {
 					if (item.$edits !== undefined) {
 						if (isEmpty(item)) target.value.update.splice(item.$index, 1);
-						else target.value.update[item.$edits] = withOnlyIf(item);
+						else target.value.update[item.$edits] = withConditions(item);
 					} else {
-						target.value.update.push(withOnlyIf(item));
+						target.value.update.push(withConditions(item));
 					}
 				}
 			}
@@ -308,7 +308,7 @@ export function useRelationMultiple(
 		}
 
 		/**
-		 * Remember the hashes of the loaded values of the deleted item, see `withOnlyIf`
+		 * Remember the digests of the loaded values of the deleted item, see `withConditions`
 		 */
 		function addDeleteOnlyIf(changes: Item, key: string | number) {
 			const info = relation.value;
@@ -322,51 +322,46 @@ export function useRelationMultiple(
 		}
 
 		/**
-		 * Add the hashes of the loaded values of the changed fields, so the API can detect if someone else
-		 * changed them in the meantime. Hashes that already exist are kept: they belong to the values the
-		 * user saw when starting to edit.
+		 * Add the digests of the loaded values of the changed fields, so the API can detect if someone else
+		 * changed them in the meantime. Conditions that already exist are kept, like the ones the item drawer
+		 * adds with the values it loaded: the list only loads the fields it displays.
 		 */
-		function withOnlyIf(item: DisplayItem) {
+		function withConditions(item: DisplayItem) {
 			const entry = cleanItem(item);
 			const info = relation.value;
 			if (!info) return entry;
 
-			const original = getFetchedItem(entry[getTargetPKField(info)]);
-			if (!original) return entry;
-
-			const onlyIf = mergeOnlyIf(getTargetCollection(info), original, entry, item[META_KEY]?.onlyIf);
-			if (Object.keys(onlyIf).length > 0) entry[META_KEY] = { onlyIf };
+			const original = getFetchedItem(entry[getTargetPKField(info)]) ?? {};
+			const result = withOnlyIf(getTargetCollection(info), original, { ...entry, [META_KEY]: item[META_KEY] });
 
 			if (info.type === 'm2m' || info.type === 'm2a') {
 				const junctionField = info.junctionField.field;
-				const related = entry[junctionField];
-				const originalRelated = original[junctionField];
+				const related = result[junctionField];
 
 				const relatedCollection =
 					info.type === 'm2m'
 						? info.relatedCollection.collection
-						: entry[info.collectionField.field] ?? original[info.collectionField.field];
+						: result[info.collectionField.field] ?? original[info.collectionField.field];
 
-				if (isPlainObject(related) && isPlainObject(originalRelated) && relatedCollection) {
-					const relatedOnlyIf = mergeOnlyIf(relatedCollection, originalRelated, related, related[META_KEY]?.onlyIf);
+				const relatedPKField =
+					info.type === 'm2m'
+						? info.relatedPrimaryKeyField.field
+						: relatedCollection && info.relationPrimaryKeyFields[relatedCollection]?.field;
 
-					if (Object.keys(relatedOnlyIf).length > 0) {
-						entry[junctionField] = { ...related, [META_KEY]: { onlyIf: relatedOnlyIf } };
-					}
+				if (isPlainObject(related) && relatedCollection && relatedPKField) {
+					// Only the values of the same related item are the base of the edits
+					const originalRelated = original[junctionField];
+
+					const isSameItem =
+						isPlainObject(originalRelated) &&
+						related[relatedPKField] !== undefined &&
+						related[relatedPKField] === originalRelated[relatedPKField];
+
+					result[junctionField] = withOnlyIf(relatedCollection, isSameItem ? originalRelated : {}, related);
 				}
 			}
 
-			return entry;
-		}
-
-		function mergeOnlyIf(
-			collection: string,
-			original: Record<string, any>,
-			edits: Record<string, any>,
-			existingOnlyIf: OnlyIf | undefined
-		) {
-			const fields = Object.keys(edits).filter((field) => !field.startsWith('$'));
-			return pick({ ...getOnlyIf(collection, original, fields), ...(existingOnlyIf ?? {}) }, fields);
+			return result;
 		}
 	}
 

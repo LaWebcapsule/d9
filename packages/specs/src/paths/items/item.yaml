@@ -26,10 +26,10 @@ patch:
   summary: Update an Item
   description: >-
     Update an existing item. To detect changes someone else saved in the meantime, add `onlyIf` to the reserved
-    `$__meta` key of the body (also in nested items): the conditions the current values have to meet, by field. The only
-    operator is `_hash`, the SHA-256 hash of the value the changes are based on. The `$__meta` of nested `delete`
-    alterations can contain `deleteOnlyIf` with the conditions by primary key. If any of the conditions isn't met,
-    nothing is saved and the API responds with 409 CONFLICT.
+    `$__meta` key of the body (also in nested items): the conditions the current values have to meet, by field. The
+    operators are `_sha256`, the SHA-256 digest of the value the changes are based on, and `_eq`, the value itself. The
+    `$__meta` of nested `delete` alterations can contain `deleteOnlyIf` with the conditions by primary key. If any of
+    the conditions isn't met, nothing is saved and the API responds with 409 CONFLICT.
   tags:
     - Items
   operationId: updateItem

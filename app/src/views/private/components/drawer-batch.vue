@@ -29,6 +29,7 @@ import { defineComponent, ref, computed, PropType, toRefs } from 'vue';
 import api from '@/api';
 import { VALIDATION_TYPES } from '@/constants';
 import { APIError } from '@/types/error';
+import { stripMeta } from '@/utils/edit-conflicts';
 import { unexpectedError } from '@/utils/unexpected-error';
 import { getEndpoint } from '@wbce-d9/utils';
 
@@ -113,7 +114,8 @@ export default defineComponent({
 				try {
 					await api.patch(getEndpoint(collection.value), {
 						keys: props.primaryKeys,
-						data: internalEdits.value,
+						// Conflicts can't be shown here, don't let relational interfaces make the save fail
+						data: stripMeta(internalEdits.value),
 					});
 
 					emit('refresh');

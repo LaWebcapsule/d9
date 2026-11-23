@@ -85,6 +85,7 @@
 			collection="directus_files"
 			:primary-key="file.id"
 			:edits="edits"
+			detect-conflicts
 			:disabled="disabled || !updateAllowed"
 			@input="update"
 		>

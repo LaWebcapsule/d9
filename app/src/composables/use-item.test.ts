@@ -8,7 +8,7 @@ import { computed, ref } from 'vue';
 
 import { useFieldsStore } from '@/stores/fields';
 import { unexpectedError } from '@/utils/unexpected-error';
-import { hashValue } from '@wbce-d9/utils';
+import { sha256Digest } from '@wbce-d9/utils';
 import { flushPromises } from '@vue/test-utils';
 import { useItem } from './use-item';
 
@@ -292,7 +292,7 @@ describe('Edit conflicts', () => {
 
 		expect(api.patch).toHaveBeenCalledWith('/items/test/1', {
 			title: 'Mine',
-			$__meta: { onlyIf: { title: { _hash: hashValue('Title') } } },
+			$__meta: { onlyIf: { title: { _sha256: sha256Digest('Title') } } },
 		});
 	});
 
@@ -306,9 +306,9 @@ describe('Edit conflicts', () => {
 			title: 'Mine',
 			translations: {
 				create: [],
-				update: [{ id: 10, body: 'Mine', $__meta: { onlyIf: { body: { _hash: hashValue('Body') } } } }],
+				update: [{ id: 10, body: 'Mine', $__meta: { onlyIf: { body: { _sha256: sha256Digest('Body') } } } }],
 				delete: [11],
-				$__meta: { deleteOnlyIf: { 11: { body: { _hash: hashValue('Other') } } } },
+				$__meta: { deleteOnlyIf: { 11: { body: { _sha256: sha256Digest('Other') } } } },
 			},
 		};
 
@@ -345,7 +345,7 @@ describe('Edit conflicts', () => {
 
 		expect(api.patch).toHaveBeenLastCalledWith('/items/test/1', {
 			title: 'Mine',
-			$__meta: { onlyIf: { title: { _hash: hashValue('Theirs') } } },
+			$__meta: { onlyIf: { title: { _sha256: sha256Digest('Theirs') } } },
 		});
 
 		expect(conflicts.value).toBeNull();
@@ -368,7 +368,9 @@ describe('Edit conflicts', () => {
 		expect(api.patch).toHaveBeenCalledWith('/items/test/1', {
 			title: 'Mine',
 			status: 'archived',
-			$__meta: { onlyIf: { title: { _hash: hashValue('Title') }, status: { _hash: hashValue('published') } } },
+			$__meta: {
+				onlyIf: { title: { _sha256: sha256Digest('Title') }, status: { _sha256: sha256Digest('published') } },
+			},
 		});
 	});
 
@@ -384,7 +386,7 @@ describe('Edit conflicts', () => {
 
 		expect(api.patch).toHaveBeenLastCalledWith('/items/test', {
 			title: 'Theirs',
-			$__meta: { onlyIf: { title: { _hash: hashValue('Theirs') } } },
+			$__meta: { onlyIf: { title: { _sha256: sha256Digest('Theirs') } } },
 		});
 	});
 

@@ -4,10 +4,10 @@ import { useRelationsStore } from '@/stores/relations';
 import { useUserStore } from '@/stores/user';
 import { createTestingPinia } from '@pinia/testing';
 import { Field, Relation } from '@wbce-d9/types';
-import { hashValue } from '@wbce-d9/utils';
+import { sha256Digest } from '@wbce-d9/utils';
 import { setActivePinia } from 'pinia';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { EditConflict, getOnlyIf, resolveEditConflicts, stripMeta, walkEdits } from './edit-conflicts';
+import { EditConflict, getOnlyIf, resolveEditConflicts, stripMeta, walkEdits, withOnlyIf } from './edit-conflicts';
 
 function field(collection: string, name: string, type = 'string', primary = false): Field {
 	return {
@@ -67,7 +67,7 @@ beforeEach(() => {
 describe('getOnlyIf', () => {
 	test('hashes the original values of the given fields', () => {
 		expect(getOnlyIf('articles', { id: 1, title: 'Title' }, ['title'])).toEqual({
-			title: { _hash: hashValue('Title') },
+			title: { _sha256: sha256Digest('Title') },
 		});
 	});
 
@@ -81,8 +81,8 @@ describe('getOnlyIf', () => {
 		const original = { languages_code: { code: 'en' }, body: 'English' };
 
 		expect(getOnlyIf('articles_translations', original, ['languages_code', 'body'])).toEqual({
-			languages_code: { _hash: hashValue('en') },
-			body: { _hash: hashValue('English') },
+			languages_code: { _sha256: sha256Digest('en') },
+			body: { _sha256: sha256Digest('English') },
 		});
 	});
 
@@ -101,24 +101,51 @@ describe('getOnlyIf', () => {
 			setReadPermission({});
 
 			expect(getOnlyIf('articles', original, ['title', 'author'])).toEqual({
-				title: { _hash: hashValue(null) },
-				author: { _hash: hashValue(null) },
+				title: { _sha256: sha256Digest(null) },
+				author: { _sha256: sha256Digest(null) },
 			});
 
 			setReadPermission(null, true);
 
-			expect(getOnlyIf('articles', original, ['author'])).toEqual({ author: { _hash: hashValue(null) } });
+			expect(getOnlyIf('articles', original, ['author'])).toEqual({ author: { _sha256: sha256Digest(null) } });
 		});
 
 		test('are skipped when the related item could be hidden from the user', () => {
 			setReadPermission({ id: { _eq: '$CURRENT_USER' } });
 
-			expect(getOnlyIf('articles', original, ['title', 'author'])).toEqual({ title: { _hash: hashValue(null) } });
+			expect(getOnlyIf('articles', original, ['title', 'author'])).toEqual({ title: { _sha256: sha256Digest(null) } });
 
 			setReadPermission(null);
 
 			expect(getOnlyIf('articles', original, ['author'])).toEqual({});
 		});
+	});
+});
+
+describe('withOnlyIf', () => {
+	const original = { id: 1, title: 'Title', author: 'a1' };
+
+	test('adds the conditions for the edited fields', () => {
+		expect(withOnlyIf('articles', original, { id: 1, title: 'Mine' })).toEqual({
+			id: 1,
+			title: 'Mine',
+			$__meta: { onlyIf: { title: { _sha256: sha256Digest('Title') } } },
+		});
+	});
+
+	test('keeps existing conditions, they belong to the values the user saw first', () => {
+		const edits = { title: 'Mine', $__meta: { onlyIf: { title: { _sha256: sha256Digest('First') } } } };
+
+		expect(withOnlyIf('articles', original, edits)).toEqual({
+			title: 'Mine',
+			$__meta: { onlyIf: { title: { _sha256: sha256Digest('First') } } },
+		});
+	});
+
+	test('drops conditions of fields that are not edited anymore, and an empty meta key', () => {
+		const edits = { id: 1, $__meta: { onlyIf: { title: { _sha256: sha256Digest('First') } } } };
+
+		expect(withOnlyIf('articles', original, edits)).toEqual({ id: 1 });
 	});
 });
 
@@ -188,7 +215,7 @@ describe('resolveEditConflicts', () => {
 		title: 'Mine',
 		translations: {
 			create: [],
-			update: [{ id: 10, body: 'My body', $__meta: { onlyIf: { body: { _hash: hashValue('Body') } } } }],
+			update: [{ id: 10, body: 'My body', $__meta: { onlyIf: { body: { _sha256: sha256Digest('Body') } } } }],
 			delete: [],
 		},
 	});
@@ -208,12 +235,12 @@ describe('resolveEditConflicts', () => {
 		const result = resolve([changedTitle, changedBody], ['mine', 'mine']);
 
 		expect(result.edits.title).toBe('Mine');
-		expect(result.rootOnlyIf).toEqual({ title: { _hash: hashValue('Theirs') } });
+		expect(result.rootOnlyIf).toEqual({ title: { _sha256: sha256Digest('Theirs') } });
 
 		expect(result.edits.translations.update[0]).toEqual({
 			id: 10,
 			body: 'My body',
-			$__meta: { onlyIf: { body: { _hash: hashValue('Their body') } } },
+			$__meta: { onlyIf: { body: { _sha256: sha256Digest('Their body') } } },
 		});
 	});
 
@@ -221,7 +248,7 @@ describe('resolveEditConflicts', () => {
 		const result = resolve([changedTitle, changedBody], ['theirs', 'theirs']);
 
 		expect(result.edits.title).toBe('Theirs');
-		expect(result.rootOnlyIf).toEqual({ title: { _hash: hashValue('Theirs') } });
+		expect(result.rootOnlyIf).toEqual({ title: { _sha256: sha256Digest('Theirs') } });
 		expect(result.edits.translations.update[0].body).toBe('Their body');
 	});
 
@@ -251,7 +278,7 @@ describe('resolveEditConflicts', () => {
 				create: [],
 				update: [],
 				delete: [11],
-				$__meta: { deleteOnlyIf: { 11: { body: { _hash: hashValue('Old') } } } },
+				$__meta: { deleteOnlyIf: { 11: { body: { _sha256: sha256Digest('Old') } } } },
 			},
 		});
 

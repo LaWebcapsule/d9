@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { hashValue, stableStringify } from './hash-value.js';
+import { sha256Digest, stableStringify } from './sha256-digest.js';
 
 describe('stableStringify', () => {
 	it('sorts object keys at every level', () => {
@@ -16,23 +16,23 @@ describe('stableStringify', () => {
 	});
 });
 
-describe('hashValue', () => {
+describe('sha256Digest', () => {
 	it('returns a sha256 hex string', () => {
-		expect(hashValue('abc')).toBe(hashValue('abc'));
-		expect(hashValue('abc')).toMatch(/^[0-9a-f]{64}$/);
+		expect(sha256Digest('abc')).toBe(sha256Digest('abc'));
+		expect(sha256Digest('abc')).toMatch(/^[0-9a-f]{64}$/);
 	});
 
 	it('is independent of key order', () => {
-		expect(hashValue({ a: 1, b: { c: 2, d: 3 } })).toBe(hashValue({ b: { d: 3, c: 2 }, a: 1 }));
+		expect(sha256Digest({ a: 1, b: { c: 2, d: 3 } })).toBe(sha256Digest({ b: { d: 3, c: 2 }, a: 1 }));
 	});
 
 	it('distinguishes different values', () => {
-		expect(hashValue('1')).not.toBe(hashValue(1));
-		expect(hashValue(null)).not.toBe(hashValue(''));
-		expect(hashValue([1, 2])).not.toBe(hashValue([2, 1]));
+		expect(sha256Digest('1')).not.toBe(sha256Digest(1));
+		expect(sha256Digest(null)).not.toBe(sha256Digest(''));
+		expect(sha256Digest([1, 2])).not.toBe(sha256Digest([2, 1]));
 	});
 
 	it('treats null and undefined the same', () => {
-		expect(hashValue(null)).toBe(hashValue(undefined));
+		expect(sha256Digest(null)).toBe(sha256Digest(undefined));
 	});
 });

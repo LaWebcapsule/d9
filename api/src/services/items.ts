@@ -19,7 +19,7 @@ import type {
 	MutationOptions,
 	PrimaryKey,
 } from '../types/index.js';
-import { detectConflicts, extractOnlyIf, hasUnfilteredAccess } from '../utils/conflicts.js';
+import { detectConflicts, extractOnlyIf, getDeletedKeys } from '../utils/conflicts.js';
 import getASTFromQuery from '../utils/get-ast-from-query.js';
 import { validateKeys } from '../utils/validate-keys.js';
 import { AuthorizationService } from './authorization.js';
@@ -29,6 +29,11 @@ export type QueryOptions = {
 	stripNonRequested?: boolean;
 	permissionsAction?: PermissionsAction;
 	emitEvents?: boolean;
+	/**
+	 * Lock the read rows until the transaction of the service's knex instance finishes, so they can't be
+	 * changed in between reading and writing them. Only applies to the items of the collection itself.
+	 */
+	forUpdate?: boolean;
 };
 
 export type MutationTracker = {
@@ -409,6 +414,7 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 			knex: this.knex,
 			// GraphQL requires relational keys to be returned regardless
 			stripNonRequested: opts?.stripNonRequested !== undefined ? opts.stripNonRequested : true,
+			forUpdate: opts?.forUpdate,
 		});
 
 		if (records === null) {
@@ -616,18 +622,21 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 		// Sort keys to ensure that the order is maintained
 		keys.sort();
 
-		// Items that were deleted in the meantime are a conflict, not a permission error. Only for users who
-		// can update every item of the collection, anyone else could use it to find out which items exist.
-		if (onlyIf && hasUnfilteredAccess(this.accountability, this.collection, 'update')) {
-			const existingKeys = (
-				await this.knex.select(primaryKeyField).from(this.collection).whereIn(primaryKeyField, keys)
-			).map((row) => String(row[primaryKeyField]));
+		// Items that were deleted in the meantime are a conflict, not a permission error, when the user is allowed
+		// to know about the deletion
+		if (onlyIf) {
+			const deletedKeys = await getDeletedKeys({
+				knex: this.knex,
+				schema: this.schema,
+				accountability: this.accountability,
+				collection: this.collection,
+				keys,
+				emitEvents: opts.emitEvents,
+			});
 
-			const missingKeys = keys.filter((key) => !existingKeys.includes(String(key)));
-
-			if (missingKeys.length > 0) {
+			if (deletedKeys.length > 0) {
 				conflicts.push(
-					...missingKeys.map((key) => ({
+					...deletedKeys.map((key) => ({
 						collection: this.collection,
 						key,
 						action: 'update' as const,
@@ -635,7 +644,7 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 					}))
 				);
 
-				keys = keys.filter((key) => existingKeys.includes(String(key)));
+				keys = keys.filter((key) => !deletedKeys.includes(key));
 
 				if (keys.length === 0) {
 					if (!opts.conflicts) throw new ConflictException(conflicts);
@@ -673,6 +682,7 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 						keys,
 						onlyIf,
 						action: 'update',
+						emitEvents: opts.emitEvents,
 					}))
 				);
 			}
