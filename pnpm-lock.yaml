@@ -842,6 +842,9 @@ importers:
       '@tiptap/core':
         specifier: 3.35.0
         version: 3.35.0(@tiptap/pm@3.35.0)
+      '@tiptap/extension-heading':
+        specifier: 3.35.0
+        version: 3.35.0(@tiptap/core@3.35.0(@tiptap/pm@3.35.0))
       '@tiptap/extension-image':
         specifier: 3.35.0
         version: 3.35.0(@tiptap/core@3.35.0(@tiptap/pm@3.35.0))

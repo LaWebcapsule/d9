@@ -97,3 +97,14 @@ test.each([
 	expect(html).not.toContain('<pre');
 	expect(html).toContain(`<p>${text.trim()}</p>`);
 });
+
+test.each([
+	['Issue #', 1],
+	['Issue ##', 2],
+	['#', 3],
+	['C#', 1],
+])('heading text %j keeps its trailing #', (text, level) => {
+	const doc = { type: 'doc', content: [{ type: 'heading', attrs: { level }, content: [{ type: 'text', text }] }] };
+
+	expect(marked(richToMarkdown(doc), { mangle: false }).trim()).toMatch(new RegExp(`^<h${level}[^>]*>${text}</h${level}>$`));
+});

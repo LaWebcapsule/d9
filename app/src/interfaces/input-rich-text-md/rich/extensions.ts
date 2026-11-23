@@ -1,11 +1,12 @@
 import type { Editor, Extensions, JSONContent } from '@tiptap/core';
-import { find } from 'linkifyjs';
+import Heading from '@tiptap/extension-heading';
 import Image from '@tiptap/extension-image';
 import Paragraph from '@tiptap/extension-paragraph';
 import { TableKit } from '@tiptap/extension-table';
 import { Placeholder } from '@tiptap/extensions';
 import { Markdown } from '@tiptap/markdown';
 import StarterKit from '@tiptap/starter-kit';
+import { find } from 'linkifyjs';
 
 export type RichExtensionsOptions = {
 	placeholder?: string;
@@ -94,6 +95,20 @@ export function serializeMarkdown(editor: Editor): string {
 	return editor.markdown?.serialize(linkifyBareUrls(editor.getJSON())) ?? '';
 }
 
+/**
+ * Backslash-escape a trailing run of `#` in heading markdown; markdown reads it as the optional closing
+ * sequence of an ATX heading and drops it.
+ */
+export function escapeClosingHashes(markdown: string): string {
+	return markdown.replace(/([ \t])(#+[ \t]*)$/, '$1\\$2');
+}
+
+const RichHeading = Heading.extend({
+	renderMarkdown(node, helpers, context) {
+		return escapeClosingHashes(this.parent?.(node, helpers, context) ?? '');
+	},
+});
+
 const RichParagraph = Paragraph.extend({
 	renderMarkdown(node, helpers, context) {
 		return escapeBlockSyntax(this.parent?.(node, helpers, context) ?? '');
@@ -108,10 +123,12 @@ export function createRichExtensions(options: RichExtensionsOptions = {}): Exten
 	return [
 		StarterKit.configure({
 			paragraph: false,
+			heading: false,
 			underline: false,
 			link: { openOnClick: false, autolink: true },
 		}),
 		RichParagraph,
+		RichHeading,
 		TableKit.configure({ table: { resizable: false } }),
 		Image.configure({ inline: false }),
 		Placeholder.configure({ placeholder: options.placeholder ?? '' }),
