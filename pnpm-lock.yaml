@@ -51,7 +51,13 @@ catalogs:
     '@vitest/coverage-v8':
       specifier: 4.1.12
       version: 4.1.12
+    '@vue/compiler-dom':
+      specifier: 3.5.44
+      version: 3.5.44
     '@vue/compiler-sfc':
+      specifier: 3.5.44
+      version: 3.5.44
+    '@vue/server-renderer':
       specifier: 3.5.44
       version: 3.5.44
     '@vue/test-utils':
@@ -924,13 +930,13 @@ importers:
         specifier: 5.2.3
         version: 5.2.3(vite@7.3.7(@types/node@25.2.3)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))(vue@3.5.44(typescript@5.9.3))
       '@vue/compiler-dom':
-        specifier: 3.5.44
+        specifier: 'catalog:'
         version: 3.5.44
       '@vue/compiler-sfc':
         specifier: 'catalog:'
         version: 3.5.44
       '@vue/server-renderer':
-        specifier: 3.5.44
+        specifier: 'catalog:'
         version: 3.5.44
       '@vue/test-utils':
         specifier: 'catalog:'
