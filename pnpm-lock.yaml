@@ -920,8 +920,14 @@ importers:
       '@vitejs/plugin-vue':
         specifier: 5.2.3
         version: 5.2.3(vite@7.3.7(@types/node@25.2.3)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))(vue@3.5.44(typescript@5.9.3))
+      '@vue/compiler-dom':
+        specifier: 3.5.44
+        version: 3.5.44
       '@vue/compiler-sfc':
         specifier: 'catalog:'
+        version: 3.5.44
+      '@vue/server-renderer':
+        specifier: 3.5.44
         version: 3.5.44
       '@vue/test-utils':
         specifier: 'catalog:'
@@ -14171,7 +14177,7 @@ snapshots:
       obug: 2.1.1
       std-env: 4.0.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.12(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(@vitest/coverage-v8@4.1.12)(happy-dom@21.0.4)(vite@7.3.7(@types/node@25.2.3)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
+      vitest: 4.1.12(@opentelemetry/api@1.9.0)(@types/node@22.15.29)(@vitest/coverage-v8@4.1.12)(happy-dom@21.0.4)(vite@7.3.7(@types/node@22.15.29)(sass@1.83.0)(terser@5.46.0)(tsx@3.12.6)(yaml@2.8.3))
 
   '@vitest/expect@4.1.12':
     dependencies:
