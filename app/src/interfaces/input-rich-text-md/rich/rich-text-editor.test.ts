@@ -62,3 +62,18 @@ test('disabled makes it read-only', async () => {
 	await flushPromises();
 	expect(w.find('[contenteditable="false"]').exists()).toBe(true);
 });
+
+test('toggling disabled does not emit for normalizable markdown', async () => {
+	const w = mountEditor({ value: '* a' });
+	await flushPromises();
+	await w.setProps({ disabled: true });
+	await flushPromises();
+	expect(w.emitted('input')).toBeUndefined();
+});
+
+test('value prop change to normalizable markdown does not emit', async () => {
+	const w = mountEditor({ value: 'one' });
+	await w.setProps({ value: '* b' });
+	await flushPromises();
+	expect(w.emitted('input')).toBeUndefined();
+});

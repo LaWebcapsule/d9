@@ -32,7 +32,11 @@ const editor = useEditor({
 	content: props.value ?? '',
 	contentType: 'markdown',
 	editable: !props.disabled,
-	onUpdate({ editor }) {
+	onCreate({ editor }) {
+		lastValue = serialize(editor);
+	},
+	onUpdate({ editor, transaction }) {
+		if (!transaction.docChanged) return;
 		const markdown = serialize(editor);
 		if (markdown === lastValue) return;
 		lastValue = markdown;
@@ -47,14 +51,14 @@ watch(
 		if (!instance) return;
 		const next = newValue ?? '';
 		if (next.trimEnd() === serialize(instance)) return;
-		lastValue = next.trimEnd();
 		instance.commands.setContent(next, { emitUpdate: false, contentType: 'markdown' });
+		lastValue = serialize(instance);
 	}
 );
 
 watch(
 	() => props.disabled,
-	(disabled) => editor.value?.setEditable(!disabled)
+	(disabled) => editor.value?.setEditable(!disabled, false)
 );
 
 function run(type: Alteration, options: Record<string, any> = {}): void {
