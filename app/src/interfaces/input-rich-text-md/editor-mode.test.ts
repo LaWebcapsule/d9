@@ -13,7 +13,17 @@ describe('resolveInitialMode', () => {
 		['markdown-only', 'rich', true, 'markdown', false],
 		['markdown-only', null, false, 'markdown', false],
 	] as const)('%s / stored=%s / representable=%s → %s', (option, stored, representable, mode, fellBack) => {
-		expect(resolveInitialMode({ option, stored, representable })).toEqual({ mode, fellBack });
+		expect(resolveInitialMode({ option, stored, isRepresentable: () => representable })).toEqual({ mode, fellBack });
+	});
+
+	test.each([
+		['markdown-only', null],
+		['markdown-only', 'rich'],
+		['rich-and-markdown', 'markdown'],
+	] as const)('%s / stored=%s does not check representability', (option, stored) => {
+		const isRepresentable = vi.fn(() => true);
+		resolveInitialMode({ option, stored, isRepresentable });
+		expect(isRepresentable).not.toHaveBeenCalled();
 	});
 });
 

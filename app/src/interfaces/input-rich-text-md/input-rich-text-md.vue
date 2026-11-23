@@ -398,7 +398,7 @@ export default defineComponent({
 		const initialMode = resolveInitialMode({
 			option: props.editorMode,
 			stored: readStoredMode(),
-			representable: isRepresentable(props.value ?? ''),
+			isRepresentable: () => isRepresentable(props.value ?? ''),
 		});
 
 		const mode = ref<EditorMode>(initialMode.mode);

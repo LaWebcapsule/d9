@@ -20,23 +20,23 @@ export function writeStoredMode(mode: EditorMode): void {
 	}
 }
 
+/**
+ * Mode the editor opens in. `isRepresentable` is only called when the result depends on it, as the
+ * check parses and renders the whole value.
+ */
 export function resolveInitialMode(args: {
 	option: EditorModeOption;
 	stored: EditorMode | null;
-	representable: boolean;
+	isRepresentable: () => boolean;
 }): { mode: EditorMode; fellBack: boolean } {
-	const { option, stored, representable } = args;
+	const { option, stored, isRepresentable } = args;
 
 	if (option === 'markdown-only') return { mode: 'markdown', fellBack: false };
 
-	if (option === 'rich-only') {
-		return representable ? { mode: 'rich', fellBack: false } : { mode: 'markdown', fellBack: true };
-	}
-
 	// rich-and-markdown: honour the stored preference, default to rich when the content allows it.
-	if (stored === 'markdown') return { mode: 'markdown', fellBack: false };
-	if (representable) return { mode: 'rich', fellBack: false };
-	return { mode: 'markdown', fellBack: true };
+	if (option === 'rich-and-markdown' && stored === 'markdown') return { mode: 'markdown', fellBack: false };
+
+	return isRepresentable() ? { mode: 'rich', fellBack: false } : { mode: 'markdown', fellBack: true };
 }
 
 export function canSwitchTo(

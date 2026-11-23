@@ -9,6 +9,12 @@ import { Tooltip } from '@/__utils__/tooltip';
 import InputRichTextMd from './input-rich-text-md.vue';
 import RichTextEditor from './rich/rich-text-editor.vue';
 import { MODE_STORAGE_KEY } from './editor-mode';
+import { isRepresentable } from './rich/markdown';
+
+vi.mock('./rich/markdown', async (importOriginal) => {
+	const original = await importOriginal<typeof import('./rich/markdown')>();
+	return { ...original, isRepresentable: vi.fn(original.isRepresentable) };
+});
 
 const i18n = createI18n({ legacy: false, locale: 'en-US', messages: { 'en-US': enUS } as any });
 
@@ -91,6 +97,7 @@ const richEditorStub = ({ link = null }: { link?: string | null } = {}) => {
 };
 
 beforeEach(() => {
+	vi.mocked(isRepresentable).mockClear();
 	localStorage.clear();
 	document.body.innerHTML = '';
 });
@@ -308,4 +315,16 @@ test('the link popover offers removing an existing link', async () => {
 
 	expect(stub.run).toHaveBeenCalledWith('link', {});
 	expect((wrapper.vm as any).linkMenuOpen).toBe(false);
+});
+
+test.each([
+	['markdown-only field', { editorMode: 'markdown-only' }, null],
+	['remembered markdown preference', {}, 'markdown'],
+])('%s mounts without checking representability', async (_name, props, stored) => {
+	if (stored) localStorage.setItem(MODE_STORAGE_KEY, stored);
+
+	mountInterface({ value: '**a**', ...props });
+	await flushPromises();
+
+	expect(isRepresentable).not.toHaveBeenCalled();
 });
