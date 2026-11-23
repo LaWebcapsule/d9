@@ -173,6 +173,38 @@ test('markdown preview is hidden after switching to Rich text', async () => {
 	expect(wrapper.classes()).not.toContain('preview');
 });
 
+test('external unrepresentable value in Rich text switches to Markdown without emitting', async () => {
+	const wrapper = mountInterface({ value: '**a**' });
+	await flushPromises();
+	const richEditor = wrapper.findComponent(RichTextEditor);
+	expect(richEditor.exists()).toBe(true);
+
+	await wrapper.setProps({ value: '<div>x</div>' });
+	await flushPromises();
+
+	// the Rich text editor was unmounted without ever holding the unrepresentable value
+	expect((richEditor.vm as any).$props.value).toBe('**a**');
+	expect(richEditor.exists()).toBe(false);
+	expect(wrapper.findComponent(RichTextEditor).exists()).toBe(false);
+	expect(codemirrorContainer(wrapper).style.display).not.toBe('none');
+	expect(wrapper.find('.v-notice').text()).toContain("can't show");
+	expect(localStorage.getItem(MODE_STORAGE_KEY)).toBeNull();
+	expect(wrapper.emitted('input')).toBeUndefined();
+});
+
+test('external representable value in Rich text stays in Rich text', async () => {
+	const wrapper = mountInterface({ value: '**a**' });
+	await flushPromises();
+
+	await wrapper.setProps({ value: '# b' });
+	await flushPromises();
+
+	expect(wrapper.findComponent(RichTextEditor).exists()).toBe(true);
+	expect(wrapper.find('h1').text()).toBe('b');
+	expect(wrapper.find('.v-notice').exists()).toBe(false);
+	expect(wrapper.emitted('input')).toBeUndefined();
+});
+
 test('markdown-only hides switch and rich editor', async () => {
 	const wrapper = mountInterface({ value: '**a**', editorMode: 'markdown-only' });
 	await flushPromises();

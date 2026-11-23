@@ -244,7 +244,7 @@
 			:disabled="disabled"
 			:placeholder="placeholder"
 			:font="editorFont"
-			@input="$emit('input', $event)"
+			@input="onRichInput"
 		/>
 
 		<div v-show="mode === 'markdown'" ref="codemirrorEl"></div>
@@ -407,6 +407,24 @@ export default defineComponent({
 		const linkMenuOpen = ref(false);
 		const linkHref = ref('');
 
+		// Markdown the Rich text editor emitted last, known to be representable
+		let lastRichEmit: string | null = null;
+
+		// Sync, so an unrepresentable external value (revision restore, discarded edits) switches to Markdown
+		// before the Rich text editor ever receives it and holds a lossy document.
+		watch(
+			() => props.value,
+			(newValue) => {
+				if (mode.value !== 'rich' || newValue === lastRichEmit) return;
+				if (isRepresentable(newValue ?? '')) return;
+
+				mode.value = 'markdown';
+				richTextUnavailable.value = true;
+				nextTick(() => codemirror?.refresh());
+			},
+			{ flush: 'sync' }
+		);
+
 		const imageDialogOpen = ref(false);
 
 		let count = ref(0);
@@ -543,7 +561,13 @@ export default defineComponent({
 			linkMenuOpen,
 			linkHref,
 			confirmLink,
+			onRichInput,
 		};
+
+		function onRichInput(markdown: string) {
+			lastRichEmit = markdown;
+			emit('input', markdown);
+		}
 
 		function onImageUpload(image: any) {
 			let url = getPublicURL() + `assets/` + image.id;
