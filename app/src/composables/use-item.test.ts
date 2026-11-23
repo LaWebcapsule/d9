@@ -400,4 +400,34 @@ describe('Edit conflicts', () => {
 
 		expect(api.post).toHaveBeenCalledWith('/items/test', { title: 'Mine', status: 'draft', meta: { nested: true } });
 	});
+
+	test('copies the loaded values when the item was deleted in the meantime', async () => {
+		vi.mocked(api.post).mockResolvedValue({ data: { data: { id: 2 } } });
+
+		const { edits, saveAsCopy, saving } = await setup();
+
+		vi.mocked(api.get).mockRejectedValue({ response: { status: 403 } });
+		edits.value = { title: 'Mine' };
+
+		await expect(saveAsCopy()).resolves.toBe(2);
+
+		expect(api.post).toHaveBeenCalledWith('/items/test', { title: 'Mine', status: 'draft' });
+		expect(saving.value).toBe(false);
+		expect(unexpectedError).not.toHaveBeenCalled();
+	});
+
+	test('stops saving and shows the error when the item to copy cannot be read', async () => {
+		const networkError = new Error('Network Error');
+
+		const { edits, saveAsCopy, saving } = await setup();
+
+		vi.mocked(api.get).mockRejectedValue(networkError);
+		edits.value = { title: 'Mine' };
+
+		await expect(saveAsCopy()).rejects.toBe(networkError);
+
+		expect(api.post).not.toHaveBeenCalled();
+		expect(saving.value).toBe(false);
+		expect(unexpectedError).toHaveBeenCalledWith(networkError);
+	});
 });

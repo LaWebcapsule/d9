@@ -261,12 +261,32 @@ export function useItem(
 		saving.value = true;
 		validationErrors.value = [];
 
+		try {
+			return await createCopy();
+		} finally {
+			saving.value = false;
+		}
+	}
+
+	async function getItemToCopy(fields: string[]) {
+		try {
+			const response = await api.get(itemEndpoint.value, { params: { fields } });
+			return response.data.data;
+		} catch (err: any) {
+			// The item was deleted (or can't be read anymore) while it was edited: copy the values that were loaded
+			if ([403, 404].includes(err?.response?.status) && loadedItem.value) return cloneDeep(loadedItem.value);
+
+			saveErrorHandler(err);
+		}
+	}
+
+	async function createCopy() {
 		const fields = collectionInfo.value?.meta?.item_duplication_fields || ['*'];
 
-		const itemData = await api.get(itemEndpoint.value, { params: { fields } });
+		const itemData = await getItemToCopy(fields);
 
 		const newItem: { [field: string]: any } = {
-			...(itemData.data.data || {}),
+			...(itemData || {}),
 			...edits.value,
 		};
 
@@ -350,7 +370,6 @@ export function useItem(
 
 		if (errors.length > 0) {
 			validationErrors.value = errors;
-			saving.value = false;
 			throw errors;
 		}
 
@@ -367,8 +386,6 @@ export function useItem(
 			return primaryKeyField.value ? response.data.data[primaryKeyField.value.field] : null;
 		} catch (err: any) {
 			saveErrorHandler(err);
-		} finally {
-			saving.value = false;
 		}
 
 		async function findExistingRelatedItems(
