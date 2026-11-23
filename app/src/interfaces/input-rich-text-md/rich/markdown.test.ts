@@ -87,3 +87,13 @@ describe('bare URLs typed as plain text are saved as working links', () => {
 		);
 	});
 });
+
+test.each([
+	['four spaces', '    four spaces'],
+	['tab', '\ttabbed'],
+])('a plain-text paragraph starting with %s stays a paragraph', (_name, text) => {
+	const html = marked(richToMarkdown(paragraphs('intro', text)), { mangle: false });
+
+	expect(html).not.toContain('<pre');
+	expect(html).toContain(`<p>${text.trim()}</p>`);
+});

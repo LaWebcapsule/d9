@@ -24,10 +24,14 @@ const BLOCK_SYNTAX_AT_LINE_START: RegExp[] = [
 
 /**
  * Backslash-escape paragraph text that would otherwise be parsed as block syntax, so plain text
- * typed in Rich text renders literally.
+ * typed in Rich text renders literally. Leading whitespace is dropped: four spaces or a tab would make
+ * the paragraph an indented code block, and markdown ignores up to three anyway.
  */
 export function escapeBlockSyntax(markdown: string): string {
-	return BLOCK_SYNTAX_AT_LINE_START.reduce((text, pattern) => text.replace(pattern, '$1\\$2'), markdown);
+	return BLOCK_SYNTAX_AT_LINE_START.reduce(
+		(text, pattern) => text.replace(pattern, '$1\\$2'),
+		markdown.replace(/^[ \t]+/, '')
+	);
 }
 
 /** URL starts that GFM (as rendered by marked) autolinks in plain text. */
