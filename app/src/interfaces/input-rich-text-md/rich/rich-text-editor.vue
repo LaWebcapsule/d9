@@ -94,11 +94,41 @@ function run(type: Alteration, options: Record<string, any> = {}): void {
 			chain.insertTable({ rows: options.rows, cols: options.columns, withHeaderRow: true }).run();
 			break;
 		case 'link':
-			if (options.href) chain.setLink({ href: options.href }).run();
-			else chain.unsetLink().run();
+			setLink(options.href);
 			break;
 		case 'custom':
 			break;
+	}
+}
+
+/**
+ * Link the selection, change the link around the cursor, or insert the URL as linked text when nothing
+ * is selected. Without a URL, removes the link around the cursor.
+ */
+function setLink(href: string | undefined): void {
+	const instance = editor.value;
+	if (!instance) return;
+
+	const chain = instance.chain().focus();
+
+	if (!href) {
+		chain.unsetLink().run();
+		return;
+	}
+
+	// setLink refuses URLs with disallowed protocols (javascript: and the like)
+	if (!instance.can().setLink({ href })) return;
+
+	if (instance.isActive('link')) {
+		chain.extendMarkRange('link').setLink({ href }).run();
+	} else if (instance.state.selection.empty) {
+		// Unset the stored link mark so typing on after the inserted URL isn't linked too
+		chain
+			.insertContent({ type: 'text', text: href, marks: [{ type: 'link', attrs: { href } }] })
+			.unsetMark('link')
+			.run();
+	} else {
+		chain.setLink({ href }).run();
 	}
 }
 

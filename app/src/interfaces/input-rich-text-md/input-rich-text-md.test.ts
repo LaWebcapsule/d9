@@ -69,14 +69,20 @@ const findIconButton = (wrapper: ReturnType<typeof mountInterface>, icon: string
 const codemirrorContainer = (wrapper: ReturnType<typeof mountInterface>) =>
 	wrapper.find('.CodeMirror').element.parentElement as HTMLElement;
 
-const richEditorStub = () => {
+const richEditorStub = ({ link = null }: { link?: string | null } = {}) => {
 	const run = vi.fn();
 	const insertImage = vi.fn();
 
 	const component = defineComponent({
 		name: 'RichTextEditor',
 		setup(_, { expose }) {
-			expose({ run, insertImage, isActive: () => false, getSelectedLink: () => null, focus: () => undefined });
+			expose({
+				run,
+				insertImage,
+				isActive: (type: string) => type === 'link' && link !== null,
+				getSelectedLink: () => link,
+				focus: () => undefined,
+			});
 			return () => h('div', { class: 'rich-text-editor-stub' });
 		},
 	});
@@ -259,4 +265,47 @@ test('image upload inserts asset URL with token in Rich text mode', async () => 
 	(wrapper.vm as any).onImageUpload({ id: 'abc' });
 
 	expect(stub.insertImage).toHaveBeenCalledWith(getPublicURL() + 'assets/abc?access_token=tok', '');
+});
+
+test('link button opens the popover prefilled with the selected link, and closes it again', async () => {
+	const stub = richEditorStub({ link: 'https://old.com' });
+
+	const wrapper = mountInterface({ value: 'text' }, { RichTextEditor: stub.component });
+	await flushPromises();
+
+	await findIconButton(wrapper, 'insert_link')!.trigger('click');
+	expect((wrapper.vm as any).linkMenuOpen).toBe(true);
+	expect((wrapper.vm as any).linkHref).toBe('https://old.com');
+
+	await findIconButton(wrapper, 'insert_link')!.trigger('click');
+	expect((wrapper.vm as any).linkMenuOpen).toBe(false);
+	expect(stub.run).not.toHaveBeenCalled();
+});
+
+test('confirming the link popover sets the link', async () => {
+	const stub = richEditorStub();
+
+	const wrapper = mountInterface({ value: 'text' }, { RichTextEditor: stub.component });
+	await flushPromises();
+
+	await findIconButton(wrapper, 'insert_link')!.trigger('click');
+	expect(findButton(wrapper, 'Remove Link')).toBeUndefined();
+	(wrapper.vm as any).linkHref = ' https://x.com ';
+	await findButton(wrapper, 'Done')!.trigger('click');
+
+	expect(stub.run).toHaveBeenCalledWith('link', { href: 'https://x.com' });
+	expect((wrapper.vm as any).linkMenuOpen).toBe(false);
+});
+
+test('the link popover offers removing an existing link', async () => {
+	const stub = richEditorStub({ link: 'https://old.com' });
+
+	const wrapper = mountInterface({ value: 'text' }, { RichTextEditor: stub.component });
+	await flushPromises();
+
+	await findIconButton(wrapper, 'insert_link')!.trigger('click');
+	await findButton(wrapper, 'Remove Link')!.trigger('click');
+
+	expect(stub.run).toHaveBeenCalledWith('link', {});
+	expect((wrapper.vm as any).linkMenuOpen).toBe(false);
 });

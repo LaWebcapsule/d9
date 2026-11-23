@@ -1,5 +1,6 @@
 import { mount, flushPromises } from '@vue/test-utils';
-import { expect, test } from 'vitest';
+import { EditorContent, type Editor } from '@tiptap/vue-3';
+import { describe, expect, test } from 'vitest';
 import RichTextEditor from './rich-text-editor.vue';
 
 const mountEditor = (props: Record<string, any> = {}) =>
@@ -76,4 +77,55 @@ test('value prop change to normalizable markdown does not emit', async () => {
 	await w.setProps({ value: '* b' });
 	await flushPromises();
 	expect(w.emitted('input')).toBeUndefined();
+});
+
+describe('link', () => {
+	const mountAt = async (value: string, selection: number | { from: number; to: number }) => {
+		const w = mountEditor({ value });
+		await flushPromises();
+		const editor = w.findComponent(EditorContent).props('editor') as Editor;
+		editor.commands.setTextSelection(selection);
+		return w;
+	};
+
+	test('without a selection inserts the URL as linked text', async () => {
+		const w = await mountAt('go', 1);
+		(w.vm as any).run('link', { href: 'https://x.com' });
+		await flushPromises();
+		expect(w.emitted('input')!.at(-1)![0]).toBe('[https://x.com](https://x.com)go');
+	});
+
+	test('on a selection links the selected text', async () => {
+		const w = await mountAt('hello world', { from: 7, to: 12 });
+		(w.vm as any).run('link', { href: 'https://x.com' });
+		await flushPromises();
+		expect(w.emitted('input')!.at(-1)![0]).toBe('hello [world](https://x.com)');
+	});
+
+	test('with the cursor inside a link changes its URL', async () => {
+		const w = await mountAt('[a link](https://old.com) after', 3);
+		(w.vm as any).run('link', { href: 'https://new.com' });
+		await flushPromises();
+		expect(w.emitted('input')!.at(-1)![0]).toBe('[a link](https://new.com) after');
+	});
+
+	test('without a URL removes the link around the cursor', async () => {
+		const w = await mountAt('[a link](https://old.com) after', 3);
+		(w.vm as any).run('link', {});
+		await flushPromises();
+		expect(w.emitted('input')!.at(-1)![0]).toBe('a link after');
+	});
+
+	test('a disallowed URL inserts nothing', async () => {
+		const w = await mountAt('go', 1);
+		(w.vm as any).run('link', { href: 'javascript:alert(1)' });
+		await flushPromises();
+		expect(w.emitted('input')).toBeUndefined();
+	});
+
+	test('getSelectedLink returns the URL of the link around the cursor', async () => {
+		const w = await mountAt('[a link](https://old.com) after', 3);
+		expect((w.vm as any).getSelectedLink()).toBe('https://old.com');
+		expect((w.vm as any).isActive('link')).toBe(true);
+	});
 });

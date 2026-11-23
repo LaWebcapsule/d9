@@ -129,7 +129,10 @@
 							<p class="type-label">{{ t('interfaces.input-rich-text-md.link_url') }}</p>
 							<v-input v-model="linkHref" autofocus placeholder="https://" @keydown.enter.prevent="confirmLink" />
 						</div>
-						<div class="field full">
+						<div v-if="linkExisting" class="field half">
+							<v-button full-width secondary @click="removeLink">{{ t('wysiwyg_options.unlink') }}</v-button>
+						</div>
+						<div class="field" :class="linkExisting ? 'half' : 'full'">
 							<v-button full-width @click="confirmLink">{{ t('done') }}</v-button>
 						</div>
 					</div>
@@ -406,6 +409,8 @@ export default defineComponent({
 
 		const linkMenuOpen = ref(false);
 		const linkHref = ref('');
+		// Whether the link popover edits a link that already exists at the cursor
+		const linkExisting = ref(false);
 
 		// Markdown the Rich text editor emitted last, known to be representable
 		let lastRichEmit: string | null = null;
@@ -560,7 +565,9 @@ export default defineComponent({
 			isActive,
 			linkMenuOpen,
 			linkHref,
+			linkExisting,
 			confirmLink,
+			removeLink,
 			onRichInput,
 		};
 
@@ -588,7 +595,7 @@ export default defineComponent({
 		function edit(type: Alteration, options?: Record<string, any>) {
 			if (mode.value === 'rich') {
 				if (props.disabled) return;
-				if (type === 'link') openLinkMenu();
+				if (type === 'link') toggleLinkMenu();
 				else richEditor.value?.run(type, options);
 				return;
 			}
@@ -614,13 +621,24 @@ export default defineComponent({
 			return mode.value === 'rich' && !!richEditor.value?.isActive(type, options);
 		}
 
-		function openLinkMenu() {
+		function toggleLinkMenu() {
+			if (linkMenuOpen.value) {
+				linkMenuOpen.value = false;
+				return;
+			}
+
 			linkHref.value = richEditor.value?.getSelectedLink() ?? '';
+			linkExisting.value = !!richEditor.value?.isActive('link');
 			linkMenuOpen.value = true;
 		}
 
 		function confirmLink() {
 			richEditor.value?.run('link', { href: linkHref.value.trim() });
+			linkMenuOpen.value = false;
+		}
+
+		function removeLink() {
+			richEditor.value?.run('link', {});
 			linkMenuOpen.value = false;
 		}
 
