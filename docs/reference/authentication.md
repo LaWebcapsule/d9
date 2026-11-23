@@ -319,8 +319,11 @@ this feature.
 
 ### Response
 
-Always `204 No Content`, sent before the account is created. The response is the same whether or not the address already
-has an account, so it can't be used to find out which addresses are registered.
+`204 No Content`, sent before the account is created. The response is the same whether or not the address already has an
+account, so it can't be used to find out which addresses are registered.
+
+`400 Bad Request` (`INVALID_PAYLOAD`) if the body is invalid, or if `verification_url` is not in
+`AUTH_<PROVIDER>_REGISTER_URL_ALLOW_LIST`. Neither check depends on the account.
 
 Calling it again for an account still awaiting confirmation re-sends the email, at most once a minute.
 
