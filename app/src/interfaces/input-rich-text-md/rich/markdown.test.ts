@@ -3,7 +3,7 @@ import { describe, expect, test } from 'vitest';
 import { isRepresentable, markdownToRich, richToMarkdown } from './markdown';
 import demo from '../demo.md?raw';
 
-const render = (md: string) => marked(md).replace(/\s+/g, ' ').trim();
+const render = (md: string) => marked(md, { mangle: false }).replace(/\s+/g, ' ').trim();
 const roundTrip = (md: string) => richToMarkdown(markdownToRich(md));
 
 describe('supported constructs open in Rich text and render identically', () => {
@@ -17,6 +17,7 @@ describe('supported constructs open in Rich text and render identically', () => 
 		['link with title', '[d9](https://example.com "Title")'],
 		['image with title', '![alt](https://example.com/a.png "T")'],
 		['autolink', 'see https://example.com'],
+		['email autolink', 'mail foo@example.com'],
 		['hard break', 'line one  \nline two'],
 		['hr', 'a\n\n---\n\nb'],
 		['aligned table', '| a | b | c |\n|:--|:-:|--:|\n| 1 | 2 | 3 |'],

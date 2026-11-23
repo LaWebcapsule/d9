@@ -20,9 +20,12 @@ export function richToMarkdown(doc: JSONContent): string {
 	return withEditor(doc, 'json', (editor) => editor.getMarkdown());
 }
 
-/** Whitespace-normalized HTML as rendered by the app's markdown renderer. */
+/**
+ * Whitespace-normalized HTML as rendered by the app's markdown renderer. `mangle` is off because it
+ * randomly entity-encodes email addresses, which would make two renders of the same input differ.
+ */
 function render(markdown: string): string {
-	return marked(markdown).replace(/\s+/g, ' ').trim();
+	return marked(markdown, { mangle: false }).replace(/\s+/g, ' ').trim();
 }
 
 type Token = { type: string; codeBlockStyle?: string; tokens?: Token[]; items?: Token[]; [key: string]: unknown };
