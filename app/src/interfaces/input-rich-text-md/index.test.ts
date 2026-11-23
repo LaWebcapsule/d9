@@ -15,3 +15,7 @@ test('flow operations pin markdown-only', () => {
 	const notif = (notification.options as any[]).find((f: any) => f.meta?.interface === 'input-rich-text-md');
 	expect(notif.meta.options.editorMode).toBe('markdown-only');
 });
+
+test('component loads asynchronously, keeping the editor out of the entry chunk', () => {
+	expect(iface.component).toHaveProperty('__asyncLoader');
+});

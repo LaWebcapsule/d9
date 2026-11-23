@@ -1,6 +1,8 @@
 import { defineInterface } from '@wbce-d9/utils';
-import InterfaceInputRichTextMD from './input-rich-text-md.vue';
+import { defineAsyncComponent } from 'vue';
 import PreviewSVG from './preview.svg?raw';
+
+const InterfaceInputRichTextMD = defineAsyncComponent(() => import('./input-rich-text-md.vue'));
 
 export default defineInterface({
 	id: 'input-rich-text-md',
