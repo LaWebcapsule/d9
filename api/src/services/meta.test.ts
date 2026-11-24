@@ -48,5 +48,55 @@ describe('Integration Tests', () => {
 				expect(tracker.history.select[0]!.sql).toContain('count(distinct "authors"."id")');
 			});
 		});
+
+		describe('totalCount', () => {
+			const accountabilityWithReadPermission = (permissions: Record<string, any>) => ({
+				role: 'reader',
+				admin: false,
+				permissions: [
+					{
+						id: 1,
+						role: 'reader',
+						collection: 'authors',
+						action: 'read' as const,
+						permissions,
+						validation: {},
+						presets: {},
+						fields: ['*'],
+					},
+				],
+			});
+
+			it('counts the rows of the collection when the permission does not cross a to-many relation', async () => {
+				tracker.on.select('authors').response([{ count: 2 }]);
+
+				const service = new MetaService({
+					knex: db,
+					schema: userSchema,
+					accountability: accountabilityWithReadPermission({ name: { _eq: 'toto' } }),
+				});
+
+				const count = await service.totalCount('authors');
+
+				expect(count).toBe(2);
+				expect(tracker.history.select[0]!.sql).toContain('count(*)');
+				expect(tracker.history.select[0]!.sql).not.toContain('distinct');
+			});
+
+			it('counts distinct items when the permission crosses a to-many relation', async () => {
+				tracker.on.select('authors').response([{ count: 1 }]);
+
+				const service = new MetaService({
+					knex: db,
+					schema: userSchema,
+					accountability: accountabilityWithReadPermission({ items: { title: { _contains: 'a' } } }),
+				});
+
+				const count = await service.totalCount('authors');
+
+				expect(count).toBe(1);
+				expect(tracker.history.select[0]!.sql).toContain('count(distinct "authors"."id")');
+			});
+		});
 	});
 });

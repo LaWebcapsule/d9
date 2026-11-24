@@ -38,16 +38,27 @@ export class MetaService {
 	}
 
 	async totalCount(collection: string): Promise<number> {
-		const dbQuery = this.knex(collection).count('*', { as: 'count' }).first();
+		const dbQuery = this.knex(collection);
 
 		// Only the permissions apply to the total count, not the filter and search of the query
 		const { filter } = await this.getAuthorizedQuery(collection, { fields: [] });
 
+		let hasMultiRelationalFilter = false;
+
 		if (filter && Object.keys(filter).length > 0) {
-			applyFilter(this.knex, this.schema, dbQuery, filter, collection, {});
+			hasMultiRelationalFilter = applyFilter(
+				this.knex,
+				this.schema,
+				dbQuery,
+				filter,
+				collection,
+				{}
+			).hasMultiRelationalFilter;
 		}
 
-		const result = await dbQuery;
+		this.applyCount(dbQuery, collection, hasMultiRelationalFilter);
+
+		const result = await dbQuery.first();
 
 		return Number(result?.count ?? 0);
 	}
@@ -74,6 +85,14 @@ export class MetaService {
 			applySearch(this.schema, dbQuery, search, collection);
 		}
 
+		this.applyCount(dbQuery, collection, hasMultiRelationalFilter);
+
+		const records = await dbQuery;
+
+		return Number(records[0]!.count);
+	}
+
+	private applyCount(dbQuery: Knex.QueryBuilder, collection: string, hasMultiRelationalFilter: boolean): void {
 		if (hasMultiRelationalFilter) {
 			// A filter across a to-many relation joins it: count the distinct items, not the joined rows
 			const primaryKeyName = this.schema.collections[collection]!.primary;
@@ -81,10 +100,6 @@ export class MetaService {
 		} else {
 			dbQuery.count('*', { as: 'count' });
 		}
-
-		const records = await dbQuery;
-
-		return Number(records[0]!.count);
 	}
 
 	/**
