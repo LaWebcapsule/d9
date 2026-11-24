@@ -131,7 +131,7 @@
 		"exif-reader": "1.2.0",
 		"fast-redact": "^3.5.0",
 		"flat": "5.0.2",
-		"graphql": "16.8.1",
+		"graphql": "16.15.0",
 		"graphql-compose": "9.0.10",
 		"helmet": "6.1.5",
 		"icc": "3.0.0",
