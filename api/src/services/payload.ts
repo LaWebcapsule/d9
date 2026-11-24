@@ -726,6 +726,7 @@ export class PayloadService {
 							},
 						],
 					},
+					limit: -1,
 				};
 
 				// Nullify all related items that aren't included in the current payload
@@ -860,6 +861,7 @@ export class PayloadService {
 								},
 							],
 						},
+						limit: -1,
 					};
 
 					if (relation.meta.one_deselect_action === 'delete') {

@@ -1276,12 +1276,18 @@ importers:
         specifier: 'catalog:'
         version: 3.1.0(mysql@2.18.1)(pg@8.10.0)(sqlite3@5.1.6(encoding@0.1.13))(tedious@18.6.1(@azure/core-client@1.10.1))
     devDependencies:
+      '@vitest/coverage-v8':
+        specifier: 'catalog:'
+        version: 4.1.12(vitest@4.1.12)
       '@wbce-d9/tsconfig':
         specifier: 'catalog:'
         version: 2.0.0
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 4.1.12(@opentelemetry/api@1.9.0)(@types/node@25.2.3)(@vitest/coverage-v8@4.1.12)(happy-dom@21.0.4)(vite@7.3.7(@types/node@25.2.3)(sass@1.83.0)(terser@5.46.0)(yaml@2.8.3))
 
   packages/specs:
     dependencies:
