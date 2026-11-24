@@ -43,7 +43,7 @@ import type {
 } from 'graphql-compose';
 import { GraphQLJSON, InputTypeComposer, ObjectTypeComposer, SchemaComposer, toInputObjectType } from 'graphql-compose';
 import type { Knex } from 'knex';
-import { flatten, get, mapKeys, merge, omit, pick, set, transform, uniq } from 'lodash-es';
+import { flatten, get, mapKeys, merge, omit, pick, transform, uniq } from 'lodash-es';
 import { clearSystemCache, getCache } from '../../cache.js';
 import {
 	ACCESS_COOKIE_CLEAR_OPTIONS,
@@ -62,6 +62,7 @@ import { generateHash } from '../../utils/generate-hash.js';
 import { getGraphQLType } from '../../utils/get-graphql-type.js';
 import { reduceSchema } from '../../utils/reduce-schema.js';
 import { sanitizeQuery } from '../../utils/sanitize-query.js';
+import { setOwn } from '../../utils/set-own.js';
 import { validateQuery } from '../../utils/validate-query.js';
 import { ActivityService } from '../activity.js';
 import { AuthenticationService } from '../authentication.js';
@@ -1614,7 +1615,7 @@ export class GraphQLService {
 							if (selection.selectionSet) {
 								if (!query.deep) query.deep = {};
 
-								set(
+								setOwn(
 									query.deep,
 									parent,
 									merge({}, get(query.deep, parent), { _alias: { [selection.alias!.value]: selection.name.value } })
@@ -1652,7 +1653,7 @@ export class GraphQLService {
 
 						const args: Record<string, any> = this.parseArgs(selection.arguments, variableValues);
 
-						set(
+						setOwn(
 							query.deep,
 							currentAlias ?? current,
 							merge(
@@ -1743,11 +1744,11 @@ export class GraphQLService {
 	 */
 	formatError(error: BaseException | BaseException[]): GraphQLError {
 		if (Array.isArray(error)) {
-			set(error[0]!, 'extensions.code', error[0]!.code);
+			setOwn(error[0]!, 'extensions.code', error[0]!.code);
 			return new GraphQLError(error[0]!.message, undefined, undefined, undefined, undefined, error[0]);
 		}
 
-		set(error, 'extensions.code', error.code);
+		setOwn(error, 'extensions.code', error.code);
 		return new GraphQLError(error.message, undefined, undefined, undefined, undefined, error);
 	}
 
