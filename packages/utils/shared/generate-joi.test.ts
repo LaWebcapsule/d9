@@ -555,6 +555,25 @@ describe(`generateJoi`, () => {
 		expect(generateJoi(mockFieldFilter).describe()).toStrictEqual(mockSchema);
 	});
 
+	it.each([
+		['_ieq', 'aBc', 'ABC', true],
+		['_ieq', 'aBc', 'abcd', false],
+		['_ieq', 'a.c', 'abc', false],
+		['_istarts_with', 'aBc', 'ABCdef', true],
+		['_istarts_with', 'aBc', 'xabc', false],
+		['_istarts_with', '(a', '(Abc', true],
+		['_nistarts_with', 'aBc', 'ABCdef', false],
+		['_nistarts_with', 'aBc', 'xabc', true],
+		['_iends_with', 'aBc', 'xyzABC', true],
+		['_iends_with', 'aBc', 'abcx', false],
+		['_iends_with', 'c)', 'abC)', true],
+		['_niends_with', 'aBc', 'xyzABC', false],
+		['_niends_with', 'aBc', 'abcx', true],
+	])(`%s %j against %j is valid: %s`, (operator, compareValue, value, valid) => {
+		const { error } = generateJoi({ field: { [operator]: compareValue } } as FieldFilter).validate({ field: value });
+		expect(error === undefined).toBe(valid);
+	});
+
 	it(`returns the correct schema for an _in match`, () => {
 		const mockFieldFilter = { field: { _in: 'field' } } as FieldFilter;
 
