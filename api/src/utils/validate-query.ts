@@ -80,6 +80,7 @@ function validateFilter(filter: Query['filter'] | Query['filter'][]) {
 					validateFilter(nested);
 					break;
 				case '_eq':
+				case '_ieq':
 				case '_neq':
 				case '_contains':
 				case '_ncontains':

@@ -25,6 +25,7 @@ export const generateFilterForDataType = (filter: ClientFilterOperator, possible
 		case 'nends_with':
 		case 'niends_with':
 		case 'eq':
+		case 'ieq':
 		case 'neq':
 			if (Array.isArray(possibleValues)) {
 				return possibleValues.map((value) => {
@@ -132,6 +133,8 @@ export const getValidatorFunction = (filter: ClientFilterOperator): FilterValida
 			return _niends_with;
 		case 'eq':
 			return _eq;
+		case 'ieq':
+			return _ieq;
 		case 'neq':
 			return _neq;
 		case 'empty':
@@ -241,6 +244,14 @@ const _niends_with = (inputValue: any, possibleValues: any): boolean => {
 
 const _eq = (inputValue: any, possibleValues: any): boolean => {
 	if (inputValue === possibleValues) {
+		return true;
+	}
+
+	return false;
+};
+
+const _ieq = (inputValue: any, possibleValues: any): boolean => {
+	if (inputValue.toLowerCase() === possibleValues.toLowerCase()) {
 		return true;
 	}
 

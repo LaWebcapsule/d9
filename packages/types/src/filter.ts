@@ -23,6 +23,7 @@ export type FilterOperator =
 
 export type ClientFilterOperator =
 	| FilterOperator
+	| 'ieq'
 	| 'starts_with'
 	| 'nstarts_with'
 	| 'istarts_with'
@@ -57,6 +58,7 @@ export type FieldFilterOperator = {
 	_contains?: string;
 	_ncontains?: string;
 	_icontains?: string;
+	_ieq?: string;
 	_starts_with?: string;
 	_nstarts_with?: string;
 	_istarts_with?: string;

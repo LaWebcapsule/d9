@@ -53,6 +53,7 @@ readTime: 5 min read
 | Operator Title _(in app)_      | Operator                           | Description                            |
 | ------------------------------ | ---------------------------------- | -------------------------------------- |
 | Equals                         | `_eq`                              | Equal to                               |
+| Equals (case-insensitive)      | `_ieq`                             | Equal to, case-insensitive             |
 | Doesn't equal                  | `_neq`                             | Not equal to                           |
 | Less than                      | `_lt`                              | Less than                              |
 | Less than or equal to          | `_lte`                             | Less than or equal to                  |

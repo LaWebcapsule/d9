@@ -580,6 +580,9 @@ export class GraphQLService {
 					_eq: {
 						type: GraphQLString,
 					},
+					_ieq: {
+						type: GraphQLString,
+					},
 					_neq: {
 						type: GraphQLString,
 					},

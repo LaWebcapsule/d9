@@ -29,6 +29,7 @@ export function getFilterOperatorsForType(
 				'iends_with',
 				'niends_with',
 				'eq',
+				'ieq',
 				'neq',
 				'empty',
 				'nempty',

@@ -712,6 +712,7 @@ change_advanced_filter_operator: Change Operator
 advanced: Advanced
 operators:
   eq: Equals
+  ieq: Equals (insensitive)
   neq: Doesn't equal
   lt: Less than
   gt: Greater than

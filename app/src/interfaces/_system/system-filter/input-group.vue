@@ -121,7 +121,7 @@ export default defineComponent({
 	},
 	emits: ['update:field'],
 	setup(props, { emit }) {
-		const singleValueOperators = ['_eq', '_neq', '_lt', '_gt', '_lte', '_gte'];
+		const singleValueOperators = ['_eq', '_ieq', '_neq', '_lt', '_gt', '_lte', '_gte'];
 
 		const patternOperators = [
 			'_contains',

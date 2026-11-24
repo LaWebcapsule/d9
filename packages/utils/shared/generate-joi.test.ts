@@ -529,6 +529,32 @@ describe(`generateJoi`, () => {
 		expect(generateJoi(mockFieldFilter).describe()).toStrictEqual(mockSchema);
 	});
 
+	it(`returns the correct schema for an _ieq match`, () => {
+		const mockFieldFilter = { field: { _ieq: 'field' } } as FieldFilter;
+
+		const mockSchema = Joi.object({
+			field: Joi.string().pattern(new RegExp(`^${escapeRegExp('field')}$`, 'i'), {
+				name: 'ieq',
+			}),
+		})
+			.unknown()
+			.describe();
+
+		expect(generateJoi(mockFieldFilter).describe()).toStrictEqual(mockSchema);
+	});
+
+	it(`returns the correct schema for an _ieq with null value`, () => {
+		const mockFieldFilter = { field: { _ieq: null } } as FieldFilter;
+
+		const mockSchema = Joi.object({
+			field: Joi.any().equal(true),
+		})
+			.unknown()
+			.describe();
+
+		expect(generateJoi(mockFieldFilter).describe()).toStrictEqual(mockSchema);
+	});
+
 	it(`returns the correct schema for an _in match`, () => {
 		const mockFieldFilter = { field: { _in: 'field' } } as FieldFilter;
 
