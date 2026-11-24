@@ -67,7 +67,7 @@
 		"vitest": "catalog:"
 	},
 	"engines": {
-		"node": "^22 || ^24"
+		"node": "^22"
 	},
 	"publishConfig": {
 		"access": "public"

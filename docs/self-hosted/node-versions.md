@@ -9,12 +9,10 @@ readTime: 2 min read
 
 ## Policy
 
-- d9 moves to the next Node.js LTS version in a major release, one quarter before the current version reaches its end of
-  life.
+- d9 moves to the next Node.js LTS version in a major release, before the current version reaches its end of life and at
+  the latest one quarter before it.
 - The switch is announced at least two months ahead: in the release notes, in a pinned GitHub issue, and by a warning in
   the API logs at startup.
-- `@wbce-d9/extensions-sdk` accepts both the current and the next Node.js version during the transition, so extension
-  authors can move at their own pace.
 
 The Docker image always ships the supported Node.js version. Docker users only need to check that their extensions run
 on it.
@@ -30,4 +28,4 @@ See the [Node.js release schedule](https://github.com/nodejs/Release#release-sch
 ## Startup Warning
 
 Until the switch, the API logs a warning at startup when it runs on a Node.js version that the next major release of d9
-won't support. Set `NODE_VERSION_WARNING=false` to hide it.
+won't support.

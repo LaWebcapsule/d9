@@ -211,7 +211,6 @@ prefixing the value with `{type}:`. The following types are available:
 | `MAX_ITEMS_PER_QUERY`      | The maximum number of items allowed when querying relational fields. Set it to `-1` to remove the limitation. | `-1`                         |
 | `ROBOTS_TXT`               | What the `/robots.txt` endpoint should return                                                                 | `User-agent: *\nDisallow: /` |
 | `X_POWERED_BY_ENABLED`     | Whether the response should return the X-Powered-By d9 Header                                           | `true`                       |
-| `NODE_VERSION_WARNING`     | Whether to log a warning at startup when the next major release of d9 won't support the current Node.js version. See [Supported Node.js Versions](/self-hosted/node-versions). | `true` |
 
 <sup>[1]</sup> The PUBLIC_URL value is used for things like OAuth redirects, forgot-password emails, and logos that
 needs to be publicly available on the internet.
