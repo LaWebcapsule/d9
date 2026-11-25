@@ -25,7 +25,6 @@
 		"autocannon": "7.10.0",
 		"globby": "12.0.0",
 		"listr2": "6.3.1",
-		"portfinder": "^1.0.32",
 		"seedrandom": "3.0.5",
 		"typescript": "catalog:"
 	},

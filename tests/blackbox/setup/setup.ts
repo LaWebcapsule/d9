@@ -77,7 +77,7 @@ export default async (): Promise<void> => {
 									});
 
 									// Give the server some time to start
-									await awaitDirectusConnection(Number(config.envs[vendor].PORT));
+									await awaitDirectusConnection(Number(config.envs[vendor].PORT), server);
 
 									// Set up separate directus instance without system cache
 									const noCacheEnv = clone(config.envs[vendor]);
@@ -105,7 +105,7 @@ export default async (): Promise<void> => {
 									});
 
 									// Give the server some time to start
-									await awaitDirectusConnection(Number(noCacheEnv.PORT));
+									await awaitDirectusConnection(Number(noCacheEnv.PORT), serverNoCache);
 								}
 							},
 						};

@@ -9,7 +9,6 @@ import type { Knex } from 'knex';
 import knex from 'knex';
 import { cloneDeep } from 'lodash-es';
 import request from 'supertest';
-import * as portfinder from 'portfinder';
 import { requestGraphQL } from '@common/transport.ts';
 import { TEST_USERS, USER } from '@common/variables.ts';
 
@@ -25,16 +24,14 @@ describe('Logger Redact Tests', () => {
 		for (const vendor of vendors) {
 			databases.set(vendor, knex(config.knexConfig[vendor]!));
 
-			const newServerPort = await portfinder.getPortPromise();
-
 			env[vendor].LOG_STYLE = 'raw';
 			env[vendor].LOG_LEVEL = 'info';
-			env[vendor].PORT = String(newServerPort);
+			env[vendor].PORT = String(Number(env[vendor].PORT) + 250);
 
 			const server = spawn('node', [paths.cli, 'start'], { cwd: paths.cwd, env: env[vendor] });
 			directusInstances[vendor] = server;
 
-			promises.push(awaitDirectusConnection(Number(env[vendor].PORT)));
+			promises.push(awaitDirectusConnection(Number(env[vendor].PORT), server));
 		}
 
 		// Give the server some time to start

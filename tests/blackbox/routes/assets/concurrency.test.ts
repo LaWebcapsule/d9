@@ -24,6 +24,7 @@ describe('/assets', () => {
 						let spawnCount = 0;
 						let hasErrors = false;
 						let isSpawnRunning = false;
+						let autocannonOutput = '';
 
 						const insertResponse = await request(getUrl(vendor))
 							.post('/files')
@@ -44,6 +45,8 @@ describe('/assets', () => {
 							isSpawnRunning = true;
 
 							child.stderr.on('data', (data) => {
+								autocannonOutput += String(data);
+
 								if (String(data).includes('errors')) {
 									hasErrors = true;
 								}
@@ -65,7 +68,7 @@ describe('/assets', () => {
 						}
 
 						// Assert
-						expect(hasErrors).toBe(false);
+						expect(hasErrors, autocannonOutput).toBe(false);
 					},
 					600000
 				);
