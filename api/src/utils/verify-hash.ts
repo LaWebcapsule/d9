@@ -5,6 +5,11 @@ import { getConfigFromEnv } from './get-config-from-env.js';
 // The cost parameters argon2.hash uses when generateHash doesn't override them through HASH_* variables
 const DEFAULT_COSTS = { m: 65536, t: 3, p: 4 };
 
+const POSITIVE_INTEGER = /^[1-9][0-9]*$/;
+
+// 0x10 and 0x13, the only versions argon2 defines
+const ARGON2_VERSIONS = ['16', '19'];
+
 /**
  * Verify a string against a hash supplied by the caller.
  *
@@ -27,12 +32,20 @@ export async function verifyHash(hash: string, stringToVerify: string): Promise<
 		.flatMap((segment) => segment.split(','))
 		.map((param) => param.split('='));
 
+	// argon2 casts the parameters to unsigned 32-bit integers, so anything but plain decimal digits (a sign, an
+	// exponent, a fraction) could wrap around to a huge value
 	for (const [name, max] of Object.entries(maxCosts)) {
-		const values = params.filter(([key]) => key === name).map(([, value]) => Number(value));
+		const values = params.filter(([key]) => key === name).map(([, value]) => value);
 
-		if (values.length !== 1 || !Number.isInteger(values[0]) || values[0]! > max) {
+		if (values.length !== 1 || !POSITIVE_INTEGER.test(values[0]!) || Number(values[0]) > max) {
 			throw new InvalidPayloadException(`"hash" is invalid`);
 		}
+	}
+
+	const versions = params.filter(([key]) => key === 'v').map(([, value]) => value);
+
+	if (versions.length > 1 || (versions.length === 1 && !ARGON2_VERSIONS.includes(versions[0]!))) {
+		throw new InvalidPayloadException(`"hash" is invalid`);
 	}
 
 	return await argon2.verify(hash, stringToVerify);

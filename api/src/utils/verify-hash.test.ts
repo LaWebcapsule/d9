@@ -30,6 +30,31 @@ describe('verifyHash', () => {
 		await expect(verifyHash(hash, 'secret')).rejects.toBeInstanceOf(InvalidPayloadException);
 	});
 
+	test.each(['m', 't', 'p'])('rejects a hash whose %s cost is not a strictly positive integer', async (name) => {
+		const hash = await argon2.hash('secret');
+
+		for (const value of ['-1', '-4294967295', '-0', '0', '+5', '1e3', '3.5', '0x10', '05', '4294967297', '']) {
+			const tampered = hash.replace(new RegExp(`([$,])${name}=[0-9]+`), `$1${name}=${value}`);
+
+			await expect(verifyHash(tampered, 'secret'), `${name}=${value}`).rejects.toBeInstanceOf(InvalidPayloadException);
+		}
+	});
+
+	test.each(['v=-19', 'v=4294967315', 'v=+19', 'v=1e1', 'v=20', 'v=19$v=19'])(
+		'rejects a hash with version %s',
+		async (version) => {
+			const hash = (await argon2.hash('secret')).replace('v=19', version);
+
+			await expect(verifyHash(hash, 'secret')).rejects.toBeInstanceOf(InvalidPayloadException);
+		}
+	);
+
+	test('accepts a hash without a version', async () => {
+		const hash = (await argon2.hash('secret', { version: 0x10 })).replace('$v=16', '');
+
+		await expect(verifyHash(hash, 'secret')).resolves.toBe(true);
+	});
+
 	test('rejects a hash repeating a cost parameter', async () => {
 		const hash = (await argon2.hash('secret')).replace('m=65536', 'm=65536,m=4194304');
 
