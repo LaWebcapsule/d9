@@ -82,6 +82,8 @@ const directusConfig = {
 	MAX_PAYLOAD_SIZE: '10mb',
 	EXTENSIONS_PATH: './extensions',
 	ASSETS_TRANSFORM_MAX_CONCURRENT: '2',
+	// A starved load generator can leave a connection idle past Node's 5s default, and its next request then races the close and gets ECONNRESET
+	SERVER_KEEP_ALIVE_TIMEOUT: '30000',
 	MAX_BATCH_MUTATION: '100', // Must be in multiples of 10 for tests and inferior of QS_ARRAY_LIMIT
 	ACCESS_TOKEN_TTL: '25d', // should be larger than 24.86 days to test Expires value larger than 32-bit signed integer
 	...directusAuthConfig,

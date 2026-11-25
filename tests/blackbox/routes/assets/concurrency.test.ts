@@ -38,8 +38,9 @@ describe('/assets', () => {
 						function spawnAutoCannon() {
 							const url = `${getUrl(vendor)}/assets/${insertResponse.body.data.id}?access_token=${USER.ADMIN.TOKEN}`;
 
-							// The runner shares its CPUs with autocannon, so the slowest of 100 concurrent responses can exceed autocannon's default 10s timeout
-							const options = ['exec', 'autocannon', '-c', '100', '-t', '60', url];
+							// The runner shares its CPUs with autocannon, so the slowest of 100 concurrent responses can exceed autocannon's default 10s timeout.
+							// --debug prints each socket error, so a failure shows its cause (ECONNRESET, ECONNREFUSED…)
+							const options = ['exec', 'autocannon', '-c', '100', '-t', '60', '--debug', url];
 							const child = spawn('pnpm', options);
 
 							isSpawnRunning = true;
