@@ -1,3 +1,4 @@
+import { IllegalAssetTransformation } from '../exceptions/illegal-asset-transformation.js';
 import type { File, Transformation, TransformationParams } from '../types/index.js';
 
 export function resolvePreset(input: TransformationParams, file: File): Transformation[] {
@@ -46,10 +47,12 @@ export function getMaxOutputDimension(transforms: readonly (readonly any[])[], w
 	let extracted = false;
 	let extendX = 0;
 	let extendY = 0;
+	// The size left by a trim depends on the pixels, so it can be anything up to the source
+	const trimmed = transforms.some(([method]) => method === 'trim');
 
 	for (const [method, ...args] of transforms) {
 		if (method === 'resize') {
-			outputs.push(...inputs.map((input) => getResizeOutput(input, args)));
+			outputs.push(...inputs.map((input) => getResizeOutput(input, args, trimmed)));
 		} else if (method === 'extract' && outputs.length === 0 && !extracted) {
 			// Only the first extract before a resize crops its input, later ones crop its output
 			inputs = [[Number(args[0]?.width), Number(args[0]?.height)]];
@@ -72,9 +75,43 @@ export function getMaxOutputDimension(transforms: readonly (readonly any[])[], w
 	return Math.max(...sides.filter((side) => !Number.isNaN(side)));
 }
 
-function getResizeOutput([inputWidth, inputHeight]: [number, number], args: any[]): [number, number] {
-	const options =
-		typeof args[0] === 'object' && args[0] !== null ? args[0] : { width: args[0], height: args[1], ...args[2] };
+/**
+ * Sharp always trims before it extracts or resizes, whatever the order of the calls, and the trimmed size depends on
+ * the request's threshold and background, so the input of the resize can't be known in advance. With a trim, a resize
+ * side left to follow the aspect ratio is capped to `maxDimension` instead, and `fit: 'outside'`, which can grow either
+ * side past the requested size, is refused.
+ */
+export function capResizeAfterTrim(transforms: Transformation[], maxDimension: number): Transformation[] {
+	if (!transforms.some(([method]) => method === 'trim')) return transforms;
+
+	return transforms.map((transform) => {
+		if (transform[0] !== 'resize') return transform;
+
+		const [, ...args] = transform;
+		const options = getResizeOptions(args);
+
+		if (options.fit === 'outside') {
+			throw new IllegalAssetTransformation(`A resize with "fit: outside" can't be combined with "trim".`);
+		}
+
+		if ((options.width == null) === (options.height == null)) return transform;
+
+		return [
+			'resize',
+			{ ...options, width: options.width ?? maxDimension, height: options.height ?? maxDimension, fit: 'inside' },
+		];
+	});
+}
+
+function getResizeOptions(args: readonly any[]) {
+	if (typeof args[0] === 'object' && args[0] !== null) return args[0];
+
+	// Like Sharp, the options object wins over the positional width and height
+	return { ...args[2], width: args[2]?.width ?? args[0], height: args[2]?.height ?? args[1] };
+}
+
+function getResizeOutput([inputWidth, inputHeight]: [number, number], args: any[], trimmed: boolean): [number, number] {
+	const options = getResizeOptions(args);
 
 	const width = options.width == null ? undefined : Number(options.width);
 	const height = options.height == null ? undefined : Number(options.height);
@@ -83,7 +120,10 @@ function getResizeOutput([inputWidth, inputHeight]: [number, number], args: any[
 	// Without enlargement, no side grows beyond the input
 	if (options.withoutEnlargement || (width === undefined && height === undefined)) return [inputWidth, inputHeight];
 
-	if (width !== undefined && height !== undefined && !['inside', 'outside'].includes(fit)) return [width, height];
+	// After a trim, an inside fit can fill its whole box
+	if (width !== undefined && height !== undefined && fit !== 'outside' && (fit !== 'inside' || trimmed)) {
+		return [width, height];
+	}
 
 	// A missing side follows the input's aspect ratio
 	const scales: number[] = [];

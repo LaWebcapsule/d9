@@ -1,5 +1,6 @@
 import type { Knex } from 'knex';
 import { Readable } from 'node:stream';
+import sharp from 'sharp';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { getStorage } from '../storage/index.js';
 import { AssetsService } from './assets.js';
@@ -109,6 +110,48 @@ describe('AssetsService.getAsset', () => {
 		storage.exists.mockImplementation(async (filename: string) => filename === 'original.png');
 
 		await expect(service.getAsset(FILE_ID, transformation)).rejects.toThrow(/exceeds the maximum/);
+
+		expect(storage.read).not.toHaveBeenCalled();
+	});
+});
+
+describe('AssetsService.getAsset with trim', () => {
+	beforeEach(() => {
+		storage.exists.mockImplementation(async (filename: string) => filename === 'original.png');
+	});
+
+	it('caps a resize the trim could stretch past ASSETS_TRANSFORM_IMAGE_MAX_DIMENSION', async () => {
+		const resize = vi.spyOn(sharp.prototype, 'resize');
+
+		await service.getAsset(FILE_ID, { transforms: [['trim'], ['resize', { width: 6000 }]] as any });
+
+		expect(resize).toHaveBeenCalledWith({ width: 6000, height: 6000, fit: 'inside' });
+
+		resize.mockRestore();
+	});
+
+	it('caps a width query parameter combined with a trim', async () => {
+		const resize = vi.spyOn(sharp.prototype, 'resize');
+
+		await service.getAsset(FILE_ID, { width: 6000, transforms: [['trim']] as any });
+
+		expect(resize).toHaveBeenCalledWith(expect.objectContaining({ width: 6000, height: 6000, fit: 'inside' }));
+
+		resize.mockRestore();
+	});
+
+	it('rejects a resize with fit outside combined with a trim', async () => {
+		await expect(
+			service.getAsset(FILE_ID, { transforms: [['trim'], ['resize', { width: 50, fit: 'outside' }]] as any })
+		).rejects.toThrow(/outside/);
+
+		expect(storage.read).not.toHaveBeenCalled();
+	});
+
+	it('still checks a trimmed resize with both sides set', async () => {
+		await expect(
+			service.getAsset(FILE_ID, { transforms: [['trim'], ['resize', { width: 20000, height: 10 }]] as any })
+		).rejects.toThrow(/exceeds the maximum/);
 
 		expect(storage.read).not.toHaveBeenCalled();
 	});

@@ -172,9 +172,14 @@ export class AssetsService {
 				);
 			}
 
+			const sharpTransforms = TransformationUtils.capResizeAfterTrim(
+				transforms,
+				env['ASSETS_TRANSFORM_IMAGE_MAX_DIMENSION']
+			);
+
 			// The requested output is just as costly as the source, so it gets the same limit
 			if (
-				TransformationUtils.getMaxOutputDimension(transforms, width, height) >
+				TransformationUtils.getMaxOutputDimension(sharpTransforms, width, height) >
 				env['ASSETS_TRANSFORM_IMAGE_MAX_DIMENSION']
 			) {
 				throw new IllegalAssetTransformation(
@@ -202,7 +207,7 @@ export class AssetsService {
 
 			if (transforms.find((transform) => transform[0] === 'rotate') === undefined) transformer.rotate();
 
-			transforms.forEach(([method, ...args]) => (transformer[method] as any).apply(transformer, args));
+			sharpTransforms.forEach(([method, ...args]) => (transformer[method] as any).apply(transformer, args));
 
 			// Sharp validates synchronously: only open the stream once the request is known to be valid
 			const readStream = await storage.location(file.storage).read(file.filename_disk, range);
