@@ -581,6 +581,9 @@ export class GraphQLService {
 					_eq: {
 						type: GraphQLString,
 					},
+					_ieq: {
+						type: GraphQLString,
+					},
 					_neq: {
 						type: GraphQLString,
 					},
@@ -599,10 +602,22 @@ export class GraphQLService {
 					_nstarts_with: {
 						type: GraphQLString,
 					},
+					_istarts_with: {
+						type: GraphQLString,
+					},
+					_nistarts_with: {
+						type: GraphQLString,
+					},
 					_ends_with: {
 						type: GraphQLString,
 					},
 					_nends_with: {
+						type: GraphQLString,
+					},
+					_iends_with: {
+						type: GraphQLString,
+					},
+					_niends_with: {
 						type: GraphQLString,
 					},
 					_in: {
