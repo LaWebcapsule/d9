@@ -65,6 +65,7 @@ import { collectTelemetry } from './utils/telemetry.js';
 import { Url } from './utils/url.js';
 import { validateEnv } from './utils/validate-env.js';
 import { validateStorage } from './utils/validate-storage.js';
+import { warnNodeVersion } from './utils/warn-node-version.js';
 import { init as initWebhooks } from './webhooks.js';
 
 const require = createRequire(import.meta.url);
@@ -73,6 +74,8 @@ export default async function createApp(): Promise<express.Application> {
 	const helmet = await import('helmet');
 
 	validateEnv(['KEY', 'SECRET']);
+
+	warnNodeVersion();
 
 	if (!new Url(env['PUBLIC_URL']).isAbsolute()) {
 		logger.warn('PUBLIC_URL should be a full URL');
