@@ -290,6 +290,25 @@ describe('deep', () => {
 
 		expect(sanitizedQuery.deep).toEqual({ deep: { relational_field_a: { _sort: ['name'] } } });
 	});
+
+	test('should not write through inherited properties', () => {
+		const deep = JSON.stringify({ toString: { call: { _limit: 1 } } });
+
+		const sanitizedQuery = sanitizeQuery({ deep });
+
+		expect(Object.prototype.hasOwnProperty.call(Object.prototype.toString, 'call')).toBe(false);
+		expect(Object.prototype.toString.call([])).toBe('[object Array]');
+		expect(sanitizedQuery.deep).toEqual({ toString: { call: { _limit: 1 } } });
+	});
+
+	test('should ignore prototype keys', () => {
+		const deep = JSON.stringify({ constructor: { prototype: { _limit: 1 } } });
+
+		const sanitizedQuery = sanitizeQuery({ deep });
+
+		expect((Object.prototype as any)._limit).toBeUndefined();
+		expect(sanitizedQuery.deep).toEqual({});
+	});
 });
 
 describe('alias', () => {

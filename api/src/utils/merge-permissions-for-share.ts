@@ -1,8 +1,9 @@
 import type { Accountability, Filter, Permission, SchemaOverview } from '@wbce-d9/types';
-import { assign, set, uniq } from 'lodash-es';
+import { assign, uniq } from 'lodash-es';
 import { schemaPermissions } from '../database/system-data/app-access-permissions/index.js';
 import { mergePermissions } from './merge-permissions.js';
 import { reduceSchema } from './reduce-schema.js';
+import { setOwn } from './set-own.js';
 
 export function mergePermissionsForShare(
 	currentPermissions: Permission[],
@@ -172,9 +173,9 @@ export function getFilterForPath(
 	const filter: Filter = {};
 
 	if (type === 'm2o' || type === 'a2o') {
-		set(filter, path.reverse(), { [rootPrimaryKeyField]: { _eq: rootPrimaryKey } });
+		setOwn(filter, path.reverse(), { [rootPrimaryKeyField]: { _eq: rootPrimaryKey } });
 	} else {
-		set(filter, path.reverse(), { _eq: rootPrimaryKey });
+		setOwn(filter, path.reverse(), { _eq: rootPrimaryKey });
 	}
 
 	return filter;
