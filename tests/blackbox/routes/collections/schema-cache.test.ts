@@ -50,7 +50,10 @@ describe('Schema Caching Tests', () => {
 					tzDirectus[vendor] = [server1, server2];
 					envs[vendor] = [env1, env2];
 
-					promises.push(awaitDirectusConnection(newServerPort1), awaitDirectusConnection(newServerPort2));
+					promises.push(
+						awaitDirectusConnection(newServerPort1, server1),
+						awaitDirectusConnection(newServerPort2, server2)
+					);
 				}
 
 				// Give the server some time to start

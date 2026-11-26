@@ -87,7 +87,7 @@ describe('schema', () => {
 				if (code !== null) throw new Error(`Directus-${vendor} server failed: \n ${serverOutput}`);
 			});
 
-			promises.push(awaitDirectusConnection(newServerPort));
+			promises.push(awaitDirectusConnection(newServerPort, server));
 		}
 
 		// Give the server some time to start

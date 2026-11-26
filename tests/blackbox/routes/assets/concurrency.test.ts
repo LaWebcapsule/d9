@@ -24,6 +24,7 @@ describe('/assets', () => {
 						let spawnCount = 0;
 						let hasErrors = false;
 						let isSpawnRunning = false;
+						let autocannonOutput = '';
 
 						const insertResponse = await request(getUrl(vendor))
 							.post('/files')
@@ -37,13 +38,16 @@ describe('/assets', () => {
 						function spawnAutoCannon() {
 							const url = `${getUrl(vendor)}/assets/${insertResponse.body.data.id}?access_token=${USER.ADMIN.TOKEN}`;
 
-							// The runner shares its CPUs with autocannon, so the slowest of 100 concurrent responses can exceed autocannon's default 10s timeout
-							const options = ['exec', 'autocannon', '-c', '100', '-t', '60', url];
+							// The runner shares its CPUs with autocannon, so the slowest of 100 concurrent responses can exceed autocannon's default 10s timeout.
+							// --debug prints each socket error, so a failure shows its cause (ECONNRESET, ECONNREFUSED…)
+							const options = ['exec', 'autocannon', '-c', '100', '-t', '60', '--debug', url];
 							const child = spawn('pnpm', options);
 
 							isSpawnRunning = true;
 
 							child.stderr.on('data', (data) => {
+								autocannonOutput += String(data);
+
 								if (String(data).includes('errors')) {
 									hasErrors = true;
 								}
@@ -65,7 +69,7 @@ describe('/assets', () => {
 						}
 
 						// Assert
-						expect(hasErrors).toBe(false);
+						expect(hasErrors, autocannonOutput).toBe(false);
 					},
 					600000
 				);

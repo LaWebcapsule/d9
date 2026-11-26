@@ -34,7 +34,7 @@ describe('Logger Redact Tests', () => {
 			const server = spawn('node', [paths.cli, 'start'], { cwd: paths.cwd, env: env[vendor] });
 			directusInstances[vendor] = server;
 
-			promises.push(awaitDirectusConnection(Number(env[vendor].PORT)));
+			promises.push(awaitDirectusConnection(Number(env[vendor].PORT), server));
 		}
 
 		// Give the server some time to start
