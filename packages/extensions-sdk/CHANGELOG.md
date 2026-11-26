@@ -1,5 +1,24 @@
 # @wbce-d9/extensions-sdk
 
+## 10.2.0
+
+### Minor Changes
+
+- [#516](https://github.com/LaWebcapsule/d9/pull/516)
+  [`36cf983`](https://github.com/LaWebcapsule/d9/commit/36cf983e698ff779529bc9f108c4317ed36175cf) - d9 will move to
+  Node.js 24 in its next major release, scheduled for 2027-01-31, before Node.js 22 reaches its end of life. The API now
+  logs a warning at startup on Node.js 22. `engines.node` is now `^22` in the API and the extensions SDK, so npm warns
+  when installing on Node.js 24 or later. See
+  [Supported Node.js Versions](https://d9.webcapsule.io/self-hosted/node-versions.html).
+
+### Patch Changes
+
+- Updated dependencies [[`de0b57b`](https://github.com/LaWebcapsule/d9/commit/de0b57b5202996b601730b3e48358666afefec1a),
+  [`de0b57b`](https://github.com/LaWebcapsule/d9/commit/de0b57b5202996b601730b3e48358666afefec1a)]:
+  - @wbce-d9/types@10.2.1
+  - @wbce-d9/utils@10.0.7
+  - @wbce-d9/composables@10.0.7
+
 ## 10.1.1
 
 ### Patch Changes

@@ -1,5 +1,18 @@
 # @wbce-d9/utils
 
+## 10.0.7
+
+### Patch Changes
+
+- [#521](https://github.com/LaWebcapsule/d9/pull/521)
+  [`de0b57b`](https://github.com/LaWebcapsule/d9/commit/de0b57b5202996b601730b3e48358666afefec1a) - Expose
+  case-insensitive variants of `_starts_with` and `_ends_with` filter operators
+
+- [#521](https://github.com/LaWebcapsule/d9/pull/521)
+  [`de0b57b`](https://github.com/LaWebcapsule/d9/commit/de0b57b5202996b601730b3e48358666afefec1a) - String fields now
+  accept the case-insensitive `ieq` filter operator in REST and GraphQL, the filter builder offers it, and validation
+  rules using it are enforced.
+
 ## 10.0.6
 
 ### Patch Changes
