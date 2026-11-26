@@ -643,6 +643,10 @@ function sidebar() {
 					text: 'CLI',
 				},
 				{
+					link: '/self-hosted/node-versions',
+					text: 'Node.js Versions',
+				},
+				{
 					link: '/self-hosted/sso',
 					text: 'Single Sign-On (SSO)',
 				},

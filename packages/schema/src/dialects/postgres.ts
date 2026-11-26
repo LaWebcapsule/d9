@@ -232,12 +232,18 @@ export default class Postgres implements SchemaInspector {
 			overview[column.table_name]!.columns[column.column_name] = column;
 		}
 
+		// Columns, primary keys and geometry columns are read by separate statements. A table (or column) dropped
+		// in between is missing from `overview`, so skip it instead of crashing the whole overview.
 		for (const { table_name, column_name } of primaryKeys) {
-			overview[table_name]!.primary = column_name;
+			const table = overview[table_name];
+			if (!table) continue;
+			table.primary = column_name;
 		}
 
 		for (const { table_name, column_name, data_type } of geometryColumns) {
-			overview[table_name]!.columns[column_name]!.data_type = data_type;
+			const column = overview[table_name]?.columns[column_name];
+			if (!column) continue;
+			column.data_type = data_type;
 		}
 
 		return overview;
