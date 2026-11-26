@@ -1,4 +1,3 @@
-import argon2 from 'argon2';
 import Busboy from 'busboy';
 import { Router } from 'express';
 import Joi from 'joi';
@@ -17,6 +16,7 @@ import { UtilsService } from '../services/utils.js';
 import asyncHandler from '../utils/async-handler.js';
 import { generateHash } from '../utils/generate-hash.js';
 import { sanitizeQuery } from '../utils/sanitize-query.js';
+import { verifyHash } from '../utils/verify-hash.js';
 
 const router = Router();
 
@@ -63,7 +63,7 @@ router.post(
 			throw new InvalidPayloadException(`"hash" is required`);
 		}
 
-		const result = await argon2.verify(req.body.hash, req.body.string);
+		const result = await verifyHash(req.body.hash, req.body.string);
 
 		return res.json({ data: result });
 	})

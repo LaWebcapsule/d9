@@ -2,7 +2,6 @@ import { Action, FUNCTIONS } from '@wbce-d9/constants';
 import type { BaseException } from '@wbce-d9/exceptions';
 import type { Accountability, Aggregate, Filter, PrimaryKey, Query, SchemaOverview } from '@wbce-d9/types';
 import { parseFilterFunctionPath } from '@wbce-d9/utils';
-import argon2 from 'argon2';
 import type {
 	ArgumentNode,
 	ExecutionResult,
@@ -64,6 +63,7 @@ import { reduceSchema } from '../../utils/reduce-schema.js';
 import { sanitizeQuery } from '../../utils/sanitize-query.js';
 import { setOwn } from '../../utils/set-own.js';
 import { validateQuery } from '../../utils/validate-query.js';
+import { verifyHash } from '../../utils/verify-hash.js';
 import { ActivityService } from '../activity.js';
 import { AuthenticationService } from '../authentication.js';
 import { CollectionsService } from '../collections.js';
@@ -2344,7 +2344,7 @@ export class GraphQLService {
 					hash: new GraphQLNonNull(GraphQLString),
 				},
 				resolve: async (_, args) => {
-					return await argon2.verify(args['hash'], args['string']);
+					return await verifyHash(args['hash'], args['string']);
 				},
 			},
 			utils_sort: {
