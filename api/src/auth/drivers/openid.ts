@@ -12,6 +12,7 @@ import {
 	InvalidCredentialsException,
 	InvalidTokenException,
 	InvalidPayloadException,
+	ServiceUnavailableException,
 } from '../../exceptions/index.js';
 import logger from '../../logger.js';
 import { respond } from '../../middleware/respond.js';
@@ -44,13 +45,71 @@ const RESERVED_AUTH_PARAMS = new Set([
 ]);
 
 export class OpenIDAuthDriver extends BaseOAuthDriver {
-	client: Promise<oidc.Configuration>;
+	clientPromise: Promise<oidc.Configuration> | null = null;
+	discoveryOptions: { issuerUrl: string; clientId: string; clientSecret: string; overrides: Record<string, any> };
 	redirectUrl: string;
 	usersService: UsersService;
 	config: Record<string, any>;
 
+	/**
+	 * The provider is discovered once at boot without blocking it, then on first use, and again after a failure: an
+	 * unreachable or misconfigured provider must not take the whole API down with it.
+	 */
 	getClient(): Promise<oidc.Configuration> {
-		return this.client;
+		return this.discover('login');
+	}
+
+	/**
+	 * Shares one discovery attempt between concurrent callers and caches a success. A failed attempt is logged once,
+	 * as a warning at boot and as an error on use, then forgotten so that the next use retries.
+	 */
+	private discover(trigger: 'boot' | 'login'): Promise<oidc.Configuration> {
+		if (this.clientPromise) return this.clientPromise;
+
+		const { issuerUrl, clientId, clientSecret, overrides } = this.discoveryOptions;
+		const provider = this.config['provider'];
+
+		const clientPromise = (async () => {
+			let config: oidc.Configuration;
+
+			try {
+				config = await oidc.discovery(new URL(issuerUrl), clientId, {
+					client_secret: clientSecret,
+					...overrides,
+				});
+			} catch (e) {
+				const message = `[OpenID] Failed to fetch provider config for "${provider}" from issuer "${issuerUrl}"`;
+
+				if (trigger === 'boot') {
+					logger.warn(e, `${message}; the API keeps running and the next login retries`);
+				} else {
+					logger.error(e, message);
+				}
+
+				// The cause stays in the server log: the client only learns that the provider can't be used
+				throw new ServiceUnavailableException('OpenID provider is unavailable or misconfigured', {
+					service: 'openid',
+					provider,
+				});
+			}
+
+			const supportedTypes = config.serverMetadata().response_types_supported;
+
+			if (supportedTypes && !supportedTypes.includes('code')) {
+				throw new InvalidConfigException('OpenID provider does not support required code flow', { provider });
+			}
+
+			return config;
+		})();
+
+		this.clientPromise = clientPromise;
+
+		// Forget a failed attempt so that the next use discovers the provider again
+		clientPromise.catch(() => {
+			if (this.clientPromise === clientPromise) this.clientPromise = null;
+		});
+
+		return clientPromise;
 	}
 
 	getredirectUrl(): string {
@@ -90,29 +149,16 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 		this.usersService = new UsersService({ knex: this.knex, schema: this.schema });
 		this.config = additionalConfig;
 
-		this.client = (async () => {
-			let config: oidc.Configuration;
+		this.discoveryOptions = { issuerUrl, clientId, clientSecret, overrides: clientOptionsOverrides };
 
-			try {
-				config = await oidc.discovery(new URL(issuerUrl), clientId, {
-					client_secret: clientSecret,
-					...clientOptionsOverrides,
-				});
-			} catch (e) {
-				logger.error(e, '[OpenID] Failed to fetch provider config');
-				process.exit(1);
-			}
+		// Discover once at boot so that a misconfiguration shows in the log right away. Never fatal: a failure is logged
+		// and the next login retries.
+		this.discover('boot').catch((e) => {
+			// A failed fetch is already logged by discover()
+			if (e instanceof ServiceUnavailableException) return;
 
-			const supportedTypes = config!.serverMetadata().response_types_supported;
-
-			if (supportedTypes && !supportedTypes.includes('code')) {
-				throw new InvalidConfigException('OpenID provider does not support required code flow', {
-					provider: additionalConfig['provider'],
-				});
-			}
-
-			return config!;
-		})();
+			logger.warn(e, `[OpenID] Provider "${additionalConfig['provider']}" can't be used; the next login retries`);
+		});
 	}
 
 	async generateAuthUrl(
@@ -121,7 +167,7 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 		additionalParams?: Record<string, string>
 	): Promise<string> {
 		try {
-			const client = await this.client;
+			const client = await this.getClient();
 			const codeChallenge = await oidc.calculatePKCECodeChallenge(codeVerifier);
 			const paramsConfig = typeof this.config['params'] === 'object' ? this.config['params'] : {};
 
@@ -155,7 +201,7 @@ export class OpenIDAuthDriver extends BaseOAuthDriver {
 		let userInfo: Record<string, unknown>;
 
 		try {
-			const client = await this.client;
+			const client = await this.getClient();
 			const codeChallenge = await oidc.calculatePKCECodeChallenge(payload['codeVerifier']);
 
 			const callbackUrl = new URL(this.redirectUrl);

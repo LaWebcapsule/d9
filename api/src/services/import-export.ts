@@ -7,7 +7,7 @@ import { dump as toYAML } from 'js-yaml';
 import { parse as toXML } from 'js2xmlparser';
 import { Parser as CSVParser, transforms as CSVTransforms } from 'json2csv';
 import type { Knex } from 'knex';
-import { set, transform } from 'lodash-es';
+import { transform } from 'lodash-es';
 import { createReadStream } from 'node:fs';
 import { appendFile } from 'node:fs/promises';
 import type { Readable } from 'node:stream';
@@ -26,6 +26,7 @@ import {
 import logger from '../logger.js';
 import type { AbstractServiceOptions, ActionEventParams, File } from '../types/index.js';
 import { getDateFormatted } from '../utils/get-date-formatted.js';
+import { setOwn } from '../utils/set-own.js';
 import { FilesService } from './files.js';
 import { ItemsService } from './items.js';
 import { NotificationsService } from './notifications.js';
@@ -142,12 +143,12 @@ export class ImportService {
 									const parsedJson = parseJSON(value);
 
 									if (typeof parsedJson === 'number') {
-										set(result, key, value);
+										setOwn(result, key, value);
 									} else {
-										set(result, key, parsedJson);
+										setOwn(result, key, parsedJson);
 									}
 								} catch {
-									set(result, key, value);
+									setOwn(result, key, value);
 								}
 							}
 						});
