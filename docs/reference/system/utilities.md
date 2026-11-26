@@ -63,7 +63,8 @@ mutation {
 
 ## Verify a Hash
 
-Verify a string with a hash.
+Verify a string with a hash. Hashes with higher cost parameters (memory, time, parallelism) than the ones d9 generates
+are rejected.
 
 ### Request Body
 

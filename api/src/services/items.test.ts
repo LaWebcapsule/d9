@@ -1056,10 +1056,11 @@ describe('Integration Tests', () => {
 					`select "${childTable}"."uploaded_by", "${childTable}"."id" from "${childTable}" where "${childTable}"."uploaded_by" in (?) order by "${childTable}"."id" asc limit ?`
 				);
 
-				expect(tracker.history.select[2]!.bindings).toStrictEqual([item.id, 1, 100]);
+				// The children left out of the list are all read, with no limit
+				expect(tracker.history.select[2]!.bindings).toStrictEqual([item.id, 1]);
 
 				expect(tracker.history.select[2]!.sql).toBe(
-					`select "${childTable}"."id" from "${childTable}" where ("${childTable}"."uploaded_by" = ? and 1 = ?) order by "${childTable}"."id" asc limit ?`
+					`select "${childTable}"."id" from "${childTable}" where ("${childTable}"."uploaded_by" = ? and 1 = ?) order by "${childTable}"."id" asc`
 				);
 
 				expect(tracker.history.select[3]!.bindings).toStrictEqual([childItem.id, 1]);

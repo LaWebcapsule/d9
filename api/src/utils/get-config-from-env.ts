@@ -1,6 +1,6 @@
 import camelcase from 'camelcase';
-import { set } from 'lodash-es';
 import { getEnv } from '../env.js';
+import { setOwn } from './set-own.js';
 
 export function getConfigFromEnv(
 	prefix: string,
@@ -31,7 +31,7 @@ export function getConfigFromEnv(
 				.split('__')
 				.map((key, index) => (index === 0 ? transform(transform(key.slice(prefix.length))) : transform(key)));
 
-			set(config, path.join('.'), value);
+			setOwn(config, path.join('.'), value);
 		} else {
 			config[transform(key.slice(prefix.length))] = value;
 		}
