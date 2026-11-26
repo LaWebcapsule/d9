@@ -7,6 +7,9 @@ readTime: 2 min read
 
 > d9 supports a single Node.js LTS version at a time.
 
+d9 is maintained by a small team. Supporting a single Node.js version lets us test every release on the exact version it
+runs on, instead of spreading our CI and support across several.
+
 ## Policy
 
 - d9 moves to the next Node.js LTS version in a major release, before the current version reaches its end of life and at
