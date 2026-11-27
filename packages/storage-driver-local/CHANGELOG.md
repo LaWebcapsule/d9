@@ -1,5 +1,13 @@
 # @wbce-d9/storage-driver-local
 
+## 10.0.7
+
+### Patch Changes
+
+- Updated dependencies [[`de0b57b`](https://github.com/LaWebcapsule/d9/commit/de0b57b5202996b601730b3e48358666afefec1a),
+  [`de0b57b`](https://github.com/LaWebcapsule/d9/commit/de0b57b5202996b601730b3e48358666afefec1a)]:
+  - @wbce-d9/utils@10.0.7
+
 ## 10.0.6
 
 ### Patch Changes

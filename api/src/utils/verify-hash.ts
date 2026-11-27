@@ -1,0 +1,52 @@
+import argon2 from 'argon2';
+import { InvalidPayloadException } from '../exceptions/index.js';
+import { getConfigFromEnv } from './get-config-from-env.js';
+
+// The cost parameters argon2.hash uses when generateHash doesn't override them through HASH_* variables
+const DEFAULT_COSTS = { m: 65536, t: 3, p: 4 };
+
+const POSITIVE_INTEGER = /^[1-9][0-9]*$/;
+
+// 0x10 and 0x13, the only versions argon2 defines
+const ARGON2_VERSIONS = ['16', '19'];
+
+/**
+ * Verify a string against a hash supplied by the caller.
+ *
+ * argon2 reads its cost parameters (memory, iterations, parallelism) from the encoded hash, so verifying an untrusted
+ * hash costs whatever the caller asks for. Hashes that are costlier than the ones generateHash produces are rejected
+ * before any hashing work is done.
+ */
+export async function verifyHash(hash: string, stringToVerify: string): Promise<boolean> {
+	const { memoryCost, timeCost, parallelism } = getConfigFromEnv('HASH_', 'HASH_RAW');
+
+	const maxCosts: Record<string, number> = {
+		m: Math.max(DEFAULT_COSTS.m, Number(memoryCost) || 0),
+		t: Math.max(DEFAULT_COSTS.t, Number(timeCost) || 0),
+		p: Math.max(DEFAULT_COSTS.p, Number(parallelism) || 0),
+	};
+
+	// $argon2id$v=19$m=65536,t=3,p=4$<salt>$<hash>
+	const params = hash
+		.split('$')
+		.flatMap((segment) => segment.split(','))
+		.map((param) => param.split('='));
+
+	// argon2 casts the parameters to unsigned 32-bit integers, so anything but plain decimal digits (a sign, an
+	// exponent, a fraction) could wrap around to a huge value
+	for (const [name, max] of Object.entries(maxCosts)) {
+		const values = params.filter(([key]) => key === name).map(([, value]) => value);
+
+		if (values.length !== 1 || !POSITIVE_INTEGER.test(values[0]!) || Number(values[0]) > max) {
+			throw new InvalidPayloadException(`"hash" is invalid`);
+		}
+	}
+
+	const versions = params.filter(([key]) => key === 'v').map(([, value]) => value);
+
+	if (versions.length > 1 || (versions.length === 1 && !ARGON2_VERSIONS.includes(versions[0]!))) {
+		throw new InvalidPayloadException(`"hash" is invalid`);
+	}
+
+	return await argon2.verify(hash, stringToVerify);
+}

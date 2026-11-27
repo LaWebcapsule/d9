@@ -1,5 +1,16 @@
 # @wbce-d9/app
 
+## 11.4.1
+
+### Patch Changes
+
+- [#521](https://github.com/LaWebcapsule/d9/pull/521)
+  [`de0b57b`](https://github.com/LaWebcapsule/d9/commit/de0b57b5202996b601730b3e48358666afefec1a) - String fields now
+  accept the case-insensitive `ieq` filter operator in REST and GraphQL, the filter builder offers it, and validation
+  rules using it are enforced.
+- Updated dependencies []:
+  - @wbce-d9/composables@10.0.7
+
 ## 11.4.0
 
 ### Minor Changes

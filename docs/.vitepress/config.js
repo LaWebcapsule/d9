@@ -43,7 +43,7 @@ export default defineConfig({
 	title: 'd9 Docs',
 	description: 'd9 — Open Data Platform. An Instant App & API for your SQL Database.',
 	ignoreDeadLinks: true,
-	appearance: "dark",
+	appearance: 'dark',
 	vite: {
 		plugins: [markdownVariablesPlugin()],
 	},
@@ -641,6 +641,10 @@ function sidebar() {
 				{
 					link: '/self-hosted/cli',
 					text: 'CLI',
+				},
+				{
+					link: '/self-hosted/node-versions',
+					text: 'Node.js Versions',
 				},
 				{
 					link: '/self-hosted/sso',

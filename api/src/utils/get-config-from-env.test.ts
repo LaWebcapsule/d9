@@ -7,6 +7,9 @@ vi.mock('../../src/env', () => {
 		OBJECT_BRAND__HEX: '#6644FF',
 		CAMELCASE_OBJECT__FIRST_KEY: 'firstValue',
 		CAMELCASE_OBJECT__SECOND_KEY: 'secondValue',
+		INHERITED_TO_STRING__CALL: 'value',
+		ARRAY_LIST__0: 'first',
+		ARRAY_LIST__1: 'second',
 	};
 
 	return {
@@ -24,5 +27,15 @@ describe('get config from env', () => {
 		expect(getConfigFromEnv('CAMELCASE_')).toStrictEqual({
 			object: { firstKey: 'firstValue', secondKey: 'secondValue' },
 		});
+	});
+
+	test('Keys named after inherited properties should not write to the prototype', () => {
+		expect(getConfigFromEnv('INHERITED_')).toStrictEqual({ toString: { call: 'value' } });
+		expect(Object.prototype.hasOwnProperty.call(Object.prototype.toString, 'call')).toBe(false);
+		expect(Object.prototype.toString.call([])).toBe('[object Array]');
+	});
+
+	test('Numeric keys should create arrays', () => {
+		expect(getConfigFromEnv('ARRAY_')).toStrictEqual({ list: ['first', 'second'] });
 	});
 });
