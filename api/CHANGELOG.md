@@ -1,5 +1,13 @@
 # @wbce-d9/api
 
+## 12.9.1
+
+### Patch Changes
+
+- [#519](https://github.com/LaWebcapsule/d9/pull/519)
+  [`fbeda59`](https://github.com/LaWebcapsule/d9/commit/fbeda5945c22705c3d93719716881b55103ee3bf) - Sorting by a field
+  of a to-many relation no longer breaks with a doubly quoted `directus_row_number` alias on newer knex versions.
+
 ## 12.9.0
 
 ### Minor Changes
