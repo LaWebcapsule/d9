@@ -2,8 +2,11 @@ import type { Knex } from 'knex';
 import { Readable } from 'node:stream';
 import sharp from 'sharp';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { ForbiddenException } from '../exceptions/forbidden.js';
 import { getStorage } from '../storage/index.js';
+import type { File } from '../types/index.js';
 import { AssetsService } from './assets.js';
+import { AuthorizationService } from './authorization.js';
 
 vi.mock('../storage/index.js');
 vi.mock('./authorization.js');
@@ -21,15 +24,27 @@ vi.mock('../env.js', () => {
 
 const FILE_ID = 'e536aa35-3a81-4fa9-b856-3780584d38d8';
 
-const file = {
+const file: File = {
 	id: FILE_ID,
 	storage: 'local',
 	filename_disk: 'original.png',
+	filename_download: 'original.png',
+	title: null,
 	type: 'image/png',
+	folder: null,
+	uploaded_by: null,
+	uploaded_on: new Date('2026-01-01T00:00:00.000Z'),
+	modified_on: '2026-01-01T00:00:00.000Z',
+	charset: null,
 	filesize: 100,
 	width: 100,
 	height: 100,
-	modified_on: '2026-01-01T00:00:00.000Z',
+	duration: null,
+	embed: null,
+	description: null,
+	location: null,
+	tags: null,
+	metadata: null,
 };
 
 let storage: {
@@ -72,7 +87,35 @@ beforeEach(() => {
 	});
 });
 
+describe('AssetsService.getFile', () => {
+	it('returns the file row without touching the storage', async () => {
+		await expect(service.getFile(FILE_ID)).resolves.toEqual(file);
+
+		expect(storage.exists).not.toHaveBeenCalled();
+		expect(storage.read).not.toHaveBeenCalled();
+	});
+
+	it('rejects an id that is not a uuid', async () => {
+		await expect(service.getFile('not-a-uuid')).rejects.toBeInstanceOf(ForbiddenException);
+	});
+});
+
 describe('AssetsService.getAsset', () => {
+	it('checks the access to the file before reading the storage', async () => {
+		vi.mocked(AuthorizationService.prototype.checkAccess).mockRejectedValueOnce(new ForbiddenException());
+
+		service = new AssetsService({
+			knex: service.knex,
+			accountability: { role: 'editor', admin: false } as any,
+			schema: { collections: {}, relations: [] },
+		});
+
+		await expect(service.getAsset(FILE_ID, {})).rejects.toBeInstanceOf(ForbiddenException);
+
+		expect(AuthorizationService.prototype.checkAccess).toHaveBeenCalledWith('read', 'directus_files', FILE_ID);
+		expect(storage.read).not.toHaveBeenCalled();
+	});
+
 	it('rejects a malformed transformation before opening the storage stream', async () => {
 		storage.exists.mockImplementation(async (filename: string) => filename === 'original.png');
 
