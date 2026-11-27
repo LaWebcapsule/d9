@@ -1,5 +1,90 @@
 # @wbce-d9/api
 
+## 12.9.0
+
+### Minor Changes
+
+- [#516](https://github.com/LaWebcapsule/d9/pull/516)
+  [`36cf983`](https://github.com/LaWebcapsule/d9/commit/36cf983e698ff779529bc9f108c4317ed36175cf) - d9 will move to
+  Node.js 24 in its next major release, scheduled for 2027-01-31, before Node.js 22 reaches its end of life. The API now
+  logs a warning at startup on Node.js 22. `engines.node` is now `^22` in the API and the extensions SDK, so npm warns
+  when installing on Node.js 24 or later. See
+  [Supported Node.js Versions](https://d9.webcapsule.io/self-hosted/node-versions.html).
+
+### Patch Changes
+
+- [#530](https://github.com/LaWebcapsule/d9/pull/530)
+  [`de68b0b`](https://github.com/LaWebcapsule/d9/commit/de68b0bd2e140ddd90725c9572172bbd3dc85aae) - security: Image
+  transformations now refuse an output larger than `ASSETS_TRANSFORM_IMAGE_MAX_DIMENSION` on either side with
+  (GHSA-7vcx-mhxq-9j96) `400 ILLEGAL_ASSET_TRANSFORMATION`, instead of letting `width`/`height` or a `resize`/`extend`
+  transform allocate an unbounded image (GHSA-7vcx-mhxq-9j96). When the transforms include `trim`, a resize that leaves
+  a side to follow the aspect ratio is capped to `ASSETS_TRANSFORM_IMAGE_MAX_DIMENSION` on that side (`fit: 'inside'`),
+  and a resize with `fit: 'outside'` is refused.
+
+- [#527](https://github.com/LaWebcapsule/d9/pull/527)
+  [`88a884a`](https://github.com/LaWebcapsule/d9/commit/88a884a7cad780a01799ff8e3ee5382b26372145) - security: Fixed a
+  prototype pollution in the `deep` query parameter: nested keys named after inherited properties (e.g.
+  (GHSA-gwvv-rr68-cmv6) `toString.call`) could overwrite a shared built-in and crash the server with one unauthenticated
+  request (GHSA-gwvv-rr68-cmv6). Every other place the API writes values at a dynamic path (GraphQL nested arguments and
+  aliases, CSV import column names, schema diffs, share permissions, nested environment config) now uses the same
+  own-properties-only setter.
+
+- [#517](https://github.com/LaWebcapsule/d9/pull/517)
+  [`15eddbc`](https://github.com/LaWebcapsule/d9/commit/15eddbc2b95a820449900b9187d3333b85058173) - `meta=filter_count`
+  and `meta=total_count` now count distinct items instead of joined rows when the filter or the role's permission
+  crosses a to-many relation.
+
+- [#528](https://github.com/LaWebcapsule/d9/pull/528)
+  [`23aa126`](https://github.com/LaWebcapsule/d9/commit/23aa12647137e25e52842eedf5ce2c503186bd49) - security: Upgraded
+  `graphql` to 16.15.0, which bounds the work spent validating duplicated fields: a query repeating the same
+  (GHSA-7hmh-pfrp-vcx4) fields many times is now rejected with a GraphQL validation error instead of blocking the API
+  for minutes (GHSA-7hmh-pfrp-vcx4)
+
+- [#529](https://github.com/LaWebcapsule/d9/pull/529)
+  [`009767d`](https://github.com/LaWebcapsule/d9/commit/009767d2fe77aafb8ae8c0b1136f20387ca291db) - security:
+  `POST /utils/hash/verify` and the `utils_hash_verify` GraphQL mutation now reject hashes whose argon2 cost parameters
+  (GHSA-xw72-c69j-h2rj) are not plain positive integers or exceed the ones d9 generates, or whose version is not one
+  argon2 defines, with `400 INVALID_PAYLOAD` (GHSA-xw72-c69j-h2rj)
+
+- [#518](https://github.com/LaWebcapsule/d9/pull/518)
+  [`f9e231f`](https://github.com/LaWebcapsule/d9/commit/f9e231fcd52aeda8a7662499efda974cc030d127) - Deselecting
+  one-to-many items now nullifies or deletes every removed child, not only the first page (100 by default) of them.
+
+- [#522](https://github.com/LaWebcapsule/d9/pull/522)
+  [`8575634`](https://github.com/LaWebcapsule/d9/commit/8575634f4e39b4d6f46e94d7550ae4e25454ba27) - The OpenID auth
+  driver no longer exits the API when its provider can't be discovered: the failure is logged at startup and logins
+  answer `503 SERVICE_UNAVAILABLE` until the provider is back.
+
+- [#511](https://github.com/LaWebcapsule/d9/pull/511)
+  [`4cc2339`](https://github.com/LaWebcapsule/d9/commit/4cc23396651328e794a8fe80bc10326cc52d3c36) - Fixed public
+  registration never activating an account: `GET /auth/login/register/verify-email` answered `403 FORBIDDEN` for every
+  valid link, and the 60 second limit on confirmation mails was never applied. The local driver wrote the `system-only`
+  field `auth_data` through a service that carries an accountability, which the payload service refuses.
+
+- [#510](https://github.com/LaWebcapsule/d9/pull/510)
+  [`bf742a9`](https://github.com/LaWebcapsule/d9/commit/bf742a941a7f35372346e5811a024a9a0594861c) -
+  `POST /auth/login/register` now rejects a `verification_url` that isn't in `AUTH_<PROVIDER>_REGISTER_URL_ALLOW_LIST`
+  with `400 INVALID_PAYLOAD` before responding, instead of answering `204` and silently sending no email.
+
+- [#521](https://github.com/LaWebcapsule/d9/pull/521)
+  [`de0b57b`](https://github.com/LaWebcapsule/d9/commit/de0b57b5202996b601730b3e48358666afefec1a) - String fields now
+  accept the case-insensitive `ieq` filter operator in REST and GraphQL, the filter builder offers it, and validation
+  rules using it are enforced.
+- Updated dependencies [[`de0b57b`](https://github.com/LaWebcapsule/d9/commit/de0b57b5202996b601730b3e48358666afefec1a),
+  [`36cf983`](https://github.com/LaWebcapsule/d9/commit/36cf983e698ff779529bc9f108c4317ed36175cf),
+  [`9ecf689`](https://github.com/LaWebcapsule/d9/commit/9ecf689f95395929c42461d7a0570e514405bde1),
+  [`de0b57b`](https://github.com/LaWebcapsule/d9/commit/de0b57b5202996b601730b3e48358666afefec1a)]:
+  - @wbce-d9/utils@10.0.7
+  - @wbce-d9/extensions-sdk@10.2.0
+  - @wbce-d9/schema@10.0.2
+  - @wbce-d9/app@11.4.1
+  - @wbce-d9/exceptions@10.0.1
+  - @wbce-d9/storage-driver-azure@10.0.7
+  - @wbce-d9/storage-driver-cloudinary@10.0.9
+  - @wbce-d9/storage-driver-gcs@10.0.7
+  - @wbce-d9/storage-driver-local@10.0.7
+  - @wbce-d9/storage-driver-s3@10.0.8
+
 ## 12.8.0
 
 ### Minor Changes

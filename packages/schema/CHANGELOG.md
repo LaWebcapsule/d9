@@ -1,5 +1,13 @@
 # @wbce-d9/schema
 
+## 10.0.2
+
+### Patch Changes
+
+- [#520](https://github.com/LaWebcapsule/d9/pull/520)
+  [`9ecf689`](https://github.com/LaWebcapsule/d9/commit/9ecf689f95395929c42461d7a0570e514405bde1) - Fixed the Postgres
+  schema overview crashing when a table or column is dropped while the schema is being read.
+
 ## 10.0.1
 
 ### Patch Changes
