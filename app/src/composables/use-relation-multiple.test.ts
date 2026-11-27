@@ -1,9 +1,16 @@
 import { RelationQueryMultiple, useRelationMultiple } from '@/composables/use-relation-multiple';
+import { useFieldsStore } from '@/stores/fields';
+import { useRelationsStore } from '@/stores/relations';
+import { createTestingPinia } from '@pinia/testing';
+import { Field, Relation } from '@wbce-d9/types';
+import { sha256Digest } from '@wbce-d9/utils';
 import { flushPromises, mount } from '@vue/test-utils';
 import { cloneDeep } from 'lodash';
-import { describe, expect, test, vi } from 'vitest';
+import { setActivePinia } from 'pinia';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { computed, defineComponent, h, ref, toRefs } from 'vue';
 import { RelationM2A } from './use-relation-m2a';
+import { RelationM2M } from './use-relation-m2m';
 import { RelationO2M } from './use-relation-o2m';
 
 vi.mock('@/api', () => {
@@ -22,6 +29,10 @@ vi.mock('@/api', () => {
 							data: workerData,
 						},
 					});
+				} else if (path === '/items/articles_translations' && params?.aggregate?.count === 'id') {
+					return Promise.resolve({ data: { data: [{ count: { id: translationsData.length } }] } });
+				} else if (path === '/items/articles_translations') {
+					return Promise.resolve({ data: { data: translationsData } });
 				} else if (path === '/items/article_m2a' && params?.aggregate?.count === 'id') {
 					return Promise.resolve({
 						data: {
@@ -458,6 +469,192 @@ Article           Many|Any: article_m2a                    ┌─Text
 															                │code     │
 															                └─────────┘
 */
+
+const translationsData: Record<string, any>[] = [
+	{ id: 10, articles_id: 1, languages_code: { code: 'en' }, body: 'English' },
+	{ id: 11, articles_id: 1, languages_code: { code: 'de' }, body: 'Deutsch' },
+];
+
+const relationTranslations = {
+	relatedCollection: { collection: 'languages' },
+	relatedPrimaryKeyField: { collection: 'languages', field: 'code' },
+	junctionCollection: { collection: 'articles_translations' },
+	junctionPrimaryKeyField: { collection: 'articles_translations', field: 'id' },
+	junctionField: { collection: 'articles_translations', field: 'languages_code' },
+	reverseJunctionField: { collection: 'articles_translations', field: 'articles_id' },
+	type: 'm2m',
+} as unknown as RelationM2M;
+
+describe('edit conflict base hashes', () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia({ createSpy: vi.fn, stubActions: false }));
+
+		useFieldsStore().fields = [
+			{ collection: 'worker', field: 'id', type: 'integer', schema: { is_primary_key: true }, meta: null },
+			{ collection: 'worker', field: 'name', type: 'string', schema: {}, meta: null },
+			{ collection: 'worker', field: 'facility', type: 'integer', schema: {}, meta: null },
+			{
+				collection: 'articles_translations',
+				field: 'id',
+				type: 'integer',
+				schema: { is_primary_key: true },
+				meta: null,
+			},
+			{ collection: 'articles_translations', field: 'languages_code', type: 'string', schema: {}, meta: null },
+			{ collection: 'articles_translations', field: 'body', type: 'text', schema: {}, meta: null },
+			{ collection: 'languages', field: 'code', type: 'string', schema: { is_primary_key: true }, meta: null },
+		] as unknown as Field[];
+
+		useRelationsStore().relations = [
+			{
+				collection: 'articles_translations',
+				field: 'languages_code',
+				related_collection: 'languages',
+				meta: { one_field: null, junction_field: 'articles_id' },
+			},
+		] as unknown as Relation[];
+	});
+
+	test('hashes the foreign key of the junction field of translations', async () => {
+		const wrapper = mount(TestComponent, {
+			props: { relation: relationTranslations, value: [], id: 1 },
+		});
+
+		await flushPromises();
+
+		wrapper.vm.update({ id: 10, languages_code: { code: 'en' }, body: 'English (edited)' });
+
+		expect(wrapper.vm.value.update).toEqual([
+			{
+				id: 10,
+				languages_code: { code: 'en' },
+				body: 'English (edited)',
+				$__meta: {
+					onlyIf: { languages_code: { _sha256: sha256Digest('en') }, body: { _sha256: sha256Digest('English') } },
+				},
+			},
+		]);
+	});
+
+	test('adds the hashes of the loaded values when updating a loaded item', async () => {
+		const wrapper = mount(TestComponent, {
+			props: { relation: relationO2M, value: [], id: 1 },
+		});
+
+		await flushPromises();
+
+		wrapper.vm.update({ id: 2, name: 'test2-edited' });
+
+		expect(wrapper.vm.value.update).toEqual([
+			{ id: 2, name: 'test2-edited', $__meta: { onlyIf: { name: { _sha256: sha256Digest('test2') } } } },
+		]);
+	});
+
+	test('keeps the existing hashes when editing again', async () => {
+		const wrapper = mount(TestComponent, {
+			props: { relation: relationO2M, value: [], id: 1 },
+		});
+
+		await flushPromises();
+
+		wrapper.vm.update({ id: 2, name: 'first' });
+		wrapper.vm.update({ ...wrapper.vm.displayItems[1], name: 'second' });
+
+		expect(wrapper.vm.value.update).toEqual([
+			{
+				id: 2,
+				name: 'second',
+				facility: 1,
+				$__meta: { onlyIf: { name: { _sha256: sha256Digest('test2') }, facility: { _sha256: sha256Digest(1) } } },
+			},
+		]);
+	});
+
+	test('keeps the conditions of the item drawer for fields the list did not load', async () => {
+		const wrapper = mount(TestComponent, {
+			props: { relation: relationO2M, value: [], id: 1 },
+		});
+
+		await flushPromises();
+
+		// The list only loaded id, name and facility, the drawer loaded all fields
+		wrapper.vm.update({ id: 2, notes: 'Mine', $__meta: { onlyIf: { notes: { _sha256: sha256Digest('Notes') } } } });
+
+		expect(wrapper.vm.value.update).toEqual([
+			{ id: 2, notes: 'Mine', $__meta: { onlyIf: { notes: { _sha256: sha256Digest('Notes') } } } },
+		]);
+	});
+
+	test('keeps the conditions of the item drawer for the related item of a many-to-many relation', async () => {
+		const wrapper = mount(TestComponent, {
+			props: { relation: relationTranslations, value: [], id: 1 },
+		});
+
+		await flushPromises();
+
+		wrapper.vm.update({
+			id: 10,
+			languages_code: {
+				code: 'en',
+				name: 'English (edited)',
+				$__meta: { onlyIf: { name: { _sha256: sha256Digest('English') } } },
+			},
+		});
+
+		expect(wrapper.vm.value.update).toEqual([
+			{
+				id: 10,
+				languages_code: {
+					code: 'en',
+					name: 'English (edited)',
+					$__meta: { onlyIf: { name: { _sha256: sha256Digest('English') } } },
+				},
+				$__meta: { onlyIf: { languages_code: { _sha256: sha256Digest('en') } } },
+			},
+		]);
+	});
+
+	test('does not use the loaded values of another related item', async () => {
+		const wrapper = mount(TestComponent, {
+			props: { relation: relationTranslations, value: [], id: 1 },
+		});
+
+		await flushPromises();
+
+		wrapper.vm.update({ id: 10, languages_code: { code: 'de', code_iso: 'de-DE' } });
+
+		expect(wrapper.vm.value.update).toEqual([
+			{
+				id: 10,
+				languages_code: { code: 'de', code_iso: 'de-DE' },
+				$__meta: { onlyIf: { languages_code: { _sha256: sha256Digest('en') } } },
+			},
+		]);
+	});
+
+	test('adds the hashes of the loaded values when deleting an item, and drops them on undo', async () => {
+		const wrapper = mount(TestComponent, {
+			props: { relation: relationO2M, value: [], id: 1 },
+		});
+
+		await flushPromises();
+
+		wrapper.vm.remove({ id: 2 });
+
+		expect(wrapper.vm.value).toEqual({
+			create: [],
+			update: [],
+			delete: [2],
+			$__meta: {
+				deleteOnlyIf: { 2: { name: { _sha256: sha256Digest('test2') }, facility: { _sha256: sha256Digest(1) } } },
+			},
+		});
+
+		wrapper.vm.remove(wrapper.vm.displayItems[1]);
+
+		expect(wrapper.vm.value?.$__meta?.deleteOnlyIf ?? {}).toEqual({});
+	});
+});
 
 describe('test m2a relation', () => {
 	test('sorting an item', async () => {

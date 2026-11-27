@@ -60,6 +60,7 @@
 			:primary-key="currentPrimaryKey"
 			:edits="edits"
 			:circular-field="relationInfo.relation.meta?.one_field ?? undefined"
+			detect-conflicts
 			:disabled="!updateAllowed || disabled"
 			@input="onDrawerItemInput"
 		/>

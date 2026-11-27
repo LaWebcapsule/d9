@@ -180,6 +180,7 @@
 			:collection="relationInfo.relatedCollection.collection"
 			:primary-key="currentlyEditing || '+'"
 			:edits="editsAtStart"
+			detect-conflicts
 			:circular-field="relationInfo.reverseJunctionField.field"
 			@input="stageEdits"
 			@update:active="cancelEdit"

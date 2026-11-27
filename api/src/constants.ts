@@ -125,7 +125,7 @@ export const OAUTH2_COOKIE_CLEAR_OPTIONS: CookieOptions = (() => {
 	return rest;
 })();
 
-export const OAS_REQUIRED_SCHEMAS = ['Diff', 'Schema', 'Query', 'x-metadata'];
+export const OAS_REQUIRED_SCHEMAS = ['Diff', 'Schema', 'Query', 'UpdateMeta', 'x-metadata'];
 
 /** Formats from which transformation is supported */
 export const SUPPORTED_IMAGE_TRANSFORM_FORMATS = ['image/jpeg', 'image/png', 'image/webp', 'image/tiff', 'image/avif'];

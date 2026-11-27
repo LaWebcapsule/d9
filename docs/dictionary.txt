@@ -335,6 +335,7 @@ SendGrid
 SEO
 SES
 SFC
+SHA-256
 siloed
 slugification
 slugify

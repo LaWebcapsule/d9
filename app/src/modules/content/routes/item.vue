@@ -176,6 +176,18 @@
 			<live-preview v-if="previewURL" :url="previewURL" @new-window="livePreviewMode = 'popup'" />
 		</template>
 
+		<conflicts-drawer
+			v-if="conflicts"
+			active
+			:collection="collection"
+			:primary-key="internalPrimaryKey"
+			:edits="edits"
+			:conflicts="conflicts"
+			:saving="saving"
+			@resolve="resolveConflictsAndContinue"
+			@cancel="conflicts = null"
+		/>
+
 		<v-dialog v-model="confirmLeave" @esc="confirmLeave = false">
 			<v-card>
 				<v-card-title>{{ t('unsaved_changes') }}</v-card-title>
@@ -242,8 +254,10 @@ import { usePermissions } from '@/composables/use-permissions';
 import { useShortcut } from '@/composables/use-shortcut';
 import { useTemplateData } from '@/composables/use-template-data';
 import { useTitle } from '@/composables/use-title';
+import { ConflictChoice } from '@/utils/edit-conflicts';
 import { renderStringTemplate } from '@/utils/render-string-template';
 import CommentsSidebarDetail from '@/views/private/components/comments-sidebar-detail.vue';
+import ConflictsDrawer from '@/views/private/components/conflicts-drawer.vue';
 import FlowSidebarDetail from '@/views/private/components/flow-sidebar-detail.vue';
 import RevisionsDrawerDetail from '@/views/private/components/revisions-drawer-detail.vue';
 import SaveOptions from '@/views/private/components/save-options.vue';
@@ -296,7 +310,9 @@ const {
 	saveAsCopy,
 	refresh,
 	validationErrors,
-} = useItem(collection, primaryKey);
+	conflicts,
+	resolveConflicts,
+} = useItem(collection, primaryKey, {}, { detectConflicts: true });
 
 const { templateData, loading: templateDataLoading } = useTemplateData(collectionInfo, primaryKey);
 
@@ -503,8 +519,13 @@ function useBreadcrumb() {
 	return { breadcrumb };
 }
 
+// The kind of save that was started last. When it reports conflicts, resolving them finishes it.
+let lastSave: 'quit' | 'stay' | 'add-new' = 'stay';
+
 async function saveAndQuit() {
 	if (isSavable.value === false) return;
+
+	lastSave = 'quit';
 
 	try {
 		await save();
@@ -516,6 +537,8 @@ async function saveAndQuit() {
 
 async function saveAndStay() {
 	if (isSavable.value === false) return;
+
+	lastSave = 'stay';
 
 	try {
 		const savedItem: Record<string, any> = await save();
@@ -531,8 +554,27 @@ async function saveAndStay() {
 	}
 }
 
+async function resolveConflictsAndContinue(choices: ConflictChoice[]) {
+	try {
+		await resolveConflicts(choices);
+
+		// Conflicts are only reported for existing items
+		if (lastSave === 'quit') {
+			if (props.singleton === false) router.push(`/content/${props.collection}`);
+		} else if (lastSave === 'add-new') {
+			router.push(`/content/${props.collection}/+`);
+		} else {
+			revisionsDrawerDetailRef.value?.refresh?.();
+		}
+	} catch {
+		// Save shows unexpected error dialog, or the conflicts again when there are new ones
+	}
+}
+
 async function saveAndAddNew() {
 	if (isSavable.value === false) return;
+
+	lastSave = 'add-new';
 
 	try {
 		await save();

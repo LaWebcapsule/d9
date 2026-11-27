@@ -13,7 +13,7 @@ import { getCollectionFromAlias } from '../utils/get-collection-from-alias.js';
 import type { AliasMap } from '../utils/get-column-path.js';
 import { getColumn } from '../utils/get-column.js';
 import { stripFunction } from '../utils/strip-function.js';
-import getDatabase from './index.js';
+import getDatabase, { getDatabaseClient } from './index.js';
 
 type RunASTOptions = {
 	/**
@@ -35,6 +35,12 @@ type RunASTOptions = {
 	 * Whether or not to strip out non-requested required fields automatically (eg IDs / FKs)
 	 */
 	stripNonRequested?: boolean;
+
+	/**
+	 * Lock the rows of the current level until the transaction of `knex` finishes, see `forUpdate` in
+	 * `QueryOptions` of the ItemsService
+	 */
+	forUpdate?: boolean | undefined;
 };
 
 /**
@@ -75,7 +81,7 @@ export default async function runAST(
 		);
 
 		// The actual knex query builder instance. This is a promise that resolves with the raw items from the db
-		const dbQuery = await getDBQuery(schema, knex, collection, fieldNodes, query);
+		const dbQuery = await getDBQuery(schema, knex, collection, fieldNodes, query, options?.forUpdate);
 
 		const rawItems: Item | Item[] = await dbQuery;
 
@@ -244,7 +250,8 @@ async function getDBQuery(
 	knex: Knex,
 	table: string,
 	fieldNodes: (FieldNode | FunctionFieldNode)[],
-	query: ASTQuery
+	query: ASTQuery,
+	forUpdate = false
 ): Promise<Knex.QueryBuilder> {
 	const preProcess = getColumnPreprocessor(knex, schema, table);
 	const queryCopy = clone(query);
@@ -349,7 +356,7 @@ async function getDBQuery(
 		}
 	}
 
-	if (!needsInnerQuery) return dbQuery;
+	if (!needsInnerQuery) return forUpdate ? lockRows(knex, dbQuery, table) : dbQuery;
 
 	const wrapperQuery = knex
 		.select(fieldNodes.map(preProcess))
@@ -367,7 +374,34 @@ async function getDBQuery(
 		}
 	}
 
-	return wrapperQuery;
+	if (!forUpdate) return wrapperQuery;
+
+	if (getDatabaseClient(knex) === 'oracle') {
+		// Oracle can't lock the rows of a query that joins a DISTINCT subquery. Lock them with a query of their own:
+		// the read that follows sees them as they are after that (READ COMMITTED).
+		await knex
+			.select(primaryKey)
+			.from(table)
+			.whereIn(primaryKey, knex.select(`inner.${primaryKey}`).from(dbQuery))
+			.forUpdate();
+
+		return wrapperQuery;
+	}
+
+	return lockRows(knex, wrapperQuery, table);
+}
+
+function lockRows(knex: Knex, dbQuery: Knex.QueryBuilder, table: string): Knex.QueryBuilder {
+	const client = getDatabaseClient(knex);
+
+	// SQLite serializes writes on its own, Redshift doesn't support row locks
+	if (client === 'sqlite' || client === 'redshift') return dbQuery;
+
+	// Knex adds the table hint after the joins, where MS SQL doesn't accept it
+	if (client === 'mssql') return dbQuery.from(knex.raw('?? with (UPDLOCK)', [table]));
+
+	// Postgres can't lock the rows of tables that are left joined, eg. for filters. Other vendors ignore the table.
+	return dbQuery.forUpdate(table);
 }
 
 function applyParentFilters(

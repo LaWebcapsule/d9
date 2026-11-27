@@ -67,6 +67,7 @@
 				collection="directus_files"
 				:primary-key="image.id"
 				:edits="edits"
+				detect-conflicts
 				@input="update"
 			>
 				<template #actions>

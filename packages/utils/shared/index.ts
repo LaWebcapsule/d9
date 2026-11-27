@@ -27,5 +27,6 @@ export * from './parse-filter-function-path.js';
 export * from './parse-filter.js';
 export * from './parse-json.js';
 export * from './pluralize.js';
+export * from './sha256-digest.js';
 export * from './to-array.js';
 export * from './validate-payload.js';

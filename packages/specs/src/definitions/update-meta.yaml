@@ -1,0 +1,19 @@
+type: object
+description: Information about an update that is not part of the item itself.
+properties:
+  onlyIf:
+    type: object
+    description: >-
+      Conditions the current values have to meet for the update to be saved, by field. Each condition has exactly one
+      operator.
+    additionalProperties:
+      type: object
+      minProperties: 1
+      maxProperties: 1
+      properties:
+        _sha256:
+          type: string
+          pattern: '^[0-9a-f]{64}$'
+          description: SHA-256 hex digest of the value the changes are based on.
+        _eq:
+          description: The value the changes are based on, as the API returns it.

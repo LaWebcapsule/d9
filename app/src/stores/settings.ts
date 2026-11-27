@@ -1,5 +1,6 @@
 import api from '@/api';
 import { i18n } from '@/lang';
+import { stripMeta } from '@/utils/edit-conflicts';
 import { notify } from '@/utils/notify';
 import { unexpectedError } from '@/utils/unexpected-error';
 import { merge } from 'lodash';
@@ -32,7 +33,8 @@ export const useSettingsStore = defineStore({
 			this.settings = newSettings;
 
 			try {
-				const response = await api.patch(`/settings`, updates);
+				// Conflicts can't be shown here, don't let relational interfaces make the save fail
+				const response = await api.patch(`/settings`, stripMeta(updates));
 
 				this.settings = response.data.data;
 

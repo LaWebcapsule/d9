@@ -10,7 +10,7 @@ import runAST from '../database/run-ast.js';
 import emitter from '../emitter.js';
 import env from '../env.js';
 import { translateDatabaseError } from '../exceptions/database/translate.js';
-import { ForbiddenException, InvalidPayloadException } from '../exceptions/index.js';
+import { ConflictException, ForbiddenException, InvalidPayloadException } from '../exceptions/index.js';
 import type {
 	AbstractService,
 	AbstractServiceOptions,
@@ -19,6 +19,7 @@ import type {
 	MutationOptions,
 	PrimaryKey,
 } from '../types/index.js';
+import { detectConflicts, extractOnlyIf, getDeletedKeys } from '../utils/conflicts.js';
 import getASTFromQuery from '../utils/get-ast-from-query.js';
 import { validateKeys } from '../utils/validate-keys.js';
 import { AuthorizationService } from './authorization.js';
@@ -28,6 +29,11 @@ export type QueryOptions = {
 	stripNonRequested?: boolean;
 	permissionsAction?: PermissionsAction;
 	emitEvents?: boolean;
+	/**
+	 * Lock the read rows until the transaction of the service's knex instance finishes, so they can't be
+	 * changed in between reading and writing them. Only applies to the items of the collection itself.
+	 */
+	forUpdate?: boolean;
 };
 
 export type MutationTracker = {
@@ -108,8 +114,14 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 			.filter((field) => field.alias === true)
 			.map((field) => field.field);
 
-		const payload: AnyItem = cloneDeep(data);
+		// Conditions only apply to existing items
+		const payload: AnyItem = cloneDeep(extractOnlyIf(data).data);
 		const nestedActionEvents: ActionEventParams[] = [];
+
+		// Nested mutations collect their conflicts in the list of the mutation that started the tree, which
+		// reports them all at once and so rolls back everything
+		const conflicts = opts.conflicts ?? [];
+		const nestedOpts: MutationOptions = { ...opts, conflicts };
 
 		// By wrapping the logic in a transaction, we make sure we automatically roll back all the
 		// changes in the DB if any of the parts contained within throws an error. This also means
@@ -161,13 +173,13 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 				payload: payloadWithM2O,
 				revisions: revisionsM2O,
 				nestedActionEvents: nestedActionEventsM2O,
-			} = await payloadService.processM2O(payloadWithPresets, opts);
+			} = await payloadService.processM2O(payloadWithPresets, nestedOpts);
 
 			const {
 				payload: payloadWithA2O,
 				revisions: revisionsA2O,
 				nestedActionEvents: nestedActionEventsA2O,
-			} = await payloadService.processA2O(payloadWithM2O, opts);
+			} = await payloadService.processA2O(payloadWithM2O, nestedOpts);
 
 			const payloadWithoutAliases = pick(payloadWithA2O, without(fields, ...aliases));
 			const payloadWithTypeCasting = await payloadService.processValues('create', payloadWithoutAliases);
@@ -208,7 +220,7 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 			const { revisions: revisionsO2M, nestedActionEvents: nestedActionEventsO2M } = await payloadService.processO2M(
 				payload,
 				primaryKey,
-				opts
+				nestedOpts
 			);
 
 			nestedActionEvents.push(...nestedActionEventsM2O);
@@ -261,6 +273,10 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 						opts.onRevisionCreate(revision);
 					}
 				}
+			}
+
+			if (!opts.conflicts && conflicts.length > 0) {
+				throw new ConflictException(conflicts);
 			}
 
 			return primaryKey;
@@ -398,6 +414,7 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 			knex: this.knex,
 			// GraphQL requires relational keys to be returned regardless
 			stripNonRequested: opts?.stripNonRequested !== undefined ? opts.stripNonRequested : true,
+			forUpdate: opts?.forUpdate,
 		});
 
 		if (records === null) {
@@ -524,10 +541,17 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 					schema: this.schema,
 				});
 
+				// Report the conflicts of all items together
+				const conflicts = opts.conflicts ?? [];
+
 				for (const item of data) {
 					if (!item[primaryKeyField]) throw new InvalidPayloadException(`Item in update misses primary key.`);
-					const combinedOpts = Object.assign({ autoPurgeCache: false }, opts);
+					const combinedOpts = Object.assign({ autoPurgeCache: false }, opts, { conflicts });
 					keys.push(await service.updateOne(item[primaryKeyField]!, omit(item, primaryKeyField), combinedOpts));
+				}
+
+				if (!opts.conflicts && conflicts.length > 0) {
+					throw new ConflictException(conflicts);
 				}
 			});
 		} finally {
@@ -561,8 +585,12 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 			.filter((field) => field.alias === true)
 			.map((field) => field.field);
 
-		const payload: Partial<AnyItem> = cloneDeep(data);
+		const { data: dataWithoutMeta, onlyIf } = extractOnlyIf(data);
+		const payload: Partial<AnyItem> = cloneDeep(dataWithoutMeta);
 		const nestedActionEvents: ActionEventParams[] = [];
+
+		const conflicts = opts.conflicts ?? [];
+		const nestedOpts: MutationOptions = { ...opts, conflicts };
 
 		const authorizationService = new AuthorizationService({
 			accountability: this.accountability,
@@ -594,6 +622,37 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 		// Sort keys to ensure that the order is maintained
 		keys.sort();
 
+		// Items that were deleted in the meantime are a conflict, not a permission error, when the user is allowed
+		// to know about the deletion
+		if (onlyIf) {
+			const deletedKeys = await getDeletedKeys({
+				knex: this.knex,
+				schema: this.schema,
+				accountability: this.accountability,
+				collection: this.collection,
+				keys,
+				emitEvents: opts.emitEvents,
+			});
+
+			if (deletedKeys.length > 0) {
+				conflicts.push(
+					...deletedKeys.map((key) => ({
+						collection: this.collection,
+						key,
+						action: 'update' as const,
+						type: 'deleted' as const,
+					}))
+				);
+
+				keys = keys.filter((key) => !deletedKeys.includes(key));
+
+				if (keys.length === 0) {
+					if (!opts.conflicts) throw new ConflictException(conflicts);
+					return [];
+				}
+			}
+		}
+
 		if (this.accountability) {
 			await authorizationService.checkAccess('update', this.collection, keys);
 		}
@@ -613,17 +672,32 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 				schema: this.schema,
 			});
 
+			if (onlyIf) {
+				conflicts.push(
+					...(await detectConflicts({
+						knex: trx,
+						schema: this.schema,
+						accountability: this.accountability,
+						collection: this.collection,
+						keys,
+						onlyIf,
+						action: 'update',
+						emitEvents: opts.emitEvents,
+					}))
+				);
+			}
+
 			const {
 				payload: payloadWithM2O,
 				revisions: revisionsM2O,
 				nestedActionEvents: nestedActionEventsM2O,
-			} = await payloadService.processM2O(payloadWithPresets, opts);
+			} = await payloadService.processM2O(payloadWithPresets, nestedOpts);
 
 			const {
 				payload: payloadWithA2O,
 				revisions: revisionsA2O,
 				nestedActionEvents: nestedActionEventsA2O,
-			} = await payloadService.processA2O(payloadWithM2O, opts);
+			} = await payloadService.processA2O(payloadWithM2O, nestedOpts);
 
 			const payloadWithoutAliasAndPK = pick(payloadWithA2O, without(fields, primaryKeyField, ...aliases));
 			const payloadWithTypeCasting = await payloadService.processValues('update', payloadWithoutAliasAndPK);
@@ -645,7 +719,7 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 				const { revisions, nestedActionEvents: nestedActionEventsO2M } = await payloadService.processO2M(
 					payload,
 					key,
-					opts
+					nestedOpts
 				);
 
 				childrenRevisions.push(...revisions);
@@ -719,6 +793,10 @@ export class ItemsService<Item extends AnyItem = AnyItem> implements AbstractSer
 						}
 					}
 				}
+			}
+
+			if (!opts.conflicts && conflicts.length > 0) {
+				throw new ConflictException(conflicts);
 			}
 		});
 

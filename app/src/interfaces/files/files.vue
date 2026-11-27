@@ -85,6 +85,7 @@
 			:related-primary-key="relatedPrimaryKey || '+'"
 			:junction-field="relationInfo.junctionField.field"
 			:edits="editsAtStart"
+			detect-conflicts
 			:circular-field="relationInfo.reverseJunctionField.field"
 			@input="stageEdits"
 		>

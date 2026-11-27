@@ -2,10 +2,11 @@ import api from '@/api';
 import { RelationM2A } from '@/composables/use-relation-m2a';
 import { RelationM2M } from '@/composables/use-relation-m2m';
 import { RelationO2M } from '@/composables/use-relation-o2m';
+import { META_KEY, OnlyIf, getOnlyIf, withOnlyIf } from '@/utils/edit-conflicts';
 import { unexpectedError } from '@/utils/unexpected-error';
 import { Filter, Item } from '@wbce-d9/types';
 import { getEndpoint, toArray } from '@wbce-d9/utils';
-import { clamp, cloneDeep, get, isEqual, merge } from 'lodash';
+import { clamp, cloneDeep, get, isEqual, isPlainObject, merge } from 'lodash';
 import { Ref, computed, ref, unref, watch } from 'vue';
 
 export type RelationQueryMultiple = {
@@ -28,6 +29,8 @@ export type ChangesItem = {
 	create: Record<string, any>[];
 	update: Record<string, any>[];
 	delete: (string | number)[];
+	/** Conditions for deleting items, so deleting items that were changed in the meantime is detected */
+	$__meta?: { deleteOnlyIf?: Record<string, OnlyIf> };
 };
 
 export function useRelationMultiple(
@@ -214,18 +217,18 @@ export function useRelationMultiple(
 
 			for (const item of items) {
 				if (item.$type === undefined || item.$index === undefined) {
-					target.value.update.push(cleanItem(item));
+					target.value.update.push(withConditions(item));
 				} else if (item.$type === 'created') {
 					target.value.create[item.$index] = cleanItem(item);
 				} else if (item.$type === 'updated') {
 					if (isEmpty(item)) target.value.update.splice(item.$index, 1);
-					else target.value.update[item.$index] = cleanItem(item);
+					else target.value.update[item.$index] = withConditions(item);
 				} else if (item.$type === 'deleted') {
 					if (item.$edits !== undefined) {
 						if (isEmpty(item)) target.value.update.splice(item.$index, 1);
-						else target.value.update[item.$edits] = cleanItem(item);
+						else target.value.update[item.$edits] = withConditions(item);
 					} else {
-						target.value.update.push(cleanItem(item));
+						target.value.update.push(withConditions(item));
 					}
 				}
 			}
@@ -244,6 +247,7 @@ export function useRelationMultiple(
 			for (const item of items) {
 				if (item.$type === undefined || item.$index === undefined) {
 					target.value.delete.push(item[pkField]);
+					addDeleteOnlyIf(target.value, item[pkField]);
 				} else if (item.$type === 'created') {
 					target.value.create.splice(item.$index, 1);
 				} else if (item.$type === 'updated') {
@@ -251,9 +255,11 @@ export function useRelationMultiple(
 						target.value.update.splice(item.$index, 1);
 					} else {
 						target.value.delete.push(item[pkField]);
+						addDeleteOnlyIf(target.value, item[pkField]);
 					}
 				} else if (item.$type === 'deleted') {
-					target.value.delete.splice(item.$index, 1);
+					const [key] = target.value.delete.splice(item.$index, 1);
+					if (key !== undefined) delete target.value[META_KEY]?.deleteOnlyIf?.[String(key)];
 				}
 			}
 
@@ -300,6 +306,77 @@ export function useRelationMultiple(
 		function updateValue() {
 			target.value = cloneDeep(target.value);
 		}
+
+		/**
+		 * Remember the digests of the loaded values of the deleted item, see `withConditions`
+		 */
+		function addDeleteOnlyIf(changes: Item, key: string | number) {
+			const info = relation.value;
+			const original = info ? getFetchedItem(key) : undefined;
+			if (!info || !original) return;
+
+			const onlyIf = getOnlyIf(getTargetCollection(info), original, Object.keys(original));
+			if (Object.keys(onlyIf).length === 0) return;
+
+			changes[META_KEY] = { deleteOnlyIf: { ...(changes[META_KEY]?.deleteOnlyIf ?? {}), [String(key)]: onlyIf } };
+		}
+
+		/**
+		 * Add the digests of the loaded values of the changed fields, so the API can detect if someone else
+		 * changed them in the meantime. Conditions that already exist are kept, like the ones the item drawer
+		 * adds with the values it loaded: the list only loads the fields it displays.
+		 */
+		function withConditions(item: DisplayItem) {
+			const entry = cleanItem(item);
+			const info = relation.value;
+			if (!info) return entry;
+
+			const original = getFetchedItem(entry[getTargetPKField(info)]) ?? {};
+			const result = withOnlyIf(getTargetCollection(info), original, { ...entry, [META_KEY]: item[META_KEY] });
+
+			if (info.type === 'm2m' || info.type === 'm2a') {
+				const junctionField = info.junctionField.field;
+				const related = result[junctionField];
+
+				const relatedCollection =
+					info.type === 'm2m'
+						? info.relatedCollection.collection
+						: result[info.collectionField.field] ?? original[info.collectionField.field];
+
+				const relatedPKField =
+					info.type === 'm2m'
+						? info.relatedPrimaryKeyField.field
+						: relatedCollection && info.relationPrimaryKeyFields[relatedCollection]?.field;
+
+				if (isPlainObject(related) && relatedCollection && relatedPKField) {
+					// Only the values of the same related item are the base of the edits
+					const originalRelated = original[junctionField];
+
+					const isSameItem =
+						isPlainObject(originalRelated) &&
+						related[relatedPKField] !== undefined &&
+						related[relatedPKField] === originalRelated[relatedPKField];
+
+					result[junctionField] = withOnlyIf(relatedCollection, isSameItem ? originalRelated : {}, related);
+				}
+			}
+
+			return result;
+		}
+	}
+
+	function getTargetCollection(info: RelationM2A | RelationM2M | RelationO2M) {
+		return info.type === 'o2m' ? info.relatedCollection.collection : info.junctionCollection.collection;
+	}
+
+	function getTargetPKField(info: RelationM2A | RelationM2M | RelationO2M) {
+		return info.type === 'o2m' ? info.relatedPrimaryKeyField.field : info.junctionPrimaryKeyField.field;
+	}
+
+	function getFetchedItem(key: string | number | undefined) {
+		if (key === undefined || !relation.value) return undefined;
+		const pkField = getTargetPKField(relation.value);
+		return fetchedItems.value.find((item) => item[pkField] === key);
 	}
 
 	async function updateFetchedItems() {
@@ -639,7 +716,9 @@ export function useRelationMultiple(
 			} else if (relation.value?.type === 'm2m') {
 				if (topLevelKeys.length === 1 && topLevelKeys[0] === relation.value.junctionPrimaryKeyField.field) return true;
 
-				const deepLevelKeys = Object.keys(item[relation.value.junctionField.field]);
+				const deepLevelKeys = Object.keys(item[relation.value.junctionField.field]).filter(
+					(key) => !key.startsWith('$')
+				);
 
 				return (
 					topLevelKeys.length === 2 &&
@@ -651,7 +730,9 @@ export function useRelationMultiple(
 			} else if (relation.value?.type === 'm2a') {
 				if (topLevelKeys.length === 1 && topLevelKeys[0] === relation.value.junctionPrimaryKeyField.field) return true;
 
-				const deepLevelKeys = Object.keys(item[relation.value.junctionField.field]);
+				const deepLevelKeys = Object.keys(item[relation.value.junctionField.field]).filter(
+					(key) => !key.startsWith('$')
+				);
 
 				if (
 					topLevelKeys.length === 2 &&
