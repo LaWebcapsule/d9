@@ -229,7 +229,7 @@ export class FieldsService {
 			? {
 					...column,
 					default_value: getDefaultValue(column),
-			  }
+				}
 			: null;
 
 		const data = {

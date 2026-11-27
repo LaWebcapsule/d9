@@ -359,10 +359,10 @@ const getItemCount = debounce(async () => {
 		const aggregate = primaryKeyField.value?.field
 			? {
 					countDistinct: [primaryKeyField.value.field],
-			  }
+				}
 			: {
 					count: ['*'],
-			  };
+				};
 
 		const count = await api
 			.get(getEndpoint(collection.value), {

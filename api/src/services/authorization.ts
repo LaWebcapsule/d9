@@ -440,8 +440,7 @@ export class AuthorizationService {
 
 					for (const [collection, children] of Object.entries(ast.children)) {
 						ast.children[collection] = children.map((child) => applyFilters(child, accountability)) as (
-							| NestedCollectionNode
-							| FieldNode
+							NestedCollectionNode | FieldNode
 						)[];
 					}
 				} else {
@@ -450,8 +449,7 @@ export class AuthorizationService {
 					updateFilterQuery(collection, ast.query);
 
 					ast.children = ast.children.map((child) => applyFilters(child, accountability)) as (
-						| NestedCollectionNode
-						| FieldNode
+						NestedCollectionNode | FieldNode
 					)[];
 				}
 			}

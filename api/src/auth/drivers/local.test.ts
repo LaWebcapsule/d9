@@ -64,7 +64,11 @@ vi.mock('../../services/users.js', async () => {
 
 			async updateOne(id: string, data: Record<string, any>) {
 				this.write(data);
-				Object.assign(accounts.find((account) => account.id === id)!, data);
+
+				Object.assign(
+					accounts.find((account) => account.id === id)!,
+					data
+				);
 			}
 		},
 	};

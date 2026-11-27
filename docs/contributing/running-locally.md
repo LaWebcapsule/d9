@@ -1,14 +1,14 @@
 ---
 description:
-  This guide explains how to install the _Development_ version of d9 locally so that you can work on the
-  platform's source code.
+  This guide explains how to install the _Development_ version of d9 locally so that you can work on the platform's
+  source code.
 readTime: 4 min read
 ---
 
 # Running Locally
 
-> This guide explains how to install the _Development_ version of d9 locally so that you can work on the
-> platform's source code. To install the _Production_ version locally, please follow to our
+> This guide explains how to install the _Development_ version of d9 locally so that you can work on the platform's
+> source code. To install the _Production_ version locally, please follow to our
 > [Docker Guide](/self-hosted/docker-guide).
 
 ::: tip Minimum Requirements
@@ -22,9 +22,8 @@ You will also need to have the package manager [pnpm](https://pnpm.io) installed
 
 ## 1. Fork the d9 repository
 
-Go to the [repository]({{GITHUB_URL}}) and fork it to your GitHub account. A fork is your
-copy of the d9 repository which allows you to freely experiment with changes without affecting the original
-project.
+Go to the [repository]({{GITHUB_URL}}) and fork it to your GitHub account. A fork is your copy of the d9 repository
+which allows you to freely experiment with changes without affecting the original project.
 
 ## 2. Clone from your repository
 
@@ -47,17 +46,14 @@ pnpm build
 
 ## 5. Create a `.env` file
 
-Create an `.env` file under the `api` folder using vars from the online
-[config help](/self-hosted/config-options).
+Create an `.env` file under the `api` folder using vars from the online [config help](/self-hosted/config-options).
 
 ::: tip Config Values
 
-The `KEY`& `SECRET` config options from [Security](/self-hosted/config-options.html#security)
-are mandatory.
+The `KEY`& `SECRET` config options from [Security](/self-hosted/config-options.html#security) are mandatory.
 
-Also the [Database Configuration](/self-hosted/config-options.html#database) must be specified.
-You might want to use the [docker-compose.yml]({{GITHUB_URL}}/blob/main/docker-compose.yml)
-file to spin up a test database.
+Also the [Database Configuration](/self-hosted/config-options.html#database) must be specified. You might want to use
+the [docker-compose.yml]({{GITHUB_URL}}/blob/main/docker-compose.yml) file to spin up a test database.
 
 :::
 

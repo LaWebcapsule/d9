@@ -132,7 +132,9 @@ body {
 		height: 60px;
 		color: var(--foreground-normal);
 		cursor: pointer;
-		transition: opacity var(--fast) var(--transition), color var(--fast) var(--transition);
+		transition:
+			opacity var(--fast) var(--transition),
+			color var(--fast) var(--transition);
 
 		.v-icon {
 			pointer-events: none;

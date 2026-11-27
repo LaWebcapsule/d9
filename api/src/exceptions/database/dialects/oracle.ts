@@ -2,7 +2,7 @@ import { ContainsNullValuesException } from '../contains-null-values.js';
 import type { OracleError } from './types.js';
 
 enum OracleErrorCodes {
-	'CONTAINS_NULL_VALUES' = 2296,
+	CONTAINS_NULL_VALUES = 2296,
 	// @TODO extend with other errors
 }
 

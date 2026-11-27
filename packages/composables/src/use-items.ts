@@ -242,10 +242,10 @@ export function useItems(
 			const aggregate = primaryKeyField.value
 				? {
 						countDistinct: primaryKeyField.value.field,
-				  }
+					}
 				: {
 						count: '*',
-				  };
+					};
 
 			const response = await api.get<any>(endpoint.value, {
 				params: {
@@ -278,10 +278,10 @@ export function useItems(
 			const aggregate = primaryKeyField.value
 				? {
 						countDistinct: primaryKeyField.value.field,
-				  }
+					}
 				: {
 						count: '*',
-				  };
+					};
 
 			const response = await api.get<any>(endpoint.value, {
 				params: {

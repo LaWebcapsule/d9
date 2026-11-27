@@ -91,7 +91,7 @@ export function renderDisplayStringTemplate(
 							interfaceOptions: fieldsUsed[key]?.meta?.options ?? {},
 							field: fieldsUsed[key] ?? undefined,
 							collection: collection,
-					  })
+						})
 					: value
 			);
 		} else {

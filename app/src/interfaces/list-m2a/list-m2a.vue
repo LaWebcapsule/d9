@@ -419,11 +419,14 @@ const customFilter = computed(() => {
 
 	const junctionField = info.junctionField.field;
 
-	const selectedPrimaryKeys = selected.value.reduce((acc, item) => {
-		const relatedPKField = info.relationPrimaryKeyFields[item[info.collectionField.field]].field;
-		if (item[info.collectionField.field] === selectingFrom.value) acc.push(item[junctionField][relatedPKField]);
-		return acc;
-	}, [] as (string | number)[]);
+	const selectedPrimaryKeys = selected.value.reduce(
+		(acc, item) => {
+			const relatedPKField = info.relationPrimaryKeyFields[item[info.collectionField.field]].field;
+			if (item[info.collectionField.field] === selectingFrom.value) acc.push(item[junctionField][relatedPKField]);
+			return acc;
+		},
+		[] as (string | number)[]
+	);
 
 	if (selectedPrimaryKeys.length > 0)
 		filter._and.push({

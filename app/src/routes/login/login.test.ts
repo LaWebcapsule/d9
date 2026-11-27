@@ -1,6 +1,6 @@
 import { createTestingPinia } from '@pinia/testing';
 import { mount } from '@vue/test-utils';
-import { GlobalMountOptions } from '@vue/test-utils/dist/types';
+import type { GlobalMountOptions } from '@/__utils__/mount';
 import { setActivePinia } from 'pinia';
 import { beforeEach, expect, test, vi } from 'vitest';
 import { createI18n } from 'vue-i18n';

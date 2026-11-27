@@ -1,6 +1,8 @@
 {
 	"extends": "@wbce-d9/tsconfig/node22",
 	"compilerOptions": {
+		"rootDir": "src",
+		"types": ["node"],
 		"outDir": "dist"
 	},
 	"include": ["src"],

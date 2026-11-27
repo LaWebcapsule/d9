@@ -43,7 +43,7 @@ export default defineConfig({
 	title: 'd9 Docs',
 	description: 'd9 — Open Data Platform. An Instant App & API for your SQL Database.',
 	ignoreDeadLinks: true,
-	appearance: "dark",
+	appearance: 'dark',
 	vite: {
 		plugins: [markdownVariablesPlugin()],
 	},

@@ -9,11 +9,11 @@ const enum Types {
 }
 
 const enum Tokens {
-	'TRUE' = -1,
-	'FALSE' = -2,
-	'NULL' = -3,
-	'EMPTY' = -4,
-	'UNDEFINED' = -5,
+	TRUE = -1,
+	FALSE = -2,
+	NULL = -3,
+	EMPTY = -4,
+	UNDEFINED = -5,
 }
 
 type Token = {

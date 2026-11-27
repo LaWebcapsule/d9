@@ -21,17 +21,20 @@ export function reduceSchema(
 	const allowedFieldsInCollection =
 		permissions
 			?.filter((permission) => actions.includes(permission.action))
-			.reduce((acc, permission) => {
-				if (!acc[permission.collection]) {
-					acc[permission.collection] = [];
-				}
+			.reduce(
+				(acc, permission) => {
+					if (!acc[permission.collection]) {
+						acc[permission.collection] = [];
+					}
 
-				if (permission.fields) {
-					acc[permission.collection] = uniq([...acc[permission.collection]!, ...permission.fields]);
-				}
+					if (permission.fields) {
+						acc[permission.collection] = uniq([...acc[permission.collection]!, ...permission.fields]);
+					}
 
-				return acc;
-			}, {} as { [collection: string]: string[] }) ?? {};
+					return acc;
+				},
+				{} as { [collection: string]: string[] }
+			) ?? {};
 
 	for (const [collectionName, collection] of Object.entries(schema.collections)) {
 		if (

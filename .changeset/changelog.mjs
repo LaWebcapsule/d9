@@ -1,7 +1,6 @@
 // Changelog generator: @changesets/changelog-github, plus a "security:" prefix and the CVE/GHSA ids
 // mentioned in the PR description for changesets whose PR has the "security" label.
 // See https://changesets.dev/guide/customize-changelog-format
-/* eslint-env es2022 */
 import github from '@changesets/changelog-github';
 import { getCommitInfo } from '@changesets/get-github-info';
 

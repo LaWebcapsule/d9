@@ -140,7 +140,7 @@ jobs:
 
       - name: Publish packages to NPM
         env:
-          NPM_CONFIG_PROVENANCE: "true"
+          NPM_CONFIG_PROVENANCE: 'true'
         # Node 24 is only needed here for npm Trusted Publishing; don't let the
         # repo's engine-strict + engines.node "^22" block the publish step.
         run: pnpm --config.engine-strict=false --recursive publish --access=public --no-git-checks --provenance

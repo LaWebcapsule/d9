@@ -1,15 +1,15 @@
 ---
 description:
-  d9 has two command line interfaces (CLI) that you can use for various actions, one for server-side actions and
-  another to interact with a d9 instance as you would with an SDK
+  d9 has two command line interfaces (CLI) that you can use for various actions, one for server-side actions and another
+  to interact with a d9 instance as you would with an SDK
 readTime: 7 min read
 ---
 
 # Command Line Interface
 
-> d9 has two command line interfaces (CLI) that you can use for various actions. One is used for server-side
-> actions that relate to your on-prem instance, like migrating the database or resetting a user, while the other allows
-> you to interact with a d9 instance as you would with an SDK.
+> d9 has two command line interfaces (CLI) that you can use for various actions. One is used for server-side actions
+> that relate to your on-prem instance, like migrating the database or resetting a user, while the other allows you to
+> interact with a d9 instance as you would with an SDK.
 
 ## Requirements
 
@@ -17,8 +17,8 @@ readTime: 7 min read
 
 ## Server
 
-For server-side CLI, all functionality can be accessed by running `npx d9 <command>` in your project folder.
-For legacy purposes, the CLI is also accessible via `npx directus <command>`.
+For server-side CLI, all functionality can be accessed by running `npx d9 <command>` in your project folder. For legacy
+purposes, the CLI is also accessible via `npx directus <command>`.
 
 ### Initialize a New Project
 
@@ -176,8 +176,8 @@ npx d9 roles create --role <role-name>
 ```
 
 These roles are created with the
-[minimum permissions required](/app/users-roles-permissions#configure-system-permissions) to properly access
-the App by default.
+[minimum permissions required](/app/users-roles-permissions#configure-system-permissions) to properly access the App by
+default.
 
 To create a new role with admin access, set the `--admin` flag to `true`, such as
 
@@ -210,8 +210,8 @@ instead.
 
 ### Instances
 
-Most client-side CLI commands needs a running d9 instance in order to work. To connect the CLI to an instance, you
-can use `directusctl instance connect` command. These instance's configs are going to be saved on `~/.directus` folder.
+Most client-side CLI commands needs a running d9 instance in order to work. To connect the CLI to an instance, you can
+use `directusctl instance connect` command. These instance's configs are going to be saved on `~/.directus` folder.
 
 To manage the connected instances, you can use `directusctl instance <command>` commands.
 
@@ -236,8 +236,8 @@ The CLI is designed with ease of use and automation in mind, this means that you
 by setting how you want the data to be written to the terminal. We currently support three formats, `table` (the default
 one), `json` and `yaml`.
 
-This makes it easier to parse and use data from d9 with other tools like `jq`, `yq`, `grep` or any other tools
-that accepts data from `stdin`
+This makes it easier to parse and use data from d9 with other tools like `jq`, `yq`, `grep` or any other tools that
+accepts data from `stdin`
 
 It's also worth mentioning that everything is data. Try for example running `directusctl --help --format=json`.
 

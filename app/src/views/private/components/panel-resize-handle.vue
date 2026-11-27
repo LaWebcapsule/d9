@@ -92,7 +92,9 @@ const hover = ref(false);
 		// into the panel elsewhere, where the grip colour already stands out
 		border: 1px solid var(--background-normal);
 		transform: translateY(-50%);
-		transition: background-color var(--fast) var(--transition), border-color var(--fast) var(--transition);
+		transition:
+			background-color var(--fast) var(--transition),
+			border-color var(--fast) var(--transition);
 		transition-delay: 0;
 		pointer-events: none;
 

@@ -68,8 +68,8 @@ Temporary access token to be used in follow-up requests.
 How long before the access token will expire. Value is in milliseconds.
 
 `refresh_token` **string**\
-The token that can be used to retrieve a new access token through [`/auth/refresh`](#refresh). Note: if you used `cookie`
-as the mode in the request, the refresh token won't be returned in the JSON.
+The token that can be used to retrieve a new access token through [`/auth/refresh`](#refresh). Note: if you used
+`cookie` as the mode in the request, the refresh token won't be returned in the JSON.
 
 ::: tip Expiry time
 
@@ -119,8 +119,8 @@ Retrieve a new access token using a refresh token.
 ### Request Body
 
 `refresh_token`\
-The refresh token to use. If you have the refresh token in a cookie through [`/auth/login`](#login), you don't have to submit
-it here.
+The refresh token to use. If you have the refresh token in a cookie through [`/auth/login`](#login), you don't have to
+submit it here.
 
 `mode`\
 Whether to retrieve the refresh token in the JSON response, or in a `httpOnly` `secure` cookie. One of `json`, `cookie`.
@@ -134,8 +134,8 @@ Temporary access token to be used in follow-up requests.
 How long before the access token will expire. Value is in milliseconds.
 
 `refresh_token` **string**\
-The token that can be used to retrieve a new access token through [`/auth/refresh`](#refresh). Note: if you used `cookie`
-as the mode in the request, the refresh token won't be returned in the JSON.
+The token that can be used to retrieve a new access token through [`/auth/refresh`](#refresh). Note: if you used
+`cookie` as the mode in the request, the refresh token won't be returned in the JSON.
 
 ### REST API
 
@@ -174,8 +174,8 @@ Invalidate the refresh token thus destroying the user's session.
 ### Request Body
 
 `refresh_token`\
-The refresh token to invalidate. If you have the refresh token in a cookie through [`/auth/login`](#login), you don't have
-to submit it here.
+The refresh token to invalidate. If you have the refresh token in a cookie through [`/auth/login`](#login), you don't
+have to submit it here.
 
 ### REST API
 
@@ -310,9 +310,9 @@ First name of the user.
 Last name of the user.
 
 `verification_url`\
-Provide a custom url which the link in the email will lead to. The token will be passed as the `token` query parameter, and
-the page is expected to forward it to the [Verify Email](#verify-email) endpoint. Without it, the link points at that endpoint
-directly.\
+Provide a custom url which the link in the email will lead to. The token will be passed as the `token` query parameter,
+and the page is expected to forward it to the [Verify Email](#verify-email) endpoint. Without it, the link points at
+that endpoint directly.\
 **Note**: You need to configure the
 [`AUTH_<PROVIDER>_REGISTER_URL_ALLOW_LIST` environment variable](/self-hosted/config-options#authentication) to enable
 this feature.

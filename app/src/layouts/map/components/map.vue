@@ -51,7 +51,7 @@ export default defineComponent({
 		},
 		camera: {
 			type: Object as PropType<CameraOptions & { bbox: any }>,
-			default: () => ({} as any),
+			default: () => ({}) as any,
 		},
 		bounds: {
 			type: Array as unknown as PropType<GeoJSON.BBox>,

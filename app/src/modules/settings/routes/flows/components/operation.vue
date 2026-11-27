@@ -246,7 +246,7 @@ const pointermove = (event: PointerEvent) => {
 							Math.round((event.pageX - workspaceOffset.x) / 20) * 20,
 							Math.round((event.pageY - workspaceOffset.y) / 20) * 20
 						),
-				  }
+					}
 				: {
 						id: props.panel.id,
 						type: down,
@@ -254,7 +254,7 @@ const pointermove = (event: PointerEvent) => {
 							Math.round((event.pageX - workspaceOffset.x) / 20) * 20,
 							Math.round((event.pageY - workspaceOffset.y) / 20) * 20
 						),
-				  };
+					};
 
 		emit('arrow-move', arrowInfo);
 	});
