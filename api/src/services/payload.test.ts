@@ -1,3 +1,4 @@
+import type { FieldOverview, SchemaOverview } from '@wbce-d9/types';
 import type { Knex } from 'knex';
 import knex from 'knex';
 import { MockClient, Tracker, createTracker } from 'knex-mock-client';
@@ -360,6 +361,104 @@ describe('Integration Tests', () => {
 
 				expect(result).toMatchObject({ other_string: 'clear-value', other_password: HASHED_SECURITY });
 			});
+		});
+
+		describe('processO2M', () => {
+			const PARENT_ID = '1d1b7806-2242-4d89-9bac-56c4027f8f1c';
+			const CHILD_ID = '4ad536cc-5960-4de7-9ee8-e37bed2a4689';
+
+			const field = (name: string, type: FieldOverview['type'], special: string[] = []): FieldOverview => ({
+				field: name,
+				type,
+				dbType: type,
+				nullable: true,
+				generated: false,
+				precision: null,
+				scale: null,
+				special,
+				note: null,
+				alias: type === 'alias',
+				validation: null,
+				defaultValue: null,
+			});
+
+			const createSchema = (deselectAction: 'nullify' | 'delete'): SchemaOverview => ({
+				collections: {
+					parent: {
+						collection: 'parent',
+						primary: 'id',
+						singleton: false,
+						note: null,
+						sortField: null,
+						accountability: null,
+						fields: { id: field('id', 'uuid'), children: field('children', 'alias', ['o2m']) },
+					},
+					child: {
+						collection: 'child',
+						primary: 'id',
+						singleton: false,
+						note: null,
+						sortField: null,
+						accountability: null,
+						fields: { id: field('id', 'uuid'), parent: field('parent', 'uuid') },
+					},
+				},
+				relations: [
+					{
+						collection: 'child',
+						field: 'parent',
+						related_collection: 'parent',
+						schema: null,
+						meta: {
+							id: 1,
+							many_collection: 'child',
+							many_field: 'parent',
+							one_collection: 'parent',
+							one_field: 'children',
+							one_collection_field: null,
+							one_allowed_collections: null,
+							junction_field: null,
+							sort_field: null,
+							one_deselect_action: deselectAction,
+						},
+					},
+				],
+			});
+
+			// Reads the keys of the children to deselect: without a limit, they get the default one and anything past
+			// the first page is left attached to the parent
+			const readKeysOfDeselectedChildren = async (deselectAction: 'nullify' | 'delete', payload: object) => {
+				// The child being kept is already attached to the parent, the read of the keys to deselect finds nothing
+				tracker.on
+					.select('child')
+					.response((rawQuery) => (/\b(not )?in \(/.test(rawQuery.sql) ? [] : [{ id: CHILD_ID, parent: PARENT_ID }]));
+
+				const service = new PayloadService('parent', { knex: db, schema: createSchema(deselectAction) });
+
+				await service.processO2M(payload, PARENT_ID);
+
+				return tracker.history.select.map((query) => query.sql).filter((sql) => /\b(not )?in \(/.test(sql));
+			};
+
+			it.each(['nullify', 'delete'] as const)(
+				'reads every child to deselect for an explicit %s alteration',
+				async (deselectAction) => {
+					const sqls = await readKeysOfDeselectedChildren(deselectAction, { children: { delete: [CHILD_ID] } });
+
+					expect(sqls).toHaveLength(1);
+					expect(sqls[0]).not.toContain(' limit ');
+				}
+			);
+
+			it.each(['nullify', 'delete'] as const)(
+				'reads every child left out of a replaced list for %s',
+				async (deselectAction) => {
+					const sqls = await readKeysOfDeselectedChildren(deselectAction, { children: [CHILD_ID] });
+
+					expect(sqls).toHaveLength(1);
+					expect(sqls[0]).not.toContain(' limit ');
+				}
+			);
 		});
 	});
 });

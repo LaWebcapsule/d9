@@ -1,6 +1,6 @@
 {
 	"name": "@wbce-d9/api",
-	"version": "12.8.0",
+	"version": "12.9.1",
 	"description": "Directus is a real-time API and App dashboard for managing SQL database content",
 	"type": "module",
 	"keywords": [
@@ -131,7 +131,7 @@
 		"exif-reader": "1.2.0",
 		"fast-redact": "^3.5.0",
 		"flat": "5.0.2",
-		"graphql": "16.8.1",
+		"graphql": "16.15.0",
 		"graphql-compose": "9.0.10",
 		"helmet": "6.1.5",
 		"icc": "3.0.0",
@@ -223,6 +223,6 @@
 		"tedious": "18.6.1"
 	},
 	"engines": {
-		"node": ">=22"
+		"node": "^22"
 	}
 }

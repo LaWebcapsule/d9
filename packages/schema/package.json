@@ -1,6 +1,6 @@
 {
 	"name": "@wbce-d9/schema",
-	"version": "10.0.1",
+	"version": "10.0.2",
 	"description": "Utility for extracting information about existing DB schema",
 	"type": "module",
 	"keywords": [
@@ -35,18 +35,22 @@
 	},
 	"main": "dist/index.js",
 	"files": [
-		"dist"
+		"dist",
+		"!**/*.test.{js,d.ts}"
 	],
 	"scripts": {
 		"build": "tsc --build",
-		"dev": "tsc --watch"
+		"dev": "tsc --watch",
+		"test": "vitest --watch=false"
 	},
 	"dependencies": {
 		"knex": "catalog:"
 	},
 	"devDependencies": {
+		"@vitest/coverage-v8": "catalog:",
 		"@wbce-d9/tsconfig": "catalog:",
-		"typescript": "catalog:"
+		"typescript": "catalog:",
+		"vitest": "catalog:"
 	},
 	"publishConfig": {
 		"access": "public"
