@@ -95,6 +95,7 @@ export default defineOperationApp({
 					width: 'full',
 					interface: panel.type === 'wysiwyg' ? 'input-rich-text-html' : 'input-rich-text-md',
 					hidden: panel.type === 'template',
+					...(panel.type === 'wysiwyg' ? {} : { options: { editorMode: 'markdown-only' } }),
 				},
 			},
 			{

@@ -1,6 +1,8 @@
 import { defineInterface } from '@wbce-d9/utils';
-import InterfaceInputRichTextMD from './input-rich-text-md.vue';
+import { defineAsyncComponent } from 'vue';
 import PreviewSVG from './preview.svg?raw';
+
+const InterfaceInputRichTextMD = defineAsyncComponent(() => import('./input-rich-text-md.vue'));
 
 export default defineInterface({
 	id: 'input-rich-text-md',
@@ -99,6 +101,34 @@ export default defineInterface({
 				},
 			},
 			{
+				field: 'editorMode',
+				name: '$t:interfaces.input-rich-text-md.editor_mode',
+				type: 'string',
+				schema: {
+					default_value: 'rich-and-markdown',
+				},
+				meta: {
+					width: 'half',
+					interface: 'select-dropdown',
+					options: {
+						choices: [
+							{
+								value: 'rich-and-markdown',
+								text: '$t:interfaces.input-rich-text-md.editor_mode_both',
+							},
+							{
+								value: 'rich-only',
+								text: '$t:interfaces.input-rich-text-md.editor_mode_rich',
+							},
+							{
+								value: 'markdown-only',
+								text: '$t:interfaces.input-rich-text-md.editor_mode_markdown',
+							},
+						],
+					},
+				},
+			},
+			{
 				field: 'folder',
 				name: '$t:interfaces.system-folder.folder',
 				type: 'uuid',
@@ -179,7 +209,7 @@ export default defineInterface({
 				name: '$t:interfaces.input-rich-text-md.customSyntax',
 				type: 'json',
 				meta: {
-					note: '$t:interfaces.input-rich-text-md.customSyntax_label',
+					note: '$t:interfaces.input-rich-text-md.customSyntax_markdown_only_note',
 					width: 'full',
 					interface: 'list',
 					options: {
